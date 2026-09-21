@@ -101,7 +101,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     }
 
     const seoSlug = `services/${serviceSlug}`;
-    const seoSlugWithSlash = `/${seoSlug}`;
+    // Avoid a template starting with "/": Next's file tracer would read it as a path and bundle the whole project.
+    const seoSlugWithSlash = seoSlug.replace(/^/, '/');
 
     const treatment = await supabase
         .from('treatments')

@@ -76,7 +76,8 @@ export const getStaticProps: GetStaticProps<StateServiceRouteProps> = async ({ p
   }
 
   const seoSlug = `${normalizedStateSlug}/${serviceSlug}`;
-  const seoSlugWithSlash = `/${seoSlug}`;
+  // Avoid a template starting with "/": Next's file tracer would read it as a path and bundle the whole project.
+  const seoSlugWithSlash = seoSlug.replace(/^/, '/');
 
   const [stateResult, treatmentResult, seoResult] = await Promise.all([
     supabase
