@@ -598,7 +598,7 @@ const shouldNoIndex = false;
                         return (
                           <Link
                             key={service.slug}
-                            href={`/${service.slug}/`}
+                            href={`/${(service.slug || '').replace(/^\/+|\/+$/g, '')}/`}
                             className="rounded-2xl border border-border bg-background px-3 py-3 text-center text-sm font-medium text-foreground transition-colors hover:border-primary/30 hover:text-primary"
                           >
                             <span className="whitespace-normal">{serviceName}</span>
