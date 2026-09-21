@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Ping Google and Bing after successful revalidation
     if (successCount > 0) {
-      const sitemapUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.appointpanda.ae'}/sitemap.xml`;
+      const sitemapUrl = `${process.env.NEXT_SITE_URL || 'https://www.appointpanda.ae'}/sitemap.xml`;
       await Promise.allSettled([
         fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),
         fetch(`https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),

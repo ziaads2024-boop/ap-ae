@@ -20,7 +20,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const projectId = pathSegments[0];
     const realPathSegments = pathSegments.slice(1);
-    const allowedProjectId = process.env.NEXT_PUBLIC_SUPABASE_URL?.match(/^https?:\/\/([^.]+)\.supabase\.co/i)?.[1];
+    const allowedProjectId = process.env.NEXT_SUPABASE_URL?.match(/^https?:\/\/([^.]+)\.supabase\.co/i)?.[1];
 
     if (!allowedProjectId || projectId !== allowedProjectId) {
         return res.status(404).json({ error: 'Not found' });
@@ -28,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const targetHost = `${projectId}.supabase.co`;
     const targetIp = '104.18.38.10'; // Bypasses UAE DNS poisoning
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
+    const supabaseKey = process.env.NEXT_SUPABASE_PUBLISHABLE_KEY || '';
 
     // Build the target path
     const queryString = req.url?.split('?')[1];

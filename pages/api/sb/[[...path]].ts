@@ -6,7 +6,7 @@ function isAllowedOrigin(origin: string | undefined): boolean {
     if (!origin) return true;
 
     const allowedOrigins = new Set([
-        process.env.NEXT_PUBLIC_SITE_URL,
+        process.env.NEXT_SITE_URL,
         'https://www.appointpanda.ae',
         'https://appointpanda.ae',
         'http://localhost:3000',
@@ -36,7 +36,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     if (req.method === 'OPTIONS') {
-        const origin = req.headers.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.appointpanda.ae';
+        const origin = req.headers.origin || process.env.NEXT_SITE_URL || 'https://www.appointpanda.ae';
         res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || 'authorization,apikey,content-type');
@@ -98,7 +98,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             }
         });
 
-        const origin = req.headers.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://www.appointpanda.ae';
+        const origin = req.headers.origin || process.env.NEXT_SITE_URL || 'https://www.appointpanda.ae';
         res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Vary', 'Origin');
 

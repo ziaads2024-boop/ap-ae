@@ -24,9 +24,9 @@ function isConfiguredSupabaseEnv(url: string | undefined, key: string | undefine
  * For admin operations, use the service role key instead.
  */
 export function createServerSupabase() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-             || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    const url = process.env.NEXT_SUPABASE_URL;
+    const key = process.env.NEXT_SUPABASE_ANON_KEY
+             || process.env.NEXT_SUPABASE_PUBLISHABLE_KEY;
 
     if (!isConfiguredSupabaseEnv(url, key)) {
         console.warn('Supabase env vars are missing or using placeholder values - returning null client');
@@ -46,7 +46,7 @@ export function createServerSupabase() {
  * Uses service role key to bypass RLS - faster for SSG builds.
  */
 export function createServerSupabaseAdmin() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const url = process.env.NEXT_SUPABASE_URL;
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!isConfiguredSupabaseEnv(url, key)) {

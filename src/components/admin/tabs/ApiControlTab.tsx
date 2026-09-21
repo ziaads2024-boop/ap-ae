@@ -262,7 +262,7 @@ export default function ApiControlTab() {
   };
 
   // Get webhook URL
-  const webhookBaseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1`;
+  const webhookBaseUrl = `${process.env.NEXT_SUPABASE_URL}/functions/v1`;
 
   // Render settings dialog content based on API type
   const renderSettingsDialog = () => {

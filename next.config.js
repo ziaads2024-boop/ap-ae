@@ -5,6 +5,15 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
+  // Inline these at build time so client code can read them without the
+  // NEXT_PUBLIC_ prefix, which Vercel blocks (URL and anon/publishable key are safe to expose).
+  env: {
+    NEXT_SUPABASE_URL: process.env.NEXT_SUPABASE_URL,
+    NEXT_SUPABASE_ANON_KEY: process.env.NEXT_SUPABASE_ANON_KEY,
+    NEXT_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_SUPABASE_PUBLISHABLE_KEY,
+    NEXT_SITE_URL: process.env.NEXT_SITE_URL,
+  },
+
   // Increase static page generation timeout to handle heavy pages
   staticPageGenerationTimeout: 300,
 

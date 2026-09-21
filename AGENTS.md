@@ -38,9 +38,9 @@ All server-side data fetching for SSG build (especially SSG/ISR pages) MUST use 
 
 ## Env Variables Required
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY` (server-only, for admin queries — do NOT use NEXT_PUBLIC_ prefix)
+- `NEXT_SUPABASE_URL`
+- `NEXT_SUPABASE_ANON_KEY` or `NEXT_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (server-only, for admin queries — do NOT use  prefix)
 
 ## Testing Changes
 

@@ -276,10 +276,10 @@ export default function StaticPagesTab() {
 
     try {
       // Use direct fetch for test mode
-      const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/serve-static?path=${encodeURIComponent(testPath)}&test=1`;
+      const url = `${process.env.NEXT_SUPABASE_URL}/functions/v1/serve-static?path=${encodeURIComponent(testPath)}&test=1`;
       const res = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${process.env.NEXT_SUPABASE_PUBLISHABLE_KEY}`,
         },
       });
 

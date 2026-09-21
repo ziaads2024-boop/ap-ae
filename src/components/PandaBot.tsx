@@ -99,12 +99,12 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
       }));
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/ai-assistant`,
+        `${process.env.NEXT_SUPABASE_URL}/functions/v1/ai-assistant`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}`,
+            'Authorization': `Bearer ${process.env.NEXT_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             messages: conversationHistory,

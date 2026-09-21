@@ -58,11 +58,11 @@ export default function SeoHealthCheckTab() {
       if (!path.startsWith("/")) path = "/" + path;
 
       // Fetch the static HTML version (what bots see)
-      const staticUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/serve-static?path=${encodeURIComponent(path)}&test=1`;
+      const staticUrl = `${process.env.NEXT_SUPABASE_URL}/functions/v1/serve-static?path=${encodeURIComponent(path)}&test=1`;
 
       const res = await fetch(staticUrl, {
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${process.env.NEXT_SUPABASE_PUBLISHABLE_KEY}`,
         },
       });
 
