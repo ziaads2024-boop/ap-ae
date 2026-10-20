@@ -320,7 +320,6 @@ const ListYourPracticePage = () => {
           type: 'practice_listing',
           clinicName: formData.clinicName,
           dentistName: formData.dentistName,
-          password: formData.password,
           userId: userId, // Store userId if created
           state: selectedLocation?.stateName || '',
           stateId: selectedLocation?.stateId || '',

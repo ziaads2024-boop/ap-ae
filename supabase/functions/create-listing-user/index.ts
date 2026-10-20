@@ -32,42 +32,6 @@ serve(async (req) => {
       );
     }
 
-    // Check if user already exists
-    const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-    const existingUser = existingUsers?.users?.find(u => u.email === email);
-
-    if (existingUser) {
-      // User already exists - update their password to the submitted one
-      await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
-        password: password,
-        email_confirm: true,
-      });
-
-      // Assign dentist role
-      await supabaseAdmin
-        .from("user_roles")
-        .upsert({ user_id: existingUser.id, role: "dentist" }, { onConflict: "user_id,role" });
-
-      // Create pending clinic record
-      await supabaseAdmin.from("pending_listing_users").upsert({
-        user_id: existingUser.id,
-        dentist_name: dentistName,
-        phone: phone,
-        email: email,
-        status: "pending",
-      }, { onConflict: "user_id" });
-
-      return new Response(
-        JSON.stringify({ 
-          success: true, 
-          message: "User account updated",
-          userId: existingUser.id,
-          isNew: false
-        }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     // Create new user with their password
     const { data: newUser, error: createUserError } = await supabaseAdmin.auth.admin.createUser({
       email,
@@ -80,6 +44,16 @@ serve(async (req) => {
     });
 
     if (createUserError || !newUser.user) {
+      // Never touch an existing account from this unauthenticated endpoint:
+      // updating its password here would let anyone take over any user by email.
+      const code = (createUserError as { code?: string } | null)?.code;
+      if (code === "email_exists" || /already (been )?registered|already exists/i.test(createUserError?.message ?? "")) {
+        return new Response(
+          JSON.stringify({ success: false, error: "An account with this email already exists. Please sign in instead.", isNew: false }),
+          { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       console.error("Failed to create user:", createUserError);
       return new Response(
         JSON.stringify({ success: false, error: createUserError?.message || "Failed to create user" }),

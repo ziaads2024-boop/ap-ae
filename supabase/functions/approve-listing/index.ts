@@ -96,25 +96,23 @@ serve(async (req) => {
       // Try to find by userId
       userId = userIdFromLead;
     } else {
-      // No existing user found - this shouldn't happen with new listings
-      // But create one as fallback with their password
+      // No existing user found - this shouldn't happen with new listings.
+      // Older leads carried the submitted password; new ones never store it,
+      // so invite the dentist to set their own password instead.
       const submittedPassword = listingData.password;
-      if (!submittedPassword) {
-        return new Response(
-          JSON.stringify({ success: false, error: "No existing user found and no password provided" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-
-      const { data: newUser, error: createUserError } = await supabaseAdmin.auth.admin.createUser({
-        email,
-        password: submittedPassword,
-        email_confirm: true,
-        user_metadata: {
-          full_name: dentistName,
-          phone,
-        },
-      });
+      const { data: newUser, error: createUserError } = submittedPassword
+        ? await supabaseAdmin.auth.admin.createUser({
+            email,
+            password: submittedPassword,
+            email_confirm: true,
+            user_metadata: {
+              full_name: dentistName,
+              phone,
+            },
+          })
+        : await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+            data: { full_name: dentistName, phone },
+          });
 
       if (createUserError || !newUser.user) {
         console.error("Failed to create user:", createUserError);
