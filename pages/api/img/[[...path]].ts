@@ -26,13 +26,23 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(404).json({ error: 'Not found' });
     }
 
+    // Only public storage objects: anything else (rest/v1, auth/v1, ...) would turn
+    // this into an open, long-cached proxy for the whole Supabase API.
+    const realPath = realPathSegments.join('/');
+    if (
+        !/^storage\/v1\/(object|render\/image)\/public\//.test(realPath)
+        || realPathSegments.some((segment) => segment === '..' || segment === '.')
+    ) {
+        return res.status(404).json({ error: 'Not found' });
+    }
+
     const targetHost = `${projectId}.supabase.co`;
     const targetIp = '104.18.38.10'; // Bypasses UAE DNS poisoning
-    const supabaseKey = process.env.NEXT_SUPABASE_PUBLISHABLE_KEY || '';
+    const supabaseKey = process.env.NEXT_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_SUPABASE_ANON_KEY || '';
 
     // Build the target path
     const queryString = req.url?.split('?')[1];
-    const targetPath = `/${realPathSegments.join('/')}${queryString ? '?' + queryString : ''}`;
+    const targetPath = `/${realPath}${queryString ? '?' + queryString : ''}`;
 
     const options: https.RequestOptions = {
         hostname: targetHost,
@@ -42,7 +52,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         headers: {
             'host': targetHost,
             'apikey': supabaseKey,
-            'authorization': req.headers['authorization'] as string,
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         },
         lookup: (hostname, lookupOptions, cb) => {
@@ -56,8 +65,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         rejectUnauthorized: true,
     };
-
-    if (!options.headers?.['authorization']) delete options.headers['authorization'];
 
     const proxy = https.request(options, (targetRes) => {
         res.status(targetRes.statusCode || 200);
