@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import { generateOtp, hashOtp, isAllowedClaimEmail } from "../_shared/claim-otp.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -133,13 +134,14 @@ const handler = async (req: Request): Promise<Response> => {
     const { clinicId, method, email, businessEmail, businessPhone } = validationResult.data;
 
     // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = generateOtp();
+    const otpHash = await hashOtp(clinicId, user.id, otp);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     // Get clinic info
     const { data: clinic, error: clinicError } = await supabaseClient
       .from("clinics")
-      .select("name, email")
+      .select("name, email, website, claim_emails, claim_status, claimed_by")
       .eq("id", clinicId)
       .maybeSingle();
 
@@ -150,8 +152,27 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    if (clinic.claimed_by && clinic.claimed_by !== user.id) {
+      return new Response(JSON.stringify({ error: "This profile has already been claimed. Please contact support." }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Use businessEmail if provided, else email, else clinic.email
     const targetVerificationEmail = businessEmail || email || clinic.email;
+
+    // The code must go to an address that belongs to the clinic, otherwise
+    // anyone could send it to themselves and take over the listing.
+    if (!targetVerificationEmail || !isAllowedClaimEmail(targetVerificationEmail, clinic)) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: "Please use the clinic's email on file or an email at the clinic's website domain, or request a manual review.",
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Create or update claim request with OTP
     const { error: upsertError } = await supabaseClient
@@ -159,7 +180,7 @@ const handler = async (req: Request): Promise<Response> => {
       .upsert({
         clinic_id: clinicId,
         user_id: user.id,
-        verification_code: otp,
+        verification_code: otpHash,
         verification_expires_at: expiresAt.toISOString(),
         verification_method: method,
         verification_sent_at: new Date().toISOString(),
@@ -177,7 +198,7 @@ const handler = async (req: Request): Promise<Response> => {
       await supabaseClient.from("claim_requests").insert({
         clinic_id: clinicId,
         user_id: user.id,
-        verification_code: otp,
+        verification_code: otpHash,
         verification_expires_at: expiresAt.toISOString(),
         verification_method: method,
         verification_sent_at: new Date().toISOString(),
@@ -188,17 +209,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    const emailToSend = targetVerificationEmail || user.email;
-
-    if (!emailToSend) {
-      return new Response(JSON.stringify({
-        success: false,
-        error: "No email address available for verification."
-      }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const emailToSend = targetVerificationEmail;
 
     const emailHtml = `
       <!DOCTYPE html>

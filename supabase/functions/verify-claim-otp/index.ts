@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { hashOtp } from "../_shared/claim-otp.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -79,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Check expiry
-    if (new Date(claimRequest.verification_expires_at) < new Date()) {
+    if (!claimRequest.verification_expires_at || new Date(claimRequest.verification_expires_at) < new Date()) {
       return new Response(JSON.stringify({ error: "Verification code has expired" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -100,28 +101,38 @@ const handler = async (req: Request): Promise<Response> => {
       .update({ verification_attempts: (claimRequest.verification_attempts || 0) + 1 })
       .eq("id", claimRequest.id);
 
-    // Verify code
-    if (claimRequest.verification_code !== code) {
+    // Verify code (stored as an HMAC, see _shared/claim-otp.ts)
+    if (!claimRequest.verification_code || claimRequest.verification_code !== await hashOtp(clinicId, user.id, code)) {
       return new Response(JSON.stringify({ error: "Invalid verification code" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // Success! Update claim request and clinic
-    await supabaseClient
-      .from("claim_requests")
-      .update({ status: "approved" })
-      .eq("id", claimRequest.id);
-
-    await supabaseClient
+    // Success! Claim the clinic, but never take it over from another owner
+    const { data: claimedClinic, error: clinicUpdateError } = await supabaseClient
       .from("clinics")
       .update({
         claim_status: "claimed",
         claimed_by: user.id,
         claimed_at: new Date().toISOString(),
       })
-      .eq("id", clinicId);
+      .eq("id", clinicId)
+      .or(`claimed_by.is.null,claimed_by.eq.${user.id}`)
+      .select("id")
+      .maybeSingle();
+
+    if (clinicUpdateError || !claimedClinic) {
+      return new Response(JSON.stringify({ error: "This profile has already been claimed. Please contact support." }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    await supabaseClient
+      .from("claim_requests")
+      .update({ status: "approved", verification_code: null })
+      .eq("id", claimRequest.id);
 
     // Add dentist role if not exists
     const { data: existingRole } = await supabaseClient
