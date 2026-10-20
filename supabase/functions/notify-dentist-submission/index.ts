@@ -283,7 +283,7 @@ serve(async (req) => {
     const emailSettings = await getEmailSettings(supabase);
 
     // Generate dashboard URL
-    const dashboardUrl = 'https://www.AppointPanda.com/dashboard?tab=my-intake-forms';
+    const dashboardUrl = 'https://www.appointpanda.ae/dashboard?tab=my-intake-forms';
 
     // Generate and send email
     const emailHtml = generateNotificationEmailHTML(

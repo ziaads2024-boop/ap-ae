@@ -18,7 +18,7 @@ const corsHeaders = {
  * - status: Returns current booking link status
  */
 
-const BOOKING_BASE_URL = 'https://www.AppointPanda.com';
+const BOOKING_BASE_URL = 'https://www.appointpanda.ae';
 
 interface PlaceActionLink {
   name?: string;

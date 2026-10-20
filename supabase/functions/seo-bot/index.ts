@@ -585,7 +585,7 @@ serve(async (req) => {
           h1: h1,
           og_title: title,
           og_description: description,
-          canonical_url: `https://www.AppointPanda.com${page.slug}`,
+          canonical_url: `https://www.appointpanda.ae${page.slug}`,
           metadata_hash: metaHash,
           is_indexed: true,
           last_generated_at: now,
