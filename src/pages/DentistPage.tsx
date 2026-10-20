@@ -12,6 +12,7 @@ import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { InterlinkingSection } from "@/components/seo/InterlinkingSection";
@@ -67,9 +68,10 @@ interface DentistPageProps {
   };
   treatmentsData?: TreatmentData[];
   reviewsData?: ReviewData[];
+  faqsProp?: { question: string; answer: string }[];
 }
 
-const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatmentsData, reviewsData }: DentistPageProps = {}) => {
+const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatmentsData, reviewsData, faqsProp }: DentistPageProps = {}) => {
   const router = useRouter();
   const isServerRender = typeof window === 'undefined';
   const dentistSlug = isServerRender
@@ -494,6 +496,24 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
                 <p className="text-muted-foreground">No reviews yet.</p>
               )}
             </div>
+
+            {faqsProp && faqsProp.length > 0 && (
+              <div className="card-modern p-6">
+                <h2 className="font-display text-xl font-bold mb-4">Frequently Asked Questions</h2>
+                <Accordion type="single" collapsible className="space-y-3">
+                  {faqsProp.slice(0, 8).map((faq, index) => (
+                    <AccordionItem key={index} value={`dentist-faq-${index}`} className="rounded-2xl border border-border px-4">
+                      <AccordionTrigger className="text-left font-semibold hover:no-underline">
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent forceMount className="pb-4 text-muted-foreground">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}

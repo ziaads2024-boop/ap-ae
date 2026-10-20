@@ -18,6 +18,7 @@ const DentistPageWithSEO = ({ dentistSlug, dentistData, seoData, faqs, treatment
                 seoDataProp={seoData}
                 treatmentsData={treatmentsData}
                 reviewsData={reviewsData}
+                faqsProp={faqs}
             />
         </>
     );
