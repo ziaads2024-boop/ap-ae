@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { requireClinicAccess } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -184,6 +185,9 @@ Deno.serve(async (req) => {
 
     const payload: ReviewRequestPayload = await req.json();
     const { clinicId, recipientEmail, recipientPhone, recipientName, channel, customMessage } = payload;
+
+    const authError = await requireClinicAccess(req, corsHeaders, clinicId);
+    if (authError) return authError;
 
     console.log(`Processing review request for ${channel} to ${recipientEmail || recipientPhone}`);
 

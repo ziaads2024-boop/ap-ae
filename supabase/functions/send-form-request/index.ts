@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { requireClinicAccess } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -184,12 +185,24 @@ serve(async (req) => {
     const { submissionId, templateName, deliveryMethod, patientEmail, patientPhone, patientName, customMessage, clinicName } = body;
 
     // Generate the form URL
-    const baseUrl = `https://www.AppointPanda.com/form/${submissionId}`;
+    const baseUrl = `https://www.appointpanda.ae/form/${submissionId}`;
     const { data: submissionRow } = await supabase
       .from('patient_form_submissions')
-      .select('access_token')
+      .select('access_token, clinic_id')
       .eq('id', submissionId)
       .maybeSingle();
+
+    if (!submissionRow) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Form submission not found" }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // The form link carries the submission's access token, so only the clinic
+    // that owns the submission (or an admin) may send it anywhere.
+    const authError = await requireClinicAccess(req, corsHeaders, submissionRow.clinic_id as string);
+    if (authError) return authError;
 
     const accessToken = submissionRow?.access_token as string | null | undefined;
     const formUrl = accessToken ? `${baseUrl}?token=${encodeURIComponent(accessToken)}` : baseUrl;
