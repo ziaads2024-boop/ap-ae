@@ -53,3 +53,7 @@ login_test_output*.json
 # Platform-specific files
 .emergent/
 .gitconfig
+
+# Supabase CLI local state
+supabase/.temp/
+*.tsbuildinfo
