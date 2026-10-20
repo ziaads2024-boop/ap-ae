@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { requireAdmin } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,6 +10,9 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const authError = await requireAdmin(req, corsHeaders);
+  if (authError) return authError;
 
   try {
     const webhookUrl = 'https://auton8n.n8n.shivahost.in/webhook/5d50a6bb-3456-4c9c-a1e6-38d6371f1be6';
