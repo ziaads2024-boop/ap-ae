@@ -363,11 +363,30 @@ serve(async (req) => {
     }
 
     // 2) Check if user already has a clinic or if this GMB location is already claimed
-    const { data: existingClinic } = await supabaseAdmin
+    // business.id is client input: query with .eq() rather than splicing it into an .or() filter
+    const { data: ownClinic } = await supabaseAdmin
       .from("clinics")
-      .select("id, slug, gmb_location_id")
-      .or(`claimed_by.eq.${userId},gmb_location_id.eq.${business.id}`)
+      .select("id, slug, gmb_location_id, claimed_by")
+      .eq("claimed_by", userId)
+      .limit(1)
       .maybeSingle();
+    const { data: locationClinic } = ownClinic
+      ? { data: null }
+      : await supabaseAdmin
+        .from("clinics")
+        .select("id, slug, gmb_location_id, claimed_by")
+        .eq("gmb_location_id", business.id)
+        .limit(1)
+        .maybeSingle();
+    const existingClinic = ownClinic ?? locationClinic;
+
+    // Never take over a clinic someone else already owns
+    if (existingClinic?.claimed_by && existingClinic.claimed_by !== userId) {
+      return new Response(
+        JSON.stringify({ success: false, error: "This business is already linked to another account. Please contact support." }),
+        { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     let clinicId: string;
     let clinicSlug: string;
