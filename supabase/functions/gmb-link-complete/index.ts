@@ -85,6 +85,19 @@ serve(async (req) => {
     }
 
     const { clinic_id, initiated_by } = linkRequest;
+
+    // Only the clinic's current owner (or an admin) may hand it over
+    const [{ data: ownsClinic }, { data: initiatorIsAdmin }] = await Promise.all([
+      supabaseAdmin.rpc('owns_clinic', { _user_id: initiated_by, _clinic_id: clinic_id }),
+      supabaseAdmin.rpc('is_admin', { _user_id: initiated_by }),
+    ]);
+    if (ownsClinic !== true && initiatorIsAdmin !== true) {
+      console.error(`Link request ${linkRequest.id} initiated by non-owner ${initiated_by} for clinic ${clinic_id}`);
+      return new Response(
+        JSON.stringify({ success: false, error: 'Invalid or expired link token' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     console.log(`Processing GMB link: clinic=${clinic_id}, initiated_by=${initiated_by}, new_user=${newUserId}`);
 
     // Mark the link request as consumed

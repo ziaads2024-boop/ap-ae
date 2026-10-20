@@ -49,3 +49,16 @@ FOR EACH ROW EXECUTE FUNCTION public.protect_claim_request_verification();
 -- accepts as a verification target). Only email-enrichment (service role) uses it.
 REVOKE EXECUTE ON FUNCTION public.add_clinic_claim_emails(uuid, text[]) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.add_clinic_claim_emails(uuid, text[]) TO service_role;
+
+-- gmb_link_requests: "Users manage own gmb_link_requests" (FOR ALL, no WITH
+-- CHECK beyond initiated_by) let any user create a link request for any clinic,
+-- which gmb-link-complete then turned into ownership. The older scoped policies
+-- (insert only for the initiator's own clinic, read/delete own) remain.
+DROP POLICY IF EXISTS "Users manage own gmb_link_requests" ON public.gmb_link_requests;
+
+CREATE POLICY "Admins manage gmb_link_requests"
+ON public.gmb_link_requests
+FOR ALL
+TO authenticated
+USING (public.is_admin(auth.uid()))
+WITH CHECK (public.is_admin(auth.uid()));
