@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { requireAdmin } from "../_shared/auth.ts";
 
 const REVALIDATION_API = Deno.env.get("NEXT_SITE_URL") || "https://www.appointpanda.ae";
 const REVALIDATION_SECRET = Deno.env.get("REVALIDATION_SECRET");
@@ -14,17 +15,12 @@ serve(async (req) => {
       });
     }
 
-    // Verify authorization header from Supabase
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    // Database webhooks must send the service-role key as the bearer token
+    const authError = await requireAdmin(req, {});
+    if (authError) return authError;
 
     // Create Supabase admin client
-    const supabaseUrl = Deno.env.get("NEXT_SUPABASE_URL")!;
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 

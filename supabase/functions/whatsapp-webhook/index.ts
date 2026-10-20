@@ -86,20 +86,24 @@ serve(async (req) => {
       const signature = req.headers.get('X-Hub-Signature-256');
       const appSecret = Deno.env.get('WHATSAPP_APP_SECRET');
       
-      if (appSecret) {
-        const isValid = await verifyWebhookSignature(rawBody, signature, appSecret);
-        if (!isValid) {
-          console.error('Invalid webhook signature - rejecting request');
-          return new Response(
-            JSON.stringify({ error: 'Invalid signature' }),
-            { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-          );
-        }
-        console.log('Webhook signature verified successfully');
-      } else {
-        // Log warning but don't block - allows testing without secret configured
-        console.warn('WHATSAPP_APP_SECRET not configured - signature verification skipped. Set this secret for production security.');
+      if (!appSecret) {
+        // Fail closed: without the app secret anyone could forge messages/leads.
+        console.error('WHATSAPP_APP_SECRET not configured - rejecting webhook POST');
+        return new Response(
+          JSON.stringify({ error: 'Webhook not configured' }),
+          { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
+
+      const isValid = await verifyWebhookSignature(rawBody, signature, appSecret);
+      if (!isValid) {
+        console.error('Invalid webhook signature - rejecting request');
+        return new Response(
+          JSON.stringify({ error: 'Invalid signature' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      console.log('Webhook signature verified successfully');
       
       // Parse the verified payload
       const body = JSON.parse(rawBody);
