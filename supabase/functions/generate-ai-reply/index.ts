@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
+import { requireClinicAccess } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -43,6 +44,31 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    if (review_type !== "google" && review_type !== "internal") {
+      return new Response(
+        JSON.stringify({ success: false, error: "Invalid review_type" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // The generated reply is saved on the review, so only that clinic's owner
+    // (or an admin) may request it
+    const { data: reviewRow } = await supabaseAdmin
+      .from(review_type === "google" ? "google_reviews" : "internal_reviews")
+      .select("clinic_id")
+      .eq("id", review_id)
+      .maybeSingle();
+
+    if (!reviewRow) {
+      return new Response(
+        JSON.stringify({ success: false, error: "Review not found" }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const authError = await requireClinicAccess(req, corsHeaders, reviewRow.clinic_id as string);
+    if (authError) return authError;
 
     // Build the prompt based on review sentiment
     const sentiment = rating >= 4 ? "positive" : rating >= 3 ? "neutral" : "negative";
