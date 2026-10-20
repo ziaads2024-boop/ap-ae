@@ -33,3 +33,21 @@ export const supabase: SupabaseClient<Database> = createClient<Database>(supabas
 });
 
 
+
+/**
+ * Anonymous client for the appointment manage link. RLS only exposes the
+ * appointment whose manage_token matches the x-manage-token request header.
+ */
+export function createAppointmentTokenClient(manageToken: string): SupabaseClient<Database> {
+  return createClient<Database>(supabaseUrl!, supabaseKey!, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      storageKey: 'sb-appointment-manage',
+    },
+    global: {
+      headers: { 'x-manage-token': manageToken },
+    },
+  });
+}

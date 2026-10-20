@@ -1,8 +1,8 @@
 'use client';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { createAppointmentTokenClient } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -54,6 +54,7 @@ const timeSlots = Array.from({ length: 20 }, (_, i) => {
 
 const AppointmentManagePage = () => {
   const { token } = useRouter().query as { token?: string };
+  const tokenClient = useMemo(() => (token ? createAppointmentTokenClient(token) : null), [token]);
   const router = useRouter(); const searchParams = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
   const action = searchParams.get("action");
   const { toast } = useToast();
@@ -86,7 +87,7 @@ const AppointmentManagePage = () => {
     queryFn: async () => {
       if (!token) throw new Error("No token provided");
 
-      const { data, error } = await supabase
+      const { data, error } = await tokenClient!
         .from("appointments")
         .select(`
           *,
@@ -109,7 +110,7 @@ const AppointmentManagePage = () => {
     mutationFn: async () => {
       if (!token) throw new Error("No token");
 
-      const { error } = await supabase
+      const { error } = await tokenClient!
         .from("appointments")
         .update({ status: "cancelled" })
         .eq("manage_token", token);
@@ -140,7 +141,7 @@ const AppointmentManagePage = () => {
         throw new Error("Please select a new date and time");
       }
 
-      const { error } = await supabase
+      const { error } = await tokenClient!
         .from("appointments")
         .update({
           preferred_date: format(selectedDate, "yyyy-MM-dd"),

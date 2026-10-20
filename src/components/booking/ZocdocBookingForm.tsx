@@ -256,11 +256,13 @@ export function ZocdocBookingForm({
         is_assigned: isPaidClinic,
       };
 
-      const { data: insertedAppointment, error } = await supabase
+      // Anonymous visitors cannot read appointments back (RLS), so generate the
+      // id here instead of using insert(...).select()
+      const appointmentId = crypto.randomUUID();
+      const { error } = await supabase
         .from("appointments")
-        .insert(appointmentData as any)
-        .select('id')
-        .single();
+        .insert({ ...appointmentData, id: appointmentId } as any);
+      const insertedAppointment = error ? null : { id: appointmentId };
 
       if (error) throw error;
 
