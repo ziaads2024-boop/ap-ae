@@ -5685,6 +5685,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_clinic_review_url: {
+        Args: {
+          _clinic_id: string
+        }
+        Returns: string | null
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

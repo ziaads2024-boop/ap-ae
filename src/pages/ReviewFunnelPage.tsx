@@ -48,17 +48,13 @@ export default function ReviewFunnelPage() {
     enabled: !!(clinicId || clinicSlug),
   });
   
-  // Fetch custom review URL from clinic_oauth_tokens
-  const { data: oauthData, isLoading: oauthLoading, error: oauthError } = useQuery({
+  // Fetch custom review URL (clinic_oauth_tokens itself is not readable by the public)
+  const { data: customReviewUrl, isLoading: oauthLoading, error: oauthError } = useQuery({
     queryKey: ['clinic-oauth-review-url', clinic?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('clinic_oauth_tokens')
-        .select('gmb_data')
-        .eq('clinic_id', clinic!.id)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc('get_clinic_review_url', { _clinic_id: clinic!.id });
       if (error) {
-        console.error('[ReviewFunnel] Error fetching oauth data:', error);
+        console.error('[ReviewFunnel] Error fetching review URL:', error);
         throw error;
       }
       return data;
@@ -70,24 +66,8 @@ export default function ReviewFunnelPage() {
   
   const getGoogleReviewUrl = (): string | null => {
     // Priority 1: Custom review URL from GMB setup (manual or OAuth)
-    if (oauthData?.gmb_data) {
-      let gmbData: { custom_review_url?: string } = {};
-      
-      // Handle both object and string forms of gmb_data
-      if (typeof oauthData.gmb_data === 'string') {
-        try {
-          gmbData = JSON.parse(oauthData.gmb_data);
-        } catch (e) {
-          console.error('[ReviewFunnel] Failed to parse gmb_data string:', e);
-        }
-      } else if (typeof oauthData.gmb_data === 'object') {
-        gmbData = oauthData.gmb_data as { custom_review_url?: string };
-      }
-      
-      if (gmbData.custom_review_url && gmbData.custom_review_url.trim()) {
-        const url = gmbData.custom_review_url.trim();
-        return url;
-      }
+    if (customReviewUrl && customReviewUrl.trim()) {
+      return customReviewUrl.trim();
     }
     
     // Priority 2: Google Place ID to construct review URL
