@@ -2,12 +2,13 @@ import Link from 'next/link';
 import { ArrowRight, LocateFixed, ShieldCheck, Car } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { emirateBySlug, hasLocalGuide, services, urls, type EmirateContent } from '@/content';
+import { emirateBySlug, hasLocalGuide, services, urls, type EmirateContent, SITE_URL } from '@/content';
 import { breadcrumbSchema, clinicListSchema, emiratePageSchema, faqSchema } from '@/content/schema';
 import {
-  BulletList, ClinicList, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, Section,
+  BulletList, ClinicList, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, PageImageCredits, Section,
   type ClinicSummary,
 } from './GuideBlocks';
+import { imageForEmirate, imageForService } from '@/content/images';
 
 export interface CityLink {
   name: string;
@@ -24,13 +25,14 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
   const localGuides = services.filter((s) => hasLocalGuide(s.slug, emirate.slug));
   const otherServices = services.filter((s) => !hasLocalGuide(s.slug, emirate.slug));
   const neighbours = emirate.neighbours.map(emirateBySlug).filter(Boolean) as EmirateContent[];
+  const heroImage = imageForEmirate(emirate.slug);
 
   return (
     <PageLayout>
-      <SEOHead title={emirate.metaTitle} description={emirate.metaDescription} canonical={path} />
+      <SEOHead title={emirate.metaTitle} description={emirate.metaDescription} canonical={path} ogImage={`${SITE_URL}${heroImage.src}`} />
       <JsonLd
         data={[
-          emiratePageSchema(emirate),
+          emiratePageSchema(emirate, heroImage),
           breadcrumbSchema(crumbs),
           faqSchema(emirate.faqs),
           clinicListSchema(`Dental clinics in ${emirate.name}`, clinics),
@@ -43,6 +45,8 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
         label={`${emirate.nameAr} · ${emirate.regulator.short}`}
         title={<>Dentists in{' '}<br />{emirate.name}</>}
         answer={emirate.summary}
+        image={heroImage}
+        badge={{ label: 'Licensing', value: emirate.regulator.name }}
       >
         <Link href={`/find-clinics/?emirate=${emirate.slug}`} className="btn-ink">Browse clinics in {emirate.name} <ArrowRight className="h-4 w-4" /></Link>
         <Link href={`/find-clinics/?emirate=${emirate.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
@@ -109,7 +113,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
           <Section id="treatments" eyebrow="Local treatment guides" title={`Treatments in ${emirate.name}`}>
             <LinkTiles
               columns={4}
-              links={localGuides.map((s) => ({ href: urls.serviceEmirate(emirate.slug, s.slug), title: `${s.shortName} in ${emirate.name}`, text: s.summary, tone: s.tone }))}
+              links={localGuides.map((s) => ({ href: urls.serviceEmirate(emirate.slug, s.slug), title: `${s.shortName} in ${emirate.name}`, tone: s.tone, image: imageForService(s.slug) }))}
             />
             {otherServices.length > 0 && (
               <p className="mt-4 text-sm text-zinc-600">
@@ -150,9 +154,11 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
 
         {neighbours.length > 0 && (
           <Section eyebrow="Nearby" title="Neighbouring emirates">
-            <LinkTiles links={neighbours.map((n) => ({ href: urls.emirate(n.slug), title: `Dentists in ${n.name}`, text: n.summary, tone: n.tone }))} />
+            <LinkTiles links={neighbours.map((n) => ({ href: urls.emirate(n.slug), title: `Dentists in ${n.name}`, text: n.summary, tone: n.tone, image: imageForEmirate(n.slug) }))} />
           </Section>
         )}
+
+        <PageImageCredits images={[heroImage, ...localGuides.map((s) => imageForService(s.slug)), ...neighbours.map((n) => imageForEmirate(n.slug))]} />
       </div>
 
       <GuideCta

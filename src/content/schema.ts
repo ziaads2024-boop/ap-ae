@@ -1,5 +1,19 @@
 import { SITE_URL, CONTENT_REVIEWED, urls } from './index';
 import type { EmirateContent, Faq, ServiceContent } from './types';
+import { LICENSE_URLS, type SiteImage } from './images';
+
+/** ImageObject with licence metadata (Google image licence fields). */
+export const imageObject = (img: SiteImage) => ({
+  '@type': 'ImageObject',
+  contentUrl: `${SITE_URL}${img.src}`,
+  width: img.width,
+  height: img.height,
+  caption: img.caption,
+  creditText: `${img.credit.author} / ${img.credit.sourceName}`,
+  creator: { '@type': 'Person', name: img.credit.author },
+  license: LICENSE_URLS[img.credit.license],
+  acquireLicensePage: img.credit.sourceUrl,
+});
 
 // JSON-LD builders. Only describe what is visibly on the page: no ratings,
 // reviews, prices or credentials that the page does not show.
@@ -71,8 +85,9 @@ const webPage = (path: string, name: string, description: string) => ({
   audience: { '@type': 'PeopleAudience', geographicArea: { '@type': 'Country', name: 'United Arab Emirates' } },
 });
 
-export const servicePageSchema = (s: ServiceContent) => ({
+export const servicePageSchema = (s: ServiceContent, img?: SiteImage) => ({
   ...webPage(urls.service(s.slug), s.metaTitle, s.metaDescription),
+  ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
   about: {
     '@type': 'MedicalProcedure',
     name: s.name,
@@ -84,13 +99,15 @@ export const servicePageSchema = (s: ServiceContent) => ({
   },
 });
 
-export const emiratePageSchema = (e: EmirateContent) => ({
+export const emiratePageSchema = (e: EmirateContent, img?: SiteImage) => ({
   ...webPage(urls.emirate(e.slug), e.metaTitle, e.metaDescription),
+  ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
   about: { '@type': 'AdministrativeArea', name: `${e.name}, United Arab Emirates` },
 });
 
-export const serviceEmiratePageSchema = (s: ServiceContent, e: EmirateContent, title: string, description: string) => ({
+export const serviceEmiratePageSchema = (s: ServiceContent, e: EmirateContent, title: string, description: string, img?: SiteImage) => ({
   ...webPage(urls.serviceEmirate(e.slug, s.slug), title, description),
+  ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
   about: [
     { '@type': 'MedicalProcedure', name: s.name, description: s.summary },
     { '@type': 'AdministrativeArea', name: `${e.name}, United Arab Emirates` },

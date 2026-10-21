@@ -4,13 +4,14 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import {
   emirates, formatAed, hasLocalGuide, serviceBySlug, urls,
-  type ServiceContent,
+  type ServiceContent, SITE_URL,
 } from '@/content';
 import { breadcrumbSchema, faqSchema, servicePageSchema, clinicListSchema } from '@/content/schema';
 import {
-  BulletList, ClinicList, FactGrid, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, MedicalNote, Section,
+  BulletList, ClinicList, FactGrid, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, MedicalNote, PageImageCredits, Section,
   type ClinicSummary,
 } from './GuideBlocks';
+import { imageForEmirate, imageForService } from '@/content/images';
 
 export function ServiceGuide({ service, clinics }: { service: ServiceContent; clinics: ClinicSummary[] }) {
   const path = urls.service(service.slug);
@@ -20,20 +21,29 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
     { name: service.name, path },
   ];
   const related = service.related.map(serviceBySlug).filter(Boolean) as ServiceContent[];
+  const heroImage = imageForService(service.slug);
 
   return (
     <PageLayout>
-      <SEOHead title={service.metaTitle} description={service.metaDescription} canonical={path} />
+      <SEOHead title={service.metaTitle} description={service.metaDescription} canonical={path} ogImage={`${SITE_URL}${heroImage.src}`} />
       <JsonLd
         data={[
-          servicePageSchema(service),
+          servicePageSchema(service, heroImage),
           breadcrumbSchema(crumbs),
           faqSchema(service.faqs),
           clinicListSchema(`${service.name} clinics in the UAE`, clinics),
         ]}
       />
 
-      <GuideHero tone={service.tone} crumbs={crumbs} label="Treatment guide" title={`${service.name} in the UAE`} answer={service.summary}>
+      <GuideHero
+        tone={service.tone}
+        crumbs={crumbs}
+        label="Treatment guide"
+        title={`${service.name} in the UAE`}
+        answer={service.summary}
+        image={heroImage}
+        badge={{ label: 'Indicative cost', value: `From ${formatAed(service.price.from)}` }}
+      >
         <Link href={`/find-clinics/?specialty=${service.slug}`} className="btn-ink">Find a clinic <ArrowRight className="h-4 w-4" /></Link>
         <Link href={`/find-clinics/?specialty=${service.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
       </GuideHero>
@@ -134,8 +144,8 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
             columns={4}
             links={emirates.map((e) =>
               hasLocalGuide(service.slug, e.slug)
-                ? { href: urls.serviceEmirate(e.slug, service.slug), title: `${service.shortName} in ${e.name}`, text: `Local guide · ${e.regulator.short}-licensed clinics`, tone: e.tone }
-                : { href: urls.emirate(e.slug), title: `Dentists in ${e.name}`, text: 'Emirate guide' }
+                ? { href: urls.serviceEmirate(e.slug, service.slug), title: `${service.shortName} in ${e.name}`, text: `Local guide · ${e.regulator.short}-licensed clinics`, tone: e.tone, image: imageForEmirate(e.slug) }
+                : { href: urls.emirate(e.slug), title: `Dentists in ${e.name}`, text: 'Emirate guide', image: imageForEmirate(e.slug) }
             )}
           />
         </Section>
@@ -153,10 +163,13 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
         </Section>
 
         <Section eyebrow="Keep reading" title="Related treatments">
-          <LinkTiles links={related.map((r) => ({ href: urls.service(r.slug), title: r.name, text: r.summary, tone: r.tone }))} />
+          <LinkTiles links={related.map((r) => ({ href: urls.service(r.slug), title: r.name, text: r.summary, tone: r.tone, image: imageForService(r.slug) }))} />
         </Section>
 
-        <div className="pb-6"><MedicalNote /></div>
+        <div className="pb-6">
+          <MedicalNote />
+          <PageImageCredits images={[heroImage, ...emirates.map((e) => imageForEmirate(e.slug)), ...related.map((r) => imageForService(r.slug))]} />
+        </div>
       </div>
 
       <GuideCta

@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { GuideCta, GuideHero, JsonLd, Section } from '@/components/guide/GuideBlocks';
+import Image from 'next/image';
+import { GuideCta, GuideHero, JsonLd, PageImageCredits, Section } from '@/components/guide/GuideBlocks';
+import { images, imageForService } from '@/content/images';
 import { formatAed, services, SITE_URL, toneClass, urls, type InsuranceCategory } from '@/content';
 import { breadcrumbSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
@@ -26,6 +28,7 @@ export default function ServicesIndex() {
         title="Dental Treatments in the UAE: Guides, Costs & Clinics"
         description="Plain-language guides to common dental treatments in the UAE, from cleaning and root canals to implants, aligners and veneers, with indicative AED costs and licensed clinics."
         canonical={urls.services}
+        ogImage={`${SITE_URL}${images.chairWhite.src}`}
       />
       <JsonLd
         data={[
@@ -45,6 +48,8 @@ export default function ServicesIndex() {
         crumbs={crumbs}
         label="Treatment guides"
         title={<>Know your{' '}<br />treatment</>}
+        image={images.chairWhite}
+        badge={{ label: 'Guides', value: `${services.length} treatments explained` }}
         answer="Each guide explains what a treatment involves, who it suits, how long it takes, what can go wrong and what it usually costs in the UAE, so you can walk into a consultation with the right questions."
       />
 
@@ -56,12 +61,15 @@ export default function ServicesIndex() {
             <Section key={group.title} title={group.title}>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((s) => (
-                  <Link key={s.slug} href={urls.service(s.slug)} className={cn('block-card group flex flex-col justify-between border-transparent p-6', toneClass[s.tone])}>
-                    <span>
+                  <Link key={s.slug} href={urls.service(s.slug)} className={cn('block-card group flex flex-col justify-between overflow-hidden border-transparent', toneClass[s.tone])}>
+                    <span className="relative block aspect-[16/9] overflow-hidden">
+                      <Image src={imageForService(s.slug).src} alt="" width={imageForService(s.slug).width} height={imageForService(s.slug).height} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    </span>
+                    <span className="block px-6 pt-5">
                       <span className="display block text-3xl text-ink">{s.name}</span>
                       <span className="mt-3 block text-sm leading-relaxed text-ink/75">{s.summary}</span>
                     </span>
-                    <span className="mt-6 flex items-center justify-between text-sm font-semibold text-ink">
+                    <span className="mt-6 flex items-center justify-between px-6 pb-6 text-sm font-semibold text-ink">
                       From {formatAed(s.price.from)}
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </span>
@@ -72,6 +80,8 @@ export default function ServicesIndex() {
           );
         })}
       </div>
+
+      <div className="mx-auto max-w-6xl px-5"><PageImageCredits images={[images.chairWhite, ...services.map((s) => imageForService(s.slug))]} /></div>
 
       <GuideCta title="Not sure what you need?" text="A check-up is the right first step. Find a licensed clinic near you and book a consultation." href="/find-clinics/?near=me" cta="Find a dentist near me" />
     </PageLayout>

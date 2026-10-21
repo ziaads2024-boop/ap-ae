@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { GuideCta, GuideHero, JsonLd, Section } from '@/components/guide/GuideBlocks';
+import Image from 'next/image';
+import { GuideCta, GuideHero, JsonLd, PageImageCredits, Section } from '@/components/guide/GuideBlocks';
+import { imageForEmirate } from '@/content/images';
 import { emirates, SITE_URL, toneClass, urls } from '@/content';
 import { breadcrumbSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
@@ -19,6 +21,7 @@ export default function EmiratesIndex() {
         title="Dentists by Emirate: Licensing & Clinics Across the UAE"
         description="Find a dentist in any of the seven emirates. Who licenses clinics where, what insurance usually covers, and licensed dental clinics in Dubai, Abu Dhabi, Sharjah and the Northern Emirates."
         canonical={urls.emirates}
+        ogImage={`${SITE_URL}${imageForEmirate('dubai').src}`}
       />
       <JsonLd
         data={[
@@ -38,6 +41,8 @@ export default function EmiratesIndex() {
         crumbs={crumbs}
         label="All seven emirates"
         title={<>Seven emirates,{' '}<br />three regulators</>}
+        image={imageForEmirate('abu-dhabi')}
+        badge={{ label: 'Regulators', value: 'DHA · DoH · MOHAP' }}
         answer="Dental clinics in Dubai are licensed by the Dubai Health Authority (or, in Dubai Healthcare City, its own authority), clinics in Abu Dhabi by the Department of Health - Abu Dhabi, and clinics in Sharjah and the Northern Emirates by the federal Ministry of Health and Prevention."
       />
 
@@ -45,15 +50,18 @@ export default function EmiratesIndex() {
         <Section title="Choose your emirate">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {emirates.map((e) => (
-              <Link key={e.slug} href={urls.emirate(e.slug)} className={cn('block-card group flex min-h-[220px] flex-col justify-between border-transparent p-6', toneClass[e.tone])}>
-                <span>
+              <Link key={e.slug} href={urls.emirate(e.slug)} className={cn('block-card group flex flex-col justify-between overflow-hidden border-transparent', toneClass[e.tone])}>
+                <span className="relative block aspect-[16/9] overflow-hidden">
+                  <Image src={imageForEmirate(e.slug).src} alt="" width={imageForEmirate(e.slug).width} height={imageForEmirate(e.slug).height} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                </span>
+                <span className="block px-6 pt-5">
                   <span className="flex items-baseline justify-between gap-3">
                     <span className="display text-4xl text-ink">{e.name}</span>
                     <span className="text-lg text-ink/60" lang="ar">{e.nameAr}</span>
                   </span>
                   <span className="mt-3 block text-sm leading-relaxed text-ink/75">{e.summary}</span>
                 </span>
-                <span className="mt-6 flex items-center justify-between text-sm font-semibold text-ink">
+                <span className="mt-6 flex items-center justify-between px-6 pb-6 text-sm font-semibold text-ink">
                   Regulator: {e.regulator.short}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>
@@ -86,6 +94,8 @@ export default function EmiratesIndex() {
           </div>
         </Section>
       </div>
+
+      <div className="mx-auto max-w-6xl px-5"><PageImageCredits images={emirates.map((e) => imageForEmirate(e.slug))} /></div>
 
       <GuideCta title="Find a dentist near you" text="Use your location to see licensed clinics closest to you, wherever you are in the UAE." href="/find-clinics/?near=me" cta="Use my location" />
     </PageLayout>

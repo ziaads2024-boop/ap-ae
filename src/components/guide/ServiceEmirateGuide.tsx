@@ -4,13 +4,15 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import {
   emirates, formatAed, hasLocalGuide, insuranceNote, services, urls,
-  type EmirateContent, type ServiceContent, type ServiceEmirateContent,
+  type EmirateContent, type ServiceContent, type ServiceEmirateContent, SITE_URL,
 } from '@/content';
 import { breadcrumbSchema, clinicListSchema, faqSchema, serviceEmiratePageSchema } from '@/content/schema';
 import {
-  BulletList, ClinicList, FactGrid, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, MedicalNote, Section,
+  BulletList, ClinicList, FactGrid, FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, MedicalNote, PageImageCredits, Section,
   type ClinicSummary,
 } from './GuideBlocks';
+import { CreditedImage } from './CreditedImage';
+import { imageForEmirate, imageForService } from '@/content/images';
 
 export function serviceEmirateMeta(service: ServiceContent, emirate: EmirateContent) {
   return {
@@ -32,13 +34,15 @@ export function ServiceEmirateGuide({
   const faqs = [...local.faqs, emirate.faqs[0]].filter(Boolean);
   const otherEmirates = emirates.filter((e) => e.slug !== emirate.slug && hasLocalGuide(service.slug, e.slug));
   const otherServices = services.filter((s) => s.slug !== service.slug && hasLocalGuide(s.slug, emirate.slug));
+  const heroImage = imageForEmirate(emirate.slug);
+  const treatmentImage = imageForService(service.slug);
 
   return (
     <PageLayout>
-      <SEOHead title={title} description={description} canonical={path} />
+      <SEOHead title={title} description={description} canonical={path} ogImage={`${SITE_URL}${heroImage.src}`} />
       <JsonLd
         data={[
-          serviceEmiratePageSchema(service, emirate, title, description),
+          serviceEmiratePageSchema(service, emirate, title, description, heroImage),
           breadcrumbSchema(crumbs),
           faqSchema(faqs),
           clinicListSchema(`${service.name} clinics in ${emirate.name}`, clinics),
@@ -51,6 +55,8 @@ export function ServiceEmirateGuide({
         label={`Local guide · ${emirate.name}`}
         title={<>{service.shortName} in{' '}<br />{emirate.name}</>}
         answer={local.localNote[0]}
+        image={heroImage}
+        badge={{ label: 'Licensed by', value: emirate.regulator.name }}
       >
         <Link href={`/find-clinics/?emirate=${emirate.slug}&specialty=${service.slug}`} className="btn-ink">
           {service.shortName} clinics in {emirate.name} <ArrowRight className="h-4 w-4" />
@@ -84,6 +90,7 @@ export function ServiceEmirateGuide({
         </Section>
 
         <Section id="process" eyebrow="The treatment" title="What to expect">
+          <CreditedImage image={treatmentImage} sizes="(min-width: 1024px) 960px, 92vw" className="mb-6 aspect-[21/9] rounded-3xl" />
           <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {service.steps.map((step, i) => (
               <li key={step.title} className="rounded-2xl border border-black/10 bg-white p-5">
@@ -126,7 +133,7 @@ export function ServiceEmirateGuide({
 
         {otherServices.length > 0 && (
           <Section eyebrow={`More in ${emirate.name}`} title="Other treatments">
-            <LinkTiles columns={4} links={otherServices.map((s) => ({ href: urls.serviceEmirate(emirate.slug, s.slug), title: `${s.shortName} in ${emirate.name}`, tone: s.tone }))} />
+            <LinkTiles columns={4} links={otherServices.map((s) => ({ href: urls.serviceEmirate(emirate.slug, s.slug), title: `${s.shortName} in ${emirate.name}`, tone: s.tone, image: imageForService(s.slug) }))} />
           </Section>
         )}
 
@@ -145,7 +152,10 @@ export function ServiceEmirateGuide({
           </Section>
         )}
 
-        <div className="pb-6"><MedicalNote /></div>
+        <div className="pb-6">
+          <MedicalNote />
+          <PageImageCredits images={[heroImage, treatmentImage, ...otherServices.map((s) => imageForService(s.slug))]} />
+        </div>
       </div>
 
       <GuideCta
