@@ -276,7 +276,7 @@ async function buildCityUrls(supabase, content) {
   return cities
     .filter((city) => city.slug && stateSlugMap.get(city.state_id))
     .filter((city) => !(stateSlugMap.get(city.state_id) === 'dubai' && content.dubai.dubaiAreas.some((a) => (a.aliases || []).includes(city.slug))))
-    .filter((city) => !content.serviceBySlug(city.slug))
+    .filter((city) => !content.serviceBySlug(content.canonicalTreatment(city.slug)))
     .map((city) => ({
       loc: normalizeUrl(`/${stateSlugMap.get(city.state_id)}/${city.slug}`),
       lastmod: city.updated_at?.split('T')[0],
@@ -285,10 +285,10 @@ async function buildCityUrls(supabase, content) {
     }));
 }
 
-async function buildServiceUrls(supabase) {
+async function buildServiceUrls(supabase, content) {
   const treatments = await fetchAll(supabase, 'treatments', 'slug, updated_at', { is_active: true });
   return treatments
-    .filter((treatment) => treatment.slug)
+    .filter((treatment) => treatment.slug && !content.isRenamedTreatment(treatment.slug))
     .map((treatment) => ({
       loc: normalizeUrl(`/services/${treatment.slug}`),
       lastmod: treatment.updated_at?.split('T')[0],
@@ -323,7 +323,7 @@ async function buildServiceLocationUrls(supabase, content) {
   }
   const validCombos = new Set([...comboCounts].filter(([, n]) => n >= MIN_CLINICS).map(([key]) => key));
   const aliasCities = new Set(content.dubai.dubaiAreas.flatMap((a) => a.aliases || []));
-  const aliasTreatments = new Set(['dental-veneers']);
+  const aliasTreatments = { has: (slug) => content.isRenamedTreatment(slug) };
 
   const urls = [];
   for (const city of cities) {
@@ -466,7 +466,7 @@ async function main() {
     [stateUrls, cityUrls, serviceUrls, serviceLocationUrls, profileUrls, postUrls, insuranceUrls] = await Promise.all([
       buildStateUrls(supabase),
       buildCityUrls(supabase, content),
-      buildServiceUrls(supabase),
+      buildServiceUrls(supabase, content),
       buildServiceLocationUrls(supabase, content),
       buildProfileUrls(supabase),
       buildPostUrls(supabase),
@@ -481,7 +481,7 @@ async function main() {
     'sitemap-static.xml': sm(buildStaticUrls()),
     'sitemap-guides.xml': sm(guideUrls),
     'sitemap-states.xml': sm(stateUrls.filter(notAGuide)),
-    'sitemap-cities.xml': sm(cityUrls),
+    'sitemap-cities.xml': sm(cityUrls.filter(notAGuide)),
     'sitemap-services.xml': sm(serviceUrls.filter(notAGuide)),
     'sitemap-service-locations.xml': sm(serviceLocationUrls),
     'sitemap-profiles.xml': sm(profileUrls),

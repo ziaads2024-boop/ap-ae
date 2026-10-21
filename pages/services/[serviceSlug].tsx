@@ -3,7 +3,7 @@ import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import ServicePageComponent from '@/pages/ServicePage';
 import { ServiceGuide } from '@/components/guide/ServiceGuide';
 import type { ClinicSummary } from '@/components/guide/GuideBlocks';
-import { services, serviceBySlug } from '@/content';
+import { services, serviceBySlug, canonicalTreatment, isRenamedTreatment } from '@/content';
 import { fetchGuideClinics } from '@/lib/guideClinics';
 
 const BASE_URL = 'https://www.appointpanda.ae';
@@ -64,7 +64,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
             .from('treatments')
             .select('slug');
         
-        const slugs = new Set([...services.map((service) => service.slug), ...(treatments || []).map((t) => t.slug)]);
+        const slugs = new Set([...services.map((service) => service.slug), ...(treatments || []).map((t) => t.slug).filter((t) => !isRenamedTreatment(t))]);
         const paths = Array.from(slugs).map((slug) => ({
             params: { serviceSlug: slug }
         }));
@@ -82,6 +82,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // Static Site Generation with SSR FAQ data for Googlebot
 export const getStaticProps: GetStaticProps = async (ctx) => {
     const slug = ctx.params?.serviceSlug as string;
+    // Old database slugs for the same treatment (e.g. dental-veneers) consolidate into the guide URL
+    if (slug && isRenamedTreatment(slug)) {
+        return { redirect: { destination: `/services/${canonicalTreatment(slug)}/`, permanent: true } };
+    }
     // Hand-written guides (src/content) render without the database; clinics are a live extra.
     if (slug && serviceBySlug(slug)) {
         const guideClinics = await fetchGuideClinics({ treatmentSlug: slug, limit: 10 });

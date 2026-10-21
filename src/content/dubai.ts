@@ -283,6 +283,71 @@ export const dubaiAreas: DubaiArea[] = [
     gettingThere: 'Mostly reached by car or bus.',
     nearby: ['dubai-silicon-oasis', 'al-warqa', 'mirdif'],
   },
+  {
+    slug: 'al-safa', name: 'Al Safa', group: 'Jumeirah coast', tone: 'sand',
+    summary: 'A residential area between Al Wasl Road and Sheikh Zayed Road, with clinics in villas and small medical centres.',
+    notes: [
+      'Al Safa sits next to Jumeirah and Al Wasl, so residents often compare clinics across all three. Villa-based clinics here usually have their own parking.',
+      'Clinics along the Sheikh Zayed Road edge of Al Safa are easier to reach by metro; the villa streets are better by car.',
+    ],
+    gettingThere: 'Reached via Al Wasl Road or Sheikh Zayed Road; the Red Line runs along the eastern edge.',
+    nearby: ['jumeirah', 'al-quoz', 'downtown-dubai'],
+  },
+  {
+    slug: 'dubai-investment-park', name: 'Dubai Investment Park', group: 'Inland communities', tone: 'lime',
+    summary: 'A large mixed industrial and residential district off Sheikh Mohammed Bin Zayed Road, with clinics serving residents and workers.',
+    notes: [
+      'Dubai Investment Park covers a wide area. Check which part the clinic is in, because driving between the residential and industrial sides takes time.',
+      'Many clinics here see shift workers and families from nearby communities; ask about early or late appointments if you need them.',
+    ],
+    gettingThere: 'Mostly reached by car; the Red Line\'s southern stations are a short drive away.',
+    nearby: ['discovery-gardens', 'jvc', 'motor-city'],
+  },
+  {
+    slug: 'discovery-gardens', name: 'Discovery Gardens', group: 'Inland communities', tone: 'sky',
+    summary: 'A residential community of themed low-rise buildings near Ibn Battuta, with neighbourhood clinics.',
+    notes: [
+      'Discovery Gardens residents often use clinics in the community or in nearby Ibn Battuta and Al Furjan. Compare travel time as well as price for treatments that need several visits.',
+    ],
+    gettingThere: 'Reached via Sheikh Zayed Road; the Red Line stations near Ibn Battuta are close by.',
+    nearby: ['dubai-investment-park', 'jlt', 'dubai-marina'],
+  },
+  {
+    slug: 'jvt', name: 'Jumeirah Village Triangle (JVT)', group: 'Inland communities', tone: 'lemon',
+    summary: 'A villa and townhouse community next to JVC, with a small number of local clinics.',
+    notes: [
+      'JVT has fewer clinics than neighbouring JVC, so many residents compare both. The two communities are a few minutes apart by car.',
+    ],
+    gettingThere: 'Reached by car via Sheikh Mohammed Bin Zayed Road and Al Khail Road.',
+    nearby: ['jvc', 'dubai-sports-city', 'motor-city'],
+  },
+  {
+    slug: 'al-mamzar', name: 'Al Mamzar', group: 'East & Deira', tone: 'blush',
+    summary: 'A coastal residential area at the northern tip of Deira, next to the Sharjah border.',
+    notes: [
+      'Al Mamzar borders Sharjah, and some clinics nearby are across the border. Dubai clinics are licensed by the DHA and Sharjah clinics by MOHAP, so check which side a clinic is on.',
+    ],
+    gettingThere: 'Reached via Al Mamzar and Al Ittihad roads; the Green Line serves nearby parts of Deira.',
+    nearby: ['deira', 'al-qusais', 'al-nahda-dubai'],
+  },
+  {
+    slug: 'al-rashidiya', name: 'Al Rashidiya', group: 'East & Deira', tone: 'sky',
+    summary: 'A residential area near Dubai International Airport, at the eastern end of the Red Line.',
+    notes: [
+      'Al Rashidiya is a family area. Residents often compare local clinics with those in neighbouring Mirdif.',
+    ],
+    gettingThere: 'Centrepoint (formerly Rashidiya) station at the end of the Red Line serves the area.',
+    nearby: ['mirdif', 'al-warqa', 'deira'],
+  },
+  {
+    slug: 'dubai-festival-city', name: 'Dubai Festival City', group: 'East & Deira', tone: 'lime',
+    summary: 'A waterfront mixed-use district on the Creek, near Al Garhoud, with clinics around Festival City Mall.',
+    notes: [
+      'Festival City is close to Al Garhoud and the airport; mall-based clinics here usually open into the evening.',
+    ],
+    gettingThere: 'Reached by car via the Business Bay Crossing and Al Rebat Street, or by taxi from Creek metro station.',
+    nearby: ['deira', 'mirdif', 'healthcare-city'],
+  },
 ];
 
 export const dubaiAreaBySlug = (slug: string) =>

@@ -52,6 +52,34 @@ export const urls = {
   dubaiReasons: '/dubai/reasons/',
 };
 
+/**
+ * Guide slugs vs treatment slugs in the database. RENAMED entries are the same
+ * treatment under an older database slug: URLs using the database slug 301 to
+ * the guide. LOOKUP_ONLY entries are related treatments used only to find
+ * clinics (no redirect).
+ */
+const RENAMED: Record<string, string> = {
+  'dental-veneers': 'veneers',
+  'root-canal-treatment': 'root-canal',
+  'emergency-dental-care': 'emergency-dentist',
+  'wisdom-teeth-removal': 'wisdom-tooth-removal',
+};
+const LOOKUP_ONLY: Record<string, string[]> = {
+  'hollywood-smile': ['smile-makeover'],
+};
+/** Database slug -> guide slug for renamed treatments (else unchanged). */
+export const canonicalTreatment = (slug: string) => RENAMED[slug] ?? slug;
+/** Every database treatment slug to query for a guide slug. */
+export const dbSlugsFor = (guideSlug: string) => [
+  guideSlug,
+  ...Object.entries(RENAMED).filter(([, g]) => g === guideSlug).map(([db]) => db),
+  ...(LOOKUP_ONLY[guideSlug] || []),
+];
+/** Guide slug for a database slug, including lookup-only relations (for counts and links). */
+export const guideSlugForDb = (dbSlug: string) =>
+  RENAMED[dbSlug] ?? Object.entries(LOOKUP_ONLY).find(([, list]) => list.includes(dbSlug))?.[0] ?? dbSlug;
+export const isRenamedTreatment = (slug: string) => slug in RENAMED;
+
 export const hasLocalGuide = (service: string, emirate: string) =>
   LOCAL_GUIDE_SERVICES.includes(service) && Boolean(serviceEmirateContent(service, emirate));
 

@@ -172,7 +172,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
             
             for (const treatment of treatments) {
                 // Only add path if this combination has at least one clinic
-                if (validCombos.has(`${cityId}-${treatment.id}`)) {
+                const area = stateSlug === 'dubai' ? dubaiAreaBySlug(citySlug) : undefined;
+                const redirects = !!area && (area.slug !== citySlug || canonicalTreatment(treatment.slug) !== treatment.slug);
+                if (validCombos.has(`${cityId}-${treatment.id}`) && !redirects) {
                     paths.push({
                         params: {
                             stateSlug,

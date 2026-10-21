@@ -6,7 +6,7 @@ import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import { buildClinicLocationOrFilter } from '@/lib/location/buildClinicLocationFilter';
 import { DubaiAreaGuide } from '@/components/guide/DubaiAreaGuide';
 import { dubaiAreas, dubaiAreaBySlug } from '@/content/dubai';
-import { hasLocalGuide, serviceBySlug, urls } from '@/content';
+import { canonicalTreatment, hasLocalGuide, serviceBySlug, urls } from '@/content';
 import { fetchAreaData, type AreaData } from '@/lib/dubaiData';
 
 // Wrapper component to render SEO meta tags server-side with FAQ data for SSR
@@ -157,7 +157,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
                 }
             }
             
-            if (matchedStateSlug) {
+            // Skip slugs that getStaticProps redirects (redirects can't be prerendered)
+            const alias = matchedStateSlug === 'dubai' && dubaiAreaBySlug(city.slug)?.slug !== city.slug && !!dubaiAreaBySlug(city.slug);
+            if (matchedStateSlug && !alias && !serviceBySlug(canonicalTreatment(city.slug))) {
                 paths.push({
                     params: {
                         stateSlug: matchedStateSlug,
@@ -183,8 +185,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     const cityParam = ctx.params?.citySlug as string;
 
     // Old URLs that put a treatment where the area belongs (e.g. /dubai/invisalign/)
-    if (stateParam && cityParam && serviceBySlug(cityParam)) {
-        const destination = hasLocalGuide(cityParam, stateParam) ? urls.serviceEmirate(stateParam, cityParam) : urls.service(cityParam);
+    if (stateParam && cityParam && serviceBySlug(canonicalTreatment(cityParam))) {
+        const t = canonicalTreatment(cityParam);
+        const destination = hasLocalGuide(t, stateParam) ? urls.serviceEmirate(stateParam, t) : urls.service(t);
         return { redirect: { destination, permanent: true } };
     }
 

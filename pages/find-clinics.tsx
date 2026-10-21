@@ -9,7 +9,7 @@ import { Crumbs } from '@/components/guide/GuideBlocks';
 import { AppointmentRequest } from '@/components/booking/AppointmentRequest';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
-import { emirates, isLiveEmirate, services, urls } from '@/content';
+import { dbSlugsFor, emirates, isLiveEmirate, services, urls } from '@/content';
 import { dubaiAreas, dubaiAreaBySlug, visitReasons, visitReasonBySlug } from '@/content/dubai';
 import { cn } from '@/lib/utils';
 
@@ -45,52 +45,66 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   return 6371 * 2 * Math.asin(Math.sqrt(a));
 }
 
-async function idsForTreatments(slugs: string[]): Promise<string[] | null> {
+/** Treatment ids for the filter, and whether any clinic has linked them yet. */
+async function treatmentFilter(slugs: string[]): Promise<{ ids: string[]; hasData: boolean } | null> {
   if (slugs.length === 0) return null;
-  const { data: treatments } = await supabase.from('treatments').select('id').in('slug', slugs);
+  const { data: treatments } = await supabase.from('treatments').select('id').in('slug', Array.from(new Set(slugs.flatMap(dbSlugsFor))));
   const ids = (treatments || []).map((t) => t.id);
-  if (ids.length === 0) return [];
-  const { data: links } = await supabase.from('clinic_treatments').select('clinic_id').in('treatment_id', ids).limit(3000);
-  return Array.from(new Set((links || []).map((l) => l.clinic_id)));
+  if (ids.length === 0) return { ids, hasData: false };
+  const { count } = await supabase.from('clinic_treatments').select('clinic_id', { count: 'exact', head: true }).in('treatment_id', ids);
+  return { ids, hasData: (count || 0) > 0 };
 }
 
-async function idsForInsurance(slug: string): Promise<string[] | null> {
+async function insuranceFilter(slug: string): Promise<{ id: string; hasData: boolean } | null> {
   if (!slug) return null;
   const { data: ins } = await supabase.from('insurances').select('id').eq('slug', slug).maybeSingle();
-  if (!ins) return [];
-  const { data: links } = await supabase.from('clinic_insurances').select('clinic_id').eq('insurance_id', ins.id).limit(3000);
-  return (links || []).map((l) => l.clinic_id);
+  if (!ins) return null;
+  const { count } = await supabase.from('clinic_insurances').select('clinic_id', { count: 'exact', head: true }).eq('insurance_id', ins.id);
+  return { id: ins.id, hasData: (count || 0) > 0 };
 }
 
-const intersect = (a: string[] | null, b: string[] | null) => (a === null ? b : b === null ? a : a.filter((x) => b.includes(x)));
+const dedupe = (rows: ClinicRow[]) => Array.from(new Map(rows.map((r) => [r.id, r])).values());
 
-async function fetchClinics(opts: { emirate: string; area: string; treatments: string[]; insurance: string; q: string; sort: Sort; geo?: { lat: number; lng: number }; limit: number }): Promise<ClinicRow[]> {
+export interface SearchResult {
+  rows: ClinicRow[];
+  /** Filters we could not apply because clinics have not listed that data yet */
+  unverified: ('treatment' | 'insurance')[];
+}
+
+async function fetchClinics(opts: { emirate: string; area: string; treatments: string[]; insurance: string; q: string; sort: Sort; geo?: { lat: number; lng: number }; limit: number }): Promise<SearchResult> {
   let cityIds: string[] | null = null;
   if (opts.area) {
     const area = dubaiAreaBySlug(opts.area);
     const slugs = area ? [area.slug, ...(area.aliases || [])] : [opts.area];
     const { data: cities } = await supabase.from('cities').select('id').in('slug', slugs);
     cityIds = (cities || []).map((c) => c.id);
-    if (cityIds.length === 0) return [];
+    if (cityIds.length === 0) return { rows: [], unverified: [] };
   } else if (opts.emirate) {
     const { data: state } = await supabase.from('states').select('id').eq('slug', opts.emirate).maybeSingle();
-    if (!state) return [];
+    if (!state) return { rows: [], unverified: [] };
     const { data: cities } = await supabase.from('cities').select('id').eq('state_id', state.id);
     cityIds = (cities || []).map((c) => c.id);
-    if (cityIds.length === 0) return [];
+    if (cityIds.length === 0) return { rows: [], unverified: [] };
   }
 
-  const [byTreatment, byInsurance] = await Promise.all([idsForTreatments(opts.treatments), idsForInsurance(opts.insurance)]);
-  const clinicIds = intersect(byTreatment, byInsurance);
-  if (clinicIds && clinicIds.length === 0) return [];
+  const [tf, inf] = await Promise.all([treatmentFilter(opts.treatments), insuranceFilter(opts.insurance)]);
+  const unverified: SearchResult['unverified'] = [];
+  if (tf && !tf.hasData) unverified.push('treatment');
+  if (inf && !inf.hasData) unverified.push('insurance');
+  const useTreatment = tf && tf.hasData ? tf.ids : null;
+  const useInsurance = inf && inf.hasData ? inf.id : null;
 
   const build = (radiusDeg?: number) => {
-    let query = supabase
-      .from('clinics')
-      .select('id, name, slug, phone, rating, review_count, cover_image_url, latitude, longitude, city:cities(name, slug), area:areas(name), clinic_insurances(insurance:insurances(name))')
-      .eq('is_active', true);
+    // Filters are inner joins, so no long id lists go into the request URL
+    const select = [
+      'id, name, slug, phone, rating, review_count, cover_image_url, latitude, longitude, city:cities(name, slug), area:areas(name), clinic_insurances(insurance:insurances(name))',
+      useTreatment ? 'tf:clinic_treatments!inner(treatment_id)' : '',
+      useInsurance ? 'inf:clinic_insurances!inner(insurance_id)' : '',
+    ].filter(Boolean).join(', ');
+    let query = supabase.from('clinics').select(select).eq('is_active', true);
     if (cityIds) query = query.in('city_id', cityIds);
-    if (clinicIds) query = query.in('id', clinicIds.slice(0, 1000));
+    if (useTreatment) query = query.in('tf.treatment_id', useTreatment);
+    if (useInsurance) query = query.eq('inf.insurance_id', useInsurance);
     if (opts.q) query = query.ilike('name', `%${opts.q.replace(/[%_,()]/g, ' ')}%`);
     if (opts.geo && radiusDeg) {
       query = query
@@ -107,13 +121,13 @@ async function fetchClinics(opts: { emirate: string; area: string; treatments: s
         .filter((c) => c.latitude != null && c.longitude != null)
         .map((c) => ({ ...c, distanceKm: haversineKm(opts.geo!.lat, opts.geo!.lng, c.latitude!, c.longitude!) }))
         .sort((a, b) => a.distanceKm! - b.distanceKm!);
-      if (rows.length >= 6 || radius === 0.75) return rows.slice(0, opts.limit);
+      if (rows.length >= 6 || radius === 0.75) return { rows: dedupe(rows).slice(0, opts.limit), unverified };
     }
   }
 
   const { data, error } = await build();
   if (error) throw error;
-  return (data || []) as unknown as ClinicRow[];
+  return { rows: dedupe((data || []) as unknown as ClinicRow[]), unverified };
 }
 
 export default function FindClinicsPage() {
@@ -180,12 +194,14 @@ export default function FindClinicsPage() {
     staleTime: 60 * 60 * 1000,
   });
 
-  const { data: clinics = [], isLoading, isError } = useQuery({
+  const { data: result, isLoading, isError } = useQuery({
     queryKey: ['find-clinics', emirate, area, treatmentFilter.join(','), insurance, debouncedQ, sort, geoCoords?.lat, geoCoords?.lng, limit],
     queryFn: () => fetchClinics({ emirate, area, treatments: treatmentFilter, insurance, q: debouncedQ, sort, geo: geoCoords, limit }),
     enabled: router.isReady,
     staleTime: 5 * 60 * 1000,
   });
+  const clinics = result?.rows || [];
+  const unverified = result?.unverified || [];
 
   const emirateName = emirates.find((e) => e.slug === emirate)?.name;
   const areaName = dubaiAreaBySlug(area)?.name;
@@ -311,6 +327,12 @@ export default function FindClinicsPage() {
           </div>
         ) : (
           <>
+            {unverified.length > 0 && (
+              <p className="mb-4 rounded-2xl bg-tone-lemon p-4 text-sm leading-relaxed text-ink" role="note">
+                Clinics have not yet confirmed their {unverified.join(' and ')} details on AppointPanda, so these results are not filtered by {unverified.join(' or ')}.
+                Ask the clinic when you request an appointment.
+              </p>
+            )}
             <p className="mb-4 text-sm text-zinc-600">{clinics.length}{clinics.length >= limit ? '+' : ''} clinics</p>
             <ul className="space-y-3">
               {clinics.map((c) => {

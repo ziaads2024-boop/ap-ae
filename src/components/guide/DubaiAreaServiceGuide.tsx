@@ -48,7 +48,7 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
       q: `Which clinics in ${area.name} offer ${service.name.toLowerCase()}?`,
       a: data.clinicCount
         ? `${data.clinics.slice(0, 3).map((c) => c.name).join(', ')}${data.clinicCount > 3 ? ` and ${data.clinicCount - 3} more` : ''} list ${service.name.toLowerCase()} on AppointPanda. The list is sorted by number of Google reviews, not by quality.`
-        : `We do not have clinics in ${area.name} listing this treatment yet. Nearby areas such as ${nearby.map((n) => n.name).join(', ')} may have options.`,
+        : `No clinic in ${area.name} has confirmed this treatment on AppointPanda yet. You can contact dental clinics in ${area.name} or nearby areas such as ${nearby.map((n) => n.name).join(', ')} and ask.`,
     },
   ];
 
@@ -76,9 +76,17 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
               <ClinicResults clinics={data.clinics} priceLabel={`${service.shortName} from`} defaultReason={reasons[0]?.slug} />
               <p className="mt-3 text-xs text-zinc-500">Sorted by number of Google reviews. Prices are those the clinic lists on AppointPanda and are a starting point, not a quote.</p>
             </>
+          ) : data.areaClinics.length ? (
+            <>
+              <p className="mb-4 rounded-2xl bg-tone-lemon p-4 text-sm leading-relaxed text-ink" role="note">
+                Clinics in {area.name} have not yet confirmed on AppointPanda which treatments they offer. These are dental clinics in the area;
+                when you request an appointment, ask whether the clinic provides {service.name.toLowerCase()}.
+              </p>
+              <ClinicResults clinics={data.areaClinics} defaultReason={reasons[0]?.slug} />
+            </>
           ) : (
             <p className="rounded-3xl border border-dashed border-black/20 bg-white p-6 text-sm text-zinc-600">
-              No clinics in {area.name} list this treatment yet.{' '}
+              No clinics in {area.name} are listed yet.{' '}
               <Link href={`/find-clinics/?specialty=${service.slug}`} className="font-semibold underline">Search all of Dubai</Link>
             </p>
           )}

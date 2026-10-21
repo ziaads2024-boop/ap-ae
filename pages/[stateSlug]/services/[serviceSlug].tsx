@@ -4,7 +4,7 @@ import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import StateServicePage from '@/pages/StateServicePage';
 import { ServiceEmirateGuide } from '@/components/guide/ServiceEmirateGuide';
 import type { ClinicSummary } from '@/components/guide/GuideBlocks';
-import { emirates, emirateBySlug, hasLocalGuide, LOCAL_GUIDE_SERVICES, serviceBySlug, serviceEmirateContent, urls } from '@/content';
+import { emirates, emirateBySlug, hasLocalGuide, LOCAL_GUIDE_SERVICES, serviceBySlug, serviceEmirateContent, urls, canonicalTreatment, isRenamedTreatment } from '@/content';
 import { fetchGuideClinics } from '@/lib/guideClinics';
 
 interface StateServiceRouteProps {
@@ -67,7 +67,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     );
 
     const seen = new Set(guidePaths.map((p) => `${p.params.stateSlug}/${p.params.serviceSlug}`));
-    const dbPaths = paths.filter((p) => !seen.has(`${p.params.stateSlug}/${p.params.serviceSlug}`) && !serviceBySlug(p.params.serviceSlug));
+    const dbPaths = paths.filter((p) => !seen.has(`${p.params.stateSlug}/${p.params.serviceSlug}`) && !serviceBySlug(p.params.serviceSlug) && !isRenamedTreatment(p.params.serviceSlug) && normalizeStateSlug(p.params.stateSlug) === p.params.stateSlug);
     return { paths: [...guidePaths, ...dbPaths], fallback: 'blocking' };
   } catch (error) {
     console.error('Error generating state service paths:', error);
@@ -78,6 +78,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<StateServiceRouteProps | GuideProps> = async (ctx) => {
   const emirateSlug = normalizeStateSlug((ctx.params?.stateSlug as string) || '');
   const serviceSlug = ctx.params?.serviceSlug as string | undefined;
+
+  if (serviceSlug && emirateBySlug(emirateSlug) && isRenamedTreatment(serviceSlug)) {
+    const target = canonicalTreatment(serviceSlug);
+    return { redirect: { destination: hasLocalGuide(target, emirateSlug) ? urls.serviceEmirate(emirateSlug, target) : urls.service(target), permanent: true } };
+  }
 
   if (serviceSlug && emirateBySlug(emirateSlug) && hasLocalGuide(serviceSlug, emirateSlug)) {
     if (emirateSlug !== ctx.params?.stateSlug) {

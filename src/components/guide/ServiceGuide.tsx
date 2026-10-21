@@ -153,7 +153,7 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
         <Section id="clinics" eyebrow="Clinics" title={`Clinics offering ${service.shortName.toLowerCase()}`}>
           <ClinicList
             clinics={clinics}
-            emptyText="Live clinic listings are not available right now."
+            emptyText="Clinics have not yet confirmed on AppointPanda which treatments they offer, so we do not list clinics for this treatment yet."
             moreHref={`/find-clinics/?specialty=${service.slug}`}
           />
         </Section>

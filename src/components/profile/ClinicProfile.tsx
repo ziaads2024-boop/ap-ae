@@ -4,7 +4,7 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Crumbs, FaqList, JsonLd } from '@/components/guide/GuideBlocks';
 import { AppointmentRequest } from '@/components/booking/AppointmentRequest';
-import { emirateBySlug, isLiveEmirate, serviceBySlug, SITE_URL, urls, formatAed, type Faq } from '@/content';
+import { canonicalTreatment, emirateBySlug, isLiveEmirate, serviceBySlug, SITE_URL, urls, formatAed, type Faq } from '@/content';
 import { dubaiAreaBySlug } from '@/content/dubai';
 import { breadcrumbSchema, faqSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
@@ -211,8 +211,8 @@ export function ClinicProfile(props: ClinicProfileProps) {
               <h2 className="display text-4xl text-ink">Treatments</h2>
               <ul className="mt-4 grid gap-2 sm:grid-cols-2">
                 {treatments.map((t) => {
-                  const guide = serviceBySlug(t.slug);
-                  const localHref = clinic.emirate && clinic.city ? `/${clinic.emirate.slug}/${clinic.city.slug}/${t.slug}/` : null;
+                  const guide = serviceBySlug(canonicalTreatment(t.slug));
+                  const localHref = clinic.emirate && clinic.city ? `/${clinic.emirate.slug}/${clinic.city.slug}/${canonicalTreatment(t.slug)}/` : null;
                   return (
                     <li key={t.slug} className="flex items-center justify-between gap-3 rounded-2xl border border-black/10 bg-white px-4 py-3">
                       <span className="min-w-0">
