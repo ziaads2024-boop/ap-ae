@@ -33,8 +33,8 @@ const CityPageWithSEO = ({ citySlug, stateSlug, stateData, cityData, seoData, fa
     const stateName = stateData?.name || stateSlug;
     const clinicCount = cityRatings?.clinicCount || 0;
     const reviewCount = cityRatings?.totalReviews || 0;
-    const fallbackTitle = `Best Dentists in ${cityName}, ${stateName} (2026) — Compare ${clinicCount}+ Clinics | AppointPanda`;
-    const fallbackDescription = `Find the best dentists in ${cityName}, ${stateName}. Compare ${clinicCount}+ verified dental clinics with ${reviewCount.toLocaleString()}+ real patient reviews. Read ratings, check AED prices for implants, whitening, invisalign. Book your appointment online in minutes. Free consultation available.`;
+    const fallbackTitle = `Dentists in ${cityName}, ${stateName}: ${clinicCount ? `${clinicCount} ` : ''}Listed Clinics | AppointPanda`;
+    const fallbackDescription = `Dental clinics in ${cityName}, ${stateName}${clinicCount ? ` (${clinicCount} listed)` : ''}. Compare Google ratings, treatments and insurance, and contact a clinic.`;
 
     return (
         <>

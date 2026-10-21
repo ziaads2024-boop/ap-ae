@@ -43,7 +43,7 @@ class MyDocument extends Document {
                   "height": 512,
                 },
                 "image": "https://www.appointpanda.ae/logo.png",
-                "description": "Find and book appointments with top-rated dental professionals across the UAE.",
+                "description": "A directory of dental clinics in Dubai and the UAE, with treatment guides and appointment requests.",
                 "address": { "@type": "PostalAddress", "addressCountry": "AE" },
                 "sameAs": [
                   "https://www.facebook.com/appointpanda/",

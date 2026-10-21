@@ -158,7 +158,7 @@ const generateOrganizationSchema = (settings?: any) => {
     name: 'AppointPanda',
     url: BASE_URL,
     logo: `${BASE_URL}/logo.png`,
-    description: 'Find and book appointments with top-rated dental professionals across the UAE.',
+    description: 'A directory of dental clinics in Dubai and the UAE, with treatment guides and appointment requests.',
   };
 
   return {

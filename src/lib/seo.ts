@@ -45,7 +45,7 @@ export const generatePageTitle = (parts: string[]) =>
 
 export const generateLocationMeta = (locationName: string, type: 'city' | 'area') => ({
   title: `Best Dentists in ${locationName} - Book Appointments Online`,
-  description: `Find and book appointments with top-rated dental professionals in ${locationName}. Compare verified clinics, read patient reviews, and get the care you deserve.`,
+  description: `Dental clinics in ${locationName}: compare Google ratings, treatments and insurance, and request an appointment.`,
   keywords: [
     `dentists in ${locationName}`,
     `dental clinics ${locationName}`,

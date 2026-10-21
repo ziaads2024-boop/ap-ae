@@ -51,7 +51,7 @@ export interface NavLinkData {
 
 export const SITE_NAME = 'AppointPanda';
 export const SITE_DOMAIN = 'appointpanda.ae';
-export const SITE_TAGLINE = "The UAE's leading directory for premium dental care.";
+export const SITE_TAGLINE = "A directory of dental clinics in Dubai and the UAE.";
 
 export const PHONE_NUMBER = '800-APANDA (272632)';
 export const PHONE_HREF = '+971800272632';

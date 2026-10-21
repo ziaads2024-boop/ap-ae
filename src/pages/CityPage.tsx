@@ -444,7 +444,7 @@ const shouldNoIndex = false;
            {
              type: 'place' as const,
              name: cityName,
-             description: `Find the best dentists and dental clinics in ${cityName}, ${stateName}`,
+             description: `Dental clinics in ${cityName}, ${stateName}`,
              url: `/${normalizedStateSlug}/${citySlug}/`,
              containedInPlace: stateName,
            },

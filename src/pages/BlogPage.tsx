@@ -13,6 +13,8 @@ import { StructuredData } from "@/components/seo/StructuredData";
 import { useRealCounts } from "@/hooks/useRealCounts";
 import { Calendar, User, ArrowRight, Clock, Tag, MapPin, Search, Star, Sparkles, BookOpen, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
+import { liveImage } from '@/lib/liveImage';
+import { displayTitle } from '@/lib/displayTitle';
 
 interface BlogPageProps {
   posts?: any[];
@@ -97,7 +99,7 @@ const BlogPage = ({
     <PageLayout>
       <SEOHead
         title="Dental Health Blog - Tips, Advice & News"
-        description="Expert dental health advice, tips, and the latest news from top dental professionals. Learn about oral hygiene, treatments, cosmetic dentistry, and more."
+        description="Articles on dental care in the UAE: treatment costs in AED, insurance, oral hygiene and how to choose a dentist in Dubai."
         canonical="/blog/"
         keywords={['dental health blog', 'oral hygiene tips', 'dental advice', 'dentist blog', 'dental care tips']}
       />
@@ -112,7 +114,7 @@ const BlogPage = ({
         badge="Blog"
         title="Dental Health"
         highlight="Insights & Guides"
-        description="Expert articles on dental care, treatments, oral hygiene tips, and finding the right dentist across the UAE."
+        description="Articles on dental care, treatment costs, oral hygiene and finding a dentist in Dubai and the UAE."
       />
 
       {/* Featured Posts */}
@@ -126,10 +128,10 @@ const BlogPage = ({
                 className={`card-modern overflow-hidden group ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
               >
                 <div className={`relative ${i === 0 ? "h-80 md:h-full" : "h-48"}`}>
-                  {post.featured_image_url ? (
+                  {liveImage(post.featured_image_url) ? (
                     <img
-                      src={post.featured_image_url}
-                      alt={post.title}
+                      src={liveImage(post.featured_image_url)!}
+                      alt={displayTitle(post.title)}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -147,7 +149,7 @@ const BlogPage = ({
                       {post.category || "Dental Health"}
                     </Badge>
                     <h3 className={`font-display font-bold text-white group-hover:text-primary transition-colors ${i === 0 ? "text-2xl md:text-3xl" : "text-lg"}`}>
-                      {post.title}
+                      {displayTitle(post.title)}
                     </h3>
                     <div className="flex items-center gap-4 mt-3 text-sm text-white/60">
                       {post.author_name && (
@@ -218,10 +220,10 @@ const BlogPage = ({
                     className="card-modern overflow-hidden group card-hover"
                   >
                     <div className="h-48 relative overflow-hidden">
-                      {post.featured_image_url ? (
+                      {liveImage(post.featured_image_url) ? (
                         <img
-                          src={post.featured_image_url}
-                          alt={post.title}
+                          src={liveImage(post.featured_image_url)!}
+                          alt={displayTitle(post.title)}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
@@ -246,7 +248,7 @@ const BlogPage = ({
                         )}
                       </div>
                       <h3 className="font-display text-lg font-bold group-hover:text-primary transition-colors line-clamp-2">
-                        {post.title}
+                        {displayTitle(post.title)}
                       </h3>
                       <div className="flex items-center gap-2 mt-4 text-sm font-bold text-primary">
                         Read More
@@ -289,7 +291,7 @@ const BlogPage = ({
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                Browse {counts?.clinics?.toLocaleString() || "6,600+"}+ verified dental professionals and book your appointment today.
+                Compare {counts?.clinics ? `${counts.clinics.toLocaleString()} ` : ''}listed dental clinics and request an appointment.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
                 <Link href="/find-clinics/">
@@ -364,7 +366,7 @@ const BlogPage = ({
             Ready to Find Your Dentist?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Browse our directory of verified dental professionals across the UAE.
+            Browse listed dental clinics in Dubai by area, treatment and insurance.
           </p>
           <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
             <Link href="/find-clinics/">

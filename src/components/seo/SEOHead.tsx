@@ -64,7 +64,7 @@ export const SEOHead = ({
   const fullTitle = safeTitle.includes(SITE_NAME) ? safeTitle : `${safeTitle} | ${SITE_NAME}`;
   
   // Ensure description is not empty
-  const safeDescription = description || 'Find and book appointments with top-rated dental professionals across the UAE.';
+  const safeDescription = description || 'Find a dentist in Dubai: compare listed clinics by area, treatment and insurance, and request an appointment.';
 
   // CRITICAL: Always generate canonical URL - use provided or derive from current path
   // Don't add trailing slash - Next.js trailingSlash: true handles redirects

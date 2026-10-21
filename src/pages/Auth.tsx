@@ -173,7 +173,7 @@ export default function Auth() {
             AppointPanda
           </CardTitle>
           <CardDescription>
-            Sign in to manage your dental practice or find the best dentists
+            Sign in to manage your dental practice or your appointment requests
           </CardDescription>
         </CardHeader>
         <CardContent>

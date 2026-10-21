@@ -20,7 +20,7 @@ function matchEmirate(text: string) {
   return emirates.find((e) => norm(e.slug) === t || norm(e.name) === t || t.includes(norm(e.name)));
 }
 
-function matchService(text: string) {
+export function matchService(text: string) {
   const t = norm(text);
   if (!t) return undefined;
   const slug = canonicalTreatment(slugify(text));

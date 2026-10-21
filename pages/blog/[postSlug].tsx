@@ -2,83 +2,44 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import BlogPostPageComponent from '@/pages/BlogPostPage';
+import { liveImage } from '@/lib/liveImage';
+import { displayTitle } from '@/lib/displayTitle';
 
 const BASE_URL = 'https://www.appointpanda.ae';
 
 const BlogPostPageWithSEO = ({ postSlug, postData, seoData, authorData }: {
     postSlug: string;
     postData: any;
-    seoData: { title: string; description: string; canonical: string; ogImage?: string; author?: string; publishedAt?: string | null; modifiedAt?: string | null };
-    authorData?: { name: string; slug: string; bio?: string; credentials?: string; linkedin_url?: string; avatar_url?: string } | null;
+    seoData: { title: string; description: string; canonical: string; ogImage?: string | null; author?: string; publishedAt?: string | null; modifiedAt?: string | null };
+    authorData?: { name: string; slug: string; bio?: string; avatar_url?: string } | null;
 }) => {
-    const fullTitle = seoData.title.includes('AppointPanda') ? seoData.title : `${seoData.title} | AppointPanda`;
-    const imageUrl = seoData.ogImage || `${BASE_URL}/og-image.png`;
-
-    const authorSchema = authorData ? {
-        "@type": "Person",
-        "name": authorData.name,
-        "url": `${BASE_URL}/blog/author/${authorData.slug}/`,
-        ...(authorData.bio && { "description": authorData.bio }),
-    } : undefined;
-
+    // Title, description, canonical and Open Graph tags come from SEOHead in the
+    // page component; this wrapper adds the Article and breadcrumb schema once.
+    const headline = displayTitle(postData?.title) || seoData.title;
+    const image = liveImage(seoData.ogImage) || `${BASE_URL}/og-image.png`;
     const articleSchema: Record<string, any> = {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": seoData.title,
+        "headline": headline,
         "description": seoData.description,
-        "image": imageUrl,
-        "author": authorSchema || {
-            "@type": "Person",
-            "name": seoData.author || 'AppointPanda Team',
-            "url": BASE_URL,
-        },
+        "image": image,
+        "author": authorData
+            ? { "@type": "Person", "name": authorData.name, ...(authorData.bio ? { "description": authorData.bio } : {}) }
+            : { "@type": "Organization", "name": "AppointPanda", "url": BASE_URL },
         "publisher": {
             "@type": "Organization",
             "name": "AppointPanda",
-            "logo": {
-                "@type": "ImageObject",
-                "url": `${BASE_URL}/logo.png`,
-                "width": 512,
-                "height": 512,
-            }
+            "logo": { "@type": "ImageObject", "url": `${BASE_URL}/logo.png`, "width": 512, "height": 512 },
         },
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": `${BASE_URL}${seoData.canonical}`,
-        },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `${BASE_URL}${seoData.canonical}` },
         "articleSection": postData?.category || 'Dental Health',
     };
-
     if (seoData.publishedAt) articleSchema.datePublished = seoData.publishedAt;
-    if (seoData.modifiedAt) articleSchema.dateModified = seoData.modifiedAt;
-    else if (seoData.publishedAt) articleSchema.dateModified = seoData.publishedAt;
-    if (postData?.content) articleSchema.wordCount = postData.content.split(/\s+/).length;
+    if (seoData.modifiedAt || seoData.publishedAt) articleSchema.dateModified = seoData.modifiedAt || seoData.publishedAt;
 
     return (
         <>
             <Head>
-                <title>{seoData.title}</title>
-                <meta name="description" content={seoData.description} />
-                <meta name="robots" content="index, follow" />
-                <meta property="og:locale" content="en_AE" />
-                <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}${seoData.canonical}`} />
-                <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}${seoData.canonical}`} />
-                <link rel="sitemap" type="application/xml" href={`${BASE_URL}/sitemap.xml`} />
-                <link rel="canonical" href={`${BASE_URL}${seoData.canonical}`} />
-                <meta property="og:type" content="article" />
-                <meta property="og:url" content={`${BASE_URL}${seoData.canonical}`} />
-                <meta property="og:title" content={fullTitle} />
-                <meta property="og:description" content={seoData.description} />
-                <meta property="og:image" content={imageUrl} />
-                <meta property="og:site_name" content="AppointPanda" />
-                {seoData.publishedAt && <meta property="article:published_time" content={seoData.publishedAt} />}
-                {seoData.modifiedAt && <meta property="article:modified_time" content={seoData.modifiedAt} />}
-                {seoData.author && <meta property="article:author" content={seoData.author} />}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:url" content={`${BASE_URL}${seoData.canonical}`} />
-                <meta name="twitter:title" content={fullTitle} />
-                <meta name="twitter:description" content={seoData.description} />
-                <meta name="twitter:image" content={imageUrl} />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -91,12 +52,12 @@ const BlogPostPageWithSEO = ({ postSlug, postData, seoData, authorData }: {
                         itemListElement: [
                             { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
                             { "@type": "ListItem", position: 2, name: "Blog", item: `${BASE_URL}/blog/` },
-                            { "@type": "ListItem", position: 3, name: postData?.title || postSlug, item: `${BASE_URL}${seoData.canonical}` },
+                            { "@type": "ListItem", position: 3, name: headline || postSlug, item: `${BASE_URL}${seoData.canonical}` },
                         ]
                     }) }}
                 />
             </Head>
-            <BlogPostPageComponent 
+            <BlogPostPageComponent
                 postSlugProp={postSlug}
                 postDataProp={postData}
                 seoDataProp={seoData}

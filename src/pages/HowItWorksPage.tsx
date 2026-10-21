@@ -24,7 +24,7 @@ const HowItWorksPage = () => {
       step: 1,
       icon: Search,
       title: "Search",
-      description: "Enter your location and the type of dental service you need. Browse through verified dental professionals in your area.",
+      description: "Choose an area and a reason for your visit or a treatment, then compare listed clinics nearby.",
       color: "from-primary/20 to-teal/10"
     },
     {
@@ -78,7 +78,7 @@ const HowItWorksPage = () => {
   ];
 
   const patientBenefits = [
-    "Access to verified dental professionals",
+    "Clinic listings with Google ratings, shown as reported",
     "Real patient reviews and ratings",
     "Easy online appointment requests",
     "Compare clinics and prices",

@@ -38,7 +38,7 @@ const defaultOrganization: OrganizationSettings = {
   name: 'AppointPanda',
   url: 'https://www.appointpanda.ae',
   logo: 'https://www.appointpanda.ae/logo.png',
-  description: 'Find and book appointments with top-rated dental professionals across the UAE.',
+  description: 'A directory of dental clinics in Dubai and the UAE, with treatment guides and appointment requests.',
   email: '',
   phone: '',
   address: {

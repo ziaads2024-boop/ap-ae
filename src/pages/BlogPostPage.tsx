@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { StructuredData } from "@/components/seo/StructuredData";
 import { getContentBody, calculateReadingTime } from "@/lib/blogContent";
 import { sanitizeCmsHtml } from "@/lib/security/sanitizeCmsHtml";
 import { BlogDentistList } from "@/components/blog/BlogDentistList";
@@ -19,6 +18,10 @@ import {
   MapPin, Search, Phone, Star, Shield, ArrowRight
 } from "lucide-react";
 import { format } from "date-fns";
+import { liveImage, stripBlockedImages } from '@/lib/liveImage';
+import { displayTitle } from '@/lib/displayTitle';
+import { matchService } from '@/lib/searchUrl';
+import { urls } from '@/content';
 
 type BlogContentBlock = {
   id: string;
@@ -145,7 +148,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Blog", href: "/blog/" },
-    { label: post.title },
+    { label: displayTitle(post.title) },
   ];
 
   const extractBlocksFromContent = (content: unknown): BlogContentBlock[] | null => {
@@ -166,6 +169,9 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
       .join("\n")
     : getContentBody(post.content);
   const readingTime = calculateReadingTime(contentStringForReading);
+  const featuredImage = liveImage(post.featured_image_url);
+  // The treatment guide this post is about, for "read next" links
+  const guide = matchService([post.title, ...(post.tags || [])].join(' '));
 
   // Check if content contains HTML tags (from n8n) or markdown
   const isHtmlContent = (content: string) => {
@@ -266,6 +272,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
         } else if (line.match(/^!\[.*?\]\(.*?\)$/)) {
           // Image markdown: ![alt](url)
           const imgMatch = line.match(/^!\[(.*?)\]\((.*?)\)$/);
+          if (imgMatch && !liveImage(imgMatch[2])) return null;
           if (imgMatch) {
             return (
               <figure key={i} className="my-6">
@@ -366,7 +373,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
         return <BlogFAQList key={b.id || `faq-${i}`} faqs={b.faqs || []} headingText={b.headingText} />;
       }
 
-      if (b.type === "image" && b.imageUrl) {
+      if (b.type === "image" && liveImage(b.imageUrl)) {
         return (
           <figure key={b.id || `img-${i}`} className="my-6 not-prose">
             <img
@@ -416,9 +423,9 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
     // If content contains HTML tags (and no special markers), render as HTML directly
     if (isHtmlContent(content)) {
       // Replace all H1 tags with H2 tags to avoid duplicate H1s (main title is already H1)
-      const contentWithoutH1 = sanitizeCmsHtml(
+      const contentWithoutH1 = stripBlockedImages(sanitizeCmsHtml(
         content.replace(/<h1(\s[^>]*)?>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>')
-      );
+      ));
       return (
         <div
           className="blog-content"
@@ -438,30 +445,13 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
         description={seoDataProp?.description || post.seo_description || post.excerpt || `Read "${post.title}" on AppointPanda's dental health blog.`}
         canonical={seoDataProp?.canonical || `/blog/${post.slug}/`}
         ogType="article"
-        ogImage={post.featured_image_url || undefined}
+        ogImage={featuredImage || undefined}
         author={post.author_name || 'AppointPanda Team'}
         publishedAt={post.published_at || undefined}
         modifiedAt={post.updated_at || undefined}
         keywords={post.tags || ['dental health', 'oral care']}
       />
-      <StructuredData
-        data={{
-          type: 'article',
-          headline: post.title,
-          description: post.excerpt || post.seo_description || '',
-          image: post.featured_image_url || '',
-          url: `/blog/${post.slug}/`,
-          datePublished: post.published_at || '',
-          dateModified: post.updated_at || post.published_at || '',
-          author: post.author_name || 'AppointPanda Team',
-        }}
-      />
-      <StructuredData
-        data={{
-          type: 'breadcrumb',
-          items: breadcrumbs.map(b => ({ name: b.label, url: b.href })),
-        }}
-      />
+      {/* Article and breadcrumb schema are rendered once by pages/blog/[postSlug].tsx */}
 
       {/* Breadcrumb Section - Clean Header */}
       <Section size="sm" className="border-b border-border bg-muted/30">
@@ -488,8 +478,8 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
               </div>
 
               {/* Title */}
-              <h1 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
-                {post.title}
+              <h1 className="display text-[clamp(2rem,4.5vw,3.5rem)] text-ink mb-6">
+                {displayTitle(post.title)}
               </h1>
 
               {/* Author & Date */}
@@ -514,9 +504,6 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                     {post.author_bio && (
                       <p className="text-xs text-muted-foreground line-clamp-1">{post.author_bio}</p>
                     )}
-                    {!post.author_credentials && !post.author_title && (
-                      <p className="text-sm text-muted-foreground">Dental Health Expert</p>
-                    )}
                   </div>
                 </div>
                 {post.published_at && (
@@ -529,11 +516,11 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
             </div>
 
             {/* Featured Image Card */}
-            {post.featured_image_url && (
+            {featuredImage && (
               <div className="card-modern overflow-hidden mb-6">
                 <div className="relative aspect-video">
                   <img
-                    src={post.featured_image_url}
+                    src={featuredImage}
                     alt={post.title}
                     className="w-full h-full object-cover"
                   />
@@ -553,6 +540,18 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                   <p className="text-muted-foreground">No content available.</p>
                 )}
               </div>
+
+              {guide && (
+                <div className="not-prose mt-8 rounded-3xl bg-tone-sky p-6 text-ink">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink/70">Treatment guide</p>
+                  <p className="mt-1 text-lg font-semibold">{guide.name}: cost, steps and what to ask</p>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/80">{guide.summary}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Link href={urls.service(guide.slug)} className="btn-ink">Read the guide</Link>
+                    <Link href={`/find-clinics/?specialty=${guide.slug}`} className="btn-ghost">Find clinics in Dubai</Link>
+                  </div>
+                </div>
+              )}
 
               {/* Tags */}
               {post.tags && post.tags.length > 0 && (
@@ -645,7 +644,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mb-4">
-                Ready to book an appointment? Find verified dental professionals in your city.
+                Looking for a dentist? Compare listed clinics in Dubai and request an appointment.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
                 <Link href="/find-clinics/">
@@ -705,7 +704,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                   <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-emerald-500 text-xs">✓</span>
                   </div>
-                  <span>6,600+ verified dental clinics</span>
+                  <span>Dental clinics across Dubai</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -768,9 +767,9 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                     className="card-modern overflow-hidden group card-hover"
                   >
                   <div className="h-40 relative overflow-hidden">
-                    {relatedPost.featured_image_url ? (
+                    {liveImage(relatedPost.featured_image_url) ? (
                       <img
-                        src={relatedPost.featured_image_url}
+                        src={liveImage(relatedPost.featured_image_url)!}
                         alt={relatedPost.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -800,7 +799,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
             Ready to Find Your Perfect Dentist?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Browse our directory of verified dental professionals across the UAE.
+            Browse listed dental clinics in Dubai by area, treatment and insurance.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">

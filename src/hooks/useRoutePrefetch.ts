@@ -9,15 +9,9 @@ import { useCallback, useRef } from 'react';
 
 // Map of routes to their lazy import functions for prefetching
 const ROUTE_PREFETCH_MAP: Record<string, () => Promise<unknown>> = {
-  '/services': () => import('@/pages/ServicesPage'),
   '/blog': () => import('@/pages/BlogPage'),
-  '/insurance': () => import('@/pages/InsurancePage'),
-  '/pricing': () => import('@/pages/PricingPage'),
-  '/about': () => import('@/pages/AboutPage'),
-  '/contact': () => import('@/pages/ContactPage'),
   '/faq': () => import('@/pages/FAQPage'),
   '/auth': () => import('@/pages/Auth'),
-  '/emergency-dentist': () => import('@/pages/EmergencyDentist'),
 };
 
 const prefetchedRoutes = new Set<string>();
@@ -62,7 +56,7 @@ export function useRoutePrefetch() {
  * Prefetch critical routes during idle time after initial load
  */
 export function prefetchCriticalRoutes() {
-  const criticalRoutes = ['/services', '/blog'];
+  const criticalRoutes = ['/blog'];
   
   if ('requestIdleCallback' in window) {
     requestIdleCallback(() => {
