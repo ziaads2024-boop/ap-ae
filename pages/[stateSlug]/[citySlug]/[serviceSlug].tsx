@@ -1,7 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { DubaiAreaServiceGuide } from '@/components/guide/DubaiAreaServiceGuide';
 import { dubaiAreaBySlug } from '@/content/dubai';
-import { serviceBySlug, urls } from '@/content';
+import { INDEX_COMING_SOON, isLiveEmirate, serviceBySlug, urls } from '@/content';
 import { canonicalTreatment, fetchAreaServiceData, type AreaServiceData } from '@/lib/dubaiData';
 import { normalizeStateSlug as normalizeDubaiState } from '@/lib/slug/normalizeStateSlug';
 import Head from 'next/head';
@@ -58,7 +58,7 @@ const ServiceLocationPageWithSEO = ({ stateSlug, citySlug, serviceSlug, stateDat
                 <title>{metaTitle}</title>
                 <meta name="description" content={metaDescription} />
                 <link rel="canonical" href={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-                <meta name="robots" content="index, follow" />
+                <meta name="robots" content={!INDEX_COMING_SOON && !isLiveEmirate(stateSlug) ? 'noindex, follow' : 'index, follow'} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
                 <meta property="og:title" content={metaTitle} />

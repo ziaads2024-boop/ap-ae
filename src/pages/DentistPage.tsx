@@ -19,6 +19,7 @@ import { InterlinkingSection } from "@/components/seo/InterlinkingSection";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
 import { MultiStepBookingModal } from "@/components/MultiStepBookingModal";
 import { AppointmentRequest } from "@/components/booking/AppointmentRequest";
+import { isLiveEmirate } from "@/content";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -541,7 +542,7 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
 
             {/* Inline Booking Calendar */}
             <div className="lg:sticky lg:top-24">
-              {dentist.clinic_id ? (
+              {dentist.clinic_id && isLiveEmirate(dentist.clinic?.city?.state?.slug) ? (
                 <div className="rounded-3xl border border-black/10 bg-white p-5">
                   <AppointmentRequest clinicId={dentist.clinic_id} clinicName={dentist.clinic?.name || dentist.name} dentistId={dentist.id} clinicPhone={dentist.clinic?.phone || null} compact />
                 </div>

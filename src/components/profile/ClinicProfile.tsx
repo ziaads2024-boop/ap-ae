@@ -4,7 +4,7 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Crumbs, FaqList, JsonLd } from '@/components/guide/GuideBlocks';
 import { AppointmentRequest } from '@/components/booking/AppointmentRequest';
-import { emirateBySlug, serviceBySlug, SITE_URL, urls, formatAed, type Faq } from '@/content';
+import { emirateBySlug, isLiveEmirate, serviceBySlug, SITE_URL, urls, formatAed, type Faq } from '@/content';
 import { dubaiAreaBySlug } from '@/content/dubai';
 import { breadcrumbSchema, faqSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
@@ -386,7 +386,16 @@ export function ClinicProfile(props: ClinicProfileProps) {
         {/* Sticky request panel */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
-            <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} compact />
+            {!clinic.emirate || isLiveEmirate(clinic.emirate.slug) ? (
+              <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} compact />
+            ) : (
+              <div className="text-sm leading-relaxed text-zinc-700">
+                <p className="text-base font-semibold text-ink">Online requests coming soon to {clinic.emirate.name}</p>
+                <p className="mt-2">AppointPanda currently takes appointment requests for Dubai clinics only. To book with {clinic.name}, contact the clinic directly.</p>
+                {clinic.phone && <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ink mt-4 w-full"><Phone className="h-4 w-4" /> Call {clinic.phone}</a>}
+                <Link href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
+              </div>
+            )}
           </div>
           <div className="mt-3 flex items-start gap-2 rounded-2xl bg-paper p-4 text-xs leading-relaxed text-zinc-600">
             <Users className="h-4 w-4 shrink-0" />

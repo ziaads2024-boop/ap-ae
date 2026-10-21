@@ -3,7 +3,7 @@ import { ArrowRight, LocateFixed } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import {
-  emirates, formatAed, hasLocalGuide, serviceBySlug, urls,
+  emirates, formatAed, hasLocalGuide, isLiveEmirate, serviceBySlug, urls,
   type ServiceContent, SITE_URL,
 } from '@/content';
 import { breadcrumbSchema, faqSchema, servicePageSchema, clinicListSchema } from '@/content/schema';
@@ -139,13 +139,13 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
           </ol>
         </Section>
 
-        <Section id="by-emirate" eyebrow="Local guides" title={`${service.shortName} by emirate`}>
+        <Section id="by-emirate" eyebrow="Local guides" title={`${service.shortName} in Dubai`}>
           <LinkTiles
             columns={4}
             links={emirates.map((e) =>
               hasLocalGuide(service.slug, e.slug)
-                ? { href: urls.serviceEmirate(e.slug, service.slug), title: `${service.shortName} in ${e.name}`, text: `Local guide · ${e.regulator.short}-licensed clinics`, tone: e.tone, image: imageForEmirate(e.slug) }
-                : { href: urls.emirate(e.slug), title: `Dentists in ${e.name}`, text: 'Emirate guide', image: imageForEmirate(e.slug) }
+                ? { href: urls.serviceEmirate(e.slug, service.slug), title: `${service.shortName} in ${e.name}`, text: isLiveEmirate(e.slug) ? `Local guide · ${e.regulator.short}-licensed clinics` : 'Coming soon · guide for information', tone: isLiveEmirate(e.slug) ? e.tone : undefined, image: imageForEmirate(e.slug) }
+                : { href: urls.emirate(e.slug), title: `Dentists in ${e.name}`, text: isLiveEmirate(e.slug) ? 'Emirate guide' : 'Coming soon', image: imageForEmirate(e.slug) }
             )}
           />
         </Section>

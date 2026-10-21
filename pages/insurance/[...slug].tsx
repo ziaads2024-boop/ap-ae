@@ -1,4 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
+import { INDEX_COMING_SOON, isLiveEmirate } from '@/content';
 import Head from 'next/head';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import InsuranceDetailPageComponent from '@/pages/InsuranceDetailPage';
@@ -61,7 +62,7 @@ const InsuranceDetailWrapper = ({
                 <title>{seoData.title}</title>
                 <meta name="description" content={seoData.description} />
                 <link rel="canonical" href={`${BASE_URL}${seoData.canonical}`} />
-                <meta name="robots" content="index, follow" />
+                <meta name="robots" content={!INDEX_COMING_SOON && emirateSlug && !isLiveEmirate(emirateSlug) ? 'noindex, follow' : 'index, follow'} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={`${BASE_URL}${seoData.canonical}`} />
                 <meta property="og:title" content={seoData.title.includes('AppointPanda') ? seoData.title : `${seoData.title} | AppointPanda`} />

@@ -1,18 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { services, emirates, urls, LOCAL_GUIDE_SERVICES, serviceBySlug } from '@/content';
+import { services, emirates, urls, LOCAL_GUIDE_SERVICES, serviceBySlug, isLiveEmirate } from '@/content';
+import { dubaiAreaBySlug } from '@/content/dubai';
 import { Logo } from '@/components/Navbar';
 
-const POPULAR_GUIDES: [string, string][] = [
-  ['dubai', 'dental-implants'],
-  ['dubai', 'invisalign'],
-  ['abu-dhabi', 'dental-implants'],
-  ['sharjah', 'veneers'],
-  ['dubai', 'emergency-dentist'],
-  ['abu-dhabi', 'pediatric-dentistry'],
-  ['sharjah', 'root-canal'],
-  ['ajman', 'braces'],
-];
+const DUBAI_GUIDES = ['dental-implants', 'invisalign', 'veneers', 'teeth-whitening', 'emergency-dentist', 'pediatric-dentistry', 'braces', 'root-canal'];
+const FOOTER_AREAS = ['dubai-marina', 'jumeirah-beach-residence', 'downtown-dubai', 'business-bay', 'jumeirah', 'al-barsha', 'deira', 'mirdif'];
 
 const COMPANY_LINKS = [
   { label: 'About AppointPanda', href: '/about/' },
@@ -56,23 +49,28 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Dentists by emirate</h2>
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Dentists in Dubai</h2>
               <ul className="space-y-2 text-sm">
-                {emirates.map((e) => (
-                  <li key={e.slug}><Link href={urls.emirate(e.slug)} className="hover:text-white">Dentists in {e.name}</Link></li>
-                ))}
+                <li><Link href={urls.emirate('dubai')} className="hover:text-white">All of Dubai</Link></li>
+                {FOOTER_AREAS.map((a) => {
+                  const area = dubaiAreaBySlug(a);
+                  return area ? <li key={a}><Link href={urls.dubaiArea(a)} className="hover:text-white">{area.name}</Link></li> : null;
+                })}
               </ul>
+              <p className="mt-4 text-xs text-zinc-500">
+                Coming soon:{' '}
+                {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e, i) => (
+                  <span key={e.slug}>{i > 0 && ', '}<Link href={urls.emirate(e.slug)} className="hover:text-white">{e.name}</Link></span>
+                ))}
+              </p>
             </div>
             <div>
-              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Popular local guides</h2>
+              <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Dubai treatment guides</h2>
               <ul className="space-y-2 text-sm">
-                {POPULAR_GUIDES.filter(([, s]) => LOCAL_GUIDE_SERVICES.includes(s)).map(([e, s]) => (
-                  <li key={`${e}-${s}`}>
-                    <Link href={urls.serviceEmirate(e, s)} className="hover:text-white">
-                      {serviceBySlug(s)?.shortName} in {emirates.find((x) => x.slug === e)?.name}
-                    </Link>
-                  </li>
+                {DUBAI_GUIDES.filter((s) => LOCAL_GUIDE_SERVICES.includes(s)).map((s) => (
+                  <li key={s}><Link href={urls.serviceEmirate('dubai', s)} className="hover:text-white">{serviceBySlug(s)?.shortName} in Dubai</Link></li>
                 ))}
+                <li><Link href={urls.dubaiReasons} className="hover:text-white">Find care by reason</Link></li>
               </ul>
             </div>
             <div>

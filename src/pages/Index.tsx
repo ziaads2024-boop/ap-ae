@@ -9,7 +9,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { FaqList, JsonLd, PageImageCredits } from '@/components/guide/GuideBlocks';
 import { images, imageForEmirate, imageForService } from '@/content/images';
-import { emirates, services, toneClass, urls, formatAed, LOCAL_GUIDE_SERVICES, serviceBySlug } from '@/content';
+import { emirates, services, toneClass, urls, formatAed, serviceBySlug, isLiveEmirate } from '@/content';
 import { faqSchema, organizationSchema, websiteSchema } from '@/content/schema';
 import { dubaiAreas, DUBAI_AREA_GROUPS, visitReasons } from '@/content/dubai';
 import { cn } from '@/lib/utils';
@@ -38,13 +38,14 @@ const HOME_FAQS = [
   },
 ];
 
+// Dubai area + treatment pairs with the most search demand (Search Console)
 const LOCAL_PICKS: [string, string][] = [
-  ['dubai', 'invisalign'],
-  ['abu-dhabi', 'dental-implants'],
-  ['sharjah', 'veneers'],
-  ['dubai', 'emergency-dentist'],
-  ['ajman', 'braces'],
-  ['ras-al-khaimah', 'root-canal'],
+  ['jumeirah-beach-residence', 'veneers'],
+  ['mirdif', 'invisalign'],
+  ['downtown-dubai', 'dental-implants'],
+  ['palm-jumeirah', 'veneers'],
+  ['dubai-marina', 'teeth-whitening'],
+  ['umm-suqeim', 'pediatric-dentistry'],
 ];
 
 interface IndexPageProps {
@@ -219,32 +220,25 @@ export default function IndexPage({ pageData }: IndexPageProps) {
         </div>
       </section>
 
-      {/* Emirates */}
+      {/* Other emirates: not live yet */}
       <section className="mx-auto max-w-6xl px-5 pb-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Beyond Dubai</h2>
-          <Link href={urls.emirates} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Compare emirates <ArrowRight className="h-4 w-4" /></Link>
+          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Coming soon</h2>
+          <p className="max-w-md text-sm text-zinc-600">We are live in Dubai and launching across the other emirates next. Guides and listings are available for information.</p>
         </div>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {emirates.map((e, i) => {
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => {
             const photo = imageForEmirate(e.slug);
             return (
-              <Link
-                key={e.slug}
-                href={urls.emirate(e.slug)}
-                className={cn('group relative flex min-h-[220px] flex-col justify-end overflow-hidden rounded-[1.25rem]', i === 0 && 'sm:col-span-2 lg:row-span-2 lg:min-h-full')}
-              >
-                <Image src={photo.src} alt="" fill sizes={i === 0 ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, 50vw'} className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent" />
+              <Link key={e.slug} href={urls.emirate(e.slug)} className="group relative flex min-h-[180px] flex-col justify-end overflow-hidden rounded-[1.25rem]">
+                <Image src={photo.src} alt="" fill sizes="(min-width: 1024px) 33vw, 50vw" className="object-cover grayscale-[40%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
                 <span className="relative p-5">
                   <span className="flex items-baseline justify-between gap-2">
-                    <span className={cn('display text-white', i === 0 ? 'text-6xl' : 'text-3xl')}>{e.name}</span>
+                    <span className="display text-3xl text-white">{e.name}</span>
                     <span className="text-sm text-white/75" lang="ar">{e.nameAr}</span>
                   </span>
-                  <span className={cn('mt-3 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold text-ink', toneClass[e.tone])}>
-                    {countsByEmirate.get(e.slug) ? `${countsByEmirate.get(e.slug)!.toLocaleString()} listed clinics` : `Licensed by ${e.regulator.short}`}
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </span>
+                  <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-ink">Coming soon</span>
                 </span>
               </Link>
             );
@@ -331,19 +325,19 @@ export default function IndexPage({ pageData }: IndexPageProps) {
         </section>
       )}
 
-      {/* Local guides */}
+      {/* Popular in Dubai */}
       <section className="mx-auto max-w-6xl px-5 py-10">
-        <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Local guides</h2>
-        <p className="mt-3 max-w-2xl text-zinc-600">Treatment guides written for each emirate: who licenses the clinics, how insurance usually treats it, and what to look out for locally.</p>
+        <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Popular in Dubai</h2>
+        <p className="mt-3 max-w-2xl text-zinc-600">What people search for most, by area: clinics, clinic-listed prices and what to expect locally.</p>
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {LOCAL_PICKS.filter(([, s]) => LOCAL_GUIDE_SERVICES.includes(s)).map(([e, s]) => {
+          {LOCAL_PICKS.map(([a, s]) => {
             const service = serviceBySlug(s)!;
-            const em = emirates.find((x) => x.slug === e)!;
+            const area = dubaiAreas.find((x) => x.slug === a)!;
             return (
-              <Link key={`${e}-${s}`} href={urls.serviceEmirate(e, s)} className="block-card group flex items-center justify-between gap-4 p-5">
+              <Link key={`${a}-${s}`} href={urls.dubaiAreaService(a, s)} className="block-card group flex items-center justify-between gap-4 p-5">
                 <span>
-                  <span className="block font-semibold text-ink">{service.shortName} in {em.name}</span>
-                  <span className="block text-sm text-zinc-500">{em.regulator.short} · from {formatAed(service.price.from)}</span>
+                  <span className="block font-semibold text-ink">{service.shortName} in {area.name}</span>
+                  <span className="block text-sm text-zinc-500">Typically from {formatAed(service.price.from)}</span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
               </Link>
@@ -384,7 +378,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
       </section>
 
       <div className="mx-auto max-w-6xl px-5">
-        <PageImageCredits images={[images.chairWhite, images.braces, ...emirates.map((e) => imageForEmirate(e.slug)), ...services.map((s) => imageForService(s.slug))]} />
+        <PageImageCredits images={[images.chairWhite, images.braces, images.dubai, ...emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => imageForEmirate(e.slug)), ...services.map((s) => imageForService(s.slug))]} />
       </div>
 
       {/* Closing CTA */}

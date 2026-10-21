@@ -1,6 +1,6 @@
 # AppointPanda
 
-> Independent guides to dental treatment in the UAE, and a directory of dental clinics across all seven emirates. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.
+> Find a dentist in Dubai: a directory of Dubai dental clinics with online appointment requests, plus independent guides to dental treatment in the UAE. Other emirates are coming soon. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.
 
 Content last reviewed: 2026-10-21. Editorial policy: https://www.appointpanda.ae/editorial-policy/
 
@@ -65,12 +65,7 @@ Content last reviewed: 2026-10-21. Editorial policy: https://www.appointpanda.ae
 
 ## Dentists by emirate
 - [Dentists in Dubai](https://www.appointpanda.ae/dubai/): Dubai has the largest choice of private dental clinics in the UAE, from neighbourhood practices to specialist centres, licensed by the Dubai Health Authority or, inside Dubai Healthcare City, by its own regulator. Licensing: Dubai Health Authority (DHA).
-- [Dentists in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/): Dental care in Abu Dhabi, including Al Ain and Al Dhafra, is regulated by the Department of Health - Abu Dhabi, with a mix of government hospital clinics and private practices. Licensing: Department of Health - Abu Dhabi (DoH).
-- [Dentists in Sharjah](https://www.appointpanda.ae/sharjah/): Sharjah has a wide range of private dental clinics, many in Al Majaz, Al Nahda and Al Taawun, plus a university dental hospital, with prices that are often lower than in central Dubai. Licensing: Ministry of Health and Prevention (MOHAP).
-- [Dentists in Ajman](https://www.appointpanda.ae/ajman/): Ajman is compact, so most residents can reach a dental clinic within a short drive. It also has university dental teaching facilities alongside private clinics. Licensing: Ministry of Health and Prevention (MOHAP).
-- [Dentists in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/): Ras Al Khaimah has private clinics around RAK City and Al Nakheel, government hospital dental departments, and a dental college that trains future dentists. Licensing: Ministry of Health and Prevention (MOHAP).
-- [Dentists in Fujairah](https://www.appointpanda.ae/fujairah/): Fujairah is the UAE's only emirate fully on the east coast. Clinics are concentrated in Fujairah City, with smaller practices in Dibba and other coastal towns. Licensing: Ministry of Health and Prevention (MOHAP).
-- [Dentists in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/): Umm Al Quwain is the least populous emirate, with a small number of local clinics for routine care. Neighbouring Ajman and Sharjah offer wider specialist choice within a short drive. Licensing: Ministry of Health and Prevention (MOHAP).
+- Coming soon (not live yet; information only, no appointment requests): Abu Dhabi, Sharjah, Ajman, Ras Al Khaimah, Fujairah, Umm Al Quwain.
 
 ## Local treatment guides
 - [Dental Implants in Dubai](https://www.appointpanda.ae/dubai/services/dental-implants/)
@@ -81,54 +76,6 @@ Content last reviewed: 2026-10-21. Editorial policy: https://www.appointpanda.ae
 - [Root Canal Treatment in Dubai](https://www.appointpanda.ae/dubai/services/root-canal/)
 - [Emergency Dentist in Dubai](https://www.appointpanda.ae/dubai/services/emergency-dentist/)
 - [Children's Dentistry in Dubai](https://www.appointpanda.ae/dubai/services/pediatric-dentistry/)
-- [Dental Implants in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/dental-implants/)
-- [Invisalign & Clear Aligners in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/invisalign/)
-- [Braces in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/braces/)
-- [Veneers in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/veneers/)
-- [Teeth Whitening in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/teeth-whitening/)
-- [Root Canal Treatment in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/root-canal/)
-- [Emergency Dentist in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/emergency-dentist/)
-- [Children's Dentistry in Abu Dhabi](https://www.appointpanda.ae/abu-dhabi/services/pediatric-dentistry/)
-- [Dental Implants in Sharjah](https://www.appointpanda.ae/sharjah/services/dental-implants/)
-- [Invisalign & Clear Aligners in Sharjah](https://www.appointpanda.ae/sharjah/services/invisalign/)
-- [Braces in Sharjah](https://www.appointpanda.ae/sharjah/services/braces/)
-- [Veneers in Sharjah](https://www.appointpanda.ae/sharjah/services/veneers/)
-- [Teeth Whitening in Sharjah](https://www.appointpanda.ae/sharjah/services/teeth-whitening/)
-- [Root Canal Treatment in Sharjah](https://www.appointpanda.ae/sharjah/services/root-canal/)
-- [Emergency Dentist in Sharjah](https://www.appointpanda.ae/sharjah/services/emergency-dentist/)
-- [Children's Dentistry in Sharjah](https://www.appointpanda.ae/sharjah/services/pediatric-dentistry/)
-- [Dental Implants in Ajman](https://www.appointpanda.ae/ajman/services/dental-implants/)
-- [Invisalign & Clear Aligners in Ajman](https://www.appointpanda.ae/ajman/services/invisalign/)
-- [Braces in Ajman](https://www.appointpanda.ae/ajman/services/braces/)
-- [Veneers in Ajman](https://www.appointpanda.ae/ajman/services/veneers/)
-- [Teeth Whitening in Ajman](https://www.appointpanda.ae/ajman/services/teeth-whitening/)
-- [Root Canal Treatment in Ajman](https://www.appointpanda.ae/ajman/services/root-canal/)
-- [Emergency Dentist in Ajman](https://www.appointpanda.ae/ajman/services/emergency-dentist/)
-- [Children's Dentistry in Ajman](https://www.appointpanda.ae/ajman/services/pediatric-dentistry/)
-- [Dental Implants in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/dental-implants/)
-- [Invisalign & Clear Aligners in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/invisalign/)
-- [Braces in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/braces/)
-- [Veneers in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/veneers/)
-- [Teeth Whitening in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/teeth-whitening/)
-- [Root Canal Treatment in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/root-canal/)
-- [Emergency Dentist in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/emergency-dentist/)
-- [Children's Dentistry in Ras Al Khaimah](https://www.appointpanda.ae/ras-al-khaimah/services/pediatric-dentistry/)
-- [Dental Implants in Fujairah](https://www.appointpanda.ae/fujairah/services/dental-implants/)
-- [Invisalign & Clear Aligners in Fujairah](https://www.appointpanda.ae/fujairah/services/invisalign/)
-- [Braces in Fujairah](https://www.appointpanda.ae/fujairah/services/braces/)
-- [Veneers in Fujairah](https://www.appointpanda.ae/fujairah/services/veneers/)
-- [Teeth Whitening in Fujairah](https://www.appointpanda.ae/fujairah/services/teeth-whitening/)
-- [Root Canal Treatment in Fujairah](https://www.appointpanda.ae/fujairah/services/root-canal/)
-- [Emergency Dentist in Fujairah](https://www.appointpanda.ae/fujairah/services/emergency-dentist/)
-- [Children's Dentistry in Fujairah](https://www.appointpanda.ae/fujairah/services/pediatric-dentistry/)
-- [Dental Implants in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/dental-implants/)
-- [Invisalign & Clear Aligners in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/invisalign/)
-- [Braces in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/braces/)
-- [Veneers in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/veneers/)
-- [Teeth Whitening in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/teeth-whitening/)
-- [Root Canal Treatment in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/root-canal/)
-- [Emergency Dentist in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/emergency-dentist/)
-- [Children's Dentistry in Umm Al Quwain](https://www.appointpanda.ae/umm-al-quwain/services/pediatric-dentistry/)
 
 ## Tools
 - [Find a dentist](https://www.appointpanda.ae/find-clinics/): search clinics by emirate, treatment or location (add ?near=me to sort by distance).

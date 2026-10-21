@@ -71,7 +71,7 @@ function buildLlmsTxt(content) {
   const lines = [
     '# AppointPanda',
     '',
-    '> Independent guides to dental treatment in the UAE, and a directory of dental clinics across all seven emirates. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.',
+    '> Find a dentist in Dubai: a directory of Dubai dental clinics with online appointment requests, plus independent guides to dental treatment in the UAE. Other emirates are coming soon. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.',
     '',
     `Content last reviewed: ${content.CONTENT_REVIEWED}. Editorial policy: ${abs('/editorial-policy/')}`,
     '',
@@ -87,11 +87,12 @@ function buildLlmsTxt(content) {
     ...content.services.map((s) => `- [${s.name}](${abs(content.urls.service(s.slug))}): ${s.summary}`),
     '',
     '## Dentists by emirate',
-    ...content.emirates.map((e) => `- [Dentists in ${e.name}](${abs(content.urls.emirate(e.slug))}): ${e.summary} Licensing: ${e.regulator.name} (${e.regulator.short}).`),
+    ...content.emirates.filter((e) => content.isLiveEmirate(e.slug)).map((e) => `- [Dentists in ${e.name}](${abs(content.urls.emirate(e.slug))}): ${e.summary} Licensing: ${e.regulator.name} (${e.regulator.short}).`),
+    `- Coming soon (not live yet; information only, no appointment requests): ${content.emirates.filter((e) => !content.isLiveEmirate(e.slug)).map((e) => e.name).join(', ')}.`,
     '',
     '## Local treatment guides',
   ];
-  for (const e of content.emirates) {
+  for (const e of content.emirates.filter((x) => content.isLiveEmirate(x.slug))) {
     for (const s of content.services) {
       if (content.hasLocalGuide(s.slug, e.slug)) {
         lines.push(`- [${s.name} in ${e.name}](${abs(content.urls.serviceEmirate(e.slug, s.slug))})`);
@@ -127,13 +128,13 @@ function buildLlmsFullTxt(content) {
     out.push('Risks:', ...s.risks.map((r) => `- ${r}`), '');
     out.push('FAQ:', ...s.faqs.flatMap((f) => [`Q: ${f.q}`, `A: ${f.a}`]), '');
   }
-  for (const e of content.emirates) {
+  for (const e of content.emirates.filter((x) => content.isLiveEmirate(x.slug))) {
     out.push(`## Dentists in ${e.name}`, `URL: ${BASE_URL}${content.urls.emirate(e.slug)}`, '', e.summary, '', ...e.intro.flatMap((p) => [p, '']));
     out.push(`Licensing: ${e.regulator.name} (${e.regulator.short}). ${e.regulator.note}`, '');
     out.push('Insurance:', ...e.insurance.map((i) => `- ${i}`), '');
     out.push('FAQ:', ...e.faqs.flatMap((f) => [`Q: ${f.q}`, `A: ${f.a}`]), '');
   }
-  for (const local of content.serviceEmirates) {
+  for (const local of content.serviceEmirates.filter((x) => content.isLiveEmirate(x.emirate))) {
     const s = content.serviceBySlug(local.service);
     const e = content.emirateBySlug(local.emirate);
     if (!s || !e) continue;
@@ -425,21 +426,24 @@ async function main() {
   const guideUrls = buildGuideUrls(content);
   const guideLocs = new Set(guideUrls.map((url) => url.loc));
   const notAGuide = (url) => !guideLocs.has(url.loc);
+  // Emirates that are not live yet are kept out of sitemaps (LIVE_EMIRATES).
+  const live = (url) => content.INDEX_COMING_SOON || !content.isComingSoonPath(new URL(url.loc).pathname);
+  const sm = (list) => generateSitemapXml(list.filter(live));
   await fs.writeFile(path.join(PUBLIC_DIR, 'llms.txt'), buildLlmsTxt(content), 'utf8');
   await fs.writeFile(path.join(PUBLIC_DIR, 'llms-full.txt'), buildLlmsFullTxt(content), 'utf8');
 
   if (!supabase) {
     const fallbackSitemaps = {
       'sitemap.xml': generateSitemapIndexXml(),
-      'sitemap-static.xml': generateSitemapXml(buildStaticUrls()),
-      'sitemap-guides.xml': generateSitemapXml(guideUrls),
-      'sitemap-states.xml': generateSitemapXml([]),
-      'sitemap-cities.xml': generateSitemapXml([]),
-      'sitemap-services.xml': generateSitemapXml([]),
-      'sitemap-service-locations.xml': generateSitemapXml([]),
-      'sitemap-profiles.xml': generateSitemapXml([]),
-      'sitemap-posts.xml': generateSitemapXml([]),
-      'sitemap-insurance.xml': generateSitemapXml([]),
+      'sitemap-static.xml': sm(buildStaticUrls()),
+      'sitemap-guides.xml': sm(guideUrls),
+      'sitemap-states.xml': sm([]),
+      'sitemap-cities.xml': sm([]),
+      'sitemap-services.xml': sm([]),
+      'sitemap-service-locations.xml': sm([]),
+      'sitemap-profiles.xml': sm([]),
+      'sitemap-posts.xml': sm([]),
+      'sitemap-insurance.xml': sm([]),
     };
 
     await Promise.all(
@@ -474,15 +478,15 @@ async function main() {
 
   const sitemapXmlByFile = {
     'sitemap.xml': generateSitemapIndexXml(),
-    'sitemap-static.xml': generateSitemapXml(buildStaticUrls()),
-    'sitemap-guides.xml': generateSitemapXml(guideUrls),
-    'sitemap-states.xml': generateSitemapXml(stateUrls.filter(notAGuide)),
-    'sitemap-cities.xml': generateSitemapXml(cityUrls),
-    'sitemap-services.xml': generateSitemapXml(serviceUrls.filter(notAGuide)),
-    'sitemap-service-locations.xml': generateSitemapXml(serviceLocationUrls),
-    'sitemap-profiles.xml': generateSitemapXml(profileUrls),
-    'sitemap-posts.xml': generateSitemapXml(postUrls),
-    'sitemap-insurance.xml': generateSitemapXml(insuranceUrls),
+    'sitemap-static.xml': sm(buildStaticUrls()),
+    'sitemap-guides.xml': sm(guideUrls),
+    'sitemap-states.xml': sm(stateUrls.filter(notAGuide)),
+    'sitemap-cities.xml': sm(cityUrls),
+    'sitemap-services.xml': sm(serviceUrls.filter(notAGuide)),
+    'sitemap-service-locations.xml': sm(serviceLocationUrls),
+    'sitemap-profiles.xml': sm(profileUrls),
+    'sitemap-posts.xml': sm(postUrls),
+    'sitemap-insurance.xml': sm(insuranceUrls),
   };
 
   await Promise.all(

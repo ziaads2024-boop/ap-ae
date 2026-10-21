@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Menu, ChevronDown, LocateFixed, ArrowRight } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { services, emirates, urls } from '@/content';
+import { services, emirates, urls, isLiveEmirate } from '@/content';
 import { dubaiAreas, DUBAI_AREA_GROUPS, visitReasons } from '@/content/dubai';
 
 type MenuKey = 'treatments' | 'emirates' | null;
@@ -137,9 +137,9 @@ export function Navbar() {
                   </div>
                 </div>
                 <div>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Emirates</p>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Coming soon</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {emirates.map((e) => (
+                    {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => (
                       <Link key={e.slug} href={urls.emirate(e.slug)} onClick={() => setMobileOpen(false)} className="rounded-xl bg-white px-3 py-2 text-sm font-medium">
                         {e.name}
                       </Link>
@@ -201,9 +201,9 @@ export function Navbar() {
             <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-black/5 pt-4">
               <Link href={urls.emirate('dubai')} className="inline-flex items-center gap-1 rounded-full bg-tone-lemon px-4 py-2 text-sm font-semibold text-ink">All of Dubai <ArrowRight className="h-4 w-4" /></Link>
               <Link href={urls.dubaiReasons} className="text-sm font-semibold text-ink underline">All reasons</Link>
-              <span className="text-sm text-zinc-500">Other emirates:</span>
-              {emirates.filter((e) => e.slug !== 'dubai').map((e) => (
-                <Link key={e.slug} href={urls.emirate(e.slug)} className="text-sm text-zinc-600 hover:text-ink">{e.name}</Link>
+              <span className="text-sm text-zinc-500">Coming soon:</span>
+              {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => (
+                <Link key={e.slug} href={urls.emirate(e.slug)} className="text-sm text-zinc-400 hover:text-ink">{e.name}</Link>
               ))}
             </div>
           </div>

@@ -9,7 +9,7 @@ import { Crumbs } from '@/components/guide/GuideBlocks';
 import { AppointmentRequest } from '@/components/booking/AppointmentRequest';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
-import { emirates, services, urls } from '@/content';
+import { emirates, isLiveEmirate, services, urls } from '@/content';
 import { dubaiAreas, dubaiAreaBySlug, visitReasons, visitReasonBySlug } from '@/content/dubai';
 import { cn } from '@/lib/utils';
 
@@ -165,6 +165,8 @@ export default function FindClinicsPage() {
     router.replace({ pathname: '/find-clinics/', query }, undefined, { shallow: true, scroll: false });
   };
 
+  // Appointment requests are only open in live emirates (Dubai).
+  const requestsOpen = isLiveEmirate(emirate);
   const reason = visitReasonBySlug(reasonSlug);
   const treatmentFilter = specialty ? [specialty] : reason ? reason.services : [];
   const geoCoords = geo.status === 'ready' ? { lat: geo.lat, lng: geo.lng } : undefined;
@@ -237,8 +239,8 @@ export default function FindClinicsPage() {
                 }} className={cn(select, 'border-0 bg-paper')}>
                   <option value="">All of Dubai</option>
                   {dubaiAreas.map((a) => <option key={a.slug} value={a.slug}>{a.name}</option>)}
-                  <optgroup label="Other emirates">
-                    {emirates.filter((e) => e.slug !== 'dubai').map((e) => <option key={e.slug} value={`e:${e.slug}`}>{e.name}</option>)}
+                  <optgroup label="Other emirates (coming soon)">
+                    {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => <option key={e.slug} value={`e:${e.slug}`}>{e.name} (coming soon)</option>)}
                     <option value="e:all">All emirates</option>
                   </optgroup>
                 </select>
@@ -279,6 +281,12 @@ export default function FindClinicsPage() {
                   <Link href={urls.dubaiReason(reason.slug)} className="font-semibold underline">What to expect</Link>
                 </p>
               </div>
+            )}
+            {!requestsOpen && (
+              <p className="mt-4 rounded-2xl bg-ink p-4 text-sm text-white" role="status">
+                <strong className="text-tone-lemon">{emirateName ? `Coming soon to ${emirateName}.` : 'Outside Dubai, coming soon.'}</strong>{' '}
+                Online appointment requests are open for Dubai clinics only. You can still view listings and contact clinics directly.
+              </p>
             )}
             {geo.status === 'error' && <p className="mt-3 text-sm text-ink/80" role="status">{geo.message}</p>}
             {geoCoords && (
@@ -336,7 +344,9 @@ export default function FindClinicsPage() {
                       )}
                     </div>
                     <div className="flex gap-2 sm:flex-col">
-                      <button type="button" onClick={() => setRequestFor(c)} className="btn-ink flex-1 !py-2.5 text-sm"><CalendarCheck2 className="h-4 w-4" /> Request appointment</button>
+                      {requestsOpen && (
+                        <button type="button" onClick={() => setRequestFor(c)} className="btn-ink flex-1 !py-2.5 text-sm"><CalendarCheck2 className="h-4 w-4" /> Request appointment</button>
+                      )}
                       <Link href={`/clinic/${c.slug}/`} className="btn-ghost flex-1 !py-2.5 text-sm">View profile</Link>
                     </div>
                   </li>

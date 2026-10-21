@@ -5,7 +5,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import Image from 'next/image';
 import { GuideCta, GuideHero, JsonLd, PageImageCredits, Section } from '@/components/guide/GuideBlocks';
 import { imageForEmirate } from '@/content/images';
-import { emirates, SITE_URL, toneClass, urls } from '@/content';
+import { emirates, isLiveEmirate, SITE_URL, toneClass, urls } from '@/content';
 import { breadcrumbSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
 
@@ -62,7 +62,7 @@ export default function EmiratesIndex() {
                   <span className="mt-3 block text-sm leading-relaxed text-ink/75">{e.summary}</span>
                 </span>
                 <span className="mt-6 flex items-center justify-between px-6 pb-6 text-sm font-semibold text-ink">
-                  Regulator: {e.regulator.short}
+                  {isLiveEmirate(e.slug) ? 'Live now' : 'Coming soon'} · {e.regulator.short}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>

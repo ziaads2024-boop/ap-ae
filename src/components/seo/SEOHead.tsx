@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { classifyPath } from '@/config/pageRegistry';
+import { INDEX_COMING_SOON, isComingSoonPath } from '@/content';
 
 export interface SEOHeadProps {
   title: string;
@@ -74,7 +75,9 @@ export const SEOHead = ({
 
   // Respect explicit noindex prop; only override if classification says non-indexable
   const classification = classifyPath(currentPath);
-  const effectiveNoindex = noindex || !classification.indexable;
+  // Emirates that are not live yet stay out of search indexes (see LIVE_EMIRATES).
+  const comingSoon = !INDEX_COMING_SOON && isComingSoonPath(pathWithoutQuery);
+  const effectiveNoindex = noindex || !classification.indexable || comingSoon;
 
   return (
     <Head>

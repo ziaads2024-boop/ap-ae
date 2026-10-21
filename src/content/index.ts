@@ -8,6 +8,34 @@ export { services, serviceBySlug, LOCAL_GUIDE_SERVICES, emirates, emirateBySlug,
 
 export const SITE_URL = 'https://www.appointpanda.ae';
 
+/**
+ * Emirates where AppointPanda is live (search, appointment requests, indexed
+ * pages). Other emirates are "coming soon": their pages stay reachable but show
+ * a notice, take no appointment requests and are kept out of search indexes and
+ * sitemaps. Add a slug here to launch an emirate.
+ */
+export const LIVE_EMIRATES = ['dubai'];
+/** Set to true to let search engines index coming-soon emirate pages. */
+export const INDEX_COMING_SOON = false;
+export const isLiveEmirate = (slug: string | null | undefined) => !!slug && LIVE_EMIRATES.includes(slug);
+
+const EMIRATE_SLUGS = ['dubai', 'abu-dhabi', 'sharjah', 'ajman', 'ras-al-khaimah', 'fujairah', 'umm-al-quwain', 'dxb', 'auh', 'shj', 'ajm', 'rak', 'fuj', 'uaq'];
+const ABBR: Record<string, string> = { dxb: 'dubai', auh: 'abu-dhabi', shj: 'sharjah', ajm: 'ajman', rak: 'ras-al-khaimah', fuj: 'fujairah', uaq: 'umm-al-quwain' };
+
+/** The emirate a URL path belongs to, if any (/sharjah/..., /insurance/daman/sharjah/...). */
+export function emirateOfPath(path: string): string | null {
+  const segs = path.split('?')[0].split('#')[0].split('/').filter(Boolean);
+  const hit = segs[0] === 'insurance' ? segs[2] : segs[0];
+  if (!hit || !EMIRATE_SLUGS.includes(hit)) return null;
+  return ABBR[hit] || hit;
+}
+
+/** True when a path is in an emirate that is not live yet. */
+export const isComingSoonPath = (path: string) => {
+  const e = emirateOfPath(path);
+  return !!e && !isLiveEmirate(e);
+};
+
 /** Date the editorial content in src/content was last reviewed. Update when content changes. */
 export const CONTENT_REVIEWED = '2026-10-21';
 export const CONTENT_REVIEWED_LABEL = 'October 2026';
