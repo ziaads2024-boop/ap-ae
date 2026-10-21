@@ -304,6 +304,8 @@ export interface VisitReason {
   urgency: Urgency;
   /** One-sentence guidance shown in search and on the reason page */
   advice: string;
+  /** Practical things to do before and while booking */
+  steps: string[];
   whatToSay: string;
   faqs: Faq[];
 }
@@ -312,6 +314,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'toothache', label: 'Toothache', services: ['emergency-dentist', 'root-canal'], urgency: 'soon',
     advice: 'Toothache that lasts more than a day or two, keeps you awake or comes with swelling needs a dentist soon, because it often means infection or a deep cavity.',
+    steps: [
+      'Take an over-the-counter painkiller as directed on the pack, and avoid placing aspirin on the gum.',
+      'Rinse with warm salt water and avoid very hot, cold or sugary food on that side.',
+      'Book a dentist within a day or two, or the same day if the pain is severe or there is swelling.',
+      'If swelling spreads to your eye or neck, or you have trouble breathing or swallowing, call 998.',
+    ],
     whatToSay: 'Which tooth hurts, how long it has hurt, whether hot, cold or biting makes it worse, and whether there is any swelling.',
     faqs: [
       { q: 'When is toothache an emergency?', a: 'Go the same day if there is facial swelling, a fever, or pain you cannot control with painkillers. If swelling spreads to your eye or neck or affects breathing, call 998.' },
@@ -321,6 +329,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'broken-tooth', label: 'Chipped or broken tooth', services: ['emergency-dentist', 'dental-crowns', 'veneers'], urgency: 'soon',
     advice: 'A chipped or broken tooth should be seen within a few days, sooner if it hurts or has a sharp edge, so the dentist can protect it before it cracks further.',
+    steps: [
+      'Rinse your mouth with warm water and keep any broken piece in milk or a clean container.',
+      'Cover a sharp edge with sugar-free gum or dental wax so it does not cut your tongue.',
+      'Avoid chewing on that side until the tooth has been checked.',
+      'Book a visit within a few days, or the same day if it hurts or the break is large.',
+    ],
     whatToSay: 'How it broke, whether it hurts, and whether any piece was lost or kept.',
     faqs: [
       { q: 'Can a broken tooth be fixed?', a: 'Usually. Small chips are repaired with bonding; larger breaks may need a crown, and a break into the nerve may need a root canal first.' },
@@ -329,6 +343,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'swelling', label: 'Swollen face or gum', services: ['emergency-dentist'], urgency: 'emergency',
     advice: 'Swelling from a tooth is a sign of infection and should be seen the same day. Swelling that spreads towards the eye or neck, or affects breathing or swallowing, needs a hospital emergency department.',
+    steps: [
+      'Call a dental clinic straight away and describe the swelling; many keep same-day slots.',
+      'Do not apply heat to the face; a cold compress outside the cheek can ease discomfort.',
+      'Note when the swelling started and whether you have a fever.',
+      'Go to a hospital emergency department or call 998 if swelling spreads to your eye or neck, or affects breathing or swallowing.',
+    ],
     whatToSay: 'Where the swelling is, when it started, whether it is getting bigger, and whether you have a fever.',
     faqs: [
       { q: 'Should I take antibiotics for a dental abscess?', a: 'Antibiotics may help control spreading infection, but the source still needs treatment by a dentist. Do not use leftover antibiotics without advice.' },
@@ -337,6 +357,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'checkup-and-cleaning', label: 'Check-up and cleaning', services: ['teeth-cleaning'], urgency: 'routine',
     advice: 'Most adults benefit from a check-up and professional cleaning every six months; it is the visit that catches problems while they are small.',
+    steps: [
+      'Check whether your insurance plan includes a dental benefit for check-ups.',
+      'Book a time you can keep every six months; many clinics send reminders.',
+      'Bring a list of any medicines you take.',
+      'Mention any sensitivity, bleeding or pain so the dentist can look closely.',
+    ],
     whatToSay: 'When you last had a check-up, any sensitivity or bleeding gums, and whether you need X-rays.',
     faqs: [
       { q: 'Is a check-up covered by insurance?', a: 'Plans that include dental often cover one or two check-ups and cleanings a year. Basic mandatory plans usually do not.' },
@@ -345,6 +371,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'bleeding-gums', label: 'Bleeding gums', services: ['teeth-cleaning'], urgency: 'routine',
     advice: 'Gums that bleed when you brush are usually an early sign of gum disease, which a professional cleaning and better daily care can often reverse.',
+    steps: [
+      'Keep brushing gently twice a day with a soft brush; stopping makes gum inflammation worse.',
+      'Clean between your teeth daily with floss or interdental brushes.',
+      'Book a check-up and professional cleaning.',
+      'See a dentist sooner if your gums are swollen, painful or your teeth feel loose.',
+    ],
     whatToSay: 'How long the bleeding has happened, whether your gums are sore or receding, and whether you smoke.',
     faqs: [
       { q: 'Is bleeding gums serious?', a: 'Early gum disease is very common and treatable. Left alone, it can progress and loosen teeth, so it is worth a check-up.' },
@@ -353,6 +385,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'missing-tooth', label: 'Missing tooth', services: ['dental-implants', 'dental-crowns'], urgency: 'routine',
     advice: 'Replacing a missing tooth stops neighbouring teeth drifting into the gap; implants, bridges and dentures are the main options.',
+    steps: [
+      'Book a consultation; the dentist will examine the gap and usually take X-rays or a 3D scan.',
+      'Ask about all options: implant, bridge and denture, with costs for each.',
+      'Check whether your insurance covers any part of the replacement.',
+      'Ask how long each option takes, from first visit to final tooth.',
+    ],
     whatToSay: 'Which tooth is missing, how long ago it was lost, and whether you have had implants or bridges before.',
     faqs: [
       { q: 'Implant or bridge?', a: 'An implant does not involve the neighbouring teeth but takes months and costs more. A bridge is quicker but needs the teeth either side to be reshaped. A dentist will advise after a scan.' },
@@ -361,6 +399,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'crooked-teeth', label: 'Crooked or gappy teeth', services: ['invisalign', 'braces'], urgency: 'routine',
     advice: 'Crowding, gaps and bite problems are treated with braces or clear aligners, after an orthodontic assessment with X-rays and a scan.',
+    steps: [
+      'Book an orthodontic assessment with X-rays and a scan.',
+      'Ask whether braces or clear aligners suit your bite, and why.',
+      'Get the total cost in writing, including retainers.',
+      'Ask who will plan and monitor your treatment.',
+    ],
     whatToSay: 'What bothers you about your teeth, whether you had braces before, and whether you prefer a removable option.',
     faqs: [
       { q: 'Am I too old for braces?', a: 'No. Adults of any age can straighten their teeth if their gums are healthy.' },
@@ -369,6 +413,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'stained-teeth', label: 'Stained or yellow teeth', services: ['teeth-whitening', 'teeth-cleaning', 'veneers'], urgency: 'routine',
     advice: 'Surface stains often lift with a professional cleaning; deeper yellowing responds to whitening, and stains that do not may need veneers.',
+    steps: [
+      'Start with a check-up and professional cleaning; surface stain often lifts.',
+      'Ask whether whitening will work for your type of staining.',
+      'Check how crowns, veneers or fillings on your front teeth will match afterwards.',
+      "Avoid buying strong whitening products online without a dentist's advice.",
+    ],
     whatToSay: 'Whether the stains are new or long-standing, and whether you have crowns or fillings on your front teeth.',
     faqs: [
       { q: 'Will whitening work on my crowns?', a: 'No. Crowns, veneers and fillings stay the same colour, so plan around them.' },
@@ -377,6 +427,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'smile-makeover', label: 'Smile makeover', services: ['veneers', 'hollywood-smile', 'teeth-whitening'], urgency: 'routine',
     advice: 'A smile makeover is planned around a consultation, photos and a mock-up; good clinics suggest the least invasive option that meets your goal.',
+    steps: [
+      'Collect photos of smiles you like and note what you want to change.',
+      'Book a consultation that includes photos and, ideally, a digital design or mock-up.',
+      'Ask for the least invasive option that meets your goal.',
+      'Get an itemised quote listing each tooth and the material.',
+    ],
     whatToSay: 'What you would like to change, any photos of smiles you like, and your budget range.',
     faqs: [
       { q: 'Do I need veneers on every tooth?', a: 'Usually not. Many people only need the teeth that show when they smile treated, and some need only whitening and bonding.' },
@@ -385,6 +441,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'wisdom-tooth-pain', label: 'Wisdom tooth pain', services: ['wisdom-tooth-removal', 'emergency-dentist'], urgency: 'soon',
     advice: 'Pain and swelling around a back tooth that is coming through is often an infected wisdom tooth; it usually settles with cleaning and treatment, and some teeth need removing.',
+    steps: [
+      'Rinse with warm salt water after meals and keep the area clean.',
+      'Take an over-the-counter painkiller as directed if needed.',
+      'Book a dentist within a few days, or sooner if it is hard to open your mouth or you have a fever.',
+      'Ask whether the tooth needs removing or can be monitored.',
+    ],
     whatToSay: 'Which side hurts, whether it is hard to open your mouth, and whether this has happened before.',
     faqs: [
       { q: 'Do all painful wisdom teeth need removing?', a: 'No. A first flare-up is often treated by cleaning around the tooth. Repeated infections or damage to the next tooth are the usual reasons to remove it.' },
@@ -393,6 +455,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'childs-first-visit', label: 'Child\'s first visit', services: ['pediatric-dentistry'], urgency: 'routine',
     advice: 'Children should see a dentist when their first tooth appears or by their first birthday; early visits are short and mostly about getting comfortable.',
+    steps: [
+      'Book a short morning visit when your child is rested.',
+      'Talk about the visit positively and avoid words like hurt or needle.',
+      'Bring any questions about teething, brushing, diet or thumb-sucking.',
+      'Ask about fluoride varnish and when fissure sealants might help.',
+    ],
     whatToSay: 'Your child\'s age, whether they have any pain or visible marks on their teeth, and whether they are nervous.',
     faqs: [
       { q: 'Should I see a pediatric dentist or a family dentist?', a: 'Either is fine for routine visits. A pediatric specialist helps with very young, anxious or medically complex children.' },
@@ -401,6 +469,12 @@ export const visitReasons: VisitReason[] = [
   {
     slug: 'dental-anxiety', label: 'Nervous about the dentist', services: ['teeth-cleaning', 'pediatric-dentistry'], urgency: 'routine',
     advice: 'If you are anxious, tell the clinic when you book; many dentists offer longer appointments, breaks and, for some treatments, sedation.',
+    steps: [
+      'Tell the clinic you are nervous when you book.',
+      'Ask for a first visit that is only a talk and a look, with no treatment.',
+      'Agree a stop signal, such as raising a hand, before treatment starts.',
+      'Ask whether longer appointments or sedation are options for the treatment you need.',
+    ],
     whatToSay: 'What makes you anxious, whether you would like a first visit without treatment, and whether you want to discuss sedation.',
     faqs: [
       { q: 'Can I have sedation for dental treatment in Dubai?', a: 'Some clinics offer sedation for anxious patients or longer procedures. It must be provided by trained, licensed staff; ask the clinic how they do it.' },
