@@ -369,8 +369,8 @@ const ClaimProfilePage = () => {
   };
 
   const benefits = [
-    { icon: BadgeCheck, title: "Verified Badge", description: "Stand out with a verified badge on your profile" },
-    { icon: TrendingUp, title: "Higher Ranking", description: "Verified profiles rank higher in search results" },
+    { icon: BadgeCheck, title: "Appointment requests", description: "See requests from patients and call them to confirm a time" },
+    { icon: TrendingUp, title: "Accurate listing", description: "Correct your address, hours, treatments and prices" },
     { icon: Star, title: "Collect Reviews", description: "Get patient reviews and build your reputation" },
     { icon: Shield, title: "Control Your Info", description: "Update your profile, services, and photos" },
   ];
@@ -1026,23 +1026,11 @@ const ClaimProfilePage = () => {
                 ))}
               </div>
 
-              {/* Trust Section */}
-              <div className="mt-5 p-4 rounded-xl bg-muted/50">
-                <h3 className="font-bold text-sm mb-3">Trusted by 500+ Clinics</h3>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div>
-                    <p className="font-display text-xl font-bold text-primary">500+</p>
-                    <p className="text-[10px] text-muted-foreground">Clinics</p>
-                  </div>
-                  <div>
-                    <p className="font-display text-xl font-bold text-primary">50K+</p>
-                    <p className="text-[10px] text-muted-foreground">Patients</p>
-                  </div>
-                  <div>
-                    <p className="font-display text-xl font-bold text-primary">4.9</p>
-                    <p className="text-[10px] text-muted-foreground">Rating</p>
-                  </div>
-                </div>
+              {/* What claiming means */}
+              <div className="mt-5 p-4 rounded-xl bg-muted/50 text-xs leading-relaxed text-muted-foreground">
+                <h3 className="font-bold text-sm mb-2 text-foreground">What claiming does</h3>
+                You confirm you can receive a code at the clinic&apos;s listed email or phone, then you can edit the profile and see appointment requests.
+                Claiming is free. See our <a href="/verification-policy/" className="underline">verification policy</a> for what the verified label means.
               </div>
             </div>
           </div>
