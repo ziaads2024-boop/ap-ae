@@ -102,7 +102,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
                 <Image src={images.dubai.src} alt="" width={images.dubai.width} height={images.dubai.height} sizes="180px" className="h-full w-full object-cover" />
               </div>
               <div className="absolute left-6 top-24 rounded-2xl bg-white px-4 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.12)]">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Licensed by</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Dental regulators</p>
                 <p className="text-sm font-semibold text-ink">DHA · DoH · MOHAP</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
               <p className="font-semibold text-ink">Ratings, unedited</p>
               <p className="mt-1 text-sm leading-relaxed text-zinc-600">
                 {reviewCount > 0
-                  ? `${reviewCount.toLocaleString()} Google reviews across ${clinicCount.toLocaleString()} listed clinics, shown as reported.`
+                  ? `Google ratings and review counts for ${clinicCount.toLocaleString()} listed clinics, shown as reported.`
                   : 'Clinic ratings come from Google and are shown as reported. We never write or edit reviews.'}
               </p>
             </div>

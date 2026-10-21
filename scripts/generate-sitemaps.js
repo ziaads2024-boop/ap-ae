@@ -380,10 +380,20 @@ async function buildPostUrls(supabase) {
     }));
 }
 
+// Insurer pages are indexable only once enough clinics have confirmed the plan
+// (MIN_CLINICS_FOR_INSURER_INDEX in src/lib/insuranceData.ts).
 async function buildInsuranceUrls(supabase) {
-  const insurances = await fetchAll(supabase, 'insurances', 'slug, updated_at', { is_active: true });
+  const [insurances, links] = await Promise.all([
+    fetchAll(supabase, 'insurances', 'id, slug, updated_at', { is_active: true }),
+    fetchAll(supabase, 'clinic_insurances', 'insurance_id, clinic_id'),
+  ]);
+  const counts = new Map();
+  for (const l of links) {
+    if (!counts.has(l.insurance_id)) counts.set(l.insurance_id, new Set());
+    counts.get(l.insurance_id).add(l.clinic_id);
+  }
   return insurances
-    .filter((insurance) => insurance.slug)
+    .filter((insurance) => insurance.slug && (counts.get(insurance.id)?.size || 0) >= 3)
     .map((insurance) => ({
       loc: normalizeUrl(`/insurance/${insurance.slug}`),
       lastmod: insurance.updated_at?.split('T')[0],
