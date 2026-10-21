@@ -22,6 +22,7 @@ class MyDocument extends Document {
 
           {/* Google Search Console Verification */}
           <meta name="google-site-verification" content="QXeUyCI6vHRD4bv5ZLJCYQVSvESe4uqju4tWaamlr2A" />
+          <meta name="google-site-verification" content="rRYuAOlERaQwgPvDUKyirGO1QMVjD43uY-eXEPn--OM" />
 
           {/* Critical preconnects for LCP */}
           <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
