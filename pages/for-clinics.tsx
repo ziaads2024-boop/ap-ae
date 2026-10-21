@@ -11,7 +11,7 @@ export default function ForClinicsPage() {
     <PageLayout>
       <Head>
         <title>List Your Dental Clinic — {SITE_NAME}.ae</title>
-        <meta name="description" content={`Join 500+ clinics generating an average of +38 bookings per month through ${SITE_NAME}. Zero commission, 4-week onboarding.`} />
+        <meta name="description" content={`List your dental clinic on ${SITE_NAME}, reach patients searching by emirate and treatment, and manage your profile, bookings and reviews in one place.`} />
         <link rel="canonical" href={`${BASE_URL}/for-clinics/`} />
         <meta name="robots" content="index, follow" />
         <meta property="og:type" content="website" />
@@ -21,13 +21,13 @@ export default function ForClinicsPage() {
         <meta property="og:locale" content="en_AE" />
         <meta name="twitter:url" content={`${BASE_URL}/for-clinics/`} />
         <meta name="twitter:title" content={`List Your Dental Clinic — ${SITE_NAME}.ae`} />
-        <meta name="twitter:description" content={`Join 500+ clinics generating an average of +38 bookings per month through ${SITE_NAME}. Zero commission, 4-week onboarding.`} />
+        <meta name="twitter:description" content={`List your dental clinic on ${SITE_NAME}, reach patients searching by emirate and treatment, and manage your profile, bookings and reviews in one place.`} />
         <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
         <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}/for-clinics/`} />
         <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/for-clinics/`} />
         <link rel="sitemap" type="application/xml" href={`${BASE_URL}/sitemap.xml`} />
         <meta property="og:title" content={`List Your Dental Clinic — ${SITE_NAME}.ae`} />
-        <meta property="og:description" content="Grow your practice with the UAE's leading dental directory." />
+        <meta property="og:description" content="List your dental clinic on AppointPanda." />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
@@ -39,11 +39,11 @@ export default function ForClinicsPage() {
             Grow your practice with {SITE_NAME}
           </h1>
           <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-xl mx-auto">
-            Join 500+ clinics across the UAE. Average +38 bookings per month, zero commission, 4-week onboarding.
+            Claim or create your clinic profile, keep your treatments and hours up to date, and let patients searching your emirate find you.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             <Link
-              href="#"
+              href="/list-your-practice/"
               className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200"
             >
               List your clinic <ArrowRight className="h-4 w-4" />
@@ -58,25 +58,6 @@ export default function ForClinicsPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <div className="border-b border-zinc-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {[
-              { number: '500+', label: 'Clinic Partners' },
-              { number: '200k+', label: 'Monthly Patients' },
-              { number: '+38', label: 'Avg Bookings/Mo' },
-              { number: '4.8★', label: 'Avg Partner Rating' },
-            ].map((stat) => (
-              <div key={stat.label} className="space-y-1">
-                <div className="text-2xl md:text-3xl font-bold text-amber-600">{stat.number}</div>
-                <div className="text-xs text-zinc-500 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Features grid */}
       <section className="py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 lg:px-6">
@@ -90,8 +71,8 @@ export default function ForClinicsPage() {
               { icon: <BarChart3 className="h-6 w-6" />, title: 'Analytics Dashboard', desc: 'Track profile views, bookings, and revenue. See exactly where your patients come from.' },
               { icon: <Users className="h-6 w-6" />, title: 'Patient Management', desc: 'Centralised patient records, treatment history, and follow-up scheduling.' },
               { icon: <Star className="h-6 w-6" />, title: 'Review Management', desc: 'Respond to reviews, showcase testimonials, and build your reputation.' },
-              { icon: <ShieldCheck className="h-6 w-6" />, title: 'Insurance Integration', desc: 'Auto-verify patient insurance and enable direct billing through the platform.' },
-              { icon: <Zap className="h-6 w-6" />, title: 'Instant Visibility', desc: 'Get listed on the UAE\'s most visited dental directory within 4 weeks.' },
+              { icon: <ShieldCheck className="h-6 w-6" />, title: 'Insurance Integration', desc: 'Show which insurers you accept so patients can filter by their plan.' },
+              { icon: <Zap className="h-6 w-6" />, title: 'Instant Visibility', desc: 'Appear in emirate, treatment and "near me" searches once your listing is live.' },
             ].map((feature) => (
               <div key={feature.title} className="card-hover-amber p-6">
                 <div className="w-12 h-12 rounded-xl bg-amber-700/10 flex items-center justify-center text-amber-700 mb-4">
@@ -102,18 +83,6 @@ export default function ForClinicsPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Testimonial */}
-      <section className="py-16 bg-[#fafafa] border-y border-zinc-200">
-        <div className="max-w-3xl mx-auto px-4 lg:px-6 text-center">
-          <Star className="h-8 w-8 text-amber-500 fill-amber-500 mx-auto mb-4" />
-          <blockquote className="text-lg md:text-xl text-zinc-700 font-medium leading-relaxed">
-            &ldquo;Since joining AppointPanda, our bookings have increased by 65%. The quality of patients is exceptional — they come pre-informed and ready to commit.&rdquo;
-          </blockquote>
-          <p className="font-semibold text-zinc-900 text-sm mt-4">Dr. Amira Al Hashimi</p>
-          <p className="text-zinc-400 text-xs">Pearl Dental Studio, Dubai Marina</p>
         </div>
       </section>
 
@@ -175,7 +144,7 @@ export default function ForClinicsPage() {
       <section className="gradient-dark-hero py-16">
         <div className="max-w-2xl mx-auto px-4 lg:px-6 text-center relative z-10">
           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">Ready to grow your practice?</h2>
-          <p className="text-zinc-400 text-sm mt-4">Join 500+ clinics already growing with {SITE_NAME}.</p>
+          <p className="text-zinc-400 text-sm mt-4">Questions? Contact our team before you sign up.</p>
           <Link
             href="#"
             className="mt-6 inline-flex items-center gap-2 px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200"

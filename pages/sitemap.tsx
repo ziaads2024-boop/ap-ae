@@ -2,7 +2,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageHero } from '@/components/layout/PageHero';
-import { emirates, specialties, insurers, SITE_NAME } from '@/lib/site-data';
+import { SITE_NAME } from '@/lib/site-data';
+import { emirates, services, urls, hasLocalGuide } from '@/content';
 
 const BASE_URL = 'https://www.appointpanda.ae';
 
@@ -33,72 +34,62 @@ export default function SitemapPage() {
         title="Sitemap"
       />
 
-      <div className="max-w-4xl mx-auto px-4 lg:px-6 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-5xl mx-auto px-5 py-12 lg:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3">Patients</h2>
-            <ul className="space-y-2">
+            <h2 className="mb-3 text-sm font-semibold text-ink">Find care</h2>
+            <ul className="space-y-2 text-sm">
               {[
-                { label: 'Find Clinics', href: '/find-clinics' },
-                { label: 'Specialties', href: '/specialties' },
-                { label: 'Emirates', href: '/emirates' },
-                { label: 'Insurance', href: '/insurance' },
-                { label: 'Reviews', href: '/reviews' },
-                { label: 'Emergency', href: '/emergency' },
-                { label: 'Blog', href: '/blog' },
-              ].map(l => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{l.label}</Link></li>
+                { label: 'Find a dentist', href: '/find-clinics/' },
+                { label: 'Dentists near me', href: '/find-clinics/?near=me' },
+                { label: 'All treatments', href: urls.services },
+                { label: 'All emirates', href: urls.emirates },
+                { label: 'Insurance', href: '/insurance/' },
+                { label: 'Guides and articles', href: '/blog/' },
+              ].map((l) => (
+                <li key={l.href}><Link href={l.href} className="text-zinc-600 hover:text-ink hover:underline">{l.label}</Link></li>
               ))}
             </ul>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3">For Clinics</h2>
-            <ul className="space-y-2">
+            <h2 className="mb-3 mt-8 text-sm font-semibold text-ink">AppointPanda</h2>
+            <ul className="space-y-2 text-sm">
               {[
-                { label: 'List Your Clinic', href: '/for-clinics' },
-                { label: 'Pricing', href: '/pricing' },
-              ].map(l => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{l.label}</Link></li>
-              ))}
-            </ul>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3 mt-6">Company</h2>
-            <ul className="space-y-2">
-              {[
-                { label: 'About', href: '/about' },
-                { label: 'Contact', href: '/contact' },
-                { label: 'Privacy', href: '/privacy' },
-                { label: 'Terms', href: '/terms' },
-                { label: 'Editorial Policy', href: '/editorial-policy' },
-              ].map(l => (
-                <li key={l.href}><Link href={l.href} className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{l.label}</Link></li>
+                { label: 'About', href: '/about/' },
+                { label: 'How it works', href: '/how-it-works/' },
+                { label: 'For clinics', href: '/for-clinics/' },
+                { label: 'List your clinic', href: '/list-your-practice/' },
+                { label: 'Contact', href: '/contact/' },
+                { label: 'Editorial policy', href: '/editorial-policy/' },
+                { label: 'Medical review policy', href: '/medical-review-policy/' },
+                { label: 'Verification policy', href: '/verification-policy/' },
+                { label: 'Privacy', href: '/privacy/' },
+                { label: 'Terms', href: '/terms/' },
+              ].map((l) => (
+                <li key={l.href}><Link href={l.href} className="text-zinc-600 hover:text-ink hover:underline">{l.label}</Link></li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3">Emirates</h2>
-            <ul className="space-y-2">
-              {emirates.map(e => (
-                <li key={e.slug}><Link href={`/${e.slug}/`} className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{e.name}</Link></li>
+            <h2 className="mb-3 text-sm font-semibold text-ink">Treatment guides</h2>
+            <ul className="space-y-2 text-sm">
+              {services.map((s) => (
+                <li key={s.slug}><Link href={urls.service(s.slug)} className="text-zinc-600 hover:text-ink hover:underline">{s.name}</Link></li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3">Specialties</h2>
-            <ul className="space-y-2">
-              {specialties.map(s => (
-                <li key={s.slug}><Link href={`/specialties/${s.slug}`} className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{s.name}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-zinc-900 text-sm mb-3">Insurance</h2>
-            <ul className="space-y-2">
-              {insurers.map(i => (
-                <li key={i.slug}><Link href="/insurance" className="text-sm text-zinc-500 hover:text-amber-700 transition-colors">{i.name}</Link></li>
+            <h2 className="mb-3 text-sm font-semibold text-ink">Emirates and local guides</h2>
+            <ul className="space-y-4 text-sm">
+              {emirates.map((e) => (
+                <li key={e.slug}>
+                  <Link href={urls.emirate(e.slug)} className="font-medium text-ink hover:underline">Dentists in {e.name}</Link>
+                  <ul className="mt-1.5 space-y-1 pl-3">
+                    {services.filter((s) => hasLocalGuide(s.slug, e.slug)).map((s) => (
+                      <li key={s.slug}><Link href={urls.serviceEmirate(e.slug, s.slug)} className="text-zinc-600 hover:text-ink hover:underline">{s.shortName} in {e.name}</Link></li>
+                    ))}
+                  </ul>
+                </li>
               ))}
             </ul>
           </div>

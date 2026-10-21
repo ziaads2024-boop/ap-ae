@@ -24,6 +24,25 @@ const nextConfig = {
         destination: '/:state/',
         permanent: true,
       },
+      // Consolidated duplicates of the hand-written treatment guides. The old pages
+      // showed placeholder clinics, counts and testimonials that were not real.
+      ...[
+        ['general-dentistry', 'teeth-cleaning'],
+        ['cosmetic-dentistry', 'veneers'],
+        ['dental-implants', 'dental-implants'],
+        ['orthodontics', 'braces'],
+        ['pediatric-dentistry', 'pediatric-dentistry'],
+        ['endodontics', 'root-canal'],
+        ['oral-surgery', 'wisdom-tooth-removal'],
+        ['prosthodontics', 'dental-crowns'],
+        ['teeth-whitening', 'teeth-whitening'],
+        ['veneers', 'veneers'],
+        ['emergency-dentistry', 'emergency-dentist'],
+      ].map(([from, to]) => ({ source: `/specialties/${from}`, destination: `/services/${to}/`, permanent: true })),
+      { source: '/specialties/:slug*', destination: '/services/', permanent: true },
+      { source: '/emergency', destination: '/services/emergency-dentist/', permanent: true },
+      { source: '/emergency-dentist', destination: '/services/emergency-dentist/', permanent: true },
+      { source: '/reviews', destination: '/find-clinics/', permanent: true },
     ];
   },
 

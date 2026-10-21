@@ -53,12 +53,6 @@ const CityPageWithSEO = ({ citySlug, stateSlug, stateData, cityData, seoData, fa
                                     "@type": "Dentist",
                                     "name": c.name,
                                     "url": `${BASE_URL}/clinic/${c.slug}/`,
-                                    "aggregateRating": c.rating ? {
-                                        "@type": "AggregateRating",
-                                        "ratingValue": c.rating.toFixed(1),
-                                        "reviewCount": c.review_count,
-                                        "bestRating": "5",
-                                    } : undefined
                                 }
                             }))
                         }) }}

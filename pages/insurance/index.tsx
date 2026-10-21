@@ -39,7 +39,6 @@ export default function InsurancePage() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold text-zinc-900 text-[15px]">{ins.name}</h3>
-                  <span className="text-xs text-zinc-400">| {ins.clinics} clinics</span>
                 </div>
                 <p className="text-zinc-500 text-xs mt-1">{ins.notes}</p>
                 <span className="inline-flex items-center gap-1 text-amber-700 text-[11px] font-semibold mt-2">
