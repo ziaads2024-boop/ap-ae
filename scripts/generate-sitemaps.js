@@ -24,7 +24,8 @@ function loadContent() {
   const jiti = require('jiti')(__filename);
   const content = jiti(path.join(process.cwd(), 'src/content/index.ts'));
   const images = jiti(path.join(process.cwd(), 'src/content/images.ts'));
-  return { ...content, images };
+  const dubai = jiti(path.join(process.cwd(), 'src/content/dubai.ts'));
+  return { ...content, images, dubai };
 }
 
 function imageEntry(img) {
@@ -52,6 +53,14 @@ function buildGuideUrls(content) {
       }
     }
   }
+  // Dubai area hubs and visit-reason pages
+  for (const area of content.dubai.dubaiAreas) {
+    urls.push({ loc: normalizeUrl(content.urls.dubaiArea(area.slug)), lastmod, priority: 0.85, changefreq: 'weekly' });
+  }
+  urls.push({ loc: normalizeUrl(content.urls.dubaiReasons), lastmod, priority: 0.7, changefreq: 'monthly' });
+  for (const reason of content.dubai.visitReasons) {
+    urls.push({ loc: normalizeUrl(content.urls.dubaiReason(reason.slug)), lastmod, priority: 0.7, changefreq: 'monthly' });
+  }
   return urls;
 }
 
@@ -65,6 +74,14 @@ function buildLlmsTxt(content) {
     '> Independent guides to dental treatment in the UAE, and a directory of dental clinics across all seven emirates. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.',
     '',
     `Content last reviewed: ${content.CONTENT_REVIEWED}. Editorial policy: ${abs('/editorial-policy/')}`,
+    '',
+    '## Dubai (primary market)',
+    `- [Dentists in Dubai](${abs(content.urls.emirate('dubai'))}): licensing (DHA, or the Dubai Healthcare City Authority inside Healthcare City), insurance and areas.`,
+    `- [Find a dentist in Dubai](${abs('/find-clinics/')}): search by area, reason for visit, treatment or insurance; patients request an appointment and the clinic confirms the time.`,
+    ...content.dubai.dubaiAreas.map((a) => `- [Dentists in ${a.name}](${abs(content.urls.dubaiArea(a.slug))}): ${a.summary}`),
+    '',
+    '## Reasons for a dental visit (Dubai)',
+    ...content.dubai.visitReasons.map((r) => `- [${r.label}](${abs(content.urls.dubaiReason(r.slug))}): ${r.advice}`),
     '',
     '## Treatment guides',
     ...content.services.map((s) => `- [${s.name}](${abs(content.urls.service(s.slug))}): ${s.summary}`),
@@ -248,7 +265,7 @@ async function buildStateUrls(supabase) {
     }));
 }
 
-async function buildCityUrls(supabase) {
+async function buildCityUrls(supabase, content) {
   const [states, cities] = await Promise.all([
     fetchAll(supabase, 'states', 'id, slug', { is_active: true }),
     fetchAll(supabase, 'cities', 'id, slug, state_id, updated_at', { is_active: true }),
@@ -257,6 +274,8 @@ async function buildCityUrls(supabase) {
 
   return cities
     .filter((city) => city.slug && stateSlugMap.get(city.state_id))
+    .filter((city) => !(stateSlugMap.get(city.state_id) === 'dubai' && content.dubai.dubaiAreas.some((a) => (a.aliases || []).includes(city.slug))))
+    .filter((city) => !content.serviceBySlug(city.slug))
     .map((city) => ({
       loc: normalizeUrl(`/${stateSlugMap.get(city.state_id)}/${city.slug}`),
       lastmod: city.updated_at?.split('T')[0],
@@ -277,7 +296,7 @@ async function buildServiceUrls(supabase) {
     }));
 }
 
-async function buildServiceLocationUrls(supabase) {
+async function buildServiceLocationUrls(supabase, content) {
   const [states, cities, treatments, clinicCombinations] = await Promise.all([
     fetchAll(supabase, 'states', 'id, slug', { is_active: true }),
     fetchAll(supabase, 'cities', 'id, slug, state_id, updated_at', { is_active: true }),
@@ -291,13 +310,19 @@ async function buildServiceLocationUrls(supabase) {
   ]);
 
   const stateSlugMap = new Map(states.map((state) => [state.id, state.slug]));
-  const validCombos = new Set();
-
+  // Only list area + treatment pages with enough real clinics to be useful
+  // (pages below the threshold are noindexed; see src/lib/dubaiData.ts).
+  const MIN_CLINICS = 3;
+  const comboCounts = new Map();
   for (const combo of clinicCombinations) {
     if (combo.clinic?.city_id && combo.treatment_id) {
-      validCombos.add(`${combo.clinic.city_id}-${combo.treatment_id}`);
+      const key = `${combo.clinic.city_id}-${combo.treatment_id}`;
+      comboCounts.set(key, (comboCounts.get(key) || 0) + 1);
     }
   }
+  const validCombos = new Set([...comboCounts].filter(([, n]) => n >= MIN_CLINICS).map(([key]) => key));
+  const aliasCities = new Set(content.dubai.dubaiAreas.flatMap((a) => a.aliases || []));
+  const aliasTreatments = new Set(['dental-veneers']);
 
   const urls = [];
   for (const city of cities) {
@@ -306,8 +331,11 @@ async function buildServiceLocationUrls(supabase) {
       continue;
     }
 
+    if (stateSlug === 'dubai' && aliasCities.has(city.slug)) {
+      continue;
+    }
     for (const treatment of treatments) {
-      if (!treatment.slug || !validCombos.has(`${city.id}-${treatment.id}`)) {
+      if (!treatment.slug || !validCombos.has(`${city.id}-${treatment.id}`) || aliasTreatments.has(treatment.slug)) {
         continue;
       }
 
@@ -433,9 +461,9 @@ async function main() {
   try {
     [stateUrls, cityUrls, serviceUrls, serviceLocationUrls, profileUrls, postUrls, insuranceUrls] = await Promise.all([
       buildStateUrls(supabase),
-      buildCityUrls(supabase),
+      buildCityUrls(supabase, content),
       buildServiceUrls(supabase),
-      buildServiceLocationUrls(supabase),
+      buildServiceLocationUrls(supabase, content),
       buildProfileUrls(supabase),
       buildPostUrls(supabase),
       buildInsuranceUrls(supabase),

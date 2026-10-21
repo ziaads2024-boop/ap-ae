@@ -74,3 +74,26 @@ Taken from the reference: oversized condensed headlines, pastel colour blocks (l
 4. Recruit a named, licensed dental reviewer for the guides (C3).
 5. After deploying, submit `https://www.appointpanda.ae/sitemap.xml` in Search Console and request indexing for the 7 emirate guides and 12 treatment guides.
 6. When you update any guide, change `CONTENT_REVIEWED` in `src/content/index.ts` so the date on the page and in the sitemap stays honest.
+
+## 8. Dubai-first, Zocdoc-style phase (added October 2026)
+
+Evidence used: Search Console export (Feb–Apr 2026, "GMB report/"). Most clicks come from clinic profile pages found by clinic-name and "clinic + reviews" queries (positions 2–10). Area + treatment URLs (e.g. JBR veneers, Mirdif Invisalign) get impressions at positions 11–20 but almost no clicks. Head terms ("dentist dubai", "invisalign dubai") sit at positions 80+.
+
+| Area | What changed |
+|---|---|
+| Clinic profiles (`/clinic/[slug]/`) | Zocdoc-style layout: licensing body, Google rating, call/WhatsApp/directions, treatments with clinic-listed prices, insurers, dentists, hours, location, photos, labelled reviews, data-only FAQs, sticky appointment request. `Dentist` schema (no ratings). The page JSON no longer includes `clinics.*` (claim emails, owner ids, GMB data). |
+| Search (`/find-clinics/`) | Dubai by default; filters for visit reason or treatment, Dubai area, insurance, name and sort; "near me"; request button on every result. |
+| Booking | No clinic publishes a calendar yet, so there are no "available" slots anywhere. The new request form asks for a preferred day and part of the day and says the clinic will confirm. The old forms that labelled generated slots as "Available Times" now say "preferred time". |
+| Dubai area hubs (`/dubai/[area]/`) | 27 areas keyed to the slugs that already have visibility, with hand-written local notes, live clinic results, per-treatment clinic counts and neighbouring areas. |
+| Area + treatment (`/dubai/[area]/[treatment]/`) | Built from real data: number of clinics offering the treatment there and the clinic-listed price range. `noindex` and left out of the sitemap until at least 3 clinics qualify. |
+| Visit reasons (`/dubai/reasons/[reason]/`) | 12 symptom-led pages (toothache, swelling, missing tooth...) with urgency, practical steps, what to tell the clinic and likely treatments. |
+| Consolidation | 301s: `jbr` → `jumeirah-beach-residence`, `dental-veneers` → `veneers` on Dubai area pages, and treatment slugs used as areas (`/dubai/invisalign/`) → the treatment guide. |
+| Sitemaps / llms.txt | Dubai areas and reasons added; area + treatment URLs listed only at ≥3 clinics; alias URLs excluded. |
+
+### Needs a decision
+
+- **Google review text.** Profiles display review text copied from Google into `google_reviews`. Google's Places/Business Profile terms restrict storing and redisplaying that content. Consider showing the rating and count with a link to Google instead of full review text, or switching to reviews collected on AppointPanda after a booked visit (the Zocdoc model).
+- **Verified-patient reviews.** Zocdoc only accepts reviews from patients who booked. Once requests are confirmed in the dashboard, send a review link tied to the appointment and label those reviews "Verified visit".
+- **Clinic calendars.** Live "next available" slots need clinics to maintain availability in the dashboard. Show slots only for clinics that do; keep the request flow for the rest.
+- **Area slugs.** The 27 area slugs come from Search Console URLs. Check them against the `cities` table and add any missing aliases in `src/content/dubai.ts`.
+- **Data quality.** On the live homepage every featured clinic showed "Dubai Festival City, Dubai"; check the city/area assignment of those clinics.
