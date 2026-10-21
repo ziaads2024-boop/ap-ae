@@ -265,7 +265,7 @@ export const services: ServiceContent[] = [
     intro: [
       'The term is popular in the Gulf for a smile makeover that treats many front teeth at once, typically 16 to 20 veneers or crowns. Done well, it looks natural. Done in a rush, it can look bulky or unnaturally white.',
       'Because it is a large, mostly irreversible change, the planning stage is the treatment. A good clinic will check gums and bite, may suggest whitening or orthodontics first, and will let you test the shape with a mock-up.',
-      'It is worth asking to see real before-and-after photos of the dentist\'s own cases and discussing the shade you want in daylight, not just under clinic lights.',
+      'Ask to see before-and-after photos of the dentist\'s own cases, and look at the proposed shade in daylight as well as under clinic lights.',
     ],
     goodFor: [
       'People with several worn, chipped or discoloured front teeth',

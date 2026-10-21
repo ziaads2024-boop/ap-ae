@@ -14,7 +14,7 @@ export const emirates: EmirateContent[] = [
     summary:
       'Dubai has the largest choice of private dental clinics in the UAE, from neighbourhood practices to specialist centres, licensed by the Dubai Health Authority or, inside Dubai Healthcare City, by its own regulator.',
     intro: [
-      'Most dental clinics in Dubai are private, so you can usually book directly without a referral. Choice is wide, which makes it worth comparing what is included in a price, who will treat you and how easy the clinic is to reach at the times you are free.',
+      'Most dental clinics in Dubai are private, so you can usually book directly without a referral. With so much choice, compare what each price includes, who will treat you and how easy the clinic is to reach at the times you are free.',
       'Clinics cluster where people live and work: the Marina and JLT, Downtown and Business Bay, Jumeirah, Al Barsha, Deira and Bur Dubai, and the newer communities further inland. Many open into the evening and on weekends.',
     ],
     regulator: {
@@ -64,7 +64,7 @@ export const emirates: EmirateContent[] = [
       'Dental care in Abu Dhabi, including Al Ain and Al Dhafra, is regulated by the Department of Health - Abu Dhabi, with a mix of government hospital clinics and private practices.',
     intro: [
       'Abu Dhabi has a strong network of private dental clinics on the island and in the mainland suburbs, plus dental departments in major hospitals. Al Ain, the emirate\'s second city, has its own established clinics, so residents there rarely need to travel to the capital.',
-      'Because insurance in Abu Dhabi is mandatory and widely used, most clinics work with the main insurers and handle approvals for you. It is still worth confirming your plan\'s dental limit before starting larger treatment.',
+      'Because insurance in Abu Dhabi is mandatory and widely used, most clinics work with the main insurers and handle approvals for you. Confirm your plan\'s dental limit before starting larger treatment.',
     ],
     regulator: {
       name: 'Department of Health - Abu Dhabi',
@@ -89,7 +89,7 @@ export const emirates: EmirateContent[] = [
       'Most residents drive. Island traffic is heaviest around the bridges at peak times, so mainland residents often prefer a clinic on their side of the water.',
     tips: [
       'If you hold Thiqa, check the clinic is a participating provider before booking.',
-      'Ask whether pre-approval is required for root canals, crowns or extractions under your plan.',
+      'Find out if your plan needs pre-approval for root canals, crowns or extractions.',
       'Al Ain residents can usually find specialists locally rather than travelling to the capital.',
     ],
     faqs: [
@@ -136,7 +136,7 @@ export const emirates: EmirateContent[] = [
     tips: [
       'Compare quotes with Dubai if you commute; equivalent treatment is often priced lower in Sharjah.',
       'Book late-evening slots early in the week; they fill quickly.',
-      'Ask whether the clinic can coordinate with your employer\'s insurer for direct billing.',
+      'Check that the clinic can bill your employer\'s insurer directly.',
     ],
     faqs: [
       { q: 'Who licenses dentists in Sharjah?', a: 'Dentists in Sharjah are licensed federally by the Ministry of Health and Prevention, with the Sharjah Health Authority overseeing healthcare in the emirate.' },
@@ -219,7 +219,7 @@ export const emirates: EmirateContent[] = [
     gettingThere: 'Driving is the norm. Allow extra time if you are coming from northern villages for specialist appointments.',
     tips: [
       'For multi-visit treatment, choose a clinic that is easy to reach on your regular routes.',
-      'Ask whether specialist treatment is done on site or referred elsewhere.',
+      'Ask if specialist treatment is done on site or referred to another clinic.',
     ],
     faqs: [
       { q: 'Do I need to travel to Dubai for specialist dental care?', a: 'Not usually. Ras Al Khaimah has general and specialist dentists. For rare procedures your dentist may refer you, but most treatments are available locally.' },
@@ -259,10 +259,10 @@ export const emirates: EmirateContent[] = [
     gettingThere: 'The drive from Dibba to Fujairah City takes about 45 minutes; plan multi-visit treatment around this.',
     tips: [
       'Group appointments together where possible to reduce travel.',
-      'Ask whether the clinic can do scans and X-rays on site to save extra trips.',
+      'Choose a clinic that takes X-rays and scans on site to save extra trips.',
     ],
     faqs: [
-      { q: 'Can I get specialist dental treatment in Fujairah?', a: 'Many treatments are available in Fujairah City. For some specialist procedures your dentist may refer you elsewhere.' },
+      { q: 'Can I get specialist dental treatment in Fujairah?', a: 'Most routine and many specialist treatments are provided in Fujairah City. For some specialist procedures your dentist may refer you to another emirate.' },
       { q: 'Who licenses dentists in Fujairah?', a: 'The federal Ministry of Health and Prevention licenses dental professionals in Fujairah.' },
     ],
     neighbours: ['ras-al-khaimah', 'sharjah'],

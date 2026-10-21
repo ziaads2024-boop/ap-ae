@@ -9,7 +9,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'dental-implants', emirate: 'dubai',
     localNote: [
-      'Dubai has many clinics with in-house CBCT scanners, which saves a separate trip to an imaging centre before implant planning. Ask whether the scan is included in the consultation fee, because some clinics charge for it separately.',
+      'Many Dubai clinics have their own CBCT scanner, which saves a separate trip to an imaging centre before implant planning. Check if the scan is included in the consultation fee; some clinics charge for it separately.',
       'Implant treatment spans several months, so think about where you will be living and working for the whole course. Commuting across the city at peak hours for each review appointment adds up quickly.',
     ],
     faqs: [
@@ -53,8 +53,8 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'dental-implants', emirate: 'ras-al-khaimah',
     localNote: [
-      'Implant treatment is available in Ras Al Khaimah, mostly in clinics around Al Nakheel and RAK City. For residents further north, choose a clinic that is easy to reach, since healing checks are spread over several months.',
-      'Ask whether the clinic has its own 3D scanner. If not, factor in a trip to an imaging centre before the plan is finalised.',
+      'An implant in Ras Al Khaimah means four to six visits spread over several months, from the first scan to the final crown. If you live north of RAK City, how easy the clinic is to reach on a weekday afternoon matters as much as the price.',
+      'Find out if the clinic has its own 3D (CBCT) scanner. If it does not, you will need a separate trip to an imaging centre before the plan can be finalised.',
     ],
     faqs: [
       { q: 'Do I need to go to Dubai for implants?', a: 'Usually not. Implants are offered locally in Ras Al Khaimah; your dentist will refer you on only if your case needs specialist surgery that is not available.' },
@@ -65,7 +65,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
     service: 'dental-implants', emirate: 'fujairah',
     localNote: [
       'In Fujairah, implant treatment is centred on clinics in Fujairah City. If you live in Dibba or further along the coast, ask the clinic to combine steps where safe, such as scan and consultation on the same day, to limit driving.',
-      'Because the final crown is usually made by a lab, ask whether the clinic\'s lab is local or in another emirate, as this can affect waiting time.',
+      'The final crown is usually made by a dental lab. A lab in another emirate can add days to the wait, so check where the clinic sends its work.',
     ],
     faqs: [
       { q: 'Can I get same-day teeth with implants in Fujairah?', a: 'Immediate temporary teeth depend on bone quality and the clinic\'s experience. Ask if your case is suitable after the 3D scan.' },
@@ -99,11 +99,11 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'invisalign', emirate: 'abu-dhabi',
     localNote: [
-      'In Abu Dhabi, aligners are offered on the island, in Khalifa City and on Reem, Yas and Saadiyat. If you live on the mainland, a clinic on your side of the bridges makes the regular check-ins easier.',
+      'Aligner check-ins in Abu Dhabi are usually every six to ten weeks for a year or more. For mainland residents, a clinic on the same side of the bridges as home or work avoids crossing at rush hour for each visit.',
       'Adult orthodontics is rarely covered by insurance in Abu Dhabi. If you have a plan with an orthodontic benefit, it is often limited to children, so check your policy before assuming any cover.',
     ],
     faqs: [
-      { q: 'Are orthodontists available in Al Ain for aligners?', a: 'Yes, aligner treatment is offered in Al Ain by both orthodontists and general dentists.' },
+      { q: 'Can I get aligners in Al Ain?', a: 'Yes. Orthodontists and general dentists in Al Ain provide aligner treatment, so residents do not need to travel to the capital for it.' },
       { q: 'How often will I need to visit?', a: 'Usually every 6 to 10 weeks, with extra visits if refinement trays are needed.' },
     ],
   },
@@ -121,8 +121,8 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'invisalign', emirate: 'ajman',
     localNote: [
-      'Clear aligners are available in Ajman from private clinics, and the short distances in the emirate make regular reviews easy to fit in.',
-      'For complex bites, ask whether an orthodontist is involved in planning. If not, it can be worth getting a second opinion before you start.',
+      'Ajman is small enough that most residents are within a short drive of a clinic, which makes the regular aligner reviews easy to fit around work or school.',
+      'If your bite is complex, find out who plans the tray sequence. When no orthodontist is involved, a second opinion before you start costs far less than correcting a poor result.',
     ],
     faqs: [
       { q: 'Can a general dentist in Ajman provide Invisalign?', a: 'Yes, for suitable cases. For complex bite problems a specialist orthodontist is often recommended.' },
@@ -132,7 +132,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'invisalign', emirate: 'ras-al-khaimah',
     localNote: [
-      'Aligners are offered in Ras Al Khaimah, mainly in Al Nakheel and RAK City. Because they need fewer chairside adjustments than braces, they can suit people who live further from the centre.',
+      'Aligners need fewer chairside adjustments than braces, which helps if you live outside RAK City and would otherwise drive in every few weeks.',
       'Ask about remote check-ins using photos, which some clinics use to reduce the number of in-person visits.',
     ],
     faqs: [
@@ -143,7 +143,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'invisalign', emirate: 'fujairah',
     localNote: [
-      'In Fujairah, aligners are available in Fujairah City. The fewer adjustment visits compared with braces can be helpful if you live along the coast and travel in for appointments.',
+      'For people in Dibba, Kalba or Masafi, the main advantage of aligners over braces is fewer trips into Fujairah City for adjustments.',
       'Make sure you know what to do if a tray is lost, and keep your previous set as a backup until the clinic advises otherwise.',
     ],
     faqs: [
@@ -167,7 +167,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'braces', emirate: 'dubai',
     localNote: [
-      'Braces in Dubai are offered by specialist orthodontists and general dentists. For children, a specialist assessment helps decide whether early treatment is worthwhile or whether to wait for more adult teeth.',
+      'Both specialist orthodontists and general dentists fit braces in Dubai. For a child, an orthodontist\'s assessment is the best way to decide between starting early and waiting for more adult teeth to come through.',
       'Adjustment visits are every 4 to 8 weeks, often after school, so ask how easy it is to book late-afternoon slots.',
     ],
     faqs: [
@@ -200,7 +200,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'braces', emirate: 'ajman',
     localNote: [
-      'Braces are available in Ajman\'s private clinics and through university dental facilities. Short travel times make the regular adjustment visits easy to keep.',
+      'Families in Ajman can choose between private clinics and university dental teaching clinics for braces. Short drives make the monthly adjustments easy to keep up.',
       'If you are comparing with Sharjah, check whether the same orthodontist will see you at every visit.',
     ],
     faqs: [
@@ -211,18 +211,18 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'braces', emirate: 'ras-al-khaimah',
     localNote: [
-      'Orthodontic treatment is available in Ras Al Khaimah. For families outside RAK City, choose a clinic you can reach easily every month or two for adjustments.',
+      'Braces need an adjustment visit every four to eight weeks for one to two years. For families outside RAK City, the route to the clinic is part of the decision.',
       'Ask what happens if a wire breaks between visits and whether the clinic can see you quickly.',
     ],
     faqs: [
-      { q: 'Is there an orthodontist in Ras Al Khaimah?', a: 'Yes, orthodontic care is offered locally, by specialists and by general dentists with orthodontic training.' },
+      { q: 'Is there an orthodontist in Ras Al Khaimah?', a: 'Yes. Orthodontic care in Ras Al Khaimah is provided by specialist orthodontists and by general dentists with orthodontic training.' },
       { q: 'Are retainers included?', a: 'It varies by clinic, so ask for retainers to be listed in the quote.' },
     ],
   },
   {
     service: 'braces', emirate: 'fujairah',
     localNote: [
-      'In Fujairah, braces are offered in Fujairah City. Since adjustments are every few weeks, families in outlying towns may find aligners or longer adjustment intervals worth discussing.',
+      'Braces mean an adjustment every few weeks, and most orthodontic care in Fujairah is in Fujairah City. Families in outlying towns can ask about aligners or brace systems with longer gaps between visits.',
       'Ask the orthodontist how often they need to see you; some systems allow longer gaps between visits.',
     ],
     faqs: [
@@ -257,8 +257,8 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'veneers', emirate: 'abu-dhabi',
     localNote: [
-      'In Abu Dhabi, veneers are offered by cosmetic and general dentists across the island and the mainland suburbs. Cosmetic treatment is not normally covered by insurance, so budget for the full cost.',
-      'If you are unsure about removing enamel, ask whether minimal-preparation or composite options are suitable for your teeth.',
+      'Veneers are cosmetic, so in Abu Dhabi, as elsewhere in the UAE, expect to pay the full cost yourself, including Thiqa holders. Get the price per tooth in writing and confirm the material.',
+      'If you are unsure about removing enamel, ask the dentist if your teeth suit a minimal-preparation or composite option instead.',
     ],
     faqs: [
       { q: 'Are veneers covered by insurance in Abu Dhabi?', a: 'Veneers are considered cosmetic and are generally not covered.' },
@@ -279,7 +279,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'veneers', emirate: 'ajman',
     localNote: [
-      'Veneers are available in Ajman from private cosmetic and general dentists. Ask whether your teeth would benefit from whitening or straightening first, which can mean fewer veneers.',
+      'Before committing to veneers in Ajman, ask if whitening or a short course of aligners would get you most of the way. Treating fewer teeth costs less and keeps more enamel.',
       'Make sure you approve a mock-up before preparation; it is the best way to judge the final shape.',
     ],
     faqs: [
@@ -301,7 +301,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'veneers', emirate: 'fujairah',
     localNote: [
-      'Veneers are offered in Fujairah City. If you live further along the coast, ask the clinic to plan the visits close together to reduce travel.',
+      'Porcelain veneers take two or three visits. If you are coming into Fujairah City from along the coast, ask the clinic to book them close together.',
       'Choose a natural shade that you will be happy with in daylight, not just under clinic lights.',
     ],
     faqs: [
@@ -316,7 +316,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
       'Whichever you choose, ask for a written plan listing each tooth, the material and the total cost.',
     ],
     faqs: [
-      { q: 'Should I travel for cosmetic dentistry?', a: 'A short drive to a dentist whose work you have seen and trust is often worth it for a permanent change like veneers.' },
+      { q: 'Should I travel for cosmetic dentistry?', a: 'For a permanent change like veneers, a short drive to a dentist whose work you have seen and trust usually makes sense.' },
       { q: 'Are veneers suitable if I grind my teeth?', a: 'They can be, with a night guard. Heavy grinding increases the risk of chips.' },
     ],
   },
@@ -325,7 +325,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'teeth-whitening', emirate: 'dubai',
     localNote: [
-      'In-clinic whitening is widely available in Dubai, including lunchtime sessions in Downtown and Business Bay. A combined approach, one clinic session plus custom take-home trays, often gives the most even, lasting result.',
+      'In Dubai, many clinics near offices in Downtown and Business Bay can fit an in-clinic whitening session into a long lunch break. One clinic session followed by custom take-home trays usually gives the most even, lasting result.',
       'Be wary of very cheap whitening offers that skip a check-up. Whitening over untreated decay or exposed roots can be painful.',
     ],
     faqs: [
@@ -336,7 +336,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'teeth-whitening', emirate: 'abu-dhabi',
     localNote: [
-      'Whitening is offered across Abu Dhabi and Al Ain. It is cosmetic, so it is not covered by insurance, but a check-up and cleaning beforehand may be, under a plan with a dental benefit.',
+      'Whitening itself is cosmetic and not covered by insurance in Abu Dhabi. The check-up and cleaning you should have first may be, if your plan includes a dental benefit.',
       'If you have crowns or veneers on front teeth, ask how they will match after whitening.',
     ],
     faqs: [
@@ -348,7 +348,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
     service: 'teeth-whitening', emirate: 'sharjah',
     localNote: [
       'Sharjah clinics offer both in-clinic and take-home whitening, often at lower prices than central Dubai. Take-home trays are a good fit if evening appointments are hard to get.',
-      'Ask whether the trays are custom-made, which keeps the gel off your gums.',
+      'Choose custom-made trays over one-size kits: a close fit keeps the gel off your gums.',
     ],
     faqs: [
       { q: 'Is take-home whitening as effective?', a: 'Over 1 to 2 weeks it can reach similar results, with less sensitivity for some people.' },
@@ -358,7 +358,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'teeth-whitening', emirate: 'ajman',
     localNote: [
-      'Whitening is available in Ajman\'s private clinics. A cleaning first removes surface stain and helps the gel work evenly.',
+      'Book a scale and polish before whitening in Ajman. Removing surface stain first helps the gel work evenly and shows what colour your teeth really are.',
       'If you have sensitive teeth, ask about a lower-strength gel over a longer period.',
     ],
     faqs: [
@@ -380,7 +380,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'teeth-whitening', emirate: 'fujairah',
     localNote: [
-      'Whitening is available in Fujairah City. Combining it with a check-up and cleaning on the same visit saves a trip if you live along the coast.',
+      'If you live along the coast, ask a Fujairah City clinic to do the check-up, cleaning and whitening on one day to save a second trip.',
       'Ask the clinic about top-up gel so you can maintain the result at home.',
     ],
     faqs: [
@@ -415,8 +415,8 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'root-canal', emirate: 'abu-dhabi',
     localNote: [
-      'Root canal treatment is widely available in Abu Dhabi and Al Ain. Clinics usually request insurance approval for root canals and crowns, which can take a day or two, so mention any severe pain so they can prioritise relief first.',
-      'Ask whether a temporary filling will be placed while you wait for approval of the crown.',
+      'In Abu Dhabi, clinics usually ask your insurer to approve a root canal and crown before starting, which can take a day or two. If you are in severe pain, say so: the clinic can relieve it while approval is pending.',
+      'Expect a temporary filling to protect the tooth while the crown is approved and made.',
     ],
     faqs: [
       { q: 'Does insurance in Abu Dhabi cover root canals?', a: 'Plans with a dental benefit often do, with a co-payment. Basic plans may only cover emergency pain relief.' },
@@ -427,7 +427,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
     service: 'root-canal', emirate: 'sharjah',
     localNote: [
       'In Sharjah, root canals are offered by many private clinics and by the university dental hospital. Compare prices for the specific tooth, because molars cost significantly more than front teeth.',
-      'Ask whether the crown is quoted separately, as it often is.',
+      'The crown is often quoted separately, so check before comparing prices.',
     ],
     faqs: [
       { q: 'Is a root canal cheaper in Sharjah?', a: 'Often, yes, for the same tooth. Check whether the crown and X-rays are included.' },
@@ -437,7 +437,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'root-canal', emirate: 'ajman',
     localNote: [
-      'Root canal treatment is available across Ajman\'s clinics. If the tooth has had a root canal before, ask whether the dentist does retreatments or refers to a specialist.',
+      'If the tooth has had a root canal before, the work is more complex. Ask an Ajman clinic if the dentist does retreatments personally or refers them to an endodontist.',
       'Being able to reach the clinic quickly matters if the tooth flares up between visits.',
     ],
     faqs: [
@@ -459,7 +459,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'root-canal', emirate: 'fujairah',
     localNote: [
-      'Root canal treatment is available in Fujairah City. If you live along the coast, ask if the treatment and crown preparation can be planned to minimise trips.',
+      'A root canal and the crown that follows can take three or four visits. If you travel into Fujairah City, ask the clinic to plan them to keep trips to a minimum.',
       'Severe swelling should be seen the same day; do not wait for a routine appointment.',
     ],
     faqs: [
@@ -474,7 +474,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
       'Ask for an X-ray after treatment to confirm the canals are well filled.',
     ],
     faqs: [
-      { q: 'Should I travel for a root canal?', a: 'For simple teeth, a local dentist is fine. For complex cases, a nearby specialist may be worth the trip.' },
+      { q: 'Should I travel for a root canal?', a: 'For simple teeth, a local dentist is fine. For complex cases, a nearby specialist can be the better choice.' },
       { q: 'Is extraction cheaper than a root canal?', a: 'Upfront, yes, but replacing the tooth later usually costs more.' },
     ],
   },
@@ -494,7 +494,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'emergency-dentist', emirate: 'abu-dhabi',
     localNote: [
-      'In Abu Dhabi and Al Ain, private clinics and hospital dental departments see urgent cases. Phone ahead, describe the problem and ask whether they bill your insurer directly for emergency care.',
+      'In Abu Dhabi and Al Ain, private clinics and hospital dental departments see urgent cases. Phone ahead, describe the problem and check if they bill your insurer directly for emergency care.',
       'Serious trauma or swelling affecting breathing or swallowing needs a hospital emergency department; call 998 for an ambulance.',
     ],
     faqs: [
@@ -573,7 +573,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'pediatric-dentistry', emirate: 'abu-dhabi',
     localNote: [
-      'In Abu Dhabi, children\'s dental care is offered in private clinics and hospital dental departments. Families covered by Thiqa should check which providers participate for children\'s dentistry.',
+      'Families covered by Thiqa should check that a clinic participates in the programme for children\'s dentistry before booking; many private clinics and hospital dental departments in Abu Dhabi see children.',
       'Fissure sealants on new adult molars, usually around age 6 and 12, are a simple way to prevent decay.',
     ],
     faqs: [
@@ -585,7 +585,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
     service: 'pediatric-dentistry', emirate: 'sharjah',
     localNote: [
       'Family dental clinics are common in Sharjah\'s residential areas such as Al Majaz and Al Nahda. Choosing one near school or home makes regular check-ups easier.',
-      'Ask whether the clinic has a dentist who regularly sees young children and how they handle nervous first visits.',
+      'When you call, ask which dentist regularly sees young children and how they handle a nervous first visit.',
     ],
     faqs: [
       { q: 'How can I prepare my child for the dentist?', a: 'Keep it positive, avoid scary words, and book a morning slot when your child is rested.' },
@@ -606,7 +606,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'pediatric-dentistry', emirate: 'ras-al-khaimah',
     localNote: [
-      'In Ras Al Khaimah, family clinics and hospital dental departments provide children\'s dental care. Ask whether a pediatric specialist is available for very young or anxious children.',
+      'Children in Ras Al Khaimah are seen at family clinics and hospital dental departments. For a very young or anxious child, ask if a pediatric specialist works at the clinic.',
       'Regular check-ups catch problems early, which matters more when specialist care involves travel.',
     ],
     faqs: [
@@ -617,7 +617,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   {
     service: 'pediatric-dentistry', emirate: 'fujairah',
     localNote: [
-      'Children\'s dental care is available in Fujairah City and through local clinics in coastal towns. Booking check-ups during school holidays can reduce missed school for families who travel in.',
+      'Families who drive into Fujairah City for a pediatric dentist can book check-ups in school holidays so children miss less school.',
       'Prevention is especially valuable when specialist care is a drive away.',
     ],
     faqs: [
