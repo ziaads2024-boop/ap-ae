@@ -24,6 +24,7 @@ const COMPANY_LINKS = [
   { label: 'How we verify clinics', href: '/verification-policy/' },
   { label: 'Privacy', href: '/privacy/' },
   { label: 'Terms', href: '/terms/' },
+  { label: 'Image credits', href: '/image-credits/' },
   { label: 'Sitemap', href: '/sitemap/' },
 ];
 

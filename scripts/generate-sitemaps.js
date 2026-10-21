@@ -22,7 +22,13 @@ const SITEMAP_FILES = [
 // sitemap always lists every guide, even when the database is unreachable.
 function loadContent() {
   const jiti = require('jiti')(__filename);
-  return jiti(path.join(process.cwd(), 'src/content/index.ts'));
+  const content = jiti(path.join(process.cwd(), 'src/content/index.ts'));
+  const images = jiti(path.join(process.cwd(), 'src/content/images.ts'));
+  return { ...content, images };
+}
+
+function imageEntry(img) {
+  return { loc: `${BASE_URL}${img.src}`, title: img.caption };
 }
 
 function buildGuideUrls(content) {
@@ -31,14 +37,18 @@ function buildGuideUrls(content) {
     { loc: normalizeUrl(content.urls.services), lastmod, priority: 0.9, changefreq: 'monthly' },
     { loc: normalizeUrl(content.urls.emirates), lastmod, priority: 0.9, changefreq: 'monthly' },
   ];
+  const { imageForService, imageForEmirate } = content.images;
   for (const service of content.services) {
-    urls.push({ loc: normalizeUrl(content.urls.service(service.slug)), lastmod, priority: 0.9, changefreq: 'monthly' });
+    urls.push({ loc: normalizeUrl(content.urls.service(service.slug)), lastmod, priority: 0.9, changefreq: 'monthly', images: [imageEntry(imageForService(service.slug))] });
   }
   for (const emirate of content.emirates) {
-    urls.push({ loc: normalizeUrl(content.urls.emirate(emirate.slug)), lastmod, priority: 0.9, changefreq: 'monthly' });
+    urls.push({ loc: normalizeUrl(content.urls.emirate(emirate.slug)), lastmod, priority: 0.9, changefreq: 'monthly', images: [imageEntry(imageForEmirate(emirate.slug))] });
     for (const service of content.services) {
       if (content.hasLocalGuide(service.slug, emirate.slug)) {
-        urls.push({ loc: normalizeUrl(content.urls.serviceEmirate(emirate.slug, service.slug)), lastmod, priority: 0.8, changefreq: 'monthly' });
+        urls.push({
+          loc: normalizeUrl(content.urls.serviceEmirate(emirate.slug, service.slug)), lastmod, priority: 0.8, changefreq: 'monthly',
+          images: [imageEntry(imageForEmirate(emirate.slug)), imageEntry(imageForService(service.slug))],
+        });
       }
     }
   }
@@ -147,10 +157,11 @@ function normalizeUrl(routePath) {
 
 function generateSitemapXml(urls) {
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.map((url) => `  <url>
     <loc>${escapeXml(url.loc)}</loc>
-    ${url.lastmod ? `<lastmod>${url.lastmod}</lastmod>` : ''}
+    ${url.lastmod ? `<lastmod>${url.lastmod}</lastmod>` : ''}${(url.images || []).map((img) => `
+    <image:image><image:loc>${escapeXml(img.loc)}</image:loc></image:image>`).join('')}
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority}</priority>
   </url>`).join('\n')}
@@ -216,6 +227,7 @@ function buildStaticUrls() {
     { loc: normalizeUrl('/how-it-works'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/pricing'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/sitemap'), priority: 0.4, changefreq: 'weekly' },
+    { loc: normalizeUrl('/image-credits'), priority: 0.2, changefreq: 'yearly' },
     { loc: normalizeUrl('/terms'), priority: 0.3, changefreq: 'yearly' },
     { loc: normalizeUrl('/privacy'), priority: 0.3, changefreq: 'yearly' },
     { loc: normalizeUrl('/verification-policy'), priority: 0.3, changefreq: 'yearly' },
