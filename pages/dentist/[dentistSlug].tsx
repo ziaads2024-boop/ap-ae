@@ -1,146 +1,81 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
-import DentistPageComponent from '@/pages/DentistPage';
+import { DentistProfile, type DentistProfileProps } from '@/components/profile/DentistProfile';
+import { liveImage } from '@/lib/liveImage';
 
-const DentistPageWithSEO = ({ dentistSlug, dentistData, seoData, faqs, treatmentsData, reviewsData }: {
-    dentistSlug: string;
-    dentistData: any;
-    seoData: { title: string; description: string; canonical: string; ogImage?: string };
-    faqs?: { question: string; answer: string }[];
-    treatmentsData?: any[];
-    reviewsData?: any[];
-}) => {
-    return (
-        <>
-            <DentistPageComponent 
-                dentistSlugProp={dentistSlug} 
-                dentistDataProp={dentistData}
-                seoDataProp={seoData}
-                treatmentsData={treatmentsData}
-                reviewsData={reviewsData}
-                faqsProp={faqs}
-            />
-        </>
-    );
-};
+// Public dentist profile. Only public fields are selected (no email, phone or user id).
 
-export default DentistPageWithSEO;
+const arr = (v: unknown) => (Array.isArray(v) ? (v as unknown[]).filter((x): x is string => typeof x === 'string' && x.trim() !== '') : []);
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    try {
-const supabase = createServerSupabaseAdmin();
-        
-        if (!supabase) {
-            return { paths: [], fallback: 'blocking' };
-        }
-        
-        // Pre-build all active dentists - eliminates slow SSR on first visit
-        const { data: dentists } = await supabase
-            .from('dentists')
-            .select('slug')
-            .eq('is_active', true);
-        
-        const paths = (dentists || []).map((dentist) => ({
-            params: { dentistSlug: dentist.slug }
-        }));
-        
-        return { paths, fallback: 'blocking' };
-    } catch (error) {
-        console.error('Error generating dentist paths:', error);
-        return { paths: [], fallback: 'blocking' };
-    }
-};
-
-// Convert to Static Site Generation with SEO data
-export const getStaticProps: GetStaticProps = async (ctx) => {
+  try {
     const supabase = createServerSupabaseAdmin();
-    const dentistSlug = ctx.params?.dentistSlug as string;
-
-    if (!dentistSlug) {
-        return { notFound: true };
-    }
-
-    if (!supabase) {
-        return {
-            props: {
-                dentistSlug,
-                seoData: {
-                    title: 'Dentist',
-                    description: 'Find and book dental appointments in UAE',
-                    canonical: `/dentist/${dentistSlug}/`,
-                },
-            },
-            revalidate: 60,
-        };
-    }
-
-    const seoSlug = `dentist/${dentistSlug}`;
-
-    // Fetch dentist and SEO content
-    const dentist = await supabase
-        .from("dentists")
-        .select("*, clinic:clinics(id, name, slug, city:cities(name, slug, state:states(name, slug, abbreviation)))")
-        .eq("slug", dentistSlug)
-        .maybeSingle()
-        .then(r => r.data);
-
-    if (!dentist) {
-        return { notFound: true };
-    }
-
-    const seoContent = await supabase
-        .from("seo_pages")
-        .select("id, slug, meta_title, meta_description, content, is_optimized, h1, faqs")
-        .or(`slug.eq.${seoSlug},slug.eq./${seoSlug}`)
-        .order("is_optimized", { ascending: false })
-        .limit(1)
-        .maybeSingle()
-        .then(r => r.data);
-
-    // Fetch treatments for this dentist's clinic (for SEO)
-    const treatments = dentist.clinic_id ? await supabase
-        .from("clinic_treatments")
-        .select("*, treatment:treatments(id, name, slug)")
-        .eq("clinic_id", dentist.clinic_id)
-        .then(r => r.data || []) : [];
-
-    // Fetch reviews for this dentist's clinic (for SEO) - limit to 10 most recent
-    const reviews = dentist.clinic_id ? await supabase
-        .from("review_funnel_events")
-        .select("id, rating, comment, created_at, visitor_id")
-        .eq("clinic_id", dentist.clinic_id)
-        .eq("event_type", "rating_submitted")
-        .order("created_at", { ascending: false })
-        .limit(10)
-        .then(r => (r.data || []).map((review: any) => ({
-            id: review.id,
-            patient_name: review.visitor_id || 'Anonymous',
-            rating: review.rating || 5,
-            content: review.comment || '',
-            created_at: review.created_at,
-        }))) : [];
-    
-    const clinicName = dentist.clinic?.name || 'Dental Clinic';
-    const cityName = dentist.clinic?.city?.name || 'UAE';
-    const metaTitle = seoContent?.meta_title || `${dentist.name} - Dentist in ${cityName} (2026) — Book Appointment | AppointPanda`;
-    const metaDescription = seoContent?.meta_description || `Book an appointment with ${dentist.name}, ${dentist.title || 'Dentist'} in ${cityName}. With 100+ verified patient reviews and 4.9+ stars, specializing in modern dental techniques. DHA-licensed. Book your appointment instantly.`;
-    
-    const faqs = seoContent?.faqs && Array.isArray(seoContent.faqs) ? seoContent.faqs : [];
-
-    return { 
-        props: {
-            dentistSlug,
-            dentistData: dentist,
-            seoData: {
-                title: metaTitle,
-                description: metaDescription,
-                canonical: `/dentist/${dentistSlug}/`,
-                ogImage: dentist.image_url || null,
-            },
-            faqs,
-            treatmentsData: treatments,
-            reviewsData: reviews,
-        },
-        revalidate: 600
-    };
+    if (!supabase) return { paths: [], fallback: 'blocking' };
+    const { data } = await supabase.from('dentists').select('slug').eq('is_active', true);
+    return { paths: (data || []).map((d) => ({ params: { dentistSlug: d.slug } })), fallback: 'blocking' };
+  } catch (error) {
+    console.error('Error generating dentist paths:', error);
+    return { paths: [], fallback: 'blocking' };
+  }
 };
+
+export const getStaticProps: GetStaticProps<DentistProfileProps> = async (ctx) => {
+  const supabase = createServerSupabaseAdmin();
+  const slug = ctx.params?.dentistSlug as string;
+  if (!slug || !supabase) return { notFound: true, revalidate: 60 };
+
+  const { data: d } = await supabase
+    .from('dentists')
+    .select('id, name, slug, title, professional_type, bio, photo_url, image_url, gender, languages, qualifications, specializations, years_experience, experience_years, clinic_id, is_active')
+    .eq('slug', slug)
+    .maybeSingle();
+  if (!d || !d.is_active) return { notFound: true, revalidate: 300 };
+
+  const [clinicRes, colleaguesRes, treatmentsRes] = d.clinic_id
+    ? await Promise.all([
+        supabase.from('clinics').select('id, name, slug, address, phone, claim_status, is_active, city:cities(name, slug, state:states(name, slug))').eq('id', d.clinic_id).maybeSingle(),
+        supabase.from('dentists').select('name, slug, title, professional_type, photo_url, image_url').eq('clinic_id', d.clinic_id).eq('is_active', true).neq('id', d.id).limit(8),
+        supabase.from('clinic_treatments').select('treatment:treatments(name, slug)').eq('clinic_id', d.clinic_id),
+      ])
+    : [{ data: null }, { data: [] }, { data: [] }];
+
+  const c = clinicRes.data as any;
+  const clinic = c && c.is_active
+    ? {
+        id: c.id,
+        name: c.name,
+        slug: c.slug,
+        address: c.address || null,
+        phone: c.phone || null,
+        claimed: c.claim_status === 'claimed',
+        city: c.city ? { name: c.city.name, slug: c.city.slug } : null,
+        emirate: c.city?.state ? { name: c.city.state.name, slug: c.city.state.slug } : null,
+      }
+    : null;
+
+  return {
+    props: {
+      dentist: {
+        id: d.id,
+        name: d.name,
+        slug: d.slug,
+        title: d.title || d.professional_type || null,
+        bio: d.bio || null,
+        photoUrl: liveImage(d.photo_url) || liveImage(d.image_url),
+        gender: d.gender || null,
+        languages: arr(d.languages),
+        qualifications: arr(d.qualifications),
+        specializations: arr(d.specializations),
+        yearsExperience: d.years_experience || d.experience_years || null,
+      },
+      clinic,
+      colleagues: ((colleaguesRes.data || []) as any[]).map((x) => ({ name: x.name, slug: x.slug, title: x.title || x.professional_type || null, photoUrl: liveImage(x.photo_url) || liveImage(x.image_url) })),
+      treatments: Array.from(
+        new Map(((treatmentsRes.data || []) as any[]).filter((t) => t.treatment).map((t) => [t.treatment.slug, { name: t.treatment.name, slug: t.treatment.slug }])).values()
+      ),
+    },
+    revalidate: 600,
+  };
+};
+
+export default DentistProfile;

@@ -384,10 +384,10 @@ export function ClinicProfile(props: ClinicProfileProps) {
         </div>
 
         {/* Sticky request panel */}
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside id="request" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
             {!clinic.emirate || isLiveEmirate(clinic.emirate.slug) ? (
-              <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} compact />
+              <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} clinicClaimed={clinic.claimed} compact />
             ) : (
               <div className="text-sm leading-relaxed text-zinc-700">
                 <p className="text-base font-semibold text-ink">Online requests coming soon to {clinic.emirate.name}</p>
@@ -405,6 +405,16 @@ export function ClinicProfile(props: ClinicProfileProps) {
           </div>
         </aside>
       </div>
+      {/* Mobile action bar: the request form sits below the profile on small screens */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex gap-2 border-t border-black/10 bg-white/95 p-3 backdrop-blur lg:hidden">
+        {(!clinic.emirate || isLiveEmirate(clinic.emirate.slug)) && (
+          <a href="#request" className="btn-ink flex-1">Request appointment</a>
+        )}
+        {clinic.phone && (
+          <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ghost flex-1"><Phone className="h-4 w-4" /> Call</a>
+        )}
+      </div>
+      <div className="h-20 lg:hidden" aria-hidden="true" />
     </PageLayout>
   );
 }

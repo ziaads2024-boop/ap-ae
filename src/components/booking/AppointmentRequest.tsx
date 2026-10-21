@@ -26,11 +26,13 @@ interface Props {
   dentistId?: string | null;
   clinicPhone?: string | null;
   defaultReason?: string;
+  /** The clinic manages its own requests on AppointPanda. Otherwise the AppointPanda team contacts the clinic for the patient. */
+  clinicClaimed?: boolean;
   compact?: boolean;
   onDone?: () => void;
 }
 
-export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhone, defaultReason = '', compact = false, onDone }: Props) {
+export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhone, defaultReason = '', clinicClaimed = false, compact = false, onDone }: Props) {
   const days = useMemo(() => Array.from({ length: 14 }, (_, i) => addDays(new Date(), i + 1)), []);
   const [reason, setReason] = useState(defaultReason);
   const [day, setDay] = useState<string>('');
@@ -41,6 +43,7 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
   const [insurance, setInsurance] = useState('');
   const [notes, setNotes] = useState('');
   const [consent, setConsent] = useState(false);
+  const [allowAlternative, setAllowAlternative] = useState(false);
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [error, setError] = useState('');
 
@@ -70,10 +73,15 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
         `Visit reason: ${reasonLabel}`,
         insurance.trim() ? `Insurance: ${insurance.trim()}` : 'Insurance: not given / self-pay',
         notes.trim() ? `Notes: ${notes.trim()}` : '',
+        allowAlternative
+          ? 'Patient agrees AppointPanda may suggest another clinic nearby if this clinic cannot be reached.'
+          : 'Patient asked for this clinic only. Do not route to another clinic.',
         'Request made via AppointPanda; time to be confirmed by the clinic.',
       ].filter(Boolean).join('\n'),
       status: 'pending',
       source: 'website',
+      // Unclaimed clinics have no dashboard: the request goes to the admin queue
+      is_assigned: clinicClaimed,
     } as never);
 
     if (insertError) {
@@ -97,7 +105,10 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
         <CheckCircle2 className="h-8 w-8" />
         <p className="mt-3 text-lg font-semibold">Request sent to {clinicName}</p>
         <p className="mt-1 text-sm leading-relaxed text-ink/80">
-          This is not a confirmed appointment yet. The clinic will contact you on {phone} to agree a time.
+          This is not a confirmed appointment yet.{' '}
+          {clinicClaimed
+            ? `The clinic will contact you on ${phone} to agree a time.`
+            : `${clinicName} does not manage requests on AppointPanda yet, so our team will contact the clinic for you and call you on ${phone} with a time.`}{' '}
           If it is urgent, call the clinic directly.
         </p>
       </div>
@@ -111,7 +122,8 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
       <div>
         <p className="flex items-center gap-2 text-base font-semibold text-ink"><CalendarCheck2 className="h-5 w-5" /> Request an appointment</p>
         <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-          Choose a preferred day and time of day. {clinicName} will call you to confirm an exact time.
+          Choose a preferred day and time of day.{' '}
+          {clinicClaimed ? `${clinicName} will call you to confirm an exact time.` : 'We pass your request to the clinic and call you to confirm an exact time.'}
         </p>
       </div>
 
@@ -196,6 +208,11 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
           I agree that AppointPanda will share these details with {clinicName} so it can contact me about this request.
           See our <a href="/privacy/" className="underline">privacy policy</a>. Do not include medical history here.
         </span>
+      </label>
+
+      <label className="flex items-start gap-2 text-xs leading-relaxed text-zinc-600">
+        <input type="checkbox" checked={allowAlternative} onChange={(e) => setAllowAlternative(e.target.checked)} className="mt-0.5 size-4 rounded border-black/20" />
+        <span>Optional: if {clinicName} cannot be reached, AppointPanda may suggest another licensed clinic nearby. We will ask you before sharing your details with it.</span>
       </label>
 
       {error && <p className="text-sm font-medium text-red-700" role="alert">{error}</p>}

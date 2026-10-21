@@ -244,7 +244,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-4 right-4 md:bottom-6 md:right-6 w-12 h-12 md:w-14 md:h-14 rounded-full shadow-2xl z-50",
+          "fixed bottom-24 right-4 lg:bottom-6 md:right-6 w-12 h-12 md:w-14 md:h-14 rounded-full shadow-2xl z-50",
           "bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70",
           "text-primary-foreground transition-all duration-300 hover:scale-110",
           "border border-primary-foreground/10 flex items-center justify-center",

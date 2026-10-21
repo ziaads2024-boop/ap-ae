@@ -1,6 +1,7 @@
 import { GetStaticProps } from 'next';
 import IndexPage from '@/pages/Index';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
+import { liveImage } from '@/lib/liveImage';
 
 export interface HomePageData {
   clinicCount: number;
@@ -102,7 +103,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: c.id,
       name: c.name,
       slug: c.slug,
-      coverImageUrl: c.cover_image_url,
+      coverImageUrl: liveImage(c.cover_image_url),
       rating: c.average_rating || 0,
       reviewCount: c.total_reviews || 0,
       cityName: cityNameMap[c.city_id] || null,

@@ -2,6 +2,7 @@ import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import { dubaiAreaBySlug } from '@/content/dubai';
 import { dbSlugsFor, guideSlugForDb } from '@/content';
 import type { ClinicResult } from '@/components/search/ClinicResults';
+import { liveImage } from '@/lib/liveImage';
 
 // Live data for the Dubai area pages. Duplicate slugs in the database
 // (e.g. jbr / jumeirah-beach-residence, veneers / dental-veneers) are merged so
@@ -32,7 +33,7 @@ function toResult(c: any, priceFrom?: number | null): ClinicResult {
     phone: c.phone || null,
     rating: Number(c.rating) || null,
     reviewCount: Number(c.review_count) || null,
-    imageUrl: c.cover_image_url || null,
+    imageUrl: liveImage(c.cover_image_url),
     place: c.area?.name || c.city?.name || null,
     insurances: (c.clinic_insurances || []).map((x: any) => x.insurance?.name).filter(Boolean),
     priceFrom: priceFrom ?? null,

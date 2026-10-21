@@ -1,6 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import { ClinicProfile, type ClinicProfileProps } from '@/components/profile/ClinicProfile';
+import { liveImage } from '@/lib/liveImage';
 
 // Public clinic profile. Only public listing fields are selected: the clinics
 // table also holds scraped claim emails, owner ids and raw GMB data, which must
@@ -70,8 +71,8 @@ export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) =>
         whatsapp: c.whatsapp || null,
         website: c.website || null,
         googleMapsUrl: c.google_maps_url || null,
-        coverImageUrl: c.cover_image_url || null,
-        logoUrl: c.logo_url || null,
+        coverImageUrl: liveImage(c.cover_image_url),
+        logoUrl: liveImage(c.logo_url),
         latitude: c.latitude ?? null,
         longitude: c.longitude ?? null,
         rating: Number(c.rating || c.average_rating) || null,
@@ -92,18 +93,18 @@ export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) =>
         title: d.title || d.professional_type || null,
         specializations: Array.isArray(d.specializations) ? d.specializations : [],
         languages: Array.isArray(d.languages) ? d.languages : [],
-        photoUrl: d.photo_url || d.image_url || null,
+        photoUrl: liveImage(d.photo_url) || liveImage(d.image_url),
         yearsExperience: d.years_experience || d.experience_years || null,
       })),
       internalReviews: (internalReviews.data || []).map((r: any) => ({ id: r.id, rating: r.rating || null, text: r.comment, date: r.created_at })),
       googleReviews: (googleReviews.data || [])
         .map((r: any) => ({ id: r.id, author: r.author_name || r.reviewer_name || 'Google user', rating: r.rating || null, text: r.text_content || r.comment || '', date: r.review_time || null }))
         .filter((r: any) => r.text),
-      images: (images.data || []).map((i: any) => ({ url: i.image_url, alt: i.alt_text || i.caption || null })).filter((i: any) => i.url),
+      images: (images.data || []).map((i: any) => ({ url: liveImage(i.image_url), alt: i.alt_text || i.caption || null })).filter((i: any) => i.url),
       hours: (hours.data || []).map((h: any) => ({ day: h.day_of_week, open: h.open_time, close: h.close_time, closed: !!h.is_closed })),
       insurances: (insurances.data || []).map((i: any) => i.insurance).filter(Boolean).map((i: any) => ({ name: i.name, slug: i.slug || null })),
       faqs,
-      nearby: (nearby.data || []).map((n: any) => ({ name: n.name, slug: n.slug, rating: Number(n.rating) || null, reviewCount: Number(n.review_count) || null, imageUrl: n.cover_image_url || null })),
+      nearby: (nearby.data || []).map((n: any) => ({ name: n.name, slug: n.slug, rating: Number(n.rating) || null, reviewCount: Number(n.review_count) || null, imageUrl: liveImage(n.cover_image_url) })),
     },
     revalidate: 600,
   };

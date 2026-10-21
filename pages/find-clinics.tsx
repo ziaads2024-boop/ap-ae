@@ -12,6 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { dbSlugsFor, emirates, isLiveEmirate, services, urls } from '@/content';
 import { dubaiAreas, dubaiAreaBySlug, visitReasons, visitReasonBySlug } from '@/content/dubai';
 import { cn } from '@/lib/utils';
+import { liveImage } from '@/lib/liveImage';
 
 // Zocdoc-style clinic search, Dubai first. Results are live directory data
 // (public, RLS-protected reads); filter URLs canonicalise to /find-clinics/.
@@ -346,9 +347,9 @@ export default function FindClinicsPage() {
                 return (
                   <li key={c.id} className="block-card grid gap-4 p-4 sm:grid-cols-[112px_1fr_auto] sm:items-center">
                     <Link href={`/clinic/${c.slug}/`} className="block size-28 overflow-hidden rounded-2xl bg-paper" tabIndex={-1} aria-hidden="true">
-                      {c.cover_image_url ? (
+                      {liveImage(c.cover_image_url) ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={c.cover_image_url} alt="" loading="lazy" width={112} height={112} className="h-full w-full object-cover" />
+                        <img src={liveImage(c.cover_image_url)!} alt="" loading="lazy" width={112} height={112} className="h-full w-full object-cover" />
                       ) : (
                         <div className="grid h-full w-full place-items-center text-3xl font-bold text-zinc-300">{c.name.charAt(0)}</div>
                       )}
