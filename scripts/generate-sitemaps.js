@@ -238,6 +238,7 @@ function buildStaticUrls() {
     { loc: normalizeUrl('/insurance'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/blog'), priority: 0.8, changefreq: 'daily' },
     { loc: normalizeUrl('/find-clinics'), priority: 0.8, changefreq: 'weekly' },
+    { loc: normalizeUrl('/tools/dental-cost-calculator'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/for-clinics'), priority: 0.7, changefreq: 'weekly' },
     { loc: normalizeUrl('/about'), priority: 0.5, changefreq: 'monthly' },
     { loc: normalizeUrl('/contact'), priority: 0.5, changefreq: 'monthly' },

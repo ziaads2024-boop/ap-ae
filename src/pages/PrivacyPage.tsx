@@ -54,6 +54,8 @@ We also automatically collect certain information when you use our platform, inc
 
 • WITH CLINIC PARTNERS: When you request an appointment, your contact details (name, phone, email) are shared with the dental clinic to facilitate your booking.
 
+• WITH THE APPOINTPANDA TEAM: If the clinic does not manage requests on AppointPanda, our team reads your request and contacts the clinic for you. We share your details with a different clinic only if you ticked the option allowing us to suggest one, and we ask you first.
+
 • WITH SERVICE PROVIDERS: We work with third-party vendors who assist in our operations (hosting, analytics, customer support).
 
 • LEGAL COMPLIANCE: To comply with UAE PDPL, DHA, DOH, and MOHAP regulations.

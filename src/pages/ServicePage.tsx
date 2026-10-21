@@ -413,27 +413,6 @@ const ServicePage = ({ serviceSlugProp, seoDataProp, h1Prop, heroIntroProp, cont
               </p>
             </div>
 
-            {sortedByPrice.length > 1 && (
-              <div className="text-center">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block">Compare Prices</span>
-                <div className="flex flex-wrap justify-center gap-3">
-                  {sortedByPrice.slice(0, -1).map((range, i) => {
-                    const nextRange = sortedByPrice[i + 1];
-                    if (!nextRange) return null;
-                    return (
-                      <span key={range.id}>
-                        <Link
-                          href={`/compare/${serviceSlug}/${range.state?.slug}-vs-${nextRange.state?.slug}/`}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-emerald-300 hover:text-emerald-600 transition-colors"
-                        >
-                          {range.state?.name} vs {nextRange.state?.name}
-                        </Link>
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
           </div>
         </Section>
       )}

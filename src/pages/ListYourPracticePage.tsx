@@ -19,7 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useStates } from "@/hooks/useLocations";
 import { useTreatments } from "@/hooks/useTreatments";
 import { SmartCitySearch } from "@/components/geo/SmartCitySearch";
-import { PromotionBanner } from "@/components/subscription/PromotionBanner";
 import { z } from "zod";
 import {
   Building2,
@@ -390,7 +389,7 @@ const ListYourPracticePage = () => {
   };
 
   const benefits = [
-    { icon: Shield, title: "Free Listing", description: "List your practice for free and reach thousands of patients" },
+    { icon: Shield, title: "Free Listing", description: "List your practice for free and receive appointment requests from patients" },
     { icon: BadgeCheck, title: "Get Verified", description: "Verify your profile to stand out and build trust" },
     { icon: TrendingUp, title: "Grow Your Practice", description: "Attract new patients actively searching for dental care" },
     { icon: Star, title: "Build Reputation", description: "Collect reviews and showcase your expertise" },
@@ -400,7 +399,7 @@ const ListYourPracticePage = () => {
     <PageLayout>
       <SEOHead
         title="List Your Dental Practice | Join AppointPanda Directory"
-        description="List your dental practice for free on AppointPanda. Reach thousands of patients, get verified, collect reviews, and grow your practice with our dental directory."
+        description="List your dental practice on AppointPanda for free. Keep your treatments, prices and hours up to date and receive appointment requests from patients in Dubai."
         canonical="/list-your-practice/"
         keywords={['list dental practice', 'dental directory listing', 'dentist marketing', 'dental practice growth']}
       />
@@ -410,7 +409,6 @@ const ListYourPracticePage = () => {
           <div className="max-w-2xl mx-auto text-center">
             {/* Promotion Banner */}
             <div className="mb-6">
-              <PromotionBanner variant="inline" />
             </div>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
@@ -421,7 +419,7 @@ const ListYourPracticePage = () => {
               List Your <span className="text-primary">Practice</span>
             </h1>
             <p className="text-lg text-muted-foreground">
-              Join the UAE's leading dental directory. Connect with patients actively searching for dental care in your area.
+              Add your clinic to AppointPanda so patients searching for dental care in your area can find and contact you.
             </p>
           </div>
         </div>
@@ -469,7 +467,7 @@ const ListYourPracticePage = () => {
                             </p>
                             <div className="flex flex-wrap gap-2">
                               <span className="text-xs px-2 py-1 rounded-full bg-muted">Auto-fill</span>
-                              <span className="text-xs px-2 py-1 rounded-full bg-muted">Sync reviews</span>
+                              <span className="text-xs px-2 py-1 rounded-full bg-muted">Show Google rating</span>
                               <span className="text-xs px-2 py-1 rounded-full bg-muted">Verified</span>
                             </div>
                           </div>

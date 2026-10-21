@@ -1,16 +1,10 @@
-import { GetStaticProps } from 'next';
-import Head from 'next/head';
-import InsuranceChecker from '@/pages/tools/InsuranceChecker';
+import type { GetServerSideProps } from 'next';
 
-export default function InsuranceCheckerWithNoIndex() {
-    return (
-        <>
-            <Head>
-                <meta name="robots" content="noindex, nofollow" />
-            </Head>
-            <InsuranceChecker />
-        </>
-    );
+// Replaced by the insurance guide, which lists clinics that confirmed each plan.
+export default function InsuranceCheckerRedirect() {
+  return null;
 }
 
-export const getStaticProps: GetStaticProps = async () => ({ props: {} });
+export const getServerSideProps: GetServerSideProps = async () => ({
+  redirect: { destination: '/insurance/', permanent: true },
+});
