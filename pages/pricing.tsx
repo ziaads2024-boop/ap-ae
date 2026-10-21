@@ -15,12 +15,12 @@ const plans = [
   },
   {
     name: 'Growth', price: 'AED 499', period: '/mo', icon: <Star className="h-5 w-5" />,
-    features: ['Everything in Starter', 'Online booking & calendar sync', 'Analytics dashboard', 'Review management', 'Insurance auto-verify', 'Priority support'],
+    features: ['Everything in Starter', 'Appointment requests in your dashboard', 'Analytics dashboard', 'Review management', 'Insurance list on your profile', 'Priority support'],
     cta: 'Start free trial', featured: true,
   },
   {
     name: 'Network', price: 'AED 1,499', period: '/mo', icon: <Building2 className="h-5 w-5" />,
-    features: ['Everything in Growth', 'Priority placement in search', 'Multi-branch management', 'Dedicated account manager', 'Featured clinic badge', 'API access', 'White-label reports'],
+    features: ['Everything in Growth', 'Multi-branch management', 'Dedicated account manager'],
     cta: 'Contact sales', featured: false,
   },
 ];
@@ -119,16 +119,13 @@ export default function PricingPage() {
               <tbody>
                 {[
                   ['Clinic profile', '✓', '✓', '✓'],
-                  ['Directory listing', 'Basic', 'Enhanced', 'Featured'],
-                  ['Online booking', '—', '✓', '✓'],
-                  ['Calendar sync', '—', '✓', '✓'],
+                  ['Treatments, prices and hours', '✓', '✓', '✓'],
+                  ['Appointment requests', '—', '✓', '✓'],
                   ['Analytics dashboard', '—', '✓', '✓'],
                   ['Review management', '—', '✓', '✓'],
-                  ['Insurance auto-verify', '—', '✓', '✓'],
-                  ['Priority placement', '—', '—', '✓'],
+                  ['Insurance list on profile', '—', '✓', '✓'],
                   ['Multi-branch', '—', '—', '✓'],
                   ['Dedicated manager', '—', '—', '✓'],
-                  ['API access', '—', '—', '✓'],
                 ].map((row, i) => (
                   <tr key={i} className="border-b border-zinc-100">
                     <td className="py-3 px-4 text-zinc-700">{row[0]}</td>

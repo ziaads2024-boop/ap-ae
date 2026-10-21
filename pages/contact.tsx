@@ -1,140 +1,115 @@
 import { useState } from 'react';
-import Head from 'next/head';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import Link from 'next/link';
+import { Loader2, Mail, MessageSquare, Send } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageHero } from '@/components/layout/PageHero';
-import { SITE_NAME, SITE_DOMAIN, PHONE_NUMBER, PHONE_HREF } from '@/lib/site-data';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { supabase } from '@/integrations/supabase/client';
 
-const BASE_URL = 'https://www.appointpanda.ae';
+const CONTACT_EMAIL = 'hello@appointpanda.ae';
+const TOPICS = [
+  { value: 'patient', label: 'I am a patient' },
+  { value: 'clinic', label: 'I represent a clinic' },
+  { value: 'correction', label: 'Report wrong information' },
+  { value: 'other', label: 'Something else' },
+];
 
 export default function ContactPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [emirate, setEmirate] = useState('');
+  const [topic, setTopic] = useState('patient');
   const [message, setMessage] = useState('');
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    if (state === 'sending') return;
+    setState('sending');
+    const { error } = await supabase.from('contact_submissions').insert({
+      name: name.trim().slice(0, 120),
+      email: email.trim().slice(0, 200) || null,
+      subject: TOPICS.find((t) => t.value === topic)?.label || topic,
+      message: message.trim().slice(0, 3000),
+      status: 'new',
+    });
+    setState(error ? 'error' : 'sent');
   };
+
+  const field = 'h-11 w-full rounded-xl border border-black/10 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20';
 
   return (
     <PageLayout>
-      <Head>
-        <title>Contact Us — {SITE_NAME}.ae</title>
-        <meta name="description" content={`Get in touch with the ${SITE_NAME}.ae team. Call ${PHONE_NUMBER}, email us, or fill out our contact form.`} />
-        <link rel="canonical" href={`${BASE_URL}/contact/`} />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${BASE_URL}/contact/`} />
-        <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <meta property="og:site_name" content="AppointPanda" />
-        <meta property="og:locale" content="en_AE" />
-        <meta name="twitter:url" content={`${BASE_URL}/contact/`} />
-        <meta name="twitter:title" content={`Contact Us — ${SITE_NAME}.ae`} />
-        <meta name="twitter:description" content={`Get in touch with the ${SITE_NAME}.ae team. Call ${PHONE_NUMBER}, email us, or fill out our contact form.`} />
-        <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
-        <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}/contact/`} />
-        <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/contact/`} />
-        <link rel="sitemap" type="application/xml" href={`${BASE_URL}/sitemap.xml`} />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
-
+      <SEOHead
+        title="Contact AppointPanda"
+        description="Contact the AppointPanda team about an appointment request, your clinic's listing or a correction."
+        canonical="/contact/"
+      />
       <PageHero
-        kicker="Get in touch"
+        kicker="Contact"
         title="Contact us"
-        subtitle="We're here to help. Whether you're a patient or a clinic, we'll respond within 24 hours."
+        subtitle="Questions about a request, your clinic's listing, or something on the site that looks wrong? Send us a message."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
+        tone="sand"
       />
 
-      <div className="max-w-4xl mx-auto px-4 lg:px-6 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Contact info */}
-          <div className="space-y-6">
-            <div className="flex items-start gap-4 p-4 bg-white border border-zinc-200 rounded-2xl">
-              <Phone className="h-5 w-5 text-amber-700 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-zinc-900 text-sm">Phone</h3>
-                <a href={`tel:${PHONE_HREF}`} className="text-zinc-500 text-sm hover:text-amber-700 transition-colors">{PHONE_NUMBER}</a>
-                <p className="text-zinc-400 text-xs mt-0.5">24/7 emergency hotline</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4 p-4 bg-white border border-zinc-200 rounded-2xl">
-              <Mail className="h-5 w-5 text-amber-700 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-zinc-900 text-sm">Email</h3>
-                <a href="mailto:hello@appointpanda.ae" className="text-zinc-500 text-sm hover:text-amber-700 transition-colors">hello@appointpanda.ae</a>
-                <p className="text-zinc-400 text-xs mt-0.5">We respond within 24 hours</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4 p-4 bg-white border border-zinc-200 rounded-2xl">
-              <MapPin className="h-5 w-5 text-amber-700 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-zinc-900 text-sm">Office</h3>
-                <p className="text-zinc-500 text-sm">Dubai Internet City</p>
-                <p className="text-zinc-400 text-xs mt-0.5">Dubai, United Arab Emirates</p>
-              </div>
+      <div className="mx-auto grid max-w-5xl gap-8 px-5 py-12 md:grid-cols-[1fr_1.2fr]">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 rounded-3xl border border-black/10 bg-white p-5">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0" />
+            <div>
+              <p className="font-semibold text-ink">Email</p>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="text-sm text-zinc-600 underline">{CONTACT_EMAIL}</a>
             </div>
           </div>
+          <div className="flex items-start gap-3 rounded-3xl bg-paper p-5 text-sm leading-relaxed text-zinc-700">
+            <MessageSquare className="mt-0.5 h-5 w-5 shrink-0" />
+            <p>
+              <span className="font-semibold text-ink">Dental emergency?</span> AppointPanda cannot give medical advice. Call a clinic directly,
+              or 998 for an ambulance if swelling spreads to your eye or neck or you have trouble breathing or swallowing.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-black/10 bg-white p-5 text-sm leading-relaxed text-zinc-700">
+            <p className="font-semibold text-ink">Clinics</p>
+            <p className="mt-1">To update your listing, <Link href="/claim-profile/" className="underline">claim your profile</Link>. To add a new clinic, use <Link href="/list-your-practice/" className="underline">List your practice</Link>.</p>
+          </div>
+        </div>
 
-          {/* Contact form */}
-          <div className="bg-white border border-zinc-200 rounded-2xl p-6">
-            {sent ? (
-              <div className="text-center py-8">
-                <Send className="h-10 w-10 text-emerald-500 mx-auto mb-3" />
-                <h3 className="font-semibold text-zinc-900">Message sent!</h3>
-                <p className="text-zinc-500 text-sm mt-2">We'll get back to you within 24 hours.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Your name"
-                  required
-                  className="w-full h-11 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all"
-                />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="w-full h-11 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all"
-                />
-                <select
-                  value={emirate}
-                  onChange={e => setEmirate(e.target.value)}
-                  required
-                  className="w-full h-11 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Select your emirate</option>
-                  <option value="dubai">Dubai</option>
-                  <option value="abu-dhabi">Abu Dhabi</option>
-                  <option value="sharjah">Sharjah</option>
-                  <option value="ajman">Ajman</option>
-                  <option value="ras-al-khaimah">Ras Al Khaimah</option>
-                  <option value="fujairah">Fujairah</option>
-                  <option value="umm-al-quwain">Umm Al Quwain</option>
+        <div className="rounded-3xl border border-black/10 bg-white p-6">
+          {state === 'sent' ? (
+            <div className="py-8 text-center" role="status">
+              <Send className="mx-auto h-9 w-9" />
+              <p className="mt-3 font-semibold text-ink">Message sent</p>
+              <p className="mt-1 text-sm text-zinc-600">Thank you. We reply by email{email ? ` to ${email}` : ''}.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <label className="block">
+                <span className="mb-1 block text-xs font-semibold text-zinc-600">Your name</span>
+                <input value={name} onChange={(e) => setName(e.target.value)} required minLength={2} autoComplete="name" className={field} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs font-semibold text-zinc-600">Email</span>
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className={field} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs font-semibold text-zinc-600">Topic</span>
+                <select value={topic} onChange={(e) => setTopic(e.target.value)} className={field}>
+                  {TOPICS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
-                <textarea
-                  value={message}
-                  onChange={e => setMessage(e.target.value)}
-                  placeholder="How can we help?"
-                  rows={4}
-                  required
-                  className="w-full px-4 py-3 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all resize-none"
-                />
-                <button
-                  type="submit"
-                  className="w-full h-11 inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200"
-                >
-                  <Send className="h-4 w-4" /> Send message
-                </button>
-              </form>
-            )}
-          </div>
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-xs font-semibold text-zinc-600">Message</span>
+                <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={5} required minLength={10} maxLength={3000} className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20" />
+              </label>
+              <p className="text-xs text-zinc-500">Please do not include medical history. See our <Link href="/privacy/" className="underline">privacy policy</Link>.</p>
+              {state === 'error' && (
+                <p className="text-sm font-medium text-red-700" role="alert">We could not send your message. Please email {CONTACT_EMAIL} instead.</p>
+              )}
+              <button type="submit" disabled={state === 'sending'} className="btn-ink w-full disabled:opacity-60">
+                {state === 'sending' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Send message
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </PageLayout>

@@ -43,9 +43,9 @@ export default function AboutPage() {
           <section>
             <h2 className="text-2xl font-semibold text-zinc-900">Our mission</h2>
             <p className="text-zinc-600 text-sm mt-3 leading-relaxed">
-              We believe that finding the right dentist should be as easy as booking a hotel. 
-              Since our founding, we&apos;ve been on a mission to bring transparency, choice, and convenience 
-              to dental care across the United Arab Emirates.
+              Choosing a dentist should not mean guessing. We explain treatments and typical costs in plain
+              language, show where each piece of information comes from, and make it simple to contact a clinic,
+              starting with Dubai.
             </p>
             <p className="text-zinc-600 text-sm mt-3 leading-relaxed">
               Our treatment and emirate guides are written by our editorial team and reviewed regularly; each shows when it was last reviewed.
@@ -60,7 +60,7 @@ export default function AboutPage() {
               {[
                 { title: 'Transparency', desc: 'We say where information comes from, when it was last reviewed, and what it does not cover.' },
                 { title: 'Trust', desc: 'We never write, buy or edit reviews, and listing a clinic is not a recommendation.' },
-                { title: 'Accessibility', desc: 'Quality dental care should be easy to find, compare, and book — in English and Arabic.' },
+                { title: 'Accessibility', desc: 'Dental care should be easy to find and compare, with prices in AED and no sign-up needed.' },
               ].map((v) => (
                 <div key={v.title} className="card-hover-amber p-5">
                   <h3 className="font-semibold text-zinc-900 text-sm">{v.title}</h3>

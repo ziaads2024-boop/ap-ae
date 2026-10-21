@@ -10,7 +10,6 @@ import { useCallback, useRef } from 'react';
 // Map of routes to their lazy import functions for prefetching
 const ROUTE_PREFETCH_MAP: Record<string, () => Promise<unknown>> = {
   '/blog': () => import('@/pages/BlogPage'),
-  '/faq': () => import('@/pages/FAQPage'),
   '/auth': () => import('@/pages/Auth'),
 };
 

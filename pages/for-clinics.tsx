@@ -67,9 +67,9 @@ export default function ForClinicsPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: <CalendarCheck className="h-6 w-6" />, title: 'Smart Booking', desc: 'Online booking with auto-sync to your calendar. Reduce no-shows with automated reminders.' },
+              { icon: <CalendarCheck className="h-6 w-6" />, title: 'Appointment requests', desc: 'Patients send a request with a preferred day and time of day; you see it in your dashboard and call them to confirm.' },
               { icon: <BarChart3 className="h-6 w-6" />, title: 'Analytics Dashboard', desc: 'Track profile views, bookings, and revenue. See exactly where your patients come from.' },
-              { icon: <Users className="h-6 w-6" />, title: 'Patient Management', desc: 'Centralised patient records, treatment history, and follow-up scheduling.' },
+              { icon: <Users className="h-6 w-6" />, title: 'Patient list', desc: 'Keep track of the patients who contacted you through AppointPanda and their requests.' },
               { icon: <Star className="h-6 w-6" />, title: 'Review Management', desc: 'Respond to reviews, showcase testimonials, and build your reputation.' },
               { icon: <ShieldCheck className="h-6 w-6" />, title: 'Insurance Integration', desc: 'Show which insurers you accept so patients can filter by their plan.' },
               { icon: <Zap className="h-6 w-6" />, title: 'Instant Visibility', desc: 'Appear in emirate, treatment and "near me" searches once your listing is live.' },
@@ -97,7 +97,7 @@ export default function ForClinicsPage() {
               { step: '01', title: 'Sign up', desc: 'Create your clinic profile in minutes.' },
               { step: '02', title: 'Verify', desc: 'We verify your regulatory license.' },
               { step: '03', title: 'Optimise', desc: 'Add treatments, photos, and team.' },
-              { step: '04', title: 'Go live', desc: 'Start receiving bookings within 4 weeks.' },
+              { step: '04', title: 'Go live', desc: 'Patients can send you appointment requests once your profile is live.' },
             ].map((item) => (
               <div key={item.step} className="text-center">
                 <div className="w-12 h-12 rounded-full bg-amber-700/10 flex items-center justify-center mx-auto mb-3">
@@ -119,10 +119,10 @@ export default function ForClinicsPage() {
           </div>
           <div className="space-y-3">
             {[
-              { q: 'How long does it take to get listed?', a: 'Most clinics go live within 4 weeks. This includes verification of your licenses, photography (if needed), and profile optimisation.' },
+              { q: 'How long does it take to get listed?', a: 'A claimed profile can be edited straight away. Verification follows the checks in our verification policy and depends on how quickly we can confirm your licence.' },
               { q: 'Is there a minimum commitment?', a: 'No. You can cancel at any time. We\'re confident you\'ll stay once you see the results.' },
               { q: 'Do you charge commission on bookings?', a: 'No commission whatsoever. You keep 100% of treatment fees. Our model is subscription-based only.' },
-              { q: 'Can I manage my own profile?', a: 'Absolutely. You get full access to your clinic dashboard where you can update treatments, prices, photos, and availability in real time.' },
+              { q: 'Can I manage my own profile?', a: 'Absolutely. You get full access to your clinic dashboard where you can update treatments, prices, photos and opening hours.' },
             ].map((faq, i) => (
               <details key={i} className="group border border-zinc-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-amber-500/40">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none text-sm font-semibold text-zinc-900">

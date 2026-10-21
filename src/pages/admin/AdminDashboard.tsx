@@ -67,6 +67,8 @@ const ClaimsTab = lazyRetry(() => import('@/components/admin/tabs/ClaimsTab'));
 const UsersTab = lazyRetry(() => import('@/components/admin/tabs/UsersTab'));
 const AppointmentsTab = lazyRetry(() => import('@/components/admin/tabs/AppointmentsTab'));
 const LeadsTab = lazyRetry(() => import('@/components/admin/tabs/LeadsTab'));
+const UnassignedQueriesTab = lazyRetry(() => import('@/components/admin/tabs/UnassignedQueriesTab'));
+const ContactMessagesTab = lazyRetry(() => import('@/components/admin/tabs/ContactMessagesTab'));
 const PagesTab = lazyRetry(() => import('@/components/admin/tabs/PagesTab'));
 const BlogTab = lazyRetry(() => import('@/components/admin/tabs/BlogTab'));
 const SeoTab = lazyRetry(() => import('@/components/admin/tabs/SeoTab'));
@@ -264,6 +266,8 @@ const adminTabGroups = [
     tabs: [
       { id: 'booking-system', label: 'Booking System', icon: CalendarDays, highlight: true },
       { id: 'appointments', label: 'Appointments', icon: Calendar },
+      { id: 'unassigned-requests', label: 'Unassigned requests', icon: Calendar, highlight: true },
+      { id: 'contact-messages', label: 'Contact messages', icon: MessageSquare },
       { id: 'leads', label: 'Lead CRM', icon: UserPlus },
     ],
   },
@@ -597,6 +601,8 @@ export default function AdminDashboard() {
       case 'appointments': return <AppointmentsTab />;
       case 'visitor-analytics': return <VisitorAnalyticsTab />;
       case 'leads': return <LeadsTab />;
+      case 'unassigned-requests': return <UnassignedQueriesTab />;
+      case 'contact-messages': return <ContactMessagesTab />;
       case 'pages': return <PagesTab />;
       case 'blog': return <BlogTab />;
       case 'seo': return <SeoTab />;

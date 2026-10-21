@@ -31,21 +31,21 @@ const HowItWorksPage = () => {
       step: 2,
       icon: UserCheck,
       title: "Compare",
-      description: "Review dentist profiles, check qualifications, read patient reviews, and compare ratings to find your perfect match.",
+      description: "Open clinic and dentist profiles to see treatments, opening hours, insurance and Google ratings. Read the treatment guide to know what to ask.",
       color: "from-purple/20 to-indigo-500/10"
     },
     {
       step: 3,
       icon: Calendar,
       title: "Book",
-      description: "Request an appointment directly through the platform. The clinic will contact you to confirm your booking.",
+      description: "Send a request with a preferred day and time of day. The clinic, or our team if the clinic is not on AppointPanda yet, calls you to agree a time.",
       color: "from-gold/20 to-amber-500/10"
     },
     {
       step: 4,
       icon: Star,
-      title: "Review",
-      description: "After your visit, share your experience to help other patients make informed decisions.",
+      title: "Give feedback",
+      description: "After your visit you can review the clinic on Google or send private feedback to the clinic. Both options are always open to you.",
       color: "from-coral/20 to-pink/10"
     },
   ];
@@ -61,7 +61,7 @@ const HowItWorksPage = () => {
       step: 2,
       icon: Shield,
       title: "Get Verified",
-      description: "Complete our verification process to earn the verified badge and boost your visibility in search results."
+      description: "Complete the checks in our verification policy to show a verified label. Verification does not change your position in search results."
     },
     {
       step: 3,
@@ -88,9 +88,9 @@ const HowItWorksPage = () => {
 
   const dentistBenefits = [
     "Free basic listing",
-    "Reach thousands of patients",
+    "Receive appointment requests from patients",
     "Verified badge for trust",
-    "Higher search visibility",
+    "Keep treatments, prices and hours up to date",
     "Manage reviews and reputation",
     "Analytics and insights"
   ];
@@ -235,7 +235,7 @@ const HowItWorksPage = () => {
             Ready to get started?
           </h2>
           <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Join thousands of patients and dentists already using AppointPanda.
+            Find a clinic near you, or list your practice for free.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
