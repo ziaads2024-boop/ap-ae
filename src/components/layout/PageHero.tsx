@@ -1,7 +1,8 @@
-'use client';
-
 import { ReactNode } from 'react';
-import { Star, BadgeCheck, Users } from 'lucide-react';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { toneClass, type Tone } from '@/content';
 
 interface PageHeroProps {
   kicker?: string;
@@ -13,57 +14,41 @@ interface PageHeroProps {
   description?: string;
   breadcrumbs?: { label: string; href?: string }[];
   size?: string;
+  tone?: Tone;
+  /** @deprecated The old hero showed fixed rating and patient numbers; it no longer shows any. */
   showTrust?: boolean;
 }
 
-export function PageHero({
-  kicker, badge, title, subtitle, description, highlight,
-  children, showTrust = true,
-}: PageHeroProps) {
-  const displayKicker = kicker || badge;
-  const displaySubtitle = subtitle || description;
-  const displayTitle = highlight ? `${title} ${highlight}` : title;
-
+// Page header in the site's block style. It shows no ratings, clinic counts or
+// patient numbers: figures like these must come from live data, not copy.
+export function PageHero({ kicker, badge, title, subtitle, description, highlight, children, breadcrumbs, tone = 'sky' }: PageHeroProps) {
+  const label = kicker || badge;
+  const text = subtitle || description;
   return (
-    <section className="gradient-dark-hero overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 relative z-10 py-14 lg:py-20">
-        {displayKicker && (
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-400 mb-3 text-center">
-            {displayKicker}
-          </p>
-        )}
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-white leading-[1.1]">
-            {displayTitle}
-          </h1>
-          {displaySubtitle && (
-            <p className="text-zinc-400 text-sm md:text-base mt-3 max-w-2xl mx-auto leading-relaxed">
-              {displaySubtitle}
-            </p>
+    <section className="px-3 pt-4 lg:px-6">
+      <div className={cn('relative mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] px-6 pb-12 pt-10 lg:px-14 lg:pb-14 lg:pt-12', toneClass[tone])}>
+        <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 size-72 rounded-full bg-white/25" />
+        <div className="relative mx-auto max-w-5xl">
+          {breadcrumbs && breadcrumbs.length > 0 && (
+            <nav aria-label="Breadcrumb" className="mb-5">
+              <ol className="flex flex-wrap items-center gap-1 text-xs text-ink/70">
+                {breadcrumbs.map((b, i) => (
+                  <li key={`${b.label}-${i}`} className="flex items-center gap-1">
+                    {i > 0 && <ChevronRight className="h-3 w-3" aria-hidden="true" />}
+                    {b.href ? <Link href={b.href} className="hover:underline">{b.label}</Link> : <span aria-current="page">{b.label}</span>}
+                  </li>
+                ))}
+              </ol>
+            </nav>
           )}
+          {label && <span className="chip-label">{label}</span>}
+          <h1 className="display mt-5 text-[clamp(2.4rem,6vw,4.75rem)] text-ink">
+            {title}
+            {highlight ? ` ${highlight}` : ''}
+          </h1>
+          {text && <p className="mt-5 max-w-3xl text-lg leading-relaxed text-ink/80">{text}</p>}
+          {children && <div className="mt-8">{children}</div>}
         </div>
-        {children && (
-          <div className="mt-8">
-            {children}
-          </div>
-        )}
-        {showTrust && (
-          <div className="mt-8 pt-6 border-t border-white/5 max-w-lg mx-auto">
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
-              <span className="flex items-center gap-1.5 text-amber-400 font-medium">
-                <Star className="h-3.5 w-3.5 fill-amber-400" /> 4.8 <span className="text-amber-300/50">★</span>
-              </span>
-              <span className="text-zinc-600">|</span>
-              <span className="flex items-center gap-1.5 text-zinc-400">
-                <BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> 1,286 clinics
-              </span>
-              <span className="text-zinc-600">|</span>
-              <span className="flex items-center gap-1.5 text-zinc-400">
-                <Users className="h-3.5 w-3.5" /> 200k+ patients
-              </span>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

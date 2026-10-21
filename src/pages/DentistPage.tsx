@@ -286,7 +286,7 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
               The dentist profile you're looking for doesn't exist.
             </p>
             <Button asChild className="rounded-xl font-bold">
-              <Link href="/search/">Find Dentists</Link>
+              <Link href="/find-clinics/">Find Dentists</Link>
             </Button>
           </div>
         </Section>
@@ -301,7 +301,7 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
   const locationDisplay = dentist.clinic?.city?.state?.name ? `${cityName}, ${dentist.clinic?.city?.state?.name}` : cityName;
 
   const breadcrumbs = [
-    { label: "Dentists", href: "/search" },
+    { label: "Dentists", href: "/find-clinics/" },
     ...(stateSlug ? [{ label: dentist.clinic?.city?.state?.name || '', href: `/${stateSlug}` }] : []),
     ...(citySlug && stateSlug ? [{ label: cityName, href: `/${stateSlug}/${citySlug}` }] : []),
     { label: dentist.name },
@@ -345,7 +345,7 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
         description={seoDataProp?.description || dentist.bio || `${dentist.name} is a verified dental professional in ${locationDisplay}.`}
         actions={[
           { href: '#book', label: 'Book Appointment', icon: <Calendar className="h-4 w-4" /> },
-          { href: dentist.clinic ? `/clinic/${dentist.clinic.slug}/` : '/search/', label: 'View Clinic', variant: 'outline' },
+          { href: dentist.clinic ? `/clinic/${dentist.clinic.slug}/` : '/find-clinics/', label: 'View Clinic', variant: 'outline' },
         ]}
         stats={[
           { label: 'Rating', value: (Number(dentist.rating) || 0) > 0 ? Number(dentist.rating).toFixed(1) : 'New', icon: <Star className="h-5 w-5" /> },

@@ -257,7 +257,7 @@ export default function ReviewRequestsTab() {
             <div>
               <h3 className="font-display font-bold text-lg">Your Review Collection Link</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Share this link with patients to collect reviews. Happy patients go to Google, unhappy patients give private feedback.
+                Share this link with patients to collect reviews. Every patient can post on Google or send private feedback to you; Google does not allow filtering reviews by sentiment.
               </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">

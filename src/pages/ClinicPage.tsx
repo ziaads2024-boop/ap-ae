@@ -334,7 +334,7 @@ const ClinicPage = ({ clinicSlugProp, clinicDataProp, clinicTreatmentsDataProp, 
               The clinic you're looking for doesn't exist or has been removed.
             </p>
             <Button asChild className="rounded-xl font-bold">
-              <Link href="/search/">Browse Clinics</Link>
+              <Link href="/find-clinics/">Browse Clinics</Link>
             </Button>
           </div>
         </Section>
@@ -366,7 +366,7 @@ const ClinicPage = ({ clinicSlugProp, clinicDataProp, clinicTreatmentsDataProp, 
     || `Book an appointment at ${clinic.name}. ${isVerified ? 'Verified' : ''} dental clinic in ${clinic.city?.name || 'UAE'} with ${dentists?.length || 0} specialists.`;
 
   const breadcrumbs = [
-    { label: "Clinics", href: "/search" },
+    { label: "Clinics", href: "/find-clinics/" },
     ...(clinic.city?.state ? [{ label: clinic.city.state.name, href: `/${clinic.city.state.slug}` }] : []),
     ...(clinic.city ? [{ label: clinic.city.name, href: `/${stateSlug}/${clinic.city.slug}` }] : []),
     { label: clinic.name },

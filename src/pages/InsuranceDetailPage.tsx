@@ -274,7 +274,7 @@ const InsuranceDetailPage = ({
         title={`${insurance.name}${locationSuffix}`}
         description={(insurance as any).description || `Find dental clinics that accept ${insurance.name} insurance with direct billing${locationSuffix}.`}
         actions={[
-          { href: '/search/', label: 'Search All Providers' },
+          { href: '/find-clinics/', label: 'Search All Providers' },
           { href: '/insurance/', label: 'All Insurance Networks', variant: 'outline' },
         ]}
         stats={[

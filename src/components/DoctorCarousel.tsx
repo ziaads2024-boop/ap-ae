@@ -50,7 +50,7 @@ export function DoctorCarousel({ doctors }: DoctorCarouselProps) {
         ))}
 
         {/* End card - View all */}
-        <Link href="/search/"
+        <Link href="/find-clinics/"
           className="shrink-0 min-w-[200px] max-w-[200px] rounded-2xl bg-card/10 border border-card/20 flex flex-col items-center justify-center p-4 hover:bg-card/20 transition-colors group"
         >
           <div className="text-center">
@@ -66,7 +66,7 @@ export function DoctorCarousel({ doctors }: DoctorCarouselProps) {
 
       {/* Navigation - positioned at header level */}
       <div className="absolute -top-16 right-0 flex items-center gap-2">
-        <Link href="/search/" className="text-interface text-card/80 hover:text-primary transition-colors flex items-center gap-1 mr-4">
+        <Link href="/find-clinics/" className="text-interface text-card/80 hover:text-primary transition-colors flex items-center gap-1 mr-4">
           VIEW FULL DIRECTORY
           <ArrowRight className="h-4 w-4" />
         </Link>

@@ -54,7 +54,7 @@ const NotFound = () => {
           </Button>
 
           <Button asChild variant="outline" className="gap-2">
-            <Link href="/search/">
+            <Link href="/find-clinics/">
               <Search className="h-4 w-4" />
               Find a Dentist
             </Link>

@@ -292,7 +292,7 @@ const BlogPage = ({
                 Browse {counts?.clinics?.toLocaleString() || "6,600+"}+ verified dental professionals and book your appointment today.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
-                <Link href="/search/">
+                <Link href="/find-clinics/">
                   Search Now
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -316,7 +316,7 @@ const BlogPage = ({
                     <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                   </Link>
                 ))}
-                <Link href="/search/"
+                <Link href="/find-clinics/"
                   className="flex items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-primary hover:text-primary transition-colors text-sm font-medium"
                 >
                   View All Locations
@@ -367,7 +367,7 @@ const BlogPage = ({
             Browse our directory of verified dental professionals across the UAE.
           </p>
           <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-            <Link href="/search">
+            <Link href="/find-clinics/">
               Find a Dentist
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

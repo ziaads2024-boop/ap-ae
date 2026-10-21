@@ -1,4 +1,5 @@
 'use client';
+import { findClinicsUrl } from '@/lib/searchUrl';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -242,7 +243,7 @@ export default function InsuranceChecker() {
                   )}
 
                   <Button className="w-full" asChild>
-                    <Link href={`/search?insurance=${selectedInsurance?.name || ''}&state=${selectedState?.abbreviation || ''}`}>
+                    <Link href={findClinicsUrl({ insurance: selectedInsurance?.name, emirate: selectedState?.name })}>
                       <Search className="h-4 w-4 mr-2" />
                       Browse All In-Network Dentists
                     </Link>

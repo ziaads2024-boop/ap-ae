@@ -459,7 +459,7 @@ const shouldNoIndex = false;
         title={pageH1 || `Find dentists in ${cityName}`}
         description={pageDescription}
         actions={[
-          { href: '/search/', label: 'Search All Providers' },
+          { href: '/find-clinics/', label: 'Search All Providers' },
           { href: `/${normalizedStateSlug}/`, label: `Browse ${stateName}`, variant: 'outline' },
         ]}
         stats={[

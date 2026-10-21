@@ -135,7 +135,7 @@ export default function DashboardWidgets({
       icon: Globe,
       type: 'action' as const,
       title: 'Connect Google Business',
-      description: 'Link your GMB to redirect happy patients to Google Reviews.',
+      description: 'Link your Google Business Profile so patients can review you on Google.',
     } : null,
     profileCompleteness < 80 ? {
       icon: Shield,

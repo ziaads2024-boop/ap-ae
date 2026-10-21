@@ -153,7 +153,7 @@ export default function AIInsightsCard({ clinicId, clinicName, onNavigate }: AII
         type: 'action',
         icon: MessageSquare,
         title: 'Connect Google Business',
-        description: 'Redirect happy patients to Google.',
+        description: 'Invite every patient to review you on Google.',
         action: { label: 'Connect', tab: 'my-settings' },
       });
     }

@@ -218,7 +218,7 @@ const ServicePage = ({ serviceSlugProp, seoDataProp, h1Prop, heroIntroProp, cont
         title={displayH1}
         description={metaDescription}
         actions={[
-          { href: '/search/', label: 'Find a Specialist' },
+          { href: '/find-clinics/', label: 'Find a Specialist' },
           { href: '/services/', label: 'All Treatments', variant: 'outline' },
         ]}
         stats={[

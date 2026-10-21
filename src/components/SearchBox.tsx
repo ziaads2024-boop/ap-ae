@@ -1,5 +1,6 @@
 'use client';
 
+import { findClinicsUrl } from '@/lib/searchUrl';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Search, MapPin, Stethoscope, ShieldCheck, X, ArrowRight } from 'lucide-react';
@@ -120,11 +121,7 @@ export function SearchBox({ variant = 'compact', className, onSearch }: SearchBo
       return;
     }
 
-    const params = new URLSearchParams();
-    if (location) params.set('q', location);
-    if (treatment) params.set('treatment', treatment);
-    if (insurance) params.set('insurance', insurance);
-    router.push(`/search/?${params.toString()}`);
+    router.push(findClinicsUrl({ location, treatment, insurance }));
   }, [location, treatment, insurance, onSearch, router]);
 
   useEffect(() => {

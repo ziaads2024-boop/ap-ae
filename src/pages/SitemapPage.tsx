@@ -110,7 +110,7 @@ const SitemapPage = () => {
 
   const mainPages = [
     { name: "Home", path: "/", icon: Home, description: "Find your perfect dentist" },
-    { name: "Find a Dentist", path: "/search", icon: Search, description: "Search dental professionals" },
+    { name: "Find a Dentist", path: "/find-clinics/", icon: Search, description: "Search dental professionals" },
     { name: "About Us", path: "/about", icon: Info, description: "Our mission & story" },
     { name: "How It Works", path: "/how-it-works", icon: HelpCircle, description: "Easy booking process" },
     { name: "Pricing", path: "/pricing", icon: DollarSign, description: "Plans for clinics" },
@@ -431,7 +431,7 @@ const SitemapPage = () => {
                   </Link>
                 ))}
                 {clinics && clinics.length > 20 && (
-                  <Link href="/search/"
+                  <Link href="/find-clinics/"
                     className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors text-primary font-semibold"
                   >
                     View All Clinics
@@ -473,7 +473,7 @@ const SitemapPage = () => {
                   </Link>
                 ))}
                 {dentists && dentists.length > 16 && (
-                  <Link href="/search/"
+                  <Link href="/find-clinics/"
                     className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-coral/10 border border-coral/20 hover:bg-coral/20 transition-colors text-coral font-semibold"
                   >
                     View All Dentists

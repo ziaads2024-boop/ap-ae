@@ -1,4 +1,5 @@
 'use client';
+import { findClinicsUrl } from '@/lib/searchUrl';
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -175,7 +176,7 @@ export const QuickAnswer = ({
               {/* Search Box */}
               <div className="pt-2">
                 <a 
-                  href={`/search?q=${encodeURIComponent(treatmentName)}`}
+                  href={findClinicsUrl({ treatment: treatmentName })}
                   className="flex items-center gap-2 text-sm text-primary hover:underline"
                 >
                   <Search className="h-4 w-4" />

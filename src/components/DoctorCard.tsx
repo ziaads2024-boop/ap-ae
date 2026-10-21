@@ -51,7 +51,7 @@ export const DoctorCard = forwardRef<HTMLDivElement, DoctorCardProps>(({
   // Use centralized URL builders
   const profileLink = slug 
     ? (type === 'clinic' ? buildClinicProfileUrl({ slug }) : buildDentistProfileUrl({ slug }))
-    : "/search/";
+    : "/find-clinics/";
 
   const handleBookNow = (e: React.MouseEvent) => {
     e.preventDefault();

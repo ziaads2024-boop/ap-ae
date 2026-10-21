@@ -648,7 +648,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                 Ready to book an appointment? Find verified dental professionals in your city.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
-                <Link href="/search/">
+                <Link href="/find-clinics/">
                   Browse Dentists
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -804,7 +804,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-              <Link href="/search/">
+              <Link href="/find-clinics/">
                 Find a Dentist
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>

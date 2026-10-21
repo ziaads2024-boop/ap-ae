@@ -1,3 +1,4 @@
+import { findClinicsUrl, searchInputFromQuery } from '@/lib/searchUrl';
 /**
  * Centralized URL builders for profile and location URLs.
  * 
@@ -130,11 +131,7 @@ export function buildReviewUrl(clinicId: string): string {
  * Build search URL with optional filters
  */
 export function buildSearchUrl(params?: Record<string, string>): string {
-  const base = withTrailingSlash("/search");
-  if (!params || Object.keys(params).length === 0) return base;
-  
-  const searchParams = new URLSearchParams(params);
-  return `${base}?${searchParams.toString()}`;
+  return findClinicsUrl(searchInputFromQuery(params || {}));
 }
 
 /**

@@ -406,7 +406,7 @@ const StatePage = ({ stateSlugProp, stateDataProp, citiesDataProp, seoDataProp, 
         title={pageH1 || `Find dentists across ${stateName}`}
         description={heroDescription}
         actions={[
-          { href: '/search/', label: 'Search the Directory' },
+          { href: '/find-clinics/', label: 'Search the Directory' },
           { href: '#browse-areas', label: isDubaiFlagship ? 'Browse Dubai Areas' : 'Browse Areas', variant: 'outline' },
         ]}
         stats={[

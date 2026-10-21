@@ -1,4 +1,5 @@
 'use client';
+import { findClinicsUrl } from '@/lib/searchUrl';
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -306,7 +307,7 @@ export default function DentalCostCalculator() {
                   )}
 
                   <Button className="w-full" asChild>
-                    <Link href={`/search?treatment=${selectedTreatment?.slug || ''}&state=${selectedState?.abbreviation || ''}`}>
+                    <Link href={findClinicsUrl({ treatment: selectedTreatment?.slug, emirate: selectedState?.name })}>
                       <Search className="h-4 w-4 mr-2" />
                       Find Dentists in Your Budget
                     </Link>
@@ -332,7 +333,7 @@ export default function DentalCostCalculator() {
                     ))}
                   </div>
                   <Button className="w-full" asChild>
-                    <Link href={`/search?treatment=${selectedTreatment?.slug || ''}`}>
+                    <Link href={findClinicsUrl({ treatment: selectedTreatment?.slug })}>
                       <Search className="h-4 w-4 mr-2" />
                       Find Dentists for This Treatment
                     </Link>
@@ -344,7 +345,7 @@ export default function DentalCostCalculator() {
                   <p>No pricing data available for this treatment yet.</p>
                   <p className="text-sm mt-2">Try selecting a different treatment.</p>
                   <Button className="mt-4 w-full" variant="outline" asChild>
-                    <Link href="/search/">
+                    <Link href="/find-clinics/">
                       <Search className="h-4 w-4 mr-2" />
                       Browse All Dentists
                     </Link>

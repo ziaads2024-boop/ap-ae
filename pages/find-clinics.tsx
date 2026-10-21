@@ -144,6 +144,11 @@ export default function FindClinicsPage() {
   const wantsNear = router.query.near === 'me';
 
   const [q, setQ] = useState('');
+  // Text search handed over from other pages (?q=)
+  const initialQ = param('q');
+  useEffect(() => {
+    if (initialQ) setQ(initialQ);
+  }, [initialQ]);
   const [debouncedQ, setDebouncedQ] = useState('');
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [geo, setGeo] = useState<GeoState>({ status: 'idle' });

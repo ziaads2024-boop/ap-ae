@@ -158,7 +158,7 @@ const HowItWorksPage = () => {
             </div>
             <div className="text-center md:text-right">
               <Button asChild size="lg" className="rounded-2xl font-bold shadow-glow">
-                <Link href="/search/">
+                <Link href="/find-clinics/">
                   Find a Dentist
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -239,7 +239,7 @@ const HowItWorksPage = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-              <Link href="/search/">Find a Dentist</Link>
+              <Link href="/find-clinics/">Find a Dentist</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-2xl font-bold border-white/40 text-white bg-white/10 hover:bg-white/20">
               <Link href="/list-your-practice/">List Your Practice</Link>

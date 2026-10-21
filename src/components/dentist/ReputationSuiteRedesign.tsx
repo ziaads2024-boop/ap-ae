@@ -447,7 +447,7 @@ export default function ReputationSuiteRedesign() {
                 {[
                   { step: '1', title: 'Share Link', desc: 'Send your review link to patients' },
                   { step: '2', title: 'Collect Feedback', desc: 'Patients give thumbs up/down' },
-                  { step: '3', title: 'Smart Routing', desc: 'Happy patients go to Google' },
+                  { step: '3', title: 'Patient choice', desc: 'Patients choose Google or private feedback' },
                   { step: '4', title: 'Improve', desc: 'Private feedback stays private' },
                 ].map((item) => (
                   <div key={item.step} className="text-center p-4">

@@ -255,7 +255,7 @@ const InsurancePage = ({ insuranceListProp, clinicCountsProp, seoDataProp }: Ins
               </Link>
             </Button>
             <Button variant="outline" asChild className="rounded-xl font-bold" size="sm">
-              <Link href="/search/">
+              <Link href="/find-clinics/">
                 <Search className="h-4 w-4 mr-2" />
                 Browse Clinics
               </Link>

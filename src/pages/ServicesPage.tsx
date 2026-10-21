@@ -65,7 +65,7 @@ const ServicesPage = ({ treatmentsProp }: { treatmentsProp?: { slug: string; nam
         title="Explore the UAE dental treatment marketplace"
         description="Browse treatments, compare specialist availability, and move from service discovery to booking through a cleaner marketplace directory."
         actions={[
-          { href: '/search/', label: 'Search Providers' },
+          { href: '/find-clinics/', label: 'Search Providers' },
           { href: '/insurance/', label: 'Check Insurance', variant: 'outline' },
         ]}
         stats={[
@@ -205,7 +205,7 @@ const ServicesPage = ({ treatmentsProp }: { treatmentsProp?: { slug: string; nam
             Book a consultation with a general dentist who can assess your needs and recommend the right treatment.
           </p>
           <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-            <Link href="/search/">
+            <Link href="/find-clinics/">
               Find a Dentist
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

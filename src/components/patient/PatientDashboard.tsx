@@ -127,7 +127,7 @@ export default function PatientDashboard() {
                 {appointments?.length === 0 ? (
                   <Card>
                     <CardContent className="py-8 text-center text-muted-foreground">
-                      No appointments yet. <Button variant="link" onClick={() => router.push('/search')}>Find a dentist</Button>
+                      No appointments yet. <Button variant="link" onClick={() => router.push('/find-clinics/')}>Find a dentist</Button>
                     </CardContent>
                   </Card>
                 ) : (

@@ -1,14 +1,11 @@
-import { GetServerSideProps } from 'next';
+import type { GetServerSideProps } from 'next';
+import { findClinicsUrl, searchInputFromQuery } from '@/lib/searchUrl';
 
-export default function FindDentistRedirect() {
-    return null;
+// Search lives at /find-clinics/; this old URL forwards its filters there.
+export default function SearchRedirect() {
+  return null;
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    return {
-        redirect: {
-            destination: '/search',
-            permanent: true,
-        },
-    };
-};
+export const getServerSideProps: GetServerSideProps = async ({ query }) => ({
+  redirect: { destination: findClinicsUrl(searchInputFromQuery(query)), permanent: true },
+});

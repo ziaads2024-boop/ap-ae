@@ -243,7 +243,7 @@ export default function ReviewFunnelPage() {
           <div>
             <h1 className="text-sm font-bold text-foreground leading-tight">{clinic.name}</h1>
             <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <Shield className="h-3 w-3" /> Verified Practice
+              <Shield className="h-3 w-3" /> Patient feedback
             </p>
           </div>
         </div>
@@ -261,8 +261,8 @@ export default function ReviewFunnelPage() {
                   <Sparkles className="h-3 w-3" />
                   Quick Feedback
                 </div>
-                <h2 className="text-2xl font-bold text-foreground mb-1">How was your visit?</h2>
-                <p className="text-muted-foreground text-sm">Your feedback helps us improve</p>
+                <h2 className="text-2xl font-bold text-foreground mb-1">Tell us about your visit</h2>
+                <p className="text-muted-foreground text-sm">Good or bad, you can post a public review on Google or send feedback only to the clinic.</p>
               </div>
 
               {/* Choice Buttons */}
@@ -285,8 +285,8 @@ export default function ReviewFunnelPage() {
                     </div>
                   )}
                   <div className="text-left flex-1">
-                    <span className="text-lg font-bold text-emerald-700 block">Great Experience!</span>
-                    <span className="text-xs text-emerald-600/70">I loved my visit</span>
+                    <span className="text-lg font-bold text-emerald-700 block">Review on Google</span>
+                    <span className="text-xs text-emerald-600/70">Post a public review, positive or negative</span>
                   </div>
                   <Heart className="h-5 w-5 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
@@ -303,14 +303,14 @@ export default function ReviewFunnelPage() {
                     </svg>
                   </div>
                   <div className="text-left flex-1">
-                    <span className="text-lg font-bold text-slate-700 block">Could Be Better</span>
-                    <span className="text-xs text-slate-500">Share what we can improve</span>
+                    <span className="text-lg font-bold text-slate-700 block">Private feedback</span>
+                    <span className="text-xs text-slate-500">Only the clinic sees it</span>
                   </div>
                 </button>
               </div>
 
               <p className="text-[11px] text-muted-foreground mt-6">
-                Your response is confidential
+                Private feedback is shared only with the clinic. Choosing it does not stop you posting on Google.
               </p>
             </div>
           )}
@@ -324,8 +324,8 @@ export default function ReviewFunnelPage() {
                     <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L14 22h0a3.13 3.13 0 0 1-3-3.88Z" />
                   </svg>
                 </div>
-                <h2 className="text-xl font-bold text-foreground mb-1">We're sorry to hear that</h2>
-                <p className="text-muted-foreground text-sm">Help us improve your next visit</p>
+                <h2 className="text-xl font-bold text-foreground mb-1">Private feedback</h2>
+                <p className="text-muted-foreground text-sm">Only {clinic.name} will see this.</p>
               </div>
 
               <div className="bg-white rounded-2xl border shadow-sm p-5 space-y-5">
@@ -367,7 +367,7 @@ export default function ReviewFunnelPage() {
 
                 {/* Comment */}
                 <div>
-                  <Label className="text-sm font-medium mb-1.5 block">What can we improve?</Label>
+                  <Label className="text-sm font-medium mb-1.5 block">Your feedback</Label>
                   <Textarea
                     placeholder="Please share your experience..."
                     value={comment}
@@ -385,6 +385,13 @@ export default function ReviewFunnelPage() {
                 >
                   {recordEvent.isPending ? 'Submitting...' : 'Submit Feedback'}
                 </Button>
+
+                <button
+                  onClick={handleThumbsUp}
+                  className="w-full text-sm font-medium text-primary hover:underline"
+                >
+                  Post a public review on Google instead
+                </button>
 
                 <button
                   onClick={() => setStep('initial')}
@@ -421,7 +428,7 @@ export default function ReviewFunnelPage() {
       {/* Footer */}
       <footer className="py-3 text-center">
         <p className="text-[10px] text-muted-foreground">
-          Powered by smart reputation management
+          Powered by AppointPanda
         </p>
       </footer>
     </div>

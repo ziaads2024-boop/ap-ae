@@ -654,7 +654,7 @@ const ContactPage = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" className="rounded-2xl font-bold shadow-glow">
-              <Link href="/search/">
+              <Link href="/find-clinics/">
                 Find a Dentist
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
