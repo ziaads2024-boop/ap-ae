@@ -18,6 +18,10 @@ export const urls = {
   serviceEmirate: (e: string, s: string) => `/${e}/services/${s}/`,
   services: '/services/',
   emirates: '/emirates/',
+  dubaiArea: (a: string) => `/dubai/${a}/`,
+  dubaiAreaService: (a: string, s: string) => `/dubai/${a}/${s}/`,
+  dubaiReason: (r: string) => `/dubai/reasons/${r}/`,
+  dubaiReasons: '/dubai/reasons/',
 };
 
 export const hasLocalGuide = (service: string, emirate: string) =>
