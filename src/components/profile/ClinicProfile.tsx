@@ -88,6 +88,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
   const title = `${clinic.name}${place ? ` – Dentist in ${place}` : ''}: Treatments, Insurance & Reviews`;
   const description = `${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See hours, location and Google reviews, and request an appointment.`.slice(0, 300);
   const heroImage = clinic.coverImageUrl || images[0]?.url || null;
+  const avatar = clinic.logoUrl || heroImage || '';
 
   const dentistSchema = {
     '@context': 'https://schema.org',
@@ -136,9 +137,9 @@ export function ClinicProfile(props: ClinicProfileProps) {
             <div className="p-6 lg:p-10">
               <div className="flex items-start gap-4">
                 <div className="size-20 shrink-0 overflow-hidden rounded-2xl bg-paper ring-1 ring-black/5">
-                  {clinic.logoUrl || heroImage ? (
+                  {avatar ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={(clinic.logoUrl || heroImage)!} alt={`${clinic.name} logo`} width={80} height={80} className="h-full w-full object-cover" />
+                    <img src={avatar} alt={`${clinic.name} logo`} width={80} height={80} className="h-full w-full object-cover" />
                   ) : (
                     <div className="grid h-full w-full place-items-center text-3xl font-bold text-zinc-300">{clinic.name.charAt(0)}</div>
                   )}
