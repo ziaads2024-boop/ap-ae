@@ -1,110 +1,79 @@
-import { GetStaticProps } from 'next';
-import Head from 'next/head';
-import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
-import ServicesPageComponent from '@/pages/ServicesPage';
-import { specialties } from '@/lib/site-data';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { GuideCta, GuideHero, JsonLd, Section } from '@/components/guide/GuideBlocks';
+import { formatAed, services, SITE_URL, toneClass, urls, type InsuranceCategory } from '@/content';
+import { breadcrumbSchema } from '@/content/schema';
+import { cn } from '@/lib/utils';
 
-const BASE_URL = 'https://www.appointpanda.ae';
+const GROUPS: { title: string; categories: InsuranceCategory[] }[] = [
+  { title: 'Everyday and preventive care', categories: ['preventive', 'pediatric', 'emergency'] },
+  { title: 'Repairing and replacing teeth', categories: ['restorative', 'surgical'] },
+  { title: 'Straightening teeth', categories: ['orthodontic'] },
+  { title: 'Changing how your smile looks', categories: ['cosmetic'] },
+];
 
-interface TreatmentData {
-  slug: string;
-  name: string;
-  description: string | null;
-}
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Treatments', path: urls.services },
+];
 
-interface ServicesPageProps {
-  treatments: TreatmentData[];
-  totalClinics: number;
-}
-
-export default function ServicesIndexPage({ treatments, totalClinics }: ServicesPageProps) {
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "Dental Services", item: `${BASE_URL}/services/` },
-    ]
-  };
-
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Dental Services in UAE",
-    "description": `Browse all ${treatments?.length || 0} dental treatments available across the UAE. From routine checkups to advanced procedures.`,
-    "url": `${BASE_URL}/services/`,
-    "numberOfItems": treatments?.length || 0,
-  };
-
+export default function ServicesIndex() {
   return (
-    <>
-      <Head>
-        {/* Meta tags — server-rendered, not duplicated by SEOHead */}
-        <title>Dental Services in UAE - Find Treatments & Procedures | AppointPanda</title>
-        <meta name="description" content={`Browse ${totalClinics.toLocaleString()}+ verified dental clinics and ${treatments?.length || 0} treatments across all 7 UAE emirates. Compare prices, read reviews, and book instantly.`} />
-        <link rel="canonical" href={`${BASE_URL}/services/`} />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${BASE_URL}/services/`} />
-        <meta property="og:title" content="Dental Services in UAE - Find Treatments & Procedures | AppointPanda" />
-        <meta property="og:description" content={`Browse ${totalClinics.toLocaleString()}+ verified dental clinics and ${treatments?.length || 0} treatments across all 7 UAE emirates.`} />
-        <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <meta property="og:site_name" content="AppointPanda" />
-        <meta property="og:locale" content="en_AE" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`${BASE_URL}/services/`} />
-        <meta name="twitter:title" content="Dental Services in UAE - Find Treatments & Procedures | AppointPanda" />
-        <meta name="twitter:description" content={`Browse ${totalClinics.toLocaleString()}+ verified dental clinics and ${treatments?.length || 0} treatments across all 7 UAE emirates.`} />
-        <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
-        <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}/services/`} />
-        <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/services/`} />
-        {/* BreadcrumbList JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        />
-        {/* CollectionPage JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
-        />
-      </Head>
-      <ServicesPageComponent treatmentsProp={treatments} />
-    </>
+    <PageLayout>
+      <SEOHead
+        title="Dental Treatments in the UAE: Guides, Costs & Clinics"
+        description="Plain-language guides to common dental treatments in the UAE, from cleaning and root canals to implants, aligners and veneers, with indicative AED costs and licensed clinics."
+        canonical={urls.services}
+      />
+      <JsonLd
+        data={[
+          breadcrumbSchema(crumbs),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Dental treatment guides',
+            url: `${SITE_URL}${urls.services}`,
+            hasPart: services.map((s) => ({ '@type': 'MedicalWebPage', name: s.name, url: `${SITE_URL}${urls.service(s.slug)}` })),
+          },
+        ]}
+      />
+
+      <GuideHero
+        tone="lime"
+        crumbs={crumbs}
+        label="Treatment guides"
+        title={<>Know your{' '}<br />treatment</>}
+        answer="Each guide explains what a treatment involves, who it suits, how long it takes, what can go wrong and what it usually costs in the UAE, so you can walk into a consultation with the right questions."
+      />
+
+      <div className="mx-auto max-w-6xl px-5">
+        {GROUPS.map((group) => {
+          const items = services.filter((s) => group.categories.includes(s.insuranceCategory));
+          if (items.length === 0) return null;
+          return (
+            <Section key={group.title} title={group.title}>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {items.map((s) => (
+                  <Link key={s.slug} href={urls.service(s.slug)} className={cn('block-card group flex flex-col justify-between border-transparent p-6', toneClass[s.tone])}>
+                    <span>
+                      <span className="display block text-3xl text-ink">{s.name}</span>
+                      <span className="mt-3 block text-sm leading-relaxed text-ink/75">{s.summary}</span>
+                    </span>
+                    <span className="mt-6 flex items-center justify-between text-sm font-semibold text-ink">
+                      From {formatAed(s.price.from)}
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </Section>
+          );
+        })}
+      </div>
+
+      <GuideCta title="Not sure what you need?" text="A check-up is the right first step. Find a licensed clinic near you and book a consultation." href="/find-clinics/?near=me" cta="Find a dentist near me" />
+    </PageLayout>
   );
 }
-
-export const getStaticProps: GetStaticProps<ServicesPageProps> = async () => {
-  const supabase = createServerSupabaseAdmin();
-
-  if (!supabase) {
-    return {
-      props: {
-        treatments: specialties.map(s => ({ slug: s.slug, name: s.name, description: s.description })),
-        totalClinics: 1301,
-      },
-      revalidate: 60,
-    };
-  }
-
-  const [treatmentsData, countData] = await Promise.all([
-    supabase
-      .from('treatments')
-      .select('slug, name, description')
-      .eq('is_active', true)
-      .then(r => r.data),
-    supabase
-      .from('clinics')
-      .select('id', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .then(r => r.count),
-  ]);
-
-  return {
-    props: {
-      treatments: (treatmentsData || specialties.map(s => ({ slug: s.slug, name: s.name, description: s.description }))) as TreatmentData[],
-      totalClinics: countData || 1301,
-    },
-    revalidate: 600,
-  };
-};

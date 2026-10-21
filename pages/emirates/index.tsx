@@ -1,67 +1,93 @@
-import Head from 'next/head';
 import Link from 'next/link';
-import { MapPin } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { PageHero } from '@/components/layout/PageHero';
-import { emirates, SITE_NAME, SITE_DOMAIN } from '@/lib/site-data';
+import { SEOHead } from '@/components/seo/SEOHead';
+import { GuideCta, GuideHero, JsonLd, Section } from '@/components/guide/GuideBlocks';
+import { emirates, SITE_URL, toneClass, urls } from '@/content';
+import { breadcrumbSchema } from '@/content/schema';
+import { cn } from '@/lib/utils';
 
-const BASE_URL = 'https://www.appointpanda.ae';
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Emirates', path: urls.emirates },
+];
 
-export default function EmiratesPage() {
+export default function EmiratesIndex() {
   return (
     <PageLayout>
-      <Head>
-        <title>Dental Clinics by Emirate — {SITE_NAME}.ae</title>
-        <meta name="description" content={`Find verified dental clinics in all 7 UAE emirates. Browse clinics in Dubai, Abu Dhabi, Sharjah, Ajman, RAK, Fujairah, and Umm Al Quwain.`} />
-        <link rel="canonical" href={`${BASE_URL}/emirates/`} />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${BASE_URL}/emirates/`} />
-        <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-        <meta property="og:site_name" content="AppointPanda" />
-        <meta property="og:locale" content="en_AE" />
-        <meta name="twitter:url" content={`${BASE_URL}/emirates/`} />
-        <meta name="twitter:title" content={`Dental Clinics by Emirate — ${SITE_NAME}.ae`} />
-        <meta name="twitter:description" content={`Find verified dental clinics in all 7 UAE emirates. Browse clinics in Dubai, Abu Dhabi, Sharjah, Ajman, RAK, Fujairah, and Umm Al Quwain.`} />
-        <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
-        <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}/emirates/`} />
-        <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}/emirates/`} />
-        <link rel="sitemap" type="application/xml" href={`${BASE_URL}/sitemap.xml`} />
-        <meta property="og:title" content={`Dental Clinics by Emirate — ${SITE_NAME}.ae`} />
-        <meta property="og:description" content="Browse clinics across all 7 emirates." />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
-
-      <PageHero
-        kicker="All 7 emirates"
-        title="Find clinics by emirate"
-        subtitle="From Dubai Marina to Fujairah City — quality dental care wherever you are."
+      <SEOHead
+        title="Dentists by Emirate: Licensing & Clinics Across the UAE"
+        description="Find a dentist in any of the seven emirates. Who licenses clinics where, what insurance usually covers, and licensed dental clinics in Dubai, Abu Dhabi, Sharjah and the Northern Emirates."
+        canonical={urls.emirates}
+      />
+      <JsonLd
+        data={[
+          breadcrumbSchema(crumbs),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CollectionPage',
+            name: 'Dentists by emirate',
+            url: `${SITE_URL}${urls.emirates}`,
+            hasPart: emirates.map((e) => ({ '@type': 'MedicalWebPage', name: `Dentists in ${e.name}`, url: `${SITE_URL}${urls.emirate(e.slug)}` })),
+          },
+        ]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {emirates.map((emirate) => (
-            <Link key={emirate.slug} href={`/${emirate.slug}/`} className="card-hover-amber p-6 flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-500 shrink-0">
-                <MapPin className="h-6 w-6" />
-              </div>
-              <div className="min-w-0">
-                <h3 className="font-semibold text-zinc-900 text-[15px]">{emirate.name}</h3>
-                <p className="text-zinc-500 text-xs mt-0.5">{emirate.tagline}</p>
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                  {emirate.areas.slice(0, 4).map((area) => (
-                    <span key={area} className="text-[10px] text-zinc-400 bg-zinc-100 px-2 py-0.5 rounded-full">{area}</span>
-                  ))}
-                  {emirate.areas.length > 4 && (
-                    <span className="text-[10px] text-zinc-400">+{emirate.areas.length - 4} more</span>
-                  )}
-                </div>
-                <p className="text-amber-700 text-[11px] font-semibold mt-2">{emirate.clinics} clinics</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+      <GuideHero
+        tone="sky"
+        crumbs={crumbs}
+        label="All seven emirates"
+        title={<>Seven emirates,{' '}<br />three regulators</>}
+        answer="Dental clinics in Dubai are licensed by the Dubai Health Authority (or, in Dubai Healthcare City, its own authority), clinics in Abu Dhabi by the Department of Health - Abu Dhabi, and clinics in Sharjah and the Northern Emirates by the federal Ministry of Health and Prevention."
+      />
+
+      <div className="mx-auto max-w-6xl px-5">
+        <Section title="Choose your emirate">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {emirates.map((e) => (
+              <Link key={e.slug} href={urls.emirate(e.slug)} className={cn('block-card group flex min-h-[220px] flex-col justify-between border-transparent p-6', toneClass[e.tone])}>
+                <span>
+                  <span className="flex items-baseline justify-between gap-3">
+                    <span className="display text-4xl text-ink">{e.name}</span>
+                    <span className="text-lg text-ink/60" lang="ar">{e.nameAr}</span>
+                  </span>
+                  <span className="mt-3 block text-sm leading-relaxed text-ink/75">{e.summary}</span>
+                </span>
+                <span className="mt-6 flex items-center justify-between text-sm font-semibold text-ink">
+                  Regulator: {e.regulator.short}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Section>
+
+        <Section title="Comparing at a glance">
+          <div className="overflow-x-auto rounded-3xl border border-black/10 bg-white">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <caption className="sr-only">Dental licensing and insurance by emirate</caption>
+              <thead className="bg-paper text-xs uppercase tracking-wider text-zinc-500">
+                <tr>
+                  <th scope="col" className="px-5 py-3">Emirate</th>
+                  <th scope="col" className="px-5 py-3">Licensing body</th>
+                  <th scope="col" className="px-5 py-3">Insurance note</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/5">
+                {emirates.map((e) => (
+                  <tr key={e.slug}>
+                    <th scope="row" className="px-5 py-4 font-semibold text-ink"><Link href={urls.emirate(e.slug)} className="underline">{e.name}</Link></th>
+                    <td className="px-5 py-4 text-zinc-700">{e.regulator.name}</td>
+                    <td className="px-5 py-4 text-zinc-600">{e.insurance[0]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
       </div>
+
+      <GuideCta title="Find a dentist near you" text="Use your location to see licensed clinics closest to you, wherever you are in the UAE." href="/find-clinics/?near=me" cta="Use my location" />
     </PageLayout>
   );
 }

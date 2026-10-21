@@ -1,11 +1,17 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import ServicePageComponent from '@/pages/ServicePage';
+import { ServiceGuide } from '@/components/guide/ServiceGuide';
+import type { ClinicSummary } from '@/components/guide/GuideBlocks';
+import { services, serviceBySlug } from '@/content';
+import { fetchGuideClinics } from '@/lib/guideClinics';
 
 const BASE_URL = 'https://www.appointpanda.ae';
 
 // Wrapper component to render SEO meta tags server-side with FAQ data for SSR
-const ServicePageWithSEO = ({ serviceSlug, seoData, h1, heroIntro, content, faqs, treatmentData, relatedTreatmentsData, profileData, statesData, priceRangesData }: {
+const ServicePageWithSEO = ({ guideSlug, guideClinics, serviceSlug, seoData, h1, heroIntro, content, faqs, treatmentData, relatedTreatmentsData, profileData, statesData, priceRangesData }: {
+    guideSlug?: string | null;
+    guideClinics?: ClinicSummary[];
     serviceSlug: string;
     seoData: { title: string; description: string; canonical: string };
     h1: string | null;
@@ -18,6 +24,11 @@ const ServicePageWithSEO = ({ serviceSlug, seoData, h1, heroIntro, content, faqs
     statesData?: any[];
     priceRangesData?: any[];
 }) => {
+    const guide = guideSlug ? serviceBySlug(guideSlug) : undefined;
+    if (guide) {
+        return <ServiceGuide service={guide} clinics={guideClinics || []} />;
+    }
+
     return (
         <>
             <ServicePageComponent 
@@ -44,16 +55,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
     try {
         const supabase = createServerSupabaseAdmin();
         
+        const contentPaths = services.map((service) => ({ params: { serviceSlug: service.slug } }));
         if (!supabase) {
-            return { paths: [], fallback: 'blocking' };
+            return { paths: contentPaths, fallback: 'blocking' };
         }
         
         const { data: treatments } = await supabase
             .from('treatments')
             .select('slug');
         
-        const paths = (treatments || []).map((treatment) => ({
-            params: { serviceSlug: treatment.slug }
+        const slugs = new Set([...services.map((service) => service.slug), ...(treatments || []).map((t) => t.slug)]);
+        const paths = Array.from(slugs).map((slug) => ({
+            params: { serviceSlug: slug }
         }));
         
         return {
@@ -68,6 +81,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 // Static Site Generation with SSR FAQ data for Googlebot
 export const getStaticProps: GetStaticProps = async (ctx) => {
+    const slug = ctx.params?.serviceSlug as string;
+    // Hand-written guides (src/content) render without the database; clinics are a live extra.
+    if (slug && serviceBySlug(slug)) {
+        const guideClinics = await fetchGuideClinics({ treatmentSlug: slug, limit: 10 });
+        return { props: { guideSlug: slug, guideClinics, serviceSlug: slug }, revalidate: 3600 };
+    }
+    return legacyGetStaticProps(ctx);
+};
+
+// Treatments without a hand-written guide keep the database-driven page.
+const legacyGetStaticProps: GetStaticProps = async (ctx) => {
     const supabase = createServerSupabaseAdmin();
     const serviceSlug = ctx.params?.serviceSlug as string;
 

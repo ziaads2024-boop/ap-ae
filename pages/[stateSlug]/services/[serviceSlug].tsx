@@ -2,6 +2,10 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import StateServicePage from '@/pages/StateServicePage';
+import { ServiceEmirateGuide } from '@/components/guide/ServiceEmirateGuide';
+import type { ClinicSummary } from '@/components/guide/GuideBlocks';
+import { emirates, emirateBySlug, hasLocalGuide, LOCAL_GUIDE_SERVICES, serviceBySlug, serviceEmirateContent, urls } from '@/content';
+import { fetchGuideClinics } from '@/lib/guideClinics';
 
 interface StateServiceRouteProps {
   stateSlug: string;
@@ -16,16 +20,33 @@ interface StateServiceRouteProps {
   priceRangesProp?: any[];
 }
 
-export default function StateServiceRoutePage(props: StateServiceRouteProps) {
+interface GuideProps {
+  guide: { emirate: string; service: string };
+  clinics: ClinicSummary[];
+}
+
+export default function StateServiceRoutePage(props: StateServiceRouteProps | GuideProps) {
+  if ('guide' in props) {
+    const service = serviceBySlug(props.guide.service)!;
+    const emirate = emirateBySlug(props.guide.emirate)!;
+    const local = serviceEmirateContent(service.slug, emirate.slug)!;
+    return <ServiceEmirateGuide service={service} emirate={emirate} local={local} clinics={props.clinics} />;
+  }
   return <StateServicePage {...props} />;
 }
+
+// Hand-written local guides are always pre-rendered; database-only
+// combinations are rendered on demand.
+const guidePaths = emirates.flatMap((e) =>
+  LOCAL_GUIDE_SERVICES.filter((s) => hasLocalGuide(s, e.slug)).map((s) => ({ params: { stateSlug: e.slug, serviceSlug: s } }))
+);
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
     const supabase = createServerSupabaseAdmin();
 
     if (!supabase) {
-      return { paths: [], fallback: 'blocking' };
+      return { paths: guidePaths, fallback: 'blocking' };
     }
 
     const [statesResult, treatmentsResult] = await Promise.all([
@@ -45,14 +66,37 @@ export const getStaticPaths: GetStaticPaths = async () => {
       }))
     );
 
-    return { paths, fallback: 'blocking' };
+    const seen = new Set(guidePaths.map((p) => `${p.params.stateSlug}/${p.params.serviceSlug}`));
+    const dbPaths = paths.filter((p) => !seen.has(`${p.params.stateSlug}/${p.params.serviceSlug}`) && !serviceBySlug(p.params.serviceSlug));
+    return { paths: [...guidePaths, ...dbPaths], fallback: 'blocking' };
   } catch (error) {
     console.error('Error generating state service paths:', error);
-    return { paths: [], fallback: 'blocking' };
+    return { paths: guidePaths, fallback: 'blocking' };
   }
 };
 
-export const getStaticProps: GetStaticProps<StateServiceRouteProps> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<StateServiceRouteProps | GuideProps> = async (ctx) => {
+  const emirateSlug = normalizeStateSlug((ctx.params?.stateSlug as string) || '');
+  const serviceSlug = ctx.params?.serviceSlug as string | undefined;
+
+  if (serviceSlug && emirateBySlug(emirateSlug) && hasLocalGuide(serviceSlug, emirateSlug)) {
+    if (emirateSlug !== ctx.params?.stateSlug) {
+      return { redirect: { destination: urls.serviceEmirate(emirateSlug, serviceSlug), permanent: true } };
+    }
+    const clinics = await fetchGuideClinics({ emirateSlug, treatmentSlug: serviceSlug, limit: 10 });
+    return { props: { guide: { emirate: emirateSlug, service: serviceSlug }, clinics }, revalidate: 3600 };
+  }
+
+  // A treatment with a national guide but no local guide yet: send readers to the
+  // national guide instead of rendering a thin, near-duplicate local page.
+  if (serviceSlug && serviceBySlug(serviceSlug)) {
+    return { redirect: { destination: urls.service(serviceSlug), permanent: false } };
+  }
+
+  return legacyGetStaticProps(ctx);
+};
+
+const legacyGetStaticProps: GetStaticProps<StateServiceRouteProps> = async ({ params }) => {
   const supabase = createServerSupabaseAdmin();
   const stateSlug = params?.stateSlug as string | undefined;
   const serviceSlug = params?.serviceSlug as string | undefined;
