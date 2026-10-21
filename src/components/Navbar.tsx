@@ -6,6 +6,7 @@ import { Menu, ChevronDown, LocateFixed, ArrowRight } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { services, emirates, urls } from '@/content';
+import { dubaiAreas, DUBAI_AREA_GROUPS, visitReasons } from '@/content/dubai';
 
 type MenuKey = 'treatments' | 'emirates' | null;
 
@@ -75,7 +76,7 @@ export function Navbar() {
             onMouseEnter={() => setOpen('emirates')}
             onClick={() => setOpen(open === 'emirates' ? null : 'emirates')}
           >
-            Emirates <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open === 'emirates' && 'rotate-180')} />
+            Dubai <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open === 'emirates' && 'rotate-180')} />
           </button>
           {simpleLinks.map((l) => (
             <Link
@@ -126,6 +127,16 @@ export function Navbar() {
                   </div>
                 </div>
                 <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Dubai areas</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {dubaiAreas.slice(0, 12).map((a) => (
+                      <Link key={a.slug} href={urls.dubaiArea(a.slug)} onClick={() => setMobileOpen(false)} className="rounded-xl bg-white px-3 py-2 text-sm font-medium">
+                        {a.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div>
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Emirates</p>
                   <div className="grid grid-cols-2 gap-2">
                     {emirates.map((e) => (
@@ -167,18 +178,33 @@ export function Navbar() {
         )}
         {open === 'emirates' && (
           <div className="absolute inset-x-0 top-2 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
-            <div className="grid grid-cols-4 gap-2">
-              {emirates.map((e) => (
-                <Link key={e.slug} href={urls.emirate(e.slug)} className="rounded-2xl p-3 hover:bg-paper">
-                  <span className="block text-sm font-semibold text-ink">
-                    {e.name} <span className="font-normal text-zinc-400" lang="ar">{e.nameAr}</span>
-                  </span>
-                  <span className="mt-0.5 block text-xs text-zinc-500">Regulator: {e.regulator.short}</span>
-                </Link>
+            <div className="grid grid-cols-4 gap-6">
+              {DUBAI_AREA_GROUPS.map((group) => (
+                <div key={group}>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">{group}</p>
+                  <ul className="space-y-1">
+                    {dubaiAreas.filter((a) => a.group === group).map((a) => (
+                      <li key={a.slug}><Link href={urls.dubaiArea(a.slug)} className="block rounded-lg px-2 py-1 text-sm text-ink hover:bg-paper">{a.name}</Link></li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-              <Link href={urls.emirates} className="flex items-center gap-1 rounded-2xl bg-tone-lemon p-3 text-sm font-semibold text-ink">
-                Compare emirates <ArrowRight className="h-4 w-4" />
-              </Link>
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Why are you visiting?</p>
+                <ul className="space-y-1">
+                  {visitReasons.slice(0, 7).map((r) => (
+                    <li key={r.slug}><Link href={urls.dubaiReason(r.slug)} className="block rounded-lg px-2 py-1 text-sm text-ink hover:bg-paper">{r.label}</Link></li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-black/5 pt-4">
+              <Link href={urls.emirate('dubai')} className="inline-flex items-center gap-1 rounded-full bg-tone-lemon px-4 py-2 text-sm font-semibold text-ink">All of Dubai <ArrowRight className="h-4 w-4" /></Link>
+              <Link href={urls.dubaiReasons} className="text-sm font-semibold text-ink underline">All reasons</Link>
+              <span className="text-sm text-zinc-500">Other emirates:</span>
+              {emirates.filter((e) => e.slug !== 'dubai').map((e) => (
+                <Link key={e.slug} href={urls.emirate(e.slug)} className="text-sm text-zinc-600 hover:text-ink">{e.name}</Link>
+              ))}
             </div>
           </div>
         )}

@@ -11,6 +11,7 @@ import { FaqList, JsonLd, PageImageCredits } from '@/components/guide/GuideBlock
 import { images, imageForEmirate, imageForService } from '@/content/images';
 import { emirates, services, toneClass, urls, formatAed, LOCAL_GUIDE_SERVICES, serviceBySlug } from '@/content';
 import { faqSchema, organizationSchema, websiteSchema } from '@/content/schema';
+import { dubaiAreas, DUBAI_AREA_GROUPS, visitReasons } from '@/content/dubai';
 import { cn } from '@/lib/utils';
 import type { HomePageData } from '../../pages/index';
 
@@ -52,13 +53,15 @@ interface IndexPageProps {
 
 export default function IndexPage({ pageData }: IndexPageProps) {
   const router = useRouter();
-  const [emirate, setEmirate] = useState('');
-  const [specialty, setSpecialty] = useState('');
+  const [where, setWhere] = useState('');
+  const [what, setWhat] = useState('');
 
   const go = (near = false) => {
     const params = new URLSearchParams();
-    if (emirate) params.set('emirate', emirate);
-    if (specialty) params.set('specialty', specialty);
+    if (where.startsWith('e:')) params.set('emirate', where.slice(2));
+    else if (where) params.set('area', where);
+    if (what.startsWith('t:')) params.set('specialty', what.slice(2));
+    else if (what) params.set('reason', what);
     if (near) params.set('near', 'me');
     const qs = params.toString();
     router.push(`/find-clinics/${qs ? `?${qs}` : ''}`);
@@ -72,8 +75,8 @@ export default function IndexPage({ pageData }: IndexPageProps) {
   return (
     <PageLayout>
       <SEOHead
-        title="AppointPanda: Find a Licensed Dentist Near You in the UAE"
-        description="Find and compare licensed dental clinics in Dubai, Abu Dhabi, Sharjah and across the UAE. Clear treatment guides, indicative AED costs and Google ratings, without the sales pitch."
+        title="Find a Dentist in Dubai | AppointPanda"
+        description="Find a licensed dentist in Dubai by area, reason for visit or insurance. Compare Google ratings and clinic-listed prices, read plain-language treatment guides and request an appointment."
         canonical="/"
       />
       <JsonLd data={[organizationSchema(), websiteSchema(), faqSchema(HOME_FAQS)]} />
@@ -105,9 +108,9 @@ export default function IndexPage({ pageData }: IndexPageProps) {
           </div>
 
           <div className="relative max-w-4xl xl:max-w-3xl">
-            <span className="chip-label">UAE dental directory · all 7 emirates</span>
+            <span className="chip-label">Dubai dental directory</span>
             <h1 className="display mt-6 text-[clamp(3.2rem,10vw,8.5rem)] text-ink">
-              Find a dentist{' '}<br />you can trust.
+              Find a Dubai dentist{' '}<br />you can trust.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink/80 md:text-xl">
               Compare licensed clinics near you, understand the treatment before you go, and know what it usually costs in AED.
@@ -121,17 +124,25 @@ export default function IndexPage({ pageData }: IndexPageProps) {
             aria-label="Find a dental clinic"
           >
             <label className="relative">
-              <span className="sr-only">Treatment</span>
-              <select value={specialty} onChange={(e) => setSpecialty(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
-                <option value="">Any treatment</option>
-                {services.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+              <span className="sr-only">Reason for visit or treatment</span>
+              <select value={what} onChange={(e) => setWhat(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
+                <option value="">Reason or treatment</option>
+                <optgroup label="Reason for visit">
+                  {visitReasons.map((r) => <option key={r.slug} value={r.slug}>{r.label}</option>)}
+                </optgroup>
+                <optgroup label="Treatment">
+                  {services.map((s) => <option key={s.slug} value={`t:${s.slug}`}>{s.name}</option>)}
+                </optgroup>
               </select>
             </label>
             <label className="relative">
-              <span className="sr-only">Emirate</span>
-              <select value={emirate} onChange={(e) => setEmirate(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
-                <option value="">Any emirate</option>
-                {emirates.map((e) => <option key={e.slug} value={e.slug}>{e.name}</option>)}
+              <span className="sr-only">Area</span>
+              <select value={where} onChange={(e) => setWhere(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
+                <option value="">All of Dubai</option>
+                {dubaiAreas.map((a) => <option key={a.slug} value={a.slug}>{a.name}</option>)}
+                <optgroup label="Other emirates">
+                  {emirates.filter((e) => e.slug !== 'dubai').map((e) => <option key={e.slug} value={`e:${e.slug}`}>{e.name}</option>)}
+                </optgroup>
               </select>
             </label>
             <button type="button" onClick={() => go(true)} className="btn-ghost h-14 rounded-[1.25rem]">
@@ -143,11 +154,11 @@ export default function IndexPage({ pageData }: IndexPageProps) {
           </form>
 
           <div className="relative mt-5 flex flex-wrap gap-2">
-            {['dental-implants', 'invisalign', 'emergency-dentist', 'teeth-whitening', 'pediatric-dentistry', 'root-canal'].map((slug) => {
-              const s = serviceBySlug(slug)!;
+            {['toothache', 'checkup-and-cleaning', 'crooked-teeth', 'missing-tooth', 'broken-tooth', 'childs-first-visit'].map((slug) => {
+              const r = visitReasons.find((x) => x.slug === slug)!;
               return (
-                <Link key={slug} href={urls.service(slug)} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm font-medium text-ink hover:bg-white">
-                  {s.shortName}
+                <Link key={slug} href={urls.dubaiReason(slug)} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm font-medium text-ink hover:bg-white">
+                  {r.label}
                 </Link>
               );
             })}
@@ -186,10 +197,32 @@ export default function IndexPage({ pageData }: IndexPageProps) {
         </ul>
       </section>
 
+      {/* Dubai areas (primary market) */}
+      <section className="mx-auto max-w-6xl px-5 pb-12">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Dentists across Dubai</h2>
+          <Link href={urls.emirate('dubai')} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Dubai guide <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {DUBAI_AREA_GROUPS.map((group) => (
+            <div key={group} className="rounded-3xl bg-white p-5 ring-1 ring-black/5">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">{group}</h3>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {dubaiAreas.filter((a) => a.group === group).map((a) => (
+                  <li key={a.slug}>
+                    <Link href={urls.dubaiArea(a.slug)} className={cn('inline-block rounded-full px-3 py-1.5 text-sm font-medium text-ink', toneClass[a.tone])}>{a.name}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Emirates */}
       <section className="mx-auto max-w-6xl px-5 pb-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Dentists by emirate</h2>
+          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Beyond Dubai</h2>
           <Link href={urls.emirates} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Compare emirates <ArrowRight className="h-4 w-4" /></Link>
         </div>
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

@@ -9,6 +9,7 @@ import {
   type ClinicSummary,
 } from './GuideBlocks';
 import { imageForEmirate, imageForService } from '@/content/images';
+import { dubaiAreas, DUBAI_AREA_GROUPS, visitReasons } from '@/content/dubai';
 
 export interface CityLink {
   name: string;
@@ -59,6 +60,36 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
           </div>
         </Section>
 
+        {emirate.slug === 'dubai' && (
+          <>
+            <Section id="dubai-areas" eyebrow="Dubai areas" title="Find a dentist by area">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {DUBAI_AREA_GROUPS.map((group) => (
+                  <div key={group}>
+                    <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">{group}</h3>
+                    <ul className="space-y-1.5">
+                      {dubaiAreas.filter((a) => a.group === group).map((a) => (
+                        <li key={a.slug}>
+                          <Link href={urls.dubaiArea(a.slug)} className="group flex items-center justify-between rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink ring-1 ring-black/5 hover:ring-ink">
+                            {a.name} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </Section>
+            <Section id="reasons" eyebrow="Why are you visiting?" title="Start with your reason">
+              <div className="flex flex-wrap gap-2">
+                {visitReasons.map((r) => (
+                  <Link key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">{r.label}</Link>
+                ))}
+              </div>
+            </Section>
+          </>
+        )}
+
         <Section id="licensing" eyebrow="Licensing" title="Who licenses dentists here">
           <div className="grid gap-4 md:grid-cols-[1fr_1.2fr]">
             <div className="rounded-3xl bg-ink p-7 text-white">
@@ -95,7 +126,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
           <div className="mt-4 flex gap-3 rounded-2xl bg-tone-sand p-5 text-[15px] leading-relaxed text-ink">
             <Car className="mt-0.5 h-5 w-5 shrink-0" /> {emirate.gettingThere}
           </div>
-          {cities.length > 0 && (
+          {cities.length > 0 && emirate.slug !== 'dubai' && (
             <div className="mt-6">
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">Browse by area</h3>
               <div className="flex flex-wrap gap-2">
