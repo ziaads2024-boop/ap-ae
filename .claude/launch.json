@@ -9,6 +9,15 @@
         "start"
       ],
       "port": 3000
+    },
+    {
+      "name": "preview-placeholder-env",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "NEXT_SUPABASE_URL=http://127.0.0.1:9 NEXT_SUPABASE_ANON_KEY=dummy SUPABASE_SERVICE_ROLE_KEY=dummy npx next start -p 3100"
+      ],
+      "port": 3100
     }
   ]
 }
