@@ -487,7 +487,7 @@ export function ZocdocBookingForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-sm font-bold">
-                        Available Times for {format(selectedDate, "MMM d")}
+                        Preferred time on {format(selectedDate, "MMM d")} (the clinic will confirm)
                       </FormLabel>
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 mt-2 max-w-full">
                         {timeSlots.map((slot) => (

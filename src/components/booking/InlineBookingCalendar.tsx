@@ -461,11 +461,11 @@ export function InlineBookingCalendar({
                     <FormItem className="animate-fade-in-up overflow-hidden max-w-full">
                       <FormLabel className="text-xs font-medium flex items-center gap-1 mb-2">
                         <Clock className="h-3.5 w-3.5 text-primary flex-shrink-0" />
-                        Available Times for {format(selectedDate, "MMM d")}
+                        Preferred time on {format(selectedDate, "MMM d")} (the clinic will confirm)
                       </FormLabel>
                       {timeSlots.length === 0 ? (
                         <div className="text-center py-4 text-muted-foreground text-xs md:text-sm">
-                          No available times for this day. Please select another date.
+                          The clinic is closed on this day. Please choose another date.
                         </div>
                       ) : (
                         <div className="grid grid-cols-2 gap-1.5 max-h-44 md:max-h-48 overflow-y-auto pr-1 pb-1 scrollbar-hide max-w-full">

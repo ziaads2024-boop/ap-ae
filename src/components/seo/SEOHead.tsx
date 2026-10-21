@@ -81,7 +81,7 @@ export const SEOHead = ({
       {/* Primary Meta Tags - These are CRITICAL for SEO */}
       <title>{fullTitle}</title>
       <meta name="description" content={safeDescription} />
-      <meta name="robots" content={effectiveNoindex ? 'noindex, nofollow' : 'index, follow'} />
+      <meta name="robots" content={effectiveNoindex ? 'noindex, follow' : 'index, follow'} />
 
       {/* Canonical URL - Prevents duplicate content */}
       {!skipCanonical && <link rel="canonical" href={normalizedCanonical} />}

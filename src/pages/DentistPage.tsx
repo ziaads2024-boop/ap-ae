@@ -18,7 +18,7 @@ import { StructuredData } from "@/components/seo/StructuredData";
 import { InterlinkingSection } from "@/components/seo/InterlinkingSection";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
 import { MultiStepBookingModal } from "@/components/MultiStepBookingModal";
-import { InlineBookingCalendar } from "@/components/booking/InlineBookingCalendar";
+import { AppointmentRequest } from "@/components/booking/AppointmentRequest";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -541,15 +541,11 @@ const DentistPage = ({ dentistSlugProp, dentistDataProp, seoDataProp, treatments
 
             {/* Inline Booking Calendar */}
             <div className="lg:sticky lg:top-24">
-              <InlineBookingCalendar
-                profileId={dentist.id}
-                profileName={dentist.name}
-                profileType="dentist"
-                clinicId={dentist.clinic_id || undefined}
-                clinicLatitude={dentist.clinic?.latitude ? Number(dentist.clinic.latitude) : undefined}
-                clinicLongitude={dentist.clinic?.longitude ? Number(dentist.clinic.longitude) : undefined}
-                clinicAddress={dentist.clinic?.address || undefined}
-              />
+              {dentist.clinic_id ? (
+                <div className="rounded-3xl border border-black/10 bg-white p-5">
+                  <AppointmentRequest clinicId={dentist.clinic_id} clinicName={dentist.clinic?.name || dentist.name} dentistId={dentist.id} clinicPhone={dentist.clinic?.phone || null} compact />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

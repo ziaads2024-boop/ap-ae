@@ -463,7 +463,7 @@ export function CalendarBookingForm({
 
               {!selectedDate && (
                 <p className="text-center text-sm text-muted-foreground py-4">
-                  Please select a date to view available time slots
+                  Please select a date to choose a preferred time
                 </p>
               )}
             </div>
@@ -573,9 +573,9 @@ function TimeSlotPicker({ clinicId, selectedDate, form }: {
       name="preferred_time"
       render={({ field }) => (
         <div className="animate-fade-in-up">
-          <label className="text-sm font-medium text-center block mb-2">Available Times</label>
+          <label className="text-sm font-medium text-center block mb-2">Preferred time (the clinic will confirm)</label>
           {isLoading ? (
-            <p className="text-center text-sm text-muted-foreground py-4">Loading available times...</p>
+            <p className="text-center text-sm text-muted-foreground py-4">Loading times...</p>
           ) : timeSlots && timeSlots.length > 0 ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {timeSlots.map((slot) => (
@@ -595,7 +595,7 @@ function TimeSlotPicker({ clinicId, selectedDate, form }: {
               ))}
             </div>
           ) : (
-            <p className="text-center text-sm text-muted-foreground py-4">No available time slots for this date.</p>
+            <p className="text-center text-sm text-muted-foreground py-4">No times to choose on this date. Please pick another day.</p>
           )}
         </div>
       )}
