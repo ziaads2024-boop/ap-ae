@@ -98,85 +98,10 @@ export default CityRoute;
 
 // Generate static paths - ALL active cities with valid state relationships
 export const getStaticPaths: GetStaticPaths = async () => {
-    try {
-        const supabase = createServerSupabaseAdmin();
-        
-        const dubaiPaths = dubaiAreas.map((a) => ({ params: { stateSlug: 'dubai', citySlug: a.slug } }));
-        if (!supabase) {
-            return { paths: dubaiPaths, fallback: 'blocking' };
-        }
-        
-        // Get all states (both active and inactive to catch all mappings)
-        const { data: states } = await supabase
-            .from('states')
-            .select('id, slug, name');
-        
-        // Create state lookup maps
-        const stateIdToSlug: Record<string, string> = {};
-        (states || []).forEach(s => { stateIdToSlug[s.id] = s.slug; });
-        
-        // Get ALL cities from database
-        const { data: cities } = await supabase
-            .from('cities')
-            .select('slug, state_id, name')
-            .limit(500);
-        
-        // Build paths for ALL cities
-        const paths: { params: { stateSlug: string; citySlug: string } }[] = [];
-        
-        for (const city of cities || []) {
-            let matchedStateSlug: string | null = null;
-            const citySlug = city.slug?.toLowerCase() || '';
-            const cityName = city.name?.toLowerCase() || '';
-            
-            // First try direct state_id relationship
-            if (city.state_id && stateIdToSlug[city.state_id]) {
-                matchedStateSlug = stateIdToSlug[city.state_id];
-            }
-            
-            // If no direct match, try fuzzy matching
-            if (!matchedStateSlug) {
-                for (const state of states || []) {
-                    const stateSlug = state.slug.toLowerCase();
-                    const stateName = (state.name || '').toLowerCase();
-                    
-                    // Various matching strategies
-                    if (citySlug.startsWith(stateSlug) || 
-                        citySlug.includes(stateSlug) ||
-                        citySlug.includes('-' + stateSlug.split('-')[0]) ||
-                        cityName.includes(stateName) ||
-                        // Emirate-specific patterns
-                        (stateSlug === 'ras-al-khaimah' && (citySlug.includes('rak') || citySlug.includes('ras'))) ||
-                        (stateSlug === 'umm-al-quwain' && (citySlug.includes('uaq') || citySlug.includes('umm'))) ||
-                        (stateSlug === 'ajman' && citySlug.includes('ajman')) ||
-                        (stateSlug === 'fujairah' && citySlug.includes('fujairah'))
-                    ) {
-                        matchedStateSlug = state.slug;
-                        break;
-                    }
-                }
-            }
-            
-            // Skip slugs that getStaticProps redirects (redirects can't be prerendered)
-            const alias = matchedStateSlug === 'dubai' && dubaiAreaBySlug(city.slug)?.slug !== city.slug && !!dubaiAreaBySlug(city.slug);
-            if (matchedStateSlug && !alias && !serviceBySlug(canonicalTreatment(city.slug))) {
-                paths.push({
-                    params: {
-                        stateSlug: matchedStateSlug,
-                        citySlug: city.slug
-                    }
-                });
-            }
-        }
-        
-        return {
-            paths,
-            fallback: 'blocking'
-        };
-    } catch (error) {
-        console.error('Error generating city paths:', error);
-        return { paths: [], fallback: 'blocking' };
-    }
+    // Prerender the Dubai area guides only. Other cities (mostly in emirates
+    // that are not live yet) render on first request and are then cached, which
+    // keeps the build within the hosting time limit.
+    return { paths: dubaiAreas.map((a) => ({ params: { stateSlug: 'dubai', citySlug: a.slug } })), fallback: 'blocking' };
 };
 
 // Static Site Generation with SSR FAQ data for Googlebot

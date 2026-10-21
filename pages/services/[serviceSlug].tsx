@@ -51,33 +51,11 @@ const ServicePageWithSEO = ({ guideSlug, guideClinics, serviceSlug, seoData, h1,
 export default ServicePageWithSEO;
 
 // Generate static paths - use fallback blocking to avoid build timeouts
-export const getStaticPaths: GetStaticPaths = async () => {
-    try {
-        const supabase = createServerSupabaseAdmin();
-        
-        const contentPaths = services.map((service) => ({ params: { serviceSlug: service.slug } }));
-        if (!supabase) {
-            return { paths: contentPaths, fallback: 'blocking' };
-        }
-        
-        const { data: treatments } = await supabase
-            .from('treatments')
-            .select('slug');
-        
-        const slugs = new Set([...services.map((service) => service.slug), ...(treatments || []).map((t) => t.slug).filter((t) => !isRenamedTreatment(t) && guideSlugForDb(t) === t)]);
-        const paths = Array.from(slugs).map((slug) => ({
-            params: { serviceSlug: slug }
-        }));
-        
-        return {
-            paths,
-            fallback: 'blocking'
-        };
-    } catch (error) {
-        console.error('Error generating service paths:', error);
-        return { paths: [], fallback: 'blocking' };
-    }
-};
+// Guides are prerendered; database-only treatment pages (noindex) render on first request.
+export const getStaticPaths: GetStaticPaths = async () => ({
+    paths: services.map((service) => ({ params: { serviceSlug: service.slug } })),
+    fallback: 'blocking',
+});
 
 // Static Site Generation with SSR FAQ data for Googlebot
 export const getStaticProps: GetStaticProps = async (ctx) => {

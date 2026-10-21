@@ -17,7 +17,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   try {
     const supabase = createServerSupabaseAdmin();
     if (!supabase) return { paths: [], fallback: 'blocking' };
-    const { data: clinics } = await supabase.from('clinics').select('slug').eq('is_active', true);
+    // The most-reviewed clinics are built ahead; the rest render on first visit and are cached.
+    const { data: clinics } = await supabase.from('clinics').select('slug').eq('is_active', true).order('review_count', { ascending: false, nullsFirst: false }).limit(300);
     return { paths: (clinics || []).map((c) => ({ params: { clinicSlug: c.slug } })), fallback: 'blocking' };
   } catch (error) {
     console.error('Error generating clinic paths:', error);

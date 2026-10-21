@@ -41,39 +41,9 @@ const guidePaths = emirates.flatMap((e) =>
   LOCAL_GUIDE_SERVICES.filter((s) => hasLocalGuide(s, e.slug)).map((s) => ({ params: { stateSlug: e.slug, serviceSlug: s } }))
 );
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const supabase = createServerSupabaseAdmin();
-
-    if (!supabase) {
-      return { paths: guidePaths, fallback: 'blocking' };
-    }
-
-    const [statesResult, treatmentsResult] = await Promise.all([
-      supabase.from('states').select('slug').eq('is_active', true),
-      supabase.from('treatments').select('slug').eq('is_active', true),
-    ]);
-
-    const states = statesResult.data || [];
-    const treatments = treatmentsResult.data || [];
-
-    const paths = states.flatMap((state) =>
-      treatments.map((treatment) => ({
-        params: {
-          stateSlug: state.slug,
-          serviceSlug: treatment.slug,
-        },
-      }))
-    );
-
-    const seen = new Set(guidePaths.map((p) => `${p.params.stateSlug}/${p.params.serviceSlug}`));
-    const dbPaths = paths.filter((p) => !seen.has(`${p.params.stateSlug}/${p.params.serviceSlug}`) && !serviceBySlug(p.params.serviceSlug) && !isRenamedTreatment(p.params.serviceSlug) && normalizeStateSlug(p.params.stateSlug) === p.params.stateSlug);
-    return { paths: [...guidePaths, ...dbPaths], fallback: 'blocking' };
-  } catch (error) {
-    console.error('Error generating state service paths:', error);
-    return { paths: guidePaths, fallback: 'blocking' };
-  }
-};
+// Only the hand-written local guides are prerendered; other combinations
+// render on first request (they redirect or are noindex).
+export const getStaticPaths: GetStaticPaths = async () => ({ paths: guidePaths, fallback: 'blocking' });
 
 export const getStaticProps: GetStaticProps<StateServiceRouteProps | GuideProps> = async (ctx) => {
   const emirateSlug = normalizeStateSlug((ctx.params?.stateSlug as string) || '');
