@@ -4,6 +4,10 @@ import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import CityPageComponent from '@/pages/CityPage';
 import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import { buildClinicLocationOrFilter } from '@/lib/location/buildClinicLocationFilter';
+import { DubaiAreaGuide } from '@/components/guide/DubaiAreaGuide';
+import { dubaiAreas, dubaiAreaBySlug } from '@/content/dubai';
+import { hasLocalGuide, serviceBySlug, urls } from '@/content';
+import { fetchAreaData, type AreaData } from '@/lib/dubaiData';
 
 // Wrapper component to render SEO meta tags server-side with FAQ data for SSR
 const BASE_URL = 'https://www.appointpanda.ae';
@@ -80,15 +84,26 @@ const CityPageWithSEO = ({ citySlug, stateSlug, stateData, cityData, seoData, fa
     );
 };
 
-export default CityPageWithSEO;
+// Dubai areas with hand-written notes use the Dubai area guide; every other
+// area keeps the database-driven city page.
+function CityRoute(props: any) {
+    if (props.dubaiArea) {
+        const area = dubaiAreaBySlug(props.dubaiArea)!;
+        return <DubaiAreaGuide area={area} data={props.areaData as AreaData} />;
+    }
+    return <CityPageWithSEO {...props} />;
+}
+
+export default CityRoute;
 
 // Generate static paths - ALL active cities with valid state relationships
 export const getStaticPaths: GetStaticPaths = async () => {
     try {
         const supabase = createServerSupabaseAdmin();
         
+        const dubaiPaths = dubaiAreas.map((a) => ({ params: { stateSlug: 'dubai', citySlug: a.slug } }));
         if (!supabase) {
-            return { paths: [], fallback: 'blocking' };
+            return { paths: dubaiPaths, fallback: 'blocking' };
         }
         
         // Get all states (both active and inactive to catch all mappings)
@@ -164,6 +179,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 // Static Site Generation with SSR FAQ data for Googlebot
 export const getStaticProps: GetStaticProps = async (ctx) => {
+    const stateParam = normalizeStateSlug(ctx.params?.stateSlug as string);
+    const cityParam = ctx.params?.citySlug as string;
+
+    // Old URLs that put a treatment where the area belongs (e.g. /dubai/invisalign/)
+    if (stateParam && cityParam && serviceBySlug(cityParam)) {
+        const destination = hasLocalGuide(cityParam, stateParam) ? urls.serviceEmirate(stateParam, cityParam) : urls.service(cityParam);
+        return { redirect: { destination, permanent: true } };
+    }
+
+    if (stateParam === 'dubai' && cityParam) {
+        const area = dubaiAreaBySlug(cityParam);
+        if (area) {
+            if (area.slug !== cityParam) {
+                return { redirect: { destination: urls.dubaiArea(area.slug), permanent: true } };
+            }
+            const areaData = await fetchAreaData(area.slug);
+            return { props: { dubaiArea: area.slug, areaData }, revalidate: 3600 };
+        }
+    }
+    return legacyGetStaticProps(ctx);
+};
+
+const legacyGetStaticProps: GetStaticProps = async (ctx) => {
     const supabase = createServerSupabaseAdmin();
     const stateSlug = ctx.params?.stateSlug as string;
     const citySlug = ctx.params?.citySlug as string;

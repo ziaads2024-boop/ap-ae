@@ -1,4 +1,9 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
+import { DubaiAreaServiceGuide } from '@/components/guide/DubaiAreaServiceGuide';
+import { dubaiAreaBySlug } from '@/content/dubai';
+import { serviceBySlug, urls } from '@/content';
+import { canonicalTreatment, fetchAreaServiceData, type AreaServiceData } from '@/lib/dubaiData';
+import { normalizeStateSlug as normalizeDubaiState } from '@/lib/slug/normalizeStateSlug';
 import Head from 'next/head';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import ServiceLocationPageComponent from '@/pages/ServiceLocationPage';
@@ -104,7 +109,16 @@ const ServiceLocationPageWithSEO = ({ stateSlug, citySlug, serviceSlug, stateDat
     );
 };
 
-export default ServiceLocationPageWithSEO;
+function ServiceLocationRoute(props: any) {
+    if (props.dubaiAreaService) {
+        const area = dubaiAreaBySlug(props.dubaiAreaService.area)!;
+        const service = serviceBySlug(props.dubaiAreaService.service)!;
+        return <DubaiAreaServiceGuide area={area} service={service} data={props.areaServiceData as AreaServiceData} />;
+    }
+    return <ServiceLocationPageWithSEO {...props} />;
+}
+
+export default ServiceLocationRoute;
 
 // Generate static paths - ONLY for city/treatment combinations with actual clinics
 // This prevents 404s from soft-404 pages with 0 results
@@ -179,6 +193,25 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 // Static Site Generation with SSR FAQ data for Googlebot
 export const getStaticProps: GetStaticProps = async (ctx) => {
+    const stateParam = normalizeDubaiState(ctx.params?.stateSlug as string);
+    const cityParam = ctx.params?.citySlug as string;
+    const serviceParam = ctx.params?.serviceSlug as string;
+    if (stateParam === 'dubai' && cityParam && serviceParam) {
+        const area = dubaiAreaBySlug(cityParam);
+        const canonicalService = canonicalTreatment(serviceParam);
+        const service = serviceBySlug(canonicalService);
+        if (area && service) {
+            if (area.slug !== cityParam || canonicalService !== serviceParam) {
+                return { redirect: { destination: urls.dubaiAreaService(area.slug, service.slug), permanent: true } };
+            }
+            const areaServiceData = await fetchAreaServiceData(area.slug, service.slug);
+            return { props: { dubaiAreaService: { area: area.slug, service: service.slug }, areaServiceData }, revalidate: 3600 };
+        }
+    }
+    return legacyGetStaticProps(ctx);
+};
+
+const legacyGetStaticProps: GetStaticProps = async (ctx) => {
     const supabase = createServerSupabaseAdmin();
     const stateSlug = ctx.params?.stateSlug as string;
     const citySlug = ctx.params?.citySlug as string;
