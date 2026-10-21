@@ -97,3 +97,40 @@ Evidence used: Search Console export (Feb–Apr 2026, "GMB report/"). Most click
 - **Clinic calendars.** Live "next available" slots need clinics to maintain availability in the dashboard. Show slots only for clinics that do; keep the request flow for the rest.
 - **Area slugs.** The 27 area slugs come from Search Console URLs. Check them against the `cities` table and add any missing aliases in `src/content/dubai.ts`.
 - **Data quality.** On the live homepage every featured clinic showed "Dubai Festival City, Dubai"; check the city/area assignment of those clinics.
+
+## 9. Live-data audit of every page (October 2026)
+
+Checked against the live database, page by page, as a patient and as a clinic.
+
+### Fixed
+
+| Area | Problem found | Fix |
+| --- | --- | --- |
+| Search | `/search/` crashed (500); `/ai-search/` duplicated it with "0+ clinics · 100% verified" | Both, and `/find-dentist/`, 301 to `/find-clinics/` with filters translated (`src/lib/searchUrl.ts`) |
+| Booking | `/book/[clinicId]` (used as the Google Business Profile booking link) showed a calendar with invented slots | Forwards to the clinic profile request form (`#request`) |
+| Booking | Requests to unclaimed clinics reached nobody; patients were told "the clinic will contact you" | Marked `is_assigned=false` for the admin queue (now in the dashboard); patients are told the AppointPanda team will contact the clinic; routing to another clinic needs an opt-in |
+| Booking | Reschedule offered half-hour slots | Preferred day and time of day |
+| Profiles | Dentist page meta said "100+ verified reviews, 4.9+ stars, DHA-licensed" for everyone | New dentist profile built from listed facts, `Person` schema, thin profiles noindex |
+| Profiles | All clinic photos broken: the old image project no longer exists (NXDOMAIN) | Dead and AI-image hosts dropped (`src/lib/liveImage.ts`); placeholders shown |
+| Reviews | Review link sent happy patients to Google and unhappy ones to private feedback (review gating) | Every patient chooses Google or private feedback; dashboard copy updated |
+| Trust | Page headers showed "4.8 ★ · 1,286 clinics · 200k+ patients"; "verified", "top-rated", "6,600+", "vetted" claims across metadata | Removed; header rebuilt in the block style |
+| Trust | Editorial and medical review policies claimed review by named, licensed UAE dentists | Policies state the guides are written by the editorial team and not yet clinically reviewed |
+| Trust | Verification policy promised priority ranking; fee not disclosed | Fee disclosed; verification does not affect ranking |
+| Contact | Form saved nothing; "24/7 emergency hotline" and placeholder phone numbers | Form writes to `contact_submissions` (admin tab added); emergency guidance points to clinics and 998 |
+| Insurance | 40 insurer pages indexed with 0 clinics and "verified quality / no upfront payment" claims | Hand-written insurance guide; insurer pages noindex until 3+ clinics confirm the plan |
+| Blog | AI-generated images, duplicate Article schema, "Dental Health Expert" author label, lowercase H1s | Fixed; posts link to their treatment guide |
+| Content | 24 database-only treatment pages with generated text and fake stats | Noindex and out of the sitemap until they have a hand-written guide; `smile-makeover` 301s to Hollywood smile |
+| Tools | Cost calculator claimed "real prices from verified dentists"; insurance checker was a US template (PPO/HMO, states); compare pages were broken templates | Calculator uses the guide ranges; the others redirect |
+| FAQ / clinic pages | Contradictory prices and insurance answers; JCI filter, calendar sync, API, "thousands of patients", "50% off, limited time" | Rewritten to match the guides and the product |
+| Build | ~4 h of worker time prerendering every clinic and legacy city page; queries up to 30 s | Prerender guides, Dubai areas and the top 300 clinics; the rest on demand |
+
+### Needs a decision or access
+
+1. **Apply `SUPABASE_SECURITY_FIX.sql` and `20261021000400_public_page_indexes.sql`** in the Supabase SQL editor, then rotate the service role, anon, Google Places and Resend keys.
+2. **Clinic photos**: re-import photos to the current project's storage (the old project is gone), or leave placeholders.
+3. **Treatments and insurance per clinic** (`clinic_treatments`, `clinic_insurances` are empty): collect from clinics (claim flow) or a verified source. Area + treatment pages and insurer pages become indexable automatically at 3+ clinics.
+4. **Clinical review**: to make health pages stronger for E-E-A-T, have a DHA-licensed dentist review the guides; the policies explain how reviewed pages will be labelled.
+5. **Contact details**: confirm a real support phone number and office address before adding them back; confirm `hello@appointpanda.ae` receives mail.
+6. **Blog**: the 37 posts are largely generated text; review them against the guides (prices differ) or noindex the weakest.
+7. **Pricing page**: plan names and prices are unchanged; confirm the AED 499 / 1,499 plans and features are what you sell.
+8. **Edge functions** need deploying (`send-booking-email` etc.) for any server-side changes; there is no Supabase CLI here.
