@@ -1,47 +1,48 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
-import {
-  MapPin, Star, ShieldCheck, Search, ChevronRight, ArrowRight, Clock, Sparkles,
-  Stethoscope, Baby, Syringe, ArrowLeftRight, Activity, Scissors, Sun, Gem,
-  Ambulance, Palette, Quote, BadgeCheck, Users,
-} from 'lucide-react';
+import { ArrowRight, LocateFixed, MapPin, Search, ShieldCheck, Star, Receipt, MessageCircleQuestion } from 'lucide-react';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { ClinicCard } from '@/components/ClinicCard';
-import {
-  SITE_NAME, SITE_DOMAIN, emirates, specialties, insurers,
-  testimonials, blogPosts, faqs, popularSearches,
-} from '@/lib/site-data';
+import { FaqList, JsonLd } from '@/components/guide/GuideBlocks';
+import { emirates, services, toneClass, urls, formatAed, LOCAL_GUIDE_SERVICES, serviceBySlug } from '@/content';
+import { faqSchema, organizationSchema, websiteSchema } from '@/content/schema';
+import { cn } from '@/lib/utils';
 import type { HomePageData } from '../../pages/index';
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  Stethoscope: <Stethoscope className="h-6 w-6" />,
-  Sparkles: <Sparkles className="h-6 w-6" />,
-  Syringe: <Syringe className="h-6 w-6" />,
-  ArrowLeftRight: <ArrowLeftRight className="h-6 w-6" />,
-  Baby: <Baby className="h-6 w-6" />,
-  Activity: <Activity className="h-6 w-6" />,
-  Scissors: <Scissors className="h-6 w-6" />,
-  Sun: <Sun className="h-6 w-6" />,
-  Gem: <Gem className="h-6 w-6" />,
-  Ambulance: <Ambulance className="h-6 w-6" />,
-  Palette: <Palette className="h-6 w-6" />,
-};
+const HOME_FAQS = [
+  {
+    q: 'How does AppointPanda choose which clinics to list?',
+    a: 'We list dental clinics operating in the UAE and show the licensing authority for each emirate so you can check a clinic yourself. Being listed is not a recommendation. Our verification policy explains what a "verified" label means.',
+  },
+  {
+    q: 'Are the prices on AppointPanda quotes?',
+    a: 'No. Treatment guides show indicative AED ranges for private clinics so you know what to expect. Only the clinic can give you a price, after examining you. Ask for an itemised quote in writing.',
+  },
+  {
+    q: 'Where do the ratings come from?',
+    a: 'Ratings and review counts on clinic listings come from Google and are shown as reported. We do not write, buy or edit reviews.',
+  },
+  {
+    q: 'Will my insurance cover dental treatment?',
+    a: 'It depends on your plan. Basic mandatory plans in the UAE usually cover little routine dental care; employer plans often add a dental benefit with an annual limit. Each emirate guide explains the basics, and the clinic can check cover with your insurer.',
+  },
+  {
+    q: 'What should I do in a dental emergency?',
+    a: 'Call a dental clinic and describe the problem; many keep same-day slots. If swelling spreads towards your eye or neck, you have difficulty breathing or swallowing, or there was a serious injury, call 998 or go to a hospital emergency department.',
+  },
+];
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className={`h-3.5 w-3.5 ${i < Math.floor(rating) ? 'text-amber-500 fill-amber-500' : 'text-zinc-200'}`} />
-      ))}
-    </div>
-  );
-}
+const LOCAL_PICKS: [string, string][] = [
+  ['dubai', 'invisalign'],
+  ['abu-dhabi', 'dental-implants'],
+  ['sharjah', 'veneers'],
+  ['dubai', 'emergency-dentist'],
+  ['ajman', 'braces'],
+  ['ras-al-khaimah', 'root-canal'],
+];
 
 interface IndexPageProps {
   pageData?: HomePageData | null;
@@ -49,431 +50,283 @@ interface IndexPageProps {
 
 export default function IndexPage({ pageData }: IndexPageProps) {
   const router = useRouter();
-  const [searchEmirate, setSearchEmirate] = useState('');
-  const [searchSpecialty, setSearchSpecialty] = useState('');
-  const [searchInsurance, setSearchInsurance] = useState('');
+  const [emirate, setEmirate] = useState('');
+  const [specialty, setSpecialty] = useState('');
 
-  const realClinics = pageData?.topDentalClinics || [];
-  const clinicCount = pageData?.clinicCount || 1301;
-  const reviewCount = pageData?.reviewCount || 5671;
-  const avgRating = pageData?.avgRating || 4.7;
-  const clinicsWithImages = pageData?.clinicsWithImages || 1181;
-  const statesData = pageData?.statesData || [];
-  const treatmentsData = pageData?.treatmentsData || [];
-
-  const featuredClinics = useMemo(() => realClinics.slice(0, 10), [realClinics]);
-
-  const [emblaRef] = useEmblaCarousel(
-    { loop: true, dragFree: true, slidesToScroll: 1, align: 'start' },
-    [Autoplay({ delay: 3500, stopOnInteraction: false })]
-  );
-
-  const handleSearch = useCallback(() => {
+  const go = (near = false) => {
     const params = new URLSearchParams();
-    if (searchEmirate) params.set('emirate', searchEmirate);
-    if (searchSpecialty) params.set('specialty', searchSpecialty);
-    if (searchInsurance) params.set('insurance', searchInsurance);
+    if (emirate) params.set('emirate', emirate);
+    if (specialty) params.set('specialty', specialty);
+    if (near) params.set('near', 'me');
     const qs = params.toString();
-    router.push(`/find-clinics${qs ? `?${qs}` : ''}`);
-  }, [searchEmirate, searchSpecialty, searchInsurance, router]);
+    router.push(`/find-clinics/${qs ? `?${qs}` : ''}`);
+  };
+
+  const clinicCount = pageData?.clinicCount || 0;
+  const reviewCount = pageData?.reviewCount || 0;
+  const topClinics = (pageData?.topDentalClinics || []).slice(0, 6);
+  const countsByEmirate = new Map((pageData?.statesData || []).map((s) => [s.slug, s.clinicCount]));
 
   return (
     <PageLayout>
       <SEOHead
-        title={`${SITE_NAME}.ae — Find Verified Dental Clinics Across the UAE`}
-        description={`${SITE_NAME}.ae connects 200,000+ patients with ${clinicCount.toLocaleString()} verified dental clinics across the UAE. Compare prices, check insurance, and book instantly.`}
+        title="AppointPanda: Find a Licensed Dentist Near You in the UAE"
+        description="Find and compare licensed dental clinics in Dubai, Abu Dhabi, Sharjah and across the UAE. Clear treatment guides, indicative AED costs and Google ratings, without the sales pitch."
         canonical="/"
-        ogImage={`https://${SITE_DOMAIN}/og-home.jpg`}
       />
+      <JsonLd data={[organizationSchema(), websiteSchema(), faqSchema(HOME_FAQS)]} />
 
       {/* Hero */}
-      <section className="gradient-dark-hero overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 relative z-10 pt-16 pb-20 lg:pt-20 lg:pb-28">
-          {/* Trust bar */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-10 text-xs">
-            <span className="flex items-center gap-1.5 text-amber-400 font-medium">
-              <Star className="h-3.5 w-3.5 fill-amber-400" /> {avgRating} <span className="text-amber-300/70">★★★★★</span>
-            </span>
-            <span className="text-zinc-600 hidden sm:inline">|</span>
-            <span className="flex items-center gap-1.5 text-zinc-300">
-              <BadgeCheck className="h-3.5 w-3.5 text-emerald-500" /> {clinicCount.toLocaleString()} licensed clinics
-            </span>
-            <span className="text-zinc-600 hidden sm:inline">|</span>
-            <span className="flex items-center gap-1.5 text-zinc-300">
-              <Users className="h-3.5 w-3.5 text-zinc-400" /> {reviewCount.toLocaleString()}+ verified reviews
-            </span>
-          </div>
+      <section className="px-3 pt-4 lg:px-6">
+        <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] bg-tone-lemon px-6 pb-12 pt-14 lg:px-14 lg:pb-16 lg:pt-20">
+          {/* Soft floating shapes, a nod to the inflated 3D style, done in CSS */}
+          <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 size-72 rounded-full bg-tone-lime opacity-80 blur-[2px] lg:size-[26rem]" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-40 hidden size-56 rounded-[45%] bg-tone-sky opacity-90 lg:block" />
+          <div aria-hidden="true" className="pointer-events-none absolute bottom-16 right-10 hidden size-24 rounded-full bg-tone-blush lg:block" />
 
-          {/* Headline */}
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-semibold tracking-tight text-white leading-[1.05]">
-              Exceptional dental care,<br />across the Emirates.
+          <div className="relative max-w-4xl">
+            <span className="chip-label">UAE dental directory · all 7 emirates</span>
+            <h1 className="display mt-6 text-[clamp(3.2rem,10vw,8.5rem)] text-ink">
+              Find a dentist{' '}<br />you can trust.
             </h1>
-            <p className="text-zinc-400 text-base md:text-lg mt-5 max-w-2xl mx-auto leading-relaxed font-[425]">
-              Compare {clinicCount.toLocaleString()} licensed clinics, see real AED prices, check your insurance coverage — and book in under 60 seconds.
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink/80 md:text-xl">
+              Compare licensed clinics near you, understand the treatment before you go, and know what it usually costs in AED.
             </p>
           </div>
 
-          {/* Search card */}
-          <div className="mt-10 max-w-4xl mx-auto">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl ring-1 ring-black/5 shadow-xl shadow-black/10 p-4 md:p-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <select
-                  value={searchEmirate}
-                  onChange={e => setSearchEmirate(e.target.value)}
-                  className="w-full h-12 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">All Emirates</option>
-                  {(pageData?.statesData?.length ? pageData.statesData : emirates).map(e => (
-                    <option key={e.slug} value={e.slug}>{e.name}</option>
-                  ))}
-                </select>
-                <select
-                  value={searchSpecialty}
-                  onChange={e => setSearchSpecialty(e.target.value)}
-                  className="w-full h-12 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">All Specialties</option>
-                  {(pageData?.treatmentsData?.length ? pageData.treatmentsData : specialties).map(s => (
-                    <option key={s.slug} value={s.slug}>{s.name}</option>
-                  ))}
-                </select>
-                <select
-                  value={searchInsurance}
-                  onChange={e => setSearchInsurance(e.target.value)}
-                  className="w-full h-12 px-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">All Insurance</option>
-                  {insurers.map(i => <option key={i.slug} value={i.slug}>{i.name}</option>)}
-                </select>
-                <button
-                  onClick={handleSearch}
-                  className="w-full h-12 inline-flex items-center justify-center gap-2 px-6 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-xl transition-all duration-200 active:scale-[0.98]"
-                >
-                  <Search className="h-4 w-4" />
-                  Search Clinics
-                </button>
-              </div>
-            </div>
+          <form
+            className="relative mt-10 grid max-w-4xl gap-2 rounded-[1.75rem] bg-white p-2 shadow-[0_20px_50px_rgba(0,0,0,0.12)] md:grid-cols-[1fr_1fr_auto_auto]"
+            onSubmit={(e) => { e.preventDefault(); go(); }}
+            role="search"
+            aria-label="Find a dental clinic"
+          >
+            <label className="relative">
+              <span className="sr-only">Treatment</span>
+              <select value={specialty} onChange={(e) => setSpecialty(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
+                <option value="">Any treatment</option>
+                {services.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+              </select>
+            </label>
+            <label className="relative">
+              <span className="sr-only">Emirate</span>
+              <select value={emirate} onChange={(e) => setEmirate(e.target.value)} className="h-14 w-full rounded-[1.25rem] bg-paper px-4 text-[15px] font-medium text-ink">
+                <option value="">Any emirate</option>
+                {emirates.map((e) => <option key={e.slug} value={e.slug}>{e.name}</option>)}
+              </select>
+            </label>
+            <button type="button" onClick={() => go(true)} className="btn-ghost h-14 rounded-[1.25rem]">
+              <LocateFixed className="h-4 w-4" /> Near me
+            </button>
+            <button type="submit" className="btn-ink h-14 rounded-[1.25rem] px-7">
+              <Search className="h-4 w-4" /> Search
+            </button>
+          </form>
 
-            {/* Popular quick-links */}
-            <div className="flex flex-wrap justify-center gap-2 mt-5">
-              {popularSearches.map((term) => (
-                <Link key={term} href={`/specialties/${term.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z-]/g, '')}`} className="inline-flex items-center px-3 py-1.5 bg-white/10 border border-white/10 text-zinc-300 hover:bg-white/15 hover:text-white text-xs font-medium rounded-full transition-all duration-200 backdrop-blur-sm">
-                  {term}
+          <div className="relative mt-5 flex flex-wrap gap-2">
+            {['dental-implants', 'invisalign', 'emergency-dentist', 'teeth-whitening', 'pediatric-dentistry', 'root-canal'].map((slug) => {
+              const s = serviceBySlug(slug)!;
+              return (
+                <Link key={slug} href={urls.service(slug)} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm font-medium text-ink hover:bg-white">
+                  {s.shortName}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Honest trust strip */}
+      <section className="mx-auto max-w-6xl px-5 py-12">
+        <ul className="grid gap-3 md:grid-cols-3">
+          <li className="flex gap-4 rounded-3xl bg-white p-6 ring-1 ring-black/5">
+            <ShieldCheck className="h-6 w-6 shrink-0 text-primary" />
+            <div>
+              <p className="font-semibold text-ink">Licensing explained</p>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">Each emirate guide names the regulator (DHA, DoH or MOHAP) so you can check a dentist&apos;s licence yourself.</p>
+            </div>
+          </li>
+          <li className="flex gap-4 rounded-3xl bg-white p-6 ring-1 ring-black/5">
+            <Star className="h-6 w-6 shrink-0 text-primary" />
+            <div>
+              <p className="font-semibold text-ink">Ratings, unedited</p>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">
+                {reviewCount > 0
+                  ? `${reviewCount.toLocaleString()} Google reviews across ${clinicCount.toLocaleString()} listed clinics, shown as reported.`
+                  : 'Clinic ratings come from Google and are shown as reported. We never write or edit reviews.'}
+              </p>
+            </div>
+          </li>
+          <li className="flex gap-4 rounded-3xl bg-white p-6 ring-1 ring-black/5">
+            <Receipt className="h-6 w-6 shrink-0 text-primary" />
+            <div>
+              <p className="font-semibold text-ink">Costs in AED, as a guide</p>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600">Indicative price ranges for every treatment guide, plus what pushes a quote up or down.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      {/* Emirates */}
+      <section className="mx-auto max-w-6xl px-5 pb-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Dentists by emirate</h2>
+          <Link href={urls.emirates} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Compare emirates <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {emirates.map((e, i) => (
+            <Link
+              key={e.slug}
+              href={urls.emirate(e.slug)}
+              className={cn('block-card group flex min-h-[170px] flex-col justify-between border-transparent p-6', toneClass[e.tone], i === 0 && 'sm:col-span-2 lg:row-span-2 lg:min-h-full')}
+            >
+              <span className="flex items-baseline justify-between gap-2">
+                <span className={cn('display text-ink', i === 0 ? 'text-6xl' : 'text-3xl')}>{e.name}</span>
+                <span className="text-sm text-ink/60" lang="ar">{e.nameAr}</span>
+              </span>
+              <span className="mt-4 flex items-center justify-between text-sm font-medium text-ink/80">
+                {countsByEmirate.get(e.slug) ? `${countsByEmirate.get(e.slug)!.toLocaleString()} listed clinics` : `Licensed by ${e.regulator.short}`}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Treatments */}
+      <section className="px-3 py-14 lg:px-6">
+        <div className="mx-auto max-w-[1400px] rounded-[2rem] bg-ink px-6 py-14 lg:px-14">
+          <div className="mx-auto max-w-6xl">
+            <span className="chip-label !bg-tone-lemon !text-ink">Treatment guides</span>
+            <h2 className="display mt-5 text-[clamp(2.4rem,6vw,4.5rem)] text-white">Understand it{' '}<br />before you book it</h2>
+            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {services.map((s) => (
+                <Link key={s.slug} href={urls.service(s.slug)} className="group rounded-3xl bg-white/[0.06] p-5 ring-1 ring-white/10 transition-colors hover:bg-white/[0.12]">
+                  <span className={cn('inline-block size-3 rounded-full', toneClass[s.tone])} aria-hidden="true" />
+                  <span className="mt-3 block font-semibold text-white">{s.name}</span>
+                  <span className="mt-1 block text-sm text-zinc-400">From {formatAed(s.price.from)}</span>
                 </Link>
               ))}
             </div>
-          </div>
-
-          {/* Inline stats */}
-          <div className="mt-12 pt-8 border-t border-white/5 max-w-3xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-6 text-center">
-              {[
-                { number: clinicCount.toLocaleString(), label: 'Licensed Clinics' },
-                { number: reviewCount.toLocaleString(), label: 'Verified Reviews' },
-                { number: '200k+', label: 'Patients Served' },
-                { number: `${avgRating}★`, label: 'Average Rating' },
-              ].map((stat) => (
-                <div key={stat.label} className="space-y-0.5">
-                  <div className="text-xl md:text-2xl font-bold text-amber-400">{stat.number}</div>
-                  <div className="text-[11px] text-zinc-500 font-medium uppercase tracking-wider">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Press strip */}
-      <div className="border-b border-zinc-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 py-7">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 text-center mb-4">As featured in</p>
-          <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-3">
-            {['Gulf News', 'The National', 'Khaleej Times', 'Time Out Dubai', 'Arabian Business'].map((name) => (
-              <span key={name} className="text-sm font-semibold text-zinc-300 tracking-tight uppercase">{name}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Trust pillars */}
-      <section aria-label="Why choose us" className="py-16 lg:py-20 bg-[#fafafa]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Why AppointPanda</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Built for trust, designed for your smile</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { icon: <ShieldCheck className="h-6 w-6" />, title: 'All Licensed & Verified', desc: `Every clinic verified against UAE regulatory databases. ${clinicsWithImages.toLocaleString()} clinics with complete profiles.` },
-              { icon: <Star className="h-6 w-6" />, title: 'Real-Patient Reviews', desc: `${reviewCount.toLocaleString()} authenticated reviews from verified patients. No fake ratings, ever.` },
-              { icon: <span className="text-lg font-bold">AED</span>, title: 'Transparent AED Pricing', desc: 'Real prices posted by clinics. No hidden fees, no surprises.' },
-              { icon: <Sparkles className="h-6 w-6" />, title: 'Insurance Pre-Matched', desc: 'See exactly what your plan covers before you book across 40+ insurance providers.' },
-            ].map((pillar) => (
-              <div key={pillar.title} className="card-hover-amber p-6">
-                <div className="w-12 h-12 rounded-xl bg-amber-700/10 flex items-center justify-center text-amber-700 mb-4">
-                  {pillar.icon}
-                </div>
-                <h3 className="font-semibold text-zinc-900 text-sm">{pillar.title}</h3>
-                <p className="text-zinc-500 text-xs mt-2 leading-relaxed">{pillar.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Clinics carousel */}
-      {featuredClinics.length > 0 && (
-        <section aria-label="Featured clinics" className="py-16 lg:py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 lg:px-6">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Top rated</p>
-                <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Featured clinics</h2>
-              </div>
-              <Link href="/find-clinics" className="hidden md:flex items-center gap-1 text-sm font-semibold text-zinc-900 hover:text-amber-700 transition-colors">
-                View all <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex max-w-7xl mx-auto px-4 lg:px-6">
-              {featuredClinics.map((clinic) => (
-                <div key={clinic.id} className="flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_28%] min-w-0 pl-4 first:pl-0">
-                  <ClinicCard
-                    slug={clinic.slug}
-                    name={clinic.name}
-                    location={clinic.cityName ? `${clinic.cityName}${clinic.stateName ? `, ${clinic.stateName}` : ''}` : 'UAE'}
-                    rating={clinic.rating}
-                    reviewCount={clinic.reviewCount}
-                    coverImageUrl={clinic.coverImageUrl}
-                    tags={[]}
-                    price=""
-                    hours=""
-                    open=""
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="max-w-7xl mx-auto px-4 lg:px-6 mt-6 md:hidden">
-            <Link href="/find-clinics" className="flex items-center justify-center gap-1 text-sm font-semibold text-zinc-900 py-3 border border-zinc-200 rounded-full">
-              View all clinics <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* Browse by Emirate */}
-      <section aria-label="Browse by emirate" className="py-16 lg:py-20 bg-[#fafafa]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Across all 7 emirates</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Find clinics near you</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {(pageData?.statesData?.length ? pageData.statesData : emirates).map((e) => (
-              <Link key={e.slug} href={`/${e.slug}/`} className="card-hover-amber p-5 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-500 shrink-0">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-zinc-900 text-sm">{e.name}</h3>
-                  <p className="text-amber-700 text-[11px] font-semibold mt-1.5">
-                    {'clinicCount' in e ? `${e.clinicCount} clinics` : 'Clinics available'}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Specialties */}
-      <section aria-label="Popular specialties" className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Find by treatment</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Popular specialties</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {specialties.map((spec) => (
-              <Link key={spec.slug} href={`/specialties/${spec.slug}`} className="card-hover-amber p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-amber-700/10 flex items-center justify-center text-amber-700 shrink-0">
-                  {ICON_MAP[spec.icon] || <Stethoscope className="h-5 w-5" />}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-zinc-900 text-sm">{spec.name}</h3>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section aria-label="How AppointPanda works" className="py-16 lg:py-20 bg-[#fafafa]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-12">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Three simple steps</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">How it works</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              { step: '01', title: 'Search', desc: `Browse ${clinicCount.toLocaleString()} clinics by emirate, specialty, or insurance. Filter by price, rating, and availability.` },
-              { step: '02', title: 'Compare & Read Reviews', desc: `Compare ${reviewCount.toLocaleString()} verified patient reviews, real AED prices, and doctor credentials side by side.` },
-              { step: '03', title: 'Book Instantly', desc: 'Book your appointment online. Your insurance is auto-verified at checkout.' },
-            ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-14 h-14 rounded-full bg-amber-700/10 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-amber-700 font-bold text-lg">{item.step}</span>
-                </div>
-                <h3 className="font-semibold text-zinc-900 text-[15px]">{item.title}</h3>
-                <p className="text-zinc-500 text-xs mt-2 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8 text-center">
-            <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              Insurance auto-verified at every booking
-            </span>
-          </div>
-        </div>
+      <section className="mx-auto max-w-6xl px-5 py-10">
+        <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Three steps, no guesswork</h2>
+        <ol className="mt-10 grid gap-3 md:grid-cols-3">
+          {[
+            { n: '01', t: 'Read the guide', d: 'Learn what the treatment involves, who it suits, the risks and the usual cost range in the UAE.', tone: 'lemon' },
+            { n: '02', t: 'Compare clinics', d: 'Filter by emirate, treatment or your location and check each clinic\'s Google rating and licence.', tone: 'sky' },
+            { n: '03', t: 'Ask the right questions', d: 'Every guide ends with questions to ask, so you get an itemised quote and a clear plan.', tone: 'blush' },
+          ].map((step) => (
+            <li key={step.n} className={cn('rounded-3xl p-7', toneClass[step.tone])}>
+              <span className="display text-6xl text-ink">{step.n}</span>
+              <p className="mt-4 text-lg font-semibold text-ink">{step.t}</p>
+              <p className="mt-1 text-[15px] leading-relaxed text-ink/75">{step.d}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
-      {/* Insurance Partners */}
-      <section aria-label="Insurance partners" className="py-12 bg-white border-t border-zinc-200">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400 text-center mb-6">Accepted by 500+ clinics</p>
-          <div className="grid grid-cols-5 md:grid-cols-10 gap-4 items-center">
-            {insurers.map((ins) => (
-              <Link key={ins.slug} href="/insurance" className="flex items-center justify-center h-10 px-2 bg-white border border-zinc-200 rounded-lg text-[11px] font-semibold text-zinc-500 hover:text-amber-700 hover:border-amber-300 transition-all">
-                {ins.name}
+      {/* Real clinics, only when the directory returned them */}
+      {topClinics.length > 0 && (
+        <section className="mx-auto max-w-6xl px-5 py-10">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Most-reviewed clinics</h2>
+            <Link href="/find-clinics/" className="inline-flex items-center gap-1 text-sm font-semibold text-ink">All clinics <ArrowRight className="h-4 w-4" /></Link>
+          </div>
+          <p className="mt-3 max-w-2xl text-sm text-zinc-500">Sorted by number of Google reviews. This is not a ranking of quality or a recommendation.</p>
+          <ul className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {topClinics.map((c) => (
+              <li key={c.id}>
+                <Link href={`/clinic/${c.slug}/`} className="block-card block overflow-hidden">
+                  <div className="aspect-[16/9] bg-paper">
+                    {c.coverImageUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={c.coverImageUrl} alt={`${c.name}`} loading="lazy" width={480} height={270} className="h-full w-full object-cover" />
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <p className="font-semibold leading-snug text-ink line-clamp-2">{c.name}</p>
+                    <p className="mt-1 flex items-center gap-1 text-sm text-zinc-500">
+                      <MapPin className="h-3.5 w-3.5" /> {[c.cityName, c.stateName].filter(Boolean).join(', ') || 'UAE'}
+                    </p>
+                    {c.rating > 0 && (
+                      <p className="mt-2 flex items-center gap-1 text-sm">
+                        <Star className="h-3.5 w-3.5 fill-ink" /> <span className="font-semibold">{c.rating.toFixed(1)}</span>
+                        <span className="text-zinc-500">({c.reviewCount.toLocaleString()} Google reviews)</span>
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Local guides */}
+      <section className="mx-auto max-w-6xl px-5 py-10">
+        <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Local guides</h2>
+        <p className="mt-3 max-w-2xl text-zinc-600">Treatment guides written for each emirate: who licenses the clinics, how insurance usually treats it, and what to look out for locally.</p>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {LOCAL_PICKS.filter(([, s]) => LOCAL_GUIDE_SERVICES.includes(s)).map(([e, s]) => {
+            const service = serviceBySlug(s)!;
+            const em = emirates.find((x) => x.slug === e)!;
+            return (
+              <Link key={`${e}-${s}`} href={urls.serviceEmirate(e, s)} className="block-card group flex items-center justify-between gap-4 p-5">
+                <span>
+                  <span className="block font-semibold text-ink">{service.shortName} in {em.name}</span>
+                  <span className="block text-sm text-zinc-500">{em.regulator.short} · from {formatAed(service.price.from)}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
               </Link>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section aria-label="Patient testimonials" className="py-16 lg:py-20 bg-[#fafafa]">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Real patients, real stories</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Trusted by thousands</h2>
+      {/* Before you book */}
+      <section className="px-3 py-10 lg:px-6">
+        <div className="mx-auto grid max-w-[1400px] gap-8 rounded-[2rem] bg-tone-sky px-6 py-14 lg:grid-cols-[1fr_1.2fr] lg:px-14">
+          <div>
+            <MessageCircleQuestion className="h-8 w-8 text-ink" />
+            <h2 className="display mt-4 text-[clamp(2.4rem,5vw,4rem)] text-ink">Five questions for any clinic</h2>
+            <p className="mt-4 text-ink/75">Ask these at your first consultation, whatever the treatment.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <div key={i} className="card-hover-amber p-6">
-                <Quote className="h-6 w-6 text-amber-700/30 mb-3" />
-                <StarRating rating={5} />
-                <p className="text-zinc-600 text-sm mt-3 leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-                <div className="mt-4 pt-3 border-t border-zinc-100">
-                  <p className="font-semibold text-zinc-900 text-sm">{t.name}</p>
-                  <p className="text-zinc-400 text-xs">{t.emirate} &middot; {t.treatment}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Blog preview */}
-      <section aria-label="Latest from our blog" className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Expert insights</p>
-              <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Latest articles</h2>
-            </div>
-            <Link href="/blog" className="hidden md:flex items-center gap-1 text-sm font-semibold text-zinc-900 hover:text-amber-700 transition-colors">
-              View all <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {blogPosts.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} className="card-hover-amber overflow-hidden">
-                <div className="h-44 bg-zinc-100 bg-gradient-to-br from-zinc-200 to-zinc-300" />
-                <div className="p-5">
-                  <span className="inline-flex px-2 py-0.5 bg-amber-700/10 text-amber-700 text-[10px] font-semibold rounded-full uppercase tracking-wider">{post.category}</span>
-                  <h3 className="font-semibold text-zinc-900 text-[15px] mt-2 leading-tight">{post.title}</h3>
-                  <p className="text-zinc-500 text-xs mt-2 leading-relaxed line-clamp-2">{post.excerpt}</p>
-                  <p className="text-zinc-400 text-[11px] mt-3">{post.readingTime} read</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-6 md:hidden text-center">
-            <Link href="/blog" className="inline-flex items-center gap-1 text-sm font-semibold text-zinc-900 py-3 px-6 border border-zinc-200 rounded-full">
-              View all articles <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* For Clinics CTA */}
-      <section className="gradient-dark-hero py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">Grow your practice with {SITE_NAME}</h2>
-          <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-xl mx-auto">
-            Join {clinicCount.toLocaleString()}+ clinics across the UAE. Average +38 bookings per month, zero commission.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mt-8">
-            <Link href="/for-clinics" className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200">
-              List your clinic <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link href="/pricing" className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 font-semibold text-sm rounded-full transition-all duration-200">
-              See pricing
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 max-w-3xl mx-auto">
+          <ol className="space-y-3">
             {[
-              { number: '+38', label: 'Avg. bookings/mo' },
-              { number: '4 weeks', label: 'Onboarding' },
-              { number: '0%', label: 'Commission' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-bold text-amber-500">{stat.number}</div>
-                <div className="text-xs text-zinc-500 mt-1">{stat.label}</div>
-              </div>
+              'Who will treat me, and what are their qualifications for this treatment?',
+              'Can I have an itemised quote in writing, including X-rays and follow-ups?',
+              'What are the alternatives, including doing nothing for now?',
+              'Do you bill my insurer directly, and do you need pre-approval?',
+              'What happens, and what does it cost, if something needs redoing?',
+            ].map((q, i) => (
+              <li key={q} className="flex gap-4 rounded-2xl bg-white p-5">
+                <span className="display text-3xl text-primary">{i + 1}</span>
+                <span className="text-[15px] font-medium leading-snug text-ink">{q}</span>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
       {/* FAQ */}
-      <section aria-label="Frequently asked questions" className="py-16 lg:py-20 bg-[#fafafa]">
-        <div className="max-w-3xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-700 mb-2">Got questions?</p>
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">FAQs</h2>
-          </div>
-          <div className="space-y-3">
-            {faqs.map((faq, i) => (
-              <details key={i} className="group border border-zinc-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-amber-500/40">
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none text-sm font-semibold text-zinc-900 hover:text-amber-700 transition-colors">
-                  {faq.q}
-                  <ChevronRight className="h-4 w-4 text-zinc-400 group-open:rotate-90 transition-transform duration-200 shrink-0" />
-                </summary>
-                <div className="px-5 pb-4">
-                  <p className="text-zinc-500 text-sm leading-relaxed">{faq.a}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
+      <section className="mx-auto max-w-4xl px-5 py-10">
+        <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Questions, answered</h2>
+        <div className="mt-8"><FaqList faqs={HOME_FAQS} /></div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-16 bg-white border-t border-zinc-200">
-        <div className="max-w-2xl mx-auto px-4 lg:px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Find your dentist in the next 60 seconds</h2>
-          <p className="text-zinc-500 text-sm mt-4">No registration required. Start browsing now.</p>
-          <Link href="/find-clinics" className="mt-6 inline-flex items-center gap-2 px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200">
-            Browse clinics <ArrowRight className="h-4 w-4" />
-          </Link>
+      {/* Closing CTA */}
+      <section className="px-3 py-10 lg:px-6">
+        <div className="mx-auto max-w-[1400px] rounded-[2rem] bg-tone-lime px-6 py-16 text-center lg:py-24">
+          <h2 className="display mx-auto text-[clamp(3rem,9vw,7.5rem)] text-ink">Find your{' '}<br />dentist.</h2>
+          <p className="mx-auto mt-4 max-w-md text-ink/75">Use your location to see licensed clinics closest to you.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/find-clinics/?near=me" className="btn-ink"><LocateFixed className="h-4 w-4" /> Dentists near me</Link>
+            <Link href="/list-your-practice/" className="btn-ghost">List your clinic</Link>
+          </div>
         </div>
       </section>
     </PageLayout>

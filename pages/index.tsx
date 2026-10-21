@@ -1,9 +1,6 @@
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 import IndexPage from '@/pages/Index';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
-
-const BASE_URL = 'https://www.appointpanda.ae';
 
 export interface HomePageData {
   clinicCount: number;
@@ -26,33 +23,8 @@ export interface HomePageData {
 }
 
 export default function IndexPageWithSEO({ pageData }: { pageData: HomePageData }) {
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "AppointPanda",
-    "url": BASE_URL,
-    "description": "Find and book appointments with top-rated dental professionals across the UAE.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${BASE_URL}/search?q={search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
-    }
-  };
-
-  return (
-    <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-      </Head>
-      <IndexPage pageData={pageData} />
-    </>
-  );
+  // Organization, WebSite and FAQ schema are rendered by the page component.
+  return <IndexPage pageData={pageData} />;
 }
 
 export const getStaticProps: GetStaticProps = async () => {
