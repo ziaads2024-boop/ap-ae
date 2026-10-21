@@ -78,7 +78,7 @@ const StatePage = ({ stateSlugProp, stateDataProp, citiesDataProp, seoDataProp, 
     'gmb-select', 'find-dentist', 'clinic', 'dentist', 'sitemap',
     'pricing', 'appointment', 'review', 'rq', 'tools', 'emergency-dentist',
     'editorial-policy', 'medical-review-policy', 'verification-policy',
-    'home-v2', 'dashboard-v2', 'form', 'book'
+    'dashboard-v2', 'form', 'book'
   ];
 
   const isInvalidSlug = !stateSlug || staticRoutes.includes(stateSlug) || stateSlug.includes('/');
