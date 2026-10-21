@@ -8,6 +8,7 @@ import { canonicalTreatment, emirateBySlug, isLiveEmirate, serviceBySlug, SITE_U
 import { dubaiAreaBySlug } from '@/content/dubai';
 import { breadcrumbSchema, faqSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
+import { clip, fitTitle } from '@/lib/metaText';
 
 export interface ClinicProfileProps {
   clinic: {
@@ -85,8 +86,8 @@ export function ClinicProfile(props: ClinicProfileProps) {
   const faqs = [...props.faqs, ...dataFaqs(props)].slice(0, 8);
   const mapsHref = clinic.googleMapsUrl || (clinic.latitude && clinic.longitude ? `https://www.google.com/maps/search/?api=1&query=${clinic.latitude},${clinic.longitude}` : null);
   const whatsappHref = clinic.whatsapp ? `https://wa.me/${clinic.whatsapp.replace(/[^\d]/g, '')}` : null;
-  const title = `${clinic.name}${place ? ` – Dentist in ${place}` : ''}: Treatments, Insurance & Reviews`;
-  const description = `${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See hours, location and Google reviews, and request an appointment.`.slice(0, 300);
+  const title = fitTitle(`${clinic.name}${place ? ` – Dentist in ${place}` : ''}`, ': Reviews & Prices');
+  const description = clip(`${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See hours, location and Google reviews, and request an appointment.`);
   const heroImage = clinic.coverImageUrl || images[0]?.url || null;
   const avatar = clinic.logoUrl || heroImage || '';
 

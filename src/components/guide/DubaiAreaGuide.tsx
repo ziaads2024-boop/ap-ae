@@ -9,11 +9,12 @@ import { breadcrumbSchema, clinicListSchema, faqSchema } from '@/content/schema'
 import { imageForService } from '@/content/images';
 import type { AreaData } from '@/lib/dubaiData';
 import { FaqList, GuideCta, GuideHero, JsonLd, LinkTiles, PageImageCredits, Section } from './GuideBlocks';
+import { clip, fitTitle } from '@/lib/metaText';
 
 export function areaMeta(area: DubaiArea) {
   return {
-    title: `Dentists in ${area.name}, Dubai: Clinics, Insurance & Appointments`,
-    description: `Find a dentist in ${area.name}, Dubai. ${area.summary} Compare clinics, check insurance and request an appointment.`.slice(0, 300),
+    title: fitTitle(`Dentists in ${area.name}, Dubai`, ': Compare Clinics'),
+    description: clip(`Find a dentist in ${area.name}, Dubai. ${area.summary} Compare clinics and request an appointment.`),
   };
 }
 

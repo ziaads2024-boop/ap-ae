@@ -39,18 +39,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const timeSlots = Array.from({ length: 20 }, (_, i) => {
-  const hour = Math.floor(i / 2) + 9;
-  const minutes = i % 2 === 0 ? "00" : "30";
-  const time = `${hour.toString().padStart(2, "0")}:${minutes}`;
-  const displayTime =
-    hour < 12
-      ? `${hour}:${minutes} AM`
-      : hour === 12
-      ? `12:${minutes} PM`
-      : `${hour - 12}:${minutes} PM`;
-  return { value: time, label: displayTime };
-});
+// Clinics do not publish live calendars on AppointPanda, so patients choose a
+// preferred part of the day (as in the request form) and the clinic confirms.
+const timeSlots = [
+  { value: 'Morning', label: 'Morning (8am to 12pm)' },
+  { value: 'Afternoon', label: 'Afternoon (12pm to 5pm)' },
+  { value: 'Evening', label: 'Evening (after 5pm)' },
+  { value: 'Any time', label: 'Any time' },
+];
 
 const AppointmentManagePage = () => {
   const { token } = useRouter().query as { token?: string };
@@ -160,7 +156,7 @@ const AppointmentManagePage = () => {
       setActionCompleted("rescheduled");
       toast({
         title: "Appointment Rescheduled",
-        description: "Your appointment has been rescheduled. The clinic will confirm your new time.",
+        description: "Your preferred time has been updated. The clinic will call you to confirm a time.",
       });
     },
     onError: (error: Error) => {
@@ -437,16 +433,16 @@ const AppointmentManagePage = () => {
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <RefreshCw className="h-8 w-8 text-primary" />
             </div>
-            <DialogTitle className="text-center text-xl">Reschedule Appointment</DialogTitle>
+            <DialogTitle className="text-center text-xl">Change your preferred time</DialogTitle>
             <DialogDescription className="text-center">
-              Choose a new date and time for your appointment
+              Choose a new preferred day and time of day. The clinic will call you to confirm an exact time.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-6 py-4">
             {/* Calendar */}
             <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">Select New Date</label>
+              <label className="text-sm font-medium text-foreground mb-3 block">Preferred day</label>
               <div className="flex justify-center">
                 <Calendar
                   mode="single"
@@ -460,10 +456,10 @@ const AppointmentManagePage = () => {
 
             {/* Time Slot */}
             <div>
-              <label className="text-sm font-medium text-foreground mb-3 block">Select New Time</label>
+              <label className="text-sm font-medium text-foreground mb-3 block">Preferred time of day</label>
               <Select value={selectedTime} onValueChange={setSelectedTime}>
                 <SelectTrigger className="rounded-xl h-12">
-                  <SelectValue placeholder="Choose a time slot" />
+                  <SelectValue placeholder="Choose a time of day" />
                 </SelectTrigger>
                 <SelectContent className="max-h-64">
                   {timeSlots.map((slot) => (
@@ -490,7 +486,7 @@ const AppointmentManagePage = () => {
               onClick={handleReschedule}
               disabled={isProcessing || !selectedDate || !selectedTime}
             >
-              {isProcessing ? "Rescheduling..." : "Confirm Reschedule"}
+              {isProcessing ? "Sending..." : "Send new preferred time"}
             </Button>
           </DialogFooter>
         </DialogContent>

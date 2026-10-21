@@ -10,6 +10,10 @@ const FOOTER_AREAS = ['dubai-marina', 'jumeirah-beach-residence', 'downtown-duba
 const COMPANY_LINKS = [
   { label: 'About AppointPanda', href: '/about/' },
   { label: 'How it works', href: '/how-it-works/' },
+  { label: 'FAQ', href: '/faq/' },
+  { label: 'Dental insurance', href: '/insurance/' },
+  { label: 'Cost calculator', href: '/tools/dental-cost-calculator/' },
+  { label: 'Articles', href: '/blog/' },
   { label: 'List your clinic', href: '/list-your-practice/' },
   { label: 'Contact', href: '/contact/' },
   { label: 'Editorial policy', href: '/editorial-policy/' },

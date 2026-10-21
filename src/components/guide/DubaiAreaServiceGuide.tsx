@@ -9,13 +9,14 @@ import { breadcrumbSchema, clinicListSchema, faqSchema } from '@/content/schema'
 import { imageForService } from '@/content/images';
 import { MIN_CLINICS_TO_INDEX, type AreaServiceData } from '@/lib/dubaiData';
 import { BulletList, FaqList, GuideCta, GuideHero, JsonLd, MedicalNote, PageImageCredits, Section } from './GuideBlocks';
+import { clip, fitTitle } from '@/lib/metaText';
 
 export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea; service: ServiceContent; data: AreaServiceData }) {
   const dubai = emirateBySlug('dubai')!;
   const path = urls.dubaiAreaService(area.slug, service.slug);
   const indexable = data.clinicCount >= MIN_CLINICS_TO_INDEX;
-  const title = `${service.shortName} in ${area.name}, Dubai: Clinics & Prices`;
-  const description = `${data.clinicCount ? `${data.clinicCount} listed clinics offer ${service.name.toLowerCase()} in ${area.name}. ` : ''}Compare clinic-listed prices, Google ratings and insurance, and request an appointment in ${area.name}, Dubai.`;
+  const title = fitTitle(`${service.shortName} in ${area.name}, Dubai`, ': Clinics & Prices');
+  const description = clip(`${data.clinicCount ? `${data.clinicCount} listed clinics offer ${service.name.toLowerCase()} in ${area.name}. ` : ''}Compare clinic-listed prices, Google ratings and insurance, and request an appointment in ${area.name}, Dubai.`);
   const crumbs = [
     { name: 'Home', path: '/' },
     { name: 'Dubai', path: urls.emirate('dubai') },
