@@ -136,7 +136,7 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
         </select>
       </label>
 
-      <fieldset>
+      <fieldset className="min-w-0">
         <legend className="mb-1 text-xs font-semibold text-zinc-600">Preferred day</legend>
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {days.map((d) => {
@@ -158,7 +158,7 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
         </div>
       </fieldset>
 
-      <fieldset>
+      <fieldset className="min-w-0">
         <legend className="mb-1 text-xs font-semibold text-zinc-600">Preferred time of day</legend>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {TIME_WINDOWS.map((w) => (

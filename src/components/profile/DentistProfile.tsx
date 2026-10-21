@@ -63,7 +63,7 @@ function faqsFor(p: DentistProfileProps): Faq[] {
 export function DentistProfile(props: DentistProfileProps) {
   const { dentist, clinic, colleagues, treatments } = props;
   const path = `/dentist/${dentist.slug}/`;
-  const role = dentist.title || 'Dentist';
+  const role = (dentist.title || 'Dentist').replace(/^./, (c) => c.toUpperCase());
   const place = clinic?.city?.name;
   const live = !clinic?.emirate || isLiveEmirate(clinic.emirate.slug);
   const area = clinic?.emirate?.slug === 'dubai' && clinic.city ? dubaiAreaBySlug(clinic.city.slug) : undefined;
@@ -141,8 +141,8 @@ export function DentistProfile(props: DentistProfileProps) {
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 lg:grid-cols-[1fr_380px]">
-        <div className="space-y-10">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="min-w-0 space-y-10">
           <section aria-labelledby="about">
             <h2 id="about" className="display text-3xl text-ink">About {dentist.name}</h2>
             <p className="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-zinc-700">{summary}</p>
@@ -238,7 +238,7 @@ export function DentistProfile(props: DentistProfileProps) {
           </p>
         </div>
 
-        <aside id="request" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
+        <aside id="request" className="min-w-0 scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
             {clinic && live ? (
               <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} dentistId={dentist.id} clinicPhone={clinic.phone} clinicClaimed={clinic.claimed} compact />

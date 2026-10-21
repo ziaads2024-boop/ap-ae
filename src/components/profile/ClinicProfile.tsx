@@ -197,7 +197,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
         </div>
       </section>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-10 lg:grid-cols-[1fr_380px]">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 space-y-10">
           {clinic.description && (
             <section>
@@ -385,7 +385,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
         </div>
 
         {/* Sticky request panel */}
-        <aside id="request" className="scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
+        <aside id="request" className="min-w-0 scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
             {!clinic.emirate || isLiveEmirate(clinic.emirate.slug) ? (
               <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} clinicClaimed={clinic.claimed} compact />
