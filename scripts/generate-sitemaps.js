@@ -103,11 +103,15 @@ function buildLlmsTxt(content) {
     '',
     '## Tools',
     `- [Find a dentist](${abs('/find-clinics/')}): search clinics by emirate, treatment or location (add ?near=me to sort by distance).`,
+    `- [Dental cost calculator](${abs('/tools/dental-cost-calculator/')}): typical AED ranges for common treatments, multiplied by number of teeth where relevant.`,
+    `- [Dental insurance guide](${abs('/insurance/')}): how dental cover usually works on UAE health insurance (annual limits, direct billing, pre-approval, cosmetic exclusions).`,
+    `- [FAQ](${abs('/faq/')}): licensing, costs, insurance, emergencies and how appointment requests work.`,
     '',
     '## Optional',
     `- [Full guide text](${abs('/llms-full.txt')})`,
     `- [About AppointPanda](${abs('/about/')})`,
-    `- [How listings are checked](${abs('/verification-policy/')})`,
+    `- [How listings are checked](${abs('/verification-policy/')}): listed, claimed and verified labels; verification does not affect ranking.`,
+    `- [Editorial policy](${abs('/editorial-policy/')}): guides are written by the AppointPanda editorial team and are not yet clinically reviewed by a named dentist.`,
     ''
   );
   return lines.join('\n');
@@ -286,10 +290,13 @@ async function buildCityUrls(supabase, content) {
     }));
 }
 
+// Treatment guides are in sitemap-guides.xml. Treatments that only have a
+// database page are noindex (src/pages/ServicePage.tsx), so none are listed here
+// until they get a hand-written guide.
 async function buildServiceUrls(supabase, content) {
   const treatments = await fetchAll(supabase, 'treatments', 'slug, updated_at', { is_active: true });
   return treatments
-    .filter((treatment) => treatment.slug && !content.isRenamedTreatment(treatment.slug))
+    .filter((treatment) => treatment.slug && !content.isRenamedTreatment(treatment.slug) && content.serviceBySlug(treatment.slug))
     .map((treatment) => ({
       loc: normalizeUrl(`/services/${treatment.slug}`),
       lastmod: treatment.updated_at?.split('T')[0],

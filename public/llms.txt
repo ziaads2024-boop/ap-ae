@@ -86,8 +86,12 @@ Content last reviewed: 2026-10-21. Editorial policy: https://www.appointpanda.ae
 
 ## Tools
 - [Find a dentist](https://www.appointpanda.ae/find-clinics/): search clinics by emirate, treatment or location (add ?near=me to sort by distance).
+- [Dental cost calculator](https://www.appointpanda.ae/tools/dental-cost-calculator/): typical AED ranges for common treatments, multiplied by number of teeth where relevant.
+- [Dental insurance guide](https://www.appointpanda.ae/insurance/): how dental cover usually works on UAE health insurance (annual limits, direct billing, pre-approval, cosmetic exclusions).
+- [FAQ](https://www.appointpanda.ae/faq/): licensing, costs, insurance, emergencies and how appointment requests work.
 
 ## Optional
 - [Full guide text](https://www.appointpanda.ae/llms-full.txt)
 - [About AppointPanda](https://www.appointpanda.ae/about/)
-- [How listings are checked](https://www.appointpanda.ae/verification-policy/)
+- [How listings are checked](https://www.appointpanda.ae/verification-policy/): listed, claimed and verified labels; verification does not affect ranking.
+- [Editorial policy](https://www.appointpanda.ae/editorial-policy/): guides are written by the AppointPanda editorial team and are not yet clinically reviewed by a named dentist.

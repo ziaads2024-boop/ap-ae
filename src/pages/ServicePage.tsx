@@ -165,7 +165,9 @@ const ServicePage = ({ serviceSlugProp, seoDataProp, h1Prop, heroIntroProp, cont
         title={metaTitle}
         description={metaDescription}
         canonical={serverCanonical}
-        keywords={[`${treatmentName} UAE`, `${treatmentName} cost`, `${treatmentName} Dubai`, `best ${treatmentName} clinic UAE`]}
+        // Database-generated treatment pages stay out of the index until they
+        // have a hand-written guide in src/content (see pages/services/[serviceSlug].tsx)
+        noindex
       />
       
       <StructuredData
@@ -222,9 +224,7 @@ const ServicePage = ({ serviceSlugProp, seoDataProp, h1Prop, heroIntroProp, cont
           { href: '/services/', label: 'All Treatments', variant: 'outline' },
         ]}
         stats={[
-          { label: 'Verified specialists', value: `${profiles?.length || 0}`, icon: <CheckCircle2 className="h-5 w-5" /> },
-          { label: 'Average rating', value: '4.8+', icon: <Star className="h-5 w-5" /> },
-          { label: 'Coverage', value: '7 Emirates', icon: <MapPin className="h-5 w-5" /> },
+          { label: 'Listed clinics', value: `${profiles?.length || 0}`, icon: <CheckCircle2 className="h-5 w-5" /> },
           { label: 'Price range', value: minPrice > 0 ? `AED ${minPrice.toLocaleString()}+` : 'Consult', icon: <BarChart3 className="h-5 w-5" /> },
         ]}
       >
