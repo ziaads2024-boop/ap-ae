@@ -8,6 +8,7 @@ const PUBLIC_DIR = path.join(process.cwd(), 'public');
 const SITEMAP_FILES = [
   'sitemap.xml',
   'sitemap-static.xml',
+  'sitemap-guides.xml',
   'sitemap-states.xml',
   'sitemap-cities.xml',
   'sitemap-services.xml',
@@ -16,6 +17,105 @@ const SITEMAP_FILES = [
   'sitemap-posts.xml',
   'sitemap-insurance.xml',
 ];
+
+// Hand-written guide content (src/content) is TypeScript; jiti loads it so the
+// sitemap always lists every guide, even when the database is unreachable.
+function loadContent() {
+  const jiti = require('jiti')(__filename);
+  return jiti(path.join(process.cwd(), 'src/content/index.ts'));
+}
+
+function buildGuideUrls(content) {
+  const lastmod = content.CONTENT_REVIEWED;
+  const urls = [
+    { loc: normalizeUrl(content.urls.services), lastmod, priority: 0.9, changefreq: 'monthly' },
+    { loc: normalizeUrl(content.urls.emirates), lastmod, priority: 0.9, changefreq: 'monthly' },
+  ];
+  for (const service of content.services) {
+    urls.push({ loc: normalizeUrl(content.urls.service(service.slug)), lastmod, priority: 0.9, changefreq: 'monthly' });
+  }
+  for (const emirate of content.emirates) {
+    urls.push({ loc: normalizeUrl(content.urls.emirate(emirate.slug)), lastmod, priority: 0.9, changefreq: 'monthly' });
+    for (const service of content.services) {
+      if (content.hasLocalGuide(service.slug, emirate.slug)) {
+        urls.push({ loc: normalizeUrl(content.urls.serviceEmirate(emirate.slug, service.slug)), lastmod, priority: 0.8, changefreq: 'monthly' });
+      }
+    }
+  }
+  return urls;
+}
+
+// llms.txt (https://llmstxt.org) and llms-full.txt are generated from the same
+// content as the pages, so AI assistants see exactly what visitors see.
+function buildLlmsTxt(content) {
+  const abs = (p) => `${BASE_URL}${p}`;
+  const lines = [
+    '# AppointPanda',
+    '',
+    '> Independent guides to dental treatment in the UAE, and a directory of dental clinics across all seven emirates. Guide prices are indicative AED ranges, not quotes. Clinic ratings come from Google and are shown as reported.',
+    '',
+    `Content last reviewed: ${content.CONTENT_REVIEWED}. Editorial policy: ${abs('/editorial-policy/')}`,
+    '',
+    '## Treatment guides',
+    ...content.services.map((s) => `- [${s.name}](${abs(content.urls.service(s.slug))}): ${s.summary}`),
+    '',
+    '## Dentists by emirate',
+    ...content.emirates.map((e) => `- [Dentists in ${e.name}](${abs(content.urls.emirate(e.slug))}): ${e.summary} Licensing: ${e.regulator.name} (${e.regulator.short}).`),
+    '',
+    '## Local treatment guides',
+  ];
+  for (const e of content.emirates) {
+    for (const s of content.services) {
+      if (content.hasLocalGuide(s.slug, e.slug)) {
+        lines.push(`- [${s.name} in ${e.name}](${abs(content.urls.serviceEmirate(e.slug, s.slug))})`);
+      }
+    }
+  }
+  lines.push(
+    '',
+    '## Tools',
+    `- [Find a dentist](${abs('/find-clinics/')}): search clinics by emirate, treatment or location (add ?near=me to sort by distance).`,
+    '',
+    '## Optional',
+    `- [Full guide text](${abs('/llms-full.txt')})`,
+    `- [About AppointPanda](${abs('/about/')})`,
+    `- [How listings are checked](${abs('/verification-policy/')})`,
+    ''
+  );
+  return lines.join('\n');
+}
+
+function buildLlmsFullTxt(content) {
+  const out = [
+    '# AppointPanda: full guide text',
+    '',
+    `Source: ${BASE_URL}. Last reviewed ${content.CONTENT_REVIEWED}. General information only; not a diagnosis or a quote. In a UAE emergency call 998.`,
+    '',
+  ];
+  for (const s of content.services) {
+    out.push(`## ${s.name}`, `URL: ${BASE_URL}${content.urls.service(s.slug)}`, '', s.summary, '', ...s.intro.flatMap((p) => [p, '']));
+    out.push(`Indicative UAE cost: ${content.formatAed(s.price.from)} to ${content.formatAed(s.price.to)} ${s.price.unit}. ${s.price.note}`);
+    out.push(`Treatment time: ${s.duration}`, `Recovery: ${s.recovery}`, '');
+    out.push('Steps:', ...s.steps.map((st, i) => `${i + 1}. ${st.title}: ${st.detail}`), '');
+    out.push('Risks:', ...s.risks.map((r) => `- ${r}`), '');
+    out.push('FAQ:', ...s.faqs.flatMap((f) => [`Q: ${f.q}`, `A: ${f.a}`]), '');
+  }
+  for (const e of content.emirates) {
+    out.push(`## Dentists in ${e.name}`, `URL: ${BASE_URL}${content.urls.emirate(e.slug)}`, '', e.summary, '', ...e.intro.flatMap((p) => [p, '']));
+    out.push(`Licensing: ${e.regulator.name} (${e.regulator.short}). ${e.regulator.note}`, '');
+    out.push('Insurance:', ...e.insurance.map((i) => `- ${i}`), '');
+    out.push('FAQ:', ...e.faqs.flatMap((f) => [`Q: ${f.q}`, `A: ${f.a}`]), '');
+  }
+  for (const local of content.serviceEmirates) {
+    const s = content.serviceBySlug(local.service);
+    const e = content.emirateBySlug(local.emirate);
+    if (!s || !e) continue;
+    out.push(`## ${s.name} in ${e.name}`, `URL: ${BASE_URL}${content.urls.serviceEmirate(e.slug, s.slug)}`, '', ...local.localNote.flatMap((p) => [p, '']));
+    out.push(`Insurance: ${content.insuranceNote(s, e)}`, '');
+    out.push('FAQ:', ...local.faqs.flatMap((f) => [`Q: ${f.q}`, `A: ${f.a}`]), '');
+  }
+  return out.join('\n');
+}
 
 function hasPlaceholderValue(value) {
   return typeof value === 'string' && (
@@ -106,22 +206,16 @@ async function fetchAll(supabase, table, select, filters = {}) {
 function buildStaticUrls() {
   return [
     { loc: normalizeUrl('/'), priority: 1.0, changefreq: 'daily' },
-    { loc: normalizeUrl('/services'), priority: 0.9, changefreq: 'weekly' },
-    { loc: normalizeUrl('/specialties'), priority: 0.9, changefreq: 'weekly' },
-    { loc: normalizeUrl('/emirates'), priority: 0.9, changefreq: 'weekly' },
     { loc: normalizeUrl('/insurance'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/blog'), priority: 0.8, changefreq: 'daily' },
     { loc: normalizeUrl('/find-clinics'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/for-clinics'), priority: 0.7, changefreq: 'weekly' },
-    { loc: normalizeUrl('/reviews'), priority: 0.7, changefreq: 'weekly' },
-    { loc: normalizeUrl('/emergency'), priority: 0.7, changefreq: 'weekly' },
     { loc: normalizeUrl('/about'), priority: 0.5, changefreq: 'monthly' },
     { loc: normalizeUrl('/contact'), priority: 0.5, changefreq: 'monthly' },
     { loc: normalizeUrl('/faq'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/how-it-works'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/pricing'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/sitemap'), priority: 0.4, changefreq: 'weekly' },
-    { loc: normalizeUrl('/emergency-dentist'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/terms'), priority: 0.3, changefreq: 'yearly' },
     { loc: normalizeUrl('/privacy'), priority: 0.3, changefreq: 'yearly' },
     { loc: normalizeUrl('/verification-policy'), priority: 0.3, changefreq: 'yearly' },
@@ -287,11 +381,18 @@ async function writeSitemap(filename, xml) {
 
 async function main() {
   const supabase = createSupabaseClient();
+  const content = loadContent();
+  const guideUrls = buildGuideUrls(content);
+  const guideLocs = new Set(guideUrls.map((url) => url.loc));
+  const notAGuide = (url) => !guideLocs.has(url.loc);
+  await fs.writeFile(path.join(PUBLIC_DIR, 'llms.txt'), buildLlmsTxt(content), 'utf8');
+  await fs.writeFile(path.join(PUBLIC_DIR, 'llms-full.txt'), buildLlmsFullTxt(content), 'utf8');
 
   if (!supabase) {
     const fallbackSitemaps = {
       'sitemap.xml': generateSitemapIndexXml(),
       'sitemap-static.xml': generateSitemapXml(buildStaticUrls()),
+      'sitemap-guides.xml': generateSitemapXml(guideUrls),
       'sitemap-states.xml': generateSitemapXml([]),
       'sitemap-cities.xml': generateSitemapXml([]),
       'sitemap-services.xml': generateSitemapXml([]),
@@ -334,9 +435,10 @@ async function main() {
   const sitemapXmlByFile = {
     'sitemap.xml': generateSitemapIndexXml(),
     'sitemap-static.xml': generateSitemapXml(buildStaticUrls()),
-    'sitemap-states.xml': generateSitemapXml(stateUrls),
+    'sitemap-guides.xml': generateSitemapXml(guideUrls),
+    'sitemap-states.xml': generateSitemapXml(stateUrls.filter(notAGuide)),
     'sitemap-cities.xml': generateSitemapXml(cityUrls),
-    'sitemap-services.xml': generateSitemapXml(serviceUrls),
+    'sitemap-services.xml': generateSitemapXml(serviceUrls.filter(notAGuide)),
     'sitemap-service-locations.xml': generateSitemapXml(serviceLocationUrls),
     'sitemap-profiles.xml': generateSitemapXml(profileUrls),
     'sitemap-posts.xml': generateSitemapXml(postUrls),

@@ -7,24 +7,6 @@
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://www.appointpanda.ae/services/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/specialties/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/emirates/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://www.appointpanda.ae/insurance/</loc>
     
     <changefreq>weekly</changefreq>
@@ -44,18 +26,6 @@
   </url>
   <url>
     <loc>https://www.appointpanda.ae/for-clinics/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/reviews/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/emergency/</loc>
     
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -95,12 +65,6 @@
     
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/emergency-dentist/</loc>
-    
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/terms/</loc>

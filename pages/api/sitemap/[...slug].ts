@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 const SITEMAP_FILES = new Set([
   'sitemap.xml',
   'sitemap-static.xml',
+  'sitemap-guides.xml',
   'sitemap-states.xml',
   'sitemap-cities.xml',
   'sitemap-services.xml',
