@@ -16,7 +16,7 @@ export function PageLayout({
   hideFooter = false,
 }: PageLayoutProps) {
   return (
-    <div className="relative min-h-screen bg-[#fafafa] text-zinc-900 overflow-x-hidden" style={{ fontFamily: "'Instrument Sans', system-ui, -apple-system, sans-serif" }}>
+    <div className="relative min-h-screen bg-paper text-ink overflow-x-hidden" style={{ fontFamily: "'Instrument Sans', system-ui, -apple-system, sans-serif" }}>
       {!hideNavbar && <Navbar />}
       <main>{children}</main>
       {!hideFooter && <Footer />}

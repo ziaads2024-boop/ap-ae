@@ -20,6 +20,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Arial Narrow', 'sans-serif'],
       },
       fontWeight: {
         normal: "400",
@@ -30,6 +31,15 @@ const config: Config = {
         black: "900",
       },
       colors: {
+        ink: "var(--ink)",
+        paper: "var(--paper)",
+        tone: {
+          lemon: "var(--tone-lemon)",
+          sky: "var(--tone-sky)",
+          blush: "var(--tone-blush)",
+          lime: "var(--tone-lime)",
+          sand: "var(--tone-sand)",
+        },
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",

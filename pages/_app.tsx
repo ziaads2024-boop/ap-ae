@@ -7,7 +7,7 @@ import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider, HydrationBoundary } from '@tanstack/react-query';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Noto_Sans_Arabic } from 'next/font/google';
+import { Noto_Sans_Arabic, Anton } from 'next/font/google';
 import { AuthProvider } from '@/hooks/useAuth';
 
 const Toaster = dynamic(() => import('@/components/ui/toaster').then(m => m.Toaster));
@@ -19,6 +19,13 @@ const arabicFont = Noto_Sans_Arabic({
   variable: '--font-arabic',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
+});
+
+const displayFont = Anton({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: '400',
 });
 
 const AnalyticsProvider = dynamic(
@@ -42,7 +49,7 @@ const VisitorTracker = dynamic(
 );
 
 export default function App({ Component, pageProps }: AppProps) {
-  const fontClass = `${arabicFont.variable}`;
+  const fontClass = `${arabicFont.variable} ${displayFont.variable}`;
   const [queryClient] = useState(
     () =>
       new QueryClient({

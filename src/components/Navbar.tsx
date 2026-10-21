@@ -1,205 +1,190 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  Menu, X, ChevronDown, Phone, Sparkles, Languages, LogIn,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  Sheet, SheetContent, SheetTrigger,
-} from '@/components/ui/sheet';
-import { NavLink } from '@/components/NavLink';
+import { Menu, ChevronDown, LocateFixed, ArrowRight } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { navLinks, SITE_NAME, PHONE_NUMBER, PHONE_HREF } from '@/lib/site-data';
+import { services, emirates, urls } from '@/content';
+
+type MenuKey = 'treatments' | 'emirates' | null;
+
+const simpleLinks = [
+  { label: 'Find clinics', href: '/find-clinics/' },
+  { label: 'Insurance', href: '/insurance/' },
+  { label: 'Guides', href: '/blog/' },
+];
+
+export function Logo({ inverted = false }: { inverted?: boolean }) {
+  return (
+    <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="AppointPanda home">
+      <span className={cn('grid size-8 place-items-center rounded-full', inverted ? 'bg-white' : 'bg-ink')}>
+        {/* Panda mark: two ears and a face */}
+        <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
+          <circle cx="6" cy="6.5" r="3" fill={inverted ? '#121212' : '#fff'} />
+          <circle cx="18" cy="6.5" r="3" fill={inverted ? '#121212' : '#fff'} />
+          <circle cx="12" cy="13" r="7.5" fill={inverted ? '#121212' : '#fff'} />
+          <ellipse cx="9.2" cy="12.4" rx="1.7" ry="2.1" fill={inverted ? '#fff' : '#121212'} />
+          <ellipse cx="14.8" cy="12.4" rx="1.7" ry="2.1" fill={inverted ? '#fff' : '#121212'} />
+          <circle cx="12" cy="16.2" r="1.1" fill={inverted ? '#fff' : '#121212'} />
+        </svg>
+      </span>
+      <span className={cn('text-[17px] font-bold tracking-tight', inverted ? 'text-white' : 'text-ink')}>
+        appointpanda<span className="text-primary">.ae</span>
+      </span>
+    </Link>
+  );
+}
 
 export function Navbar() {
+  const [open, setOpen] = useState<MenuKey>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header className="relative z-50">
-      {/* Emergency Hotline Bar */}
-      <div className="bg-zinc-900 hidden lg:block">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-9">
-          <a
-            href={`tel:${PHONE_HREF}`}
-            className="flex items-center gap-1.5 text-xs font-medium text-zinc-300 hover:text-amber-400 transition-colors"
+    <header className="sticky top-0 z-50 px-3 pt-3 lg:px-6" onMouseLeave={() => setOpen(null)}>
+      <div
+        className={cn(
+          'mx-auto flex h-14 max-w-6xl items-center justify-between rounded-full border bg-white/90 pl-4 pr-2 backdrop-blur-md transition-shadow',
+          scrolled ? 'border-black/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)]' : 'border-black/5'
+        )}
+      >
+        <Logo />
+
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+          <button
+            type="button"
+            className="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-ink"
+            aria-expanded={open === 'treatments'}
+            onMouseEnter={() => setOpen('treatments')}
+            onClick={() => setOpen(open === 'treatments' ? null : 'treatments')}
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
-            </span>
-            24/7 Dental Emergency hotline: {PHONE_NUMBER}
-          </a>
-          <div className="flex items-center gap-4 text-xs text-zinc-400">
-            <span className="hover:text-zinc-200 transition-colors cursor-default">Trusted by 200,000+ UAE residents</span>
-            <span className="opacity-50">|</span>
-            <button className="flex items-center gap-1 hover:text-zinc-200 transition-colors">
-              <Languages className="h-3 w-3" />
-              English / العربية
-            </button>
-          </div>
+            Treatments <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open === 'treatments' && 'rotate-180')} />
+          </button>
+          <button
+            type="button"
+            className="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-ink"
+            aria-expanded={open === 'emirates'}
+            onMouseEnter={() => setOpen('emirates')}
+            onClick={() => setOpen(open === 'emirates' ? null : 'emirates')}
+          >
+            Emirates <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', open === 'emirates' && 'rotate-180')} />
+          </button>
+          {simpleLinks.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onMouseEnter={() => setOpen(null)}
+              className="rounded-full px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-ink"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-1.5">
+          <Link href="/find-clinics/?near=me" className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-ink hover:bg-zinc-100 md:flex">
+            <LocateFixed className="h-4 w-4" /> Near me
+          </Link>
+          <Link href="/list-your-practice/" className="hidden rounded-full px-3 py-2 text-sm font-medium text-zinc-600 hover:text-ink xl:block">
+            For clinics
+          </Link>
+          <Link href="/auth/" className="btn-ink !px-4 !py-2 text-sm">
+            Log in
+          </Link>
+
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <button type="button" className="grid size-10 place-items-center rounded-full hover:bg-zinc-100 lg:hidden" aria-label="Open menu">
+                <Menu className="h-5 w-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[88vw] max-w-sm overflow-y-auto bg-paper p-0">
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+              <div className="border-b border-black/10 p-5">
+                <Logo />
+              </div>
+              <div className="space-y-6 p-5">
+                <Link href="/find-clinics/?near=me" onClick={() => setMobileOpen(false)} className="btn-ink w-full">
+                  <LocateFixed className="h-4 w-4" /> Find a dentist near me
+                </Link>
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Treatments</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {services.map((s) => (
+                      <Link key={s.slug} href={urls.service(s.slug)} onClick={() => setMobileOpen(false)} className="rounded-xl bg-white px-3 py-2 text-sm font-medium">
+                        {s.shortName}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Emirates</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {emirates.map((e) => (
+                      <Link key={e.slug} href={urls.emirate(e.slug)} onClick={() => setMobileOpen(false)} className="rounded-xl bg-white px-3 py-2 text-sm font-medium">
+                        {e.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  {[...simpleLinks, { label: 'For clinics', href: '/list-your-practice/' }].map((l) => (
+                    <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)} className="rounded-xl px-3 py-2.5 text-[15px] font-medium hover:bg-white">
+                      {l.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
-      {/* Main Navbar */}
-      <div className="bg-[#fafafa]/85 backdrop-blur-md border-b border-zinc-200">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <div className="size-7 rounded-md bg-zinc-900 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-zinc-900 font-bold text-lg tracking-tight">
-                {SITE_NAME}<span className="text-amber-700 font-semibold">.ae</span>
-              </span>
+      {/* Desktop mega menus */}
+      <div className="relative mx-auto hidden max-w-6xl lg:block">
+        {open === 'treatments' && (
+          <div className="absolute inset-x-0 top-2 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
+            <div className="grid grid-cols-4 gap-2">
+              {services.map((s) => (
+                <Link key={s.slug} href={urls.service(s.slug)} className="group rounded-2xl p-3 hover:bg-paper">
+                  <span className="block text-sm font-semibold text-ink">{s.name}</span>
+                  <span className="mt-0.5 block text-xs leading-snug text-zinc-500 line-clamp-2">{s.summary}</span>
+                </Link>
+              ))}
+            </div>
+            <Link href={urls.services} className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-ink">
+              All treatments <ArrowRight className="h-4 w-4" />
             </Link>
-
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-0.5">
-              {navLinks.map((link) => {
-                if (link.dropdown) {
-                  return (
-                    <div
-                      key={link.label}
-                      className="relative"
-                      onMouseEnter={() => setOpenDropdown(link.label)}
-                      onMouseLeave={() => setOpenDropdown(null)}
-                    >
-                      <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors rounded-lg hover:bg-zinc-100">
-                        {link.label}
-                        <ChevronDown className={cn(
-                          'h-3.5 w-3.5 transition-transform duration-200',
-                          openDropdown === link.label && 'rotate-180'
-                        )} />
-                      </button>
-                      <div className={cn(
-                        'absolute top-full left-0 pt-2 opacity-0 invisible transition-all duration-200 translate-y-1',
-                        openDropdown === link.label && 'opacity-100 visible translate-y-0'
-                      )}>
-                        <div className="w-56 bg-white border border-zinc-200 rounded-xl shadow-lg p-2">
-                          {link.children?.map((child) => (
-                            <NavLink
-                              key={child.href}
-                              to={child.href}
-                              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors"
-                            >
-                              {child.label}
-                            </NavLink>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-                return (
-                  <NavLink
-                    key={link.href}
-                    to={link.href!}
-                    className="px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors rounded-lg hover:bg-zinc-100"
-                  >
-                    {link.label}
-                  </NavLink>
-                );
-              })}
-            </nav>
-
-            {/* Right Side - Desktop */}
-            <div className="hidden lg:flex items-center gap-3">
-              <Link
-                href="/auth/"
-                className="flex items-center gap-1.5 text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors px-3 py-2 rounded-full hover:bg-zinc-100"
-              >
-                <LogIn className="h-3.5 w-3.5" />
-                Sign in
-              </Link>
-              <Link
-                href="/for-clinics"
-                className="inline-flex items-center px-4 py-2 bg-zinc-900 text-white text-sm font-semibold rounded-full hover:bg-zinc-800 hover:scale-[1.02] transition-all duration-200"
-              >
-                List your Clinic
+          </div>
+        )}
+        {open === 'emirates' && (
+          <div className="absolute inset-x-0 top-2 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_20px_50px_rgba(0,0,0,0.12)]">
+            <div className="grid grid-cols-4 gap-2">
+              {emirates.map((e) => (
+                <Link key={e.slug} href={urls.emirate(e.slug)} className="rounded-2xl p-3 hover:bg-paper">
+                  <span className="block text-sm font-semibold text-ink">
+                    {e.name} <span className="font-normal text-zinc-400" lang="ar">{e.nameAr}</span>
+                  </span>
+                  <span className="mt-0.5 block text-xs text-zinc-500">Regulator: {e.regulator.short}</span>
+                </Link>
+              ))}
+              <Link href={urls.emirates} className="flex items-center gap-1 rounded-2xl bg-tone-lemon p-3 text-sm font-semibold text-ink">
+                Compare emirates <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-
-            {/* Mobile Trigger */}
-            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-              <SheetTrigger asChild>
-                <button className="lg:hidden p-2 text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors touch-target">
-                  {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-full max-w-sm bg-[#fafafa] border-l border-zinc-200 p-0">
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200">
-                    <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                      <div className="size-7 rounded-md bg-zinc-900 flex items-center justify-center">
-                        <Sparkles className="h-4 w-4 text-white" />
-                      </div>
-                      <span className="text-zinc-900 font-bold">{SITE_NAME}<span className="text-amber-700">.ae</span></span>
-                    </Link>
-                  </div>
-
-                  <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-                    {navLinks.map((link) => {
-                      if (link.dropdown && link.children) {
-                        return (
-                          <div key={link.label} className="space-y-1">
-                            <div className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-zinc-400 uppercase tracking-widest text-[11px]">
-                              {link.label}
-                            </div>
-                            <div className="ml-4 space-y-0.5 border-l border-zinc-200 pl-3">
-                              {link.children.map((child) => (
-                                <NavLink
-                                  key={child.href}
-                                  to={child.href}
-                                  onClick={() => setMobileOpen(false)}
-                                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors"
-                                >
-                                  {child.label}
-                                </NavLink>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      }
-                      return (
-                        <NavLink
-                          key={link.href}
-                          to={link.href!}
-                          onClick={() => setMobileOpen(false)}
-                          className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors"
-                        >
-                          {link.label}
-                        </NavLink>
-                      );
-                    })}
-
-                    <div className="pt-4 space-y-2 border-t border-zinc-200 mt-4">
-                      <Link
-                        href="/auth/"
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-center px-3 py-2.5 text-sm font-medium text-zinc-500 hover:text-zinc-900 rounded-full transition-colors"
-                      >
-                        <LogIn className="h-3.5 w-3.5 mr-1.5" />
-                        Sign in
-                      </Link>
-                      <Link
-                        href="/for-clinics"
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-center px-3 py-2.5 text-sm font-semibold bg-zinc-900 text-white rounded-full hover:bg-zinc-800 transition-colors"
-                      >
-                        List your Clinic
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
           </div>
-        </div>
+        )}
       </div>
     </header>
   );
 }
+
+export default Navbar;
