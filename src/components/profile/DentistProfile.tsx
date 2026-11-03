@@ -129,9 +129,9 @@ export function DentistProfile(props: DentistProfileProps) {
                 <h1 className="display mt-3 text-[clamp(2.2rem,5.5vw,4.25rem)] text-ink">{dentist.name}</h1>
                 {clinic && (
                   <p className="mt-2 flex flex-wrap items-center gap-x-2 text-ink/80">
-                    <Link href={`/clinic/${clinic.slug}/`} className="font-semibold underline">{clinic.name}</Link>
+                    <Link prefetch={false} href={`/clinic/${clinic.slug}/`} className="font-semibold underline">{clinic.name}</Link>
                     {place && (
-                      <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{placeHref ? <Link href={placeHref} className="hover:underline">{place}</Link> : place}</span>
+                      <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{placeHref ? <Link prefetch={false} href={placeHref} className="hover:underline">{place}</Link> : place}</span>
                     )}
                   </p>
                 )}
@@ -188,7 +188,7 @@ export function DentistProfile(props: DentistProfileProps) {
                   return (
                     <li key={t.slug}>
                       {guide ? (
-                        <Link href={urls.service(guide.slug)} className="inline-block rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper">{t.name}</Link>
+                        <Link prefetch={false} href={urls.service(guide.slug)} className="inline-block rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:bg-paper">{t.name}</Link>
                       ) : (
                         <span className="inline-block rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-ink">{t.name}</span>
                       )}
@@ -206,7 +206,7 @@ export function DentistProfile(props: DentistProfileProps) {
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {colleagues.map((c) => (
                   <li key={c.slug}>
-                    <Link href={`/dentist/${c.slug}/`} className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white p-3 hover:bg-paper">
+                    <Link prefetch={false} href={`/dentist/${c.slug}/`} className="flex items-center gap-3 rounded-2xl border border-black/10 bg-white p-3 hover:bg-paper">
                       {c.photoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={c.photoUrl} alt="" className="size-12 rounded-xl object-cover" loading="lazy" />
@@ -247,13 +247,13 @@ export function DentistProfile(props: DentistProfileProps) {
                 <p className="text-base font-semibold text-ink">Online requests coming soon to {clinic.emirate?.name}</p>
                 <p className="mt-2">To book with {dentist.name}, contact {clinic.name} directly.</p>
                 {clinic.phone && <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ink mt-4 w-full"><Phone className="h-4 w-4" /> Call {clinic.phone}</a>}
-                <Link href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
+                <Link prefetch={false} href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
               </div>
             ) : (
               <div className="text-sm text-zinc-700">
                 <p className="text-base font-semibold text-ink">No clinic listed</p>
                 <p className="mt-2">This dentist is not linked to a clinic on AppointPanda yet.</p>
-                <Link href="/find-clinics/" className="btn-ink mt-4 w-full">Find a clinic</Link>
+                <Link prefetch={false} href="/find-clinics/" className="btn-ink mt-4 w-full">Find a clinic</Link>
               </div>
             )}
           </div>

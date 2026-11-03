@@ -160,7 +160,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
                   </span>
                 ) : null}
                 {clinic.verified && (
-                  <Link href="/verification-policy/" className="flex items-center gap-1.5 rounded-full bg-tone-lime px-3 py-1.5 font-medium text-ink">
+                  <Link prefetch={false} href="/verification-policy/" className="flex items-center gap-1.5 rounded-full bg-tone-lime px-3 py-1.5 font-medium text-ink">
                     <BadgeCheck className="h-4 w-4" /> Verified listing
                   </Link>
                 )}
@@ -223,8 +223,8 @@ export function ClinicProfile(props: ClinicProfileProps) {
                         </span>
                       </span>
                       <span className="flex shrink-0 gap-2 text-xs font-medium">
-                        {guide && <Link href={urls.service(guide.slug)} className="underline">Guide</Link>}
-                        {localHref && clinic.city && <Link href={localHref} className="underline">More in {clinic.city.name}</Link>}
+                        {guide && <Link prefetch={false} href={urls.service(guide.slug)} className="underline">Guide</Link>}
+                        {localHref && clinic.city && <Link prefetch={false} href={localHref} className="underline">More in {clinic.city.name}</Link>}
                       </span>
                     </li>
                   );
@@ -241,7 +241,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
                   {insurances.map((i) => (
                     <li key={i.name}>
                       {i.slug && clinic.emirate ? (
-                        <Link href={`/insurance/${i.slug}/${clinic.emirate.slug}/`} className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</Link>
+                        <Link prefetch={false} href={`/insurance/${i.slug}/${clinic.emirate.slug}/`} className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</Link>
                       ) : (
                         <span className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</span>
                       )}
@@ -261,7 +261,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {dentists.map((d) => (
                   <li key={d.slug}>
-                    <Link href={`/dentist/${d.slug}/`} className="block-card flex gap-4 p-4">
+                    <Link prefetch={false} href={`/dentist/${d.slug}/`} className="block-card flex gap-4 p-4">
                       <div className="size-16 shrink-0 overflow-hidden rounded-full bg-paper">
                         {d.photoUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -370,7 +370,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
               <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {nearby.map((n) => (
                   <li key={n.slug}>
-                    <Link href={`/clinic/${n.slug}/`} className="block-card block p-4">
+                    <Link prefetch={false} href={`/clinic/${n.slug}/`} className="block-card block p-4">
                       <p className="font-semibold leading-snug text-ink line-clamp-2">{n.name}</p>
                       {n.rating && n.reviewCount ? (
                         <p className="mt-1 flex items-center gap-1 text-sm"><Star className="h-3.5 w-3.5 fill-ink" /> {n.rating.toFixed(1)} <span className="text-zinc-500">({n.reviewCount})</span></p>
@@ -379,7 +379,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
                   </li>
                 ))}
               </ul>
-              {clinic.emirate && <Link href={`/${clinic.emirate.slug}/${clinic.city.slug}/`} className="mt-4 inline-block text-sm font-semibold text-ink underline">All dentists in {clinic.city.name}</Link>}
+              {clinic.emirate && <Link prefetch={false} href={`/${clinic.emirate.slug}/${clinic.city.slug}/`} className="mt-4 inline-block text-sm font-semibold text-ink underline">All dentists in {clinic.city.name}</Link>}
             </section>
           )}
         </div>
@@ -394,7 +394,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
                 <p className="text-base font-semibold text-ink">Online requests coming soon to {clinic.emirate.name}</p>
                 <p className="mt-2">AppointPanda currently takes appointment requests for Dubai clinics only. To book with {clinic.name}, contact the clinic directly.</p>
                 {clinic.phone && <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ink mt-4 w-full"><Phone className="h-4 w-4" /> Call {clinic.phone}</a>}
-                <Link href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
+                <Link prefetch={false} href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
               </div>
             )}
           </div>
@@ -402,7 +402,7 @@ export function ClinicProfile(props: ClinicProfileProps) {
             <Users className="h-4 w-4 shrink-0" />
             {clinic.claimed
               ? 'This profile is managed by the clinic.'
-              : <>Work here? <Link href="/claim-profile/" className="underline">Claim this profile</Link> to keep its details up to date.</>}
+              : <>Work here? <Link prefetch={false} href="/claim-profile/" className="underline">Claim this profile</Link> to keep its details up to date.</>}
           </div>
         </aside>
       </div>

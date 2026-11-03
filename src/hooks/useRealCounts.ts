@@ -43,7 +43,7 @@ export function useRealCounts(initialData?: RealCounts | null) {
       };
     },
     initialData: initialData ?? undefined,
-    staleTime: 5 * 60 * 1000, // 5 min cache
+    staleTime: 60 * 60 * 1000, // counts change slowly
     gcTime: 30 * 60 * 1000,
   });
 }
@@ -64,7 +64,7 @@ export function useStateClinicCount(stateId?: string) {
       return count || 0;
     },
     enabled: !!stateId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });
 }
@@ -84,6 +84,6 @@ export function useTreatmentClinicCount(treatmentId?: string) {
       return count || 0;
     },
     enabled: !!treatmentId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60 * 60 * 1000,
   });
 }

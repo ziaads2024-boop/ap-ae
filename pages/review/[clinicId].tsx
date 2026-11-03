@@ -1,6 +1,9 @@
-import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import ReviewFunnelPage from '@/pages/ReviewFunnelPage';
+import dynamic from 'next/dynamic';
+
+// Private, token-based page: served as a static shell and rendered in the browser,
+// so visits do not run a server function.
+const ReviewFunnelPage = dynamic(() => import('@/pages/ReviewFunnelPage'), { ssr: false });
 
 export default function ReviewPage() {
   return (
@@ -12,4 +15,3 @@ export default function ReviewPage() {
     </>
   );
 }
-export const getServerSideProps: GetStaticProps = async () => ({ props: {} });

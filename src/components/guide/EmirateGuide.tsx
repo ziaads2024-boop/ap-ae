@@ -49,8 +49,8 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
         image={heroImage}
         badge={{ label: 'Licensing', value: emirate.regulator.name }}
       >
-        <Link href={`/find-clinics/?emirate=${emirate.slug}`} className="btn-ink">Browse clinics in {emirate.name} <ArrowRight className="h-4 w-4" /></Link>
-        <Link href={`/find-clinics/?emirate=${emirate.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
+        <Link prefetch={false} href={`/find-clinics/?emirate=${emirate.slug}`} className="btn-ink">Browse clinics in {emirate.name} <ArrowRight className="h-4 w-4" /></Link>
+        <Link prefetch={false} href={`/find-clinics/?emirate=${emirate.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
@@ -70,7 +70,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
                     <ul className="space-y-1.5">
                       {dubaiAreas.filter((a) => a.group === group).map((a) => (
                         <li key={a.slug}>
-                          <Link href={urls.dubaiArea(a.slug)} className="group flex items-center justify-between rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink ring-1 ring-black/5 hover:ring-ink">
+                          <Link prefetch={false} href={urls.dubaiArea(a.slug)} className="group flex items-center justify-between rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink ring-1 ring-black/5 hover:ring-ink">
                             {a.name} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                           </Link>
                         </li>
@@ -83,7 +83,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
             <Section id="reasons" eyebrow="Why are you visiting?" title="Start with your reason">
               <div className="flex flex-wrap gap-2">
                 {visitReasons.map((r) => (
-                  <Link key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">{r.label}</Link>
+                  <Link prefetch={false} key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">{r.label}</Link>
                 ))}
               </div>
             </Section>
@@ -100,7 +100,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
             <div className="rounded-3xl border border-black/10 bg-white p-7">
               <p className="text-[15px] leading-relaxed text-zinc-700">{emirate.regulator.note}</p>
               <p className="mt-3 text-[15px] font-medium leading-relaxed text-ink">{emirate.regulator.checkLicence}</p>
-              <Link href="/verification-policy/" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-ink underline">
+              <Link prefetch={false} href="/verification-policy/" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-ink underline">
                 How AppointPanda checks listings
               </Link>
             </div>
@@ -131,7 +131,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500">Browse by area</h3>
               <div className="flex flex-wrap gap-2">
                 {cities.map((c) => (
-                  <Link key={c.slug} href={`/${emirate.slug}/${c.slug}/`} className="rounded-full border border-black/10 bg-white px-3.5 py-1.5 text-sm font-medium text-ink hover:border-ink">
+                  <Link prefetch={false} key={c.slug} href={`/${emirate.slug}/${c.slug}/`} className="rounded-full border border-black/10 bg-white px-3.5 py-1.5 text-sm font-medium text-ink hover:border-ink">
                     {c.name}
                   </Link>
                 ))}
@@ -152,7 +152,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
                 {otherServices.map((s, i) => (
                   <span key={s.slug}>
                     {i > 0 && (i === otherServices.length - 1 ? ' and ' : ', ')}
-                    <Link href={urls.service(s.slug)} className="font-medium text-ink underline">{s.name.toLowerCase()}</Link>
+                    <Link prefetch={false} href={urls.service(s.slug)} className="font-medium text-ink underline">{s.name.toLowerCase()}</Link>
                   </span>
                 ))}.
               </p>

@@ -6,7 +6,7 @@ import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import { buildClinicLocationOrFilter } from '@/lib/location/buildClinicLocationFilter';
 import { DubaiAreaGuide } from '@/components/guide/DubaiAreaGuide';
 import { dubaiAreas, dubaiAreaBySlug } from '@/content/dubai';
-import { canonicalTreatment, hasLocalGuide, serviceBySlug, urls } from '@/content';
+import { canonicalTreatment, emirateBySlug, hasLocalGuide, serviceBySlug, urls } from '@/content';
 import { fetchAreaData, type AreaData } from '@/lib/dubaiData';
 
 // Wrapper component to render SEO meta tags server-side with FAQ data for SSR
@@ -108,6 +108,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (ctx) => {
     const stateParam = normalizeStateSlug(ctx.params?.stateSlug as string);
     const cityParam = ctx.params?.citySlug as string;
+    // Unknown emirates (scanner probes such as /wp-admin/setup-config/) end here, before any query
+    if (!emirateBySlug(stateParam) || !/^[a-z0-9-]{1,80}$/.test(cityParam || '')) return { notFound: true, revalidate: 86400 };
 
     // Old URLs that put a treatment where the area belongs (e.g. /dubai/invisalign/)
     if (stateParam && cityParam && serviceBySlug(canonicalTreatment(cityParam))) {
@@ -123,7 +125,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
                 return { redirect: { destination: urls.dubaiArea(area.slug), permanent: true } };
             }
             const areaData = await fetchAreaData(area.slug);
-            return { props: { dubaiArea: area.slug, areaData }, revalidate: 3600 };
+            return { props: { dubaiArea: area.slug, areaData }, revalidate: 86400 };
         }
     }
     return legacyGetStaticProps(ctx);
@@ -166,7 +168,7 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
                 serviceLocationPagesProp: [],
                 treatmentsDataProp: [],
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -351,6 +353,6 @@ const [stateData, cityData, seoContent, pageContent, treatmentsData] = await Pro
             serviceLocationPagesProp,
             treatmentsDataProp: treatmentsData,
         },
-        revalidate: 600,
+        revalidate: 86400,
     };
 };

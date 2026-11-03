@@ -54,7 +54,7 @@ export default function DubaiReasonPage({ reasonSlug }: { reasonSlug: string }) 
         image={image}
         badge={{ label: 'Urgency', value: URGENCY_LABEL[reason.urgency] }}
       >
-        <Link href={`/find-clinics/?reason=${reason.slug}`} className="btn-ink">Find a dentist in Dubai <ArrowRight className="h-4 w-4" /></Link>
+        <Link prefetch={false} href={`/find-clinics/?reason=${reason.slug}`} className="btn-ink">Find a dentist in Dubai <ArrowRight className="h-4 w-4" /></Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
@@ -93,11 +93,11 @@ export default function DubaiReasonPage({ reasonSlug }: { reasonSlug: string }) 
         <Section id="areas" eyebrow="Where in Dubai?" title="Find a dentist by area">
           <div className="flex flex-wrap gap-2">
             {dubaiAreas.filter((a) => POPULAR_AREAS.includes(a.slug)).map((a) => (
-              <Link key={a.slug} href={`/find-clinics/?area=${a.slug}&reason=${reason.slug}`} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">
+              <Link prefetch={false} key={a.slug} href={`/find-clinics/?area=${a.slug}&reason=${reason.slug}`} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">
                 {reason.label} · {a.name}
               </Link>
             ))}
-            <Link href={`/find-clinics/?reason=${reason.slug}&near=me`} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Near me</Link>
+            <Link prefetch={false} href={`/find-clinics/?reason=${reason.slug}&near=me`} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Near me</Link>
           </div>
         </Section>
 
@@ -108,7 +108,7 @@ export default function DubaiReasonPage({ reasonSlug }: { reasonSlug: string }) 
         <Section eyebrow="Other reasons" title="Something else?">
           <div className="flex flex-wrap gap-2">
             {visitReasons.filter((r) => r.slug !== reason.slug).map((r) => (
-              <Link key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.label}</Link>
+              <Link prefetch={false} key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.label}</Link>
             ))}
           </div>
         </Section>

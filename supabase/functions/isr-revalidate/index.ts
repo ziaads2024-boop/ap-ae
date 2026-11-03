@@ -30,6 +30,26 @@ serve(async (req) => {
 
     console.log(`[ISR Revalidation] ${type} on ${table}:`, record?.slug || record?.id);
 
+    // Background jobs (enrichment, scraping, counters) update rows constantly.
+    // Skip updates that change nothing shown on a public page, so a bulk job
+    // does not trigger one page rebuild per row on the hosting plan.
+    if (type === "UPDATE" && record && old_record) {
+      const IGNORED = new Set([
+        "updated_at", "last_enriched_at", "enrichment_status", "claim_emails", "gmb_data",
+        "view_count", "profile_views", "last_synced_at", "seo_score", "sync_status",
+        "is_assigned", "routing_notes",
+      ]);
+      const changed = Object.keys(record).filter(
+        (k) => !IGNORED.has(k) && JSON.stringify(record[k]) !== JSON.stringify(old_record[k]),
+      );
+      if (changed.length === 0) {
+        return new Response(JSON.stringify({ skipped: true, reason: "no public fields changed" }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+    }
+
     const revalidatePaths: string[] = [];
     const revalidateTags: string[] = [];
 

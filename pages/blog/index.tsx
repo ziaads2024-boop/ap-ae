@@ -52,7 +52,7 @@ export const getStaticProps: GetStaticProps<BlogIndexPageProps> = async () => {
         popularStates: [],
         popularTreatments: [],
       },
-      revalidate: 600,
+      revalidate: 86400,
     };
   }
 
@@ -91,6 +91,6 @@ export const getStaticProps: GetStaticProps<BlogIndexPageProps> = async () => {
       popularStates: statesResult.data || [],
       popularTreatments: treatmentsResult.data || [],
     },
-    revalidate: 600,
+    revalidate: 86400,
   };
 };

@@ -294,7 +294,7 @@ const BlogPage = ({
                 Compare {counts?.clinics ? `${counts.clinics.toLocaleString()} ` : ''}listed dental clinics and request an appointment.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
-                <Link href="/find-clinics/">
+                <Link prefetch={false} href="/find-clinics/">
                   Search Now
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -318,7 +318,7 @@ const BlogPage = ({
                     <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                   </Link>
                 ))}
-                <Link href="/find-clinics/"
+                <Link prefetch={false} href="/find-clinics/"
                   className="flex items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-primary hover:text-primary transition-colors text-sm font-medium"
                 >
                   View All Locations
@@ -352,7 +352,7 @@ const BlogPage = ({
                 Get the latest dental health tips and news delivered to your inbox.
               </p>
               <Button asChild variant="outline" className="w-full rounded-xl font-bold border-gold/30 hover:bg-gold/10">
-                <Link href="/contact/">Subscribe</Link>
+                <Link prefetch={false} href="/contact/">Subscribe</Link>
               </Button>
             </div>
           </aside>
@@ -369,7 +369,7 @@ const BlogPage = ({
             Browse listed dental clinics in Dubai by area, treatment and insurance.
           </p>
           <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-            <Link href="/find-clinics/">
+            <Link prefetch={false} href="/find-clinics/">
               Find a Dentist
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

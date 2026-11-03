@@ -31,7 +31,7 @@ export function ClinicResults({ clinics, defaultReason = '', priceLabel }: { cli
       <ul className="space-y-3">
         {clinics.map((c) => (
           <li key={c.id} className="block-card grid gap-4 p-4 sm:grid-cols-[112px_1fr_auto] sm:items-center">
-            <Link href={`/clinic/${c.slug}/`} className="block size-28 overflow-hidden rounded-2xl bg-paper" tabIndex={-1} aria-hidden="true">
+            <Link prefetch={false} href={`/clinic/${c.slug}/`} className="block size-28 overflow-hidden rounded-2xl bg-paper" tabIndex={-1} aria-hidden="true">
               {c.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={c.imageUrl} alt="" loading="lazy" width={112} height={112} className="h-full w-full object-cover" />
@@ -40,7 +40,7 @@ export function ClinicResults({ clinics, defaultReason = '', priceLabel }: { cli
               )}
             </Link>
             <div className="min-w-0">
-              <Link href={`/clinic/${c.slug}/`} className="text-lg font-semibold leading-snug text-ink hover:underline">{c.name}</Link>
+              <Link prefetch={false} href={`/clinic/${c.slug}/`} className="text-lg font-semibold leading-snug text-ink hover:underline">{c.name}</Link>
               <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-600">
                 {c.place && <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {c.place}</span>}
                 {c.distanceKm != null && <span className="font-medium text-ink">{c.distanceKm < 1 ? '<1' : c.distanceKm.toFixed(1)} km away</span>}
@@ -61,7 +61,7 @@ export function ClinicResults({ clinics, defaultReason = '', priceLabel }: { cli
             </div>
             <div className="flex gap-2 sm:flex-col">
               <button type="button" onClick={() => setRequestFor(c)} className="btn-ink flex-1 !py-2.5 text-sm"><CalendarCheck2 className="h-4 w-4" /> Request appointment</button>
-              <Link href={`/clinic/${c.slug}/`} className="btn-ghost flex-1 !py-2.5 text-sm">View profile</Link>
+              <Link prefetch={false} href={`/clinic/${c.slug}/`} className="btn-ghost flex-1 !py-2.5 text-sm">View profile</Link>
             </div>
           </li>
         ))}

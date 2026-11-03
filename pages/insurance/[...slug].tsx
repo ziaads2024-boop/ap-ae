@@ -95,7 +95,7 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
   // Old /insurance/{insurer}/{emirate}/{city}/ pages are consolidated into one page per insurer
   if (segs.length > 1) return { redirect: { destination: `/insurance/${segs[0]}/`, permanent: true } };
   const insurer = await fetchInsurer(segs[0]);
-  if (!insurer) return { notFound: true, revalidate: 300 };
+  if (!insurer) return { notFound: true, revalidate: 86400 };
   const others = (await fetchInsurers().catch(() => [])).filter((i) => i.slug !== insurer.slug).slice(0, 12).map((i) => ({ name: i.name, slug: i.slug }));
-  return { props: { insurer, others }, revalidate: 3600 };
+  return { props: { insurer, others }, revalidate: 86400 };
 };

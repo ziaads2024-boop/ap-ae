@@ -81,5 +81,5 @@ export default function InsuranceHub({ insurers }: Props) {
 
 export const getStaticProps: GetStaticProps<Props> = async () => ({
   props: { insurers: await fetchInsurers().catch(() => []) },
-  revalidate: 3600,
+  revalidate: 86400,
 });

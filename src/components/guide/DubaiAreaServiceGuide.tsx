@@ -67,7 +67,7 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
         image={image}
         badge={data.priceRange ? { label: `Clinic-listed prices in ${area.name}`, value: `${formatAed(data.priceRange.min)} – ${formatAed(data.priceRange.max)}` } : { label: 'Typical UAE range', value: `${formatAed(service.price.from)} – ${formatAed(service.price.to)}` }}
       >
-        <Link href={`/find-clinics/?area=${area.slug}&specialty=${service.slug}`} className="btn-ink">Compare clinics <ArrowRight className="h-4 w-4" /></Link>
+        <Link prefetch={false} href={`/find-clinics/?area=${area.slug}&specialty=${service.slug}`} className="btn-ink">Compare clinics <ArrowRight className="h-4 w-4" /></Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
@@ -88,7 +88,7 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
           ) : (
             <p className="rounded-3xl border border-dashed border-black/20 bg-white p-6 text-sm text-zinc-600">
               No clinics in {area.name} are listed yet.{' '}
-              <Link href={`/find-clinics/?specialty=${service.slug}`} className="font-semibold underline">Search all of Dubai</Link>
+              <Link prefetch={false} href={`/find-clinics/?specialty=${service.slug}`} className="font-semibold underline">Search all of Dubai</Link>
             </p>
           )}
         </Section>
@@ -141,18 +141,18 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
 
         <Section eyebrow="Keep reading" title="More guidance">
           <div className="flex flex-wrap gap-2">
-            <Link href={urls.service(service.slug)} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Full {service.name.toLowerCase()} guide</Link>
+            <Link prefetch={false} href={urls.service(service.slug)} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Full {service.name.toLowerCase()} guide</Link>
             {hasLocalGuide(service.slug, 'dubai') && (
-              <Link href={urls.serviceEmirate('dubai', service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in Dubai</Link>
+              <Link prefetch={false} href={urls.serviceEmirate('dubai', service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in Dubai</Link>
             )}
             {reasons.map((r) => (
-              <Link key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.label}</Link>
+              <Link prefetch={false} key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.label}</Link>
             ))}
             {nearby.map((n) => (
-              <Link key={n.slug} href={urls.dubaiAreaService(n.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in {n.name}</Link>
+              <Link prefetch={false} key={n.slug} href={urls.dubaiAreaService(n.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in {n.name}</Link>
             ))}
             {related.map((r) => (
-              <Link key={r.slug} href={urls.dubaiAreaService(area.slug, r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.shortName} in {area.name}</Link>
+              <Link prefetch={false} key={r.slug} href={urls.dubaiAreaService(area.slug, r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.shortName} in {area.name}</Link>
             ))}
           </div>
         </Section>

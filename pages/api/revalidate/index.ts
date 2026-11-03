@@ -28,6 +28,11 @@ interface RevalidateRequest {
   tag?: string;
 }
 
+const MAX_PATHS_PER_CALL = 10;
+// Clinic, dentist and blog pages, and the Dubai guides. Legacy city and listing
+// pages refresh on their daily ISR schedule instead.
+const REVALIDATABLE = /^\/(clinic|dentist|blog|services|insurance)\/[^/]+\/$|^\/dubai\/[^/]+\/$/;
+
 function normalizePath(path: string): string {
   if (!path || path === '/') {
     return '/';
@@ -59,8 +64,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const results: { path?: string; tag?: string; success: boolean; error?: string }[] = [];
 
-    // Revalidate paths
-    const paths = body.paths || (body.path ? [body.path] : []);
+    // Revalidate paths. Each one re-runs the page's data queries, and this is
+    // called by a database webhook on every row change, so bulk updates could
+    // trigger thousands of rebuilds. Only profile/guide pages, at most 10 per call.
+    const requested = body.paths || (body.path ? [body.path] : []);
+    const paths = Array.from(new Set(requested.map((p) => normalizePath(String(p)))))
+      .filter((p) => REVALIDATABLE.test(p))
+      .slice(0, MAX_PATHS_PER_CALL);
     for (const path of paths) {
       try {
         const normalizedPath = normalizePath(path);
@@ -81,23 +91,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    // If no paths or tags provided, revalidate homepage
-    if (paths.length === 0 && tags.length === 0) {
-      await res.revalidate('/');
-      results.push({ path: '/', success: true });
-    }
 
     const successCount = results.filter(r => r.success).length;
     const failCount = results.filter(r => !r.success).length;
-
-    // Ping Google and Bing after successful revalidation
-    if (successCount > 0) {
-      const sitemapUrl = `${process.env.NEXT_SITE_URL || 'https://www.appointpanda.ae'}/sitemap.xml`;
-      await Promise.allSettled([
-        fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),
-        fetch(`https://www.bing.com/ping?sitemap=${encodeURIComponent(sitemapUrl)}`),
-      ]).catch(() => { /* Non-critical - don't fail the response */ });
-    }
 
     return res.status(200).json({
       revalidated: true,

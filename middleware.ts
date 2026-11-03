@@ -39,8 +39,16 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
+// Run only where it does something: protected pages and the sign-in page.
+// Matching every route made each public page view a middleware invocation.
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.).*)',
+    '/admin/:path*',
+    '/dashboard/:path*',
+    '/dashboard-v2/:path*',
+    '/claim-profile/:path*',
+    '/gmb-select/:path*',
+    '/onboarding/:path*',
+    '/auth/:path*',
   ],
 }

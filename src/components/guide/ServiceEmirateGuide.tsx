@@ -58,10 +58,10 @@ export function ServiceEmirateGuide({
         image={heroImage}
         badge={{ label: 'Licensed by', value: emirate.regulator.name }}
       >
-        <Link href={`/find-clinics/?emirate=${emirate.slug}&specialty=${service.slug}`} className="btn-ink">
+        <Link prefetch={false} href={`/find-clinics/?emirate=${emirate.slug}&specialty=${service.slug}`} className="btn-ink">
           {service.shortName} clinics in {emirate.name} <ArrowRight className="h-4 w-4" />
         </Link>
-        <Link href={`/find-clinics/?emirate=${emirate.slug}&specialty=${service.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
+        <Link prefetch={false} href={`/find-clinics/?emirate=${emirate.slug}&specialty=${service.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
@@ -99,7 +99,7 @@ export function ServiceEmirateGuide({
               </li>
             ))}
           </ol>
-          <Link href={urls.service(service.slug)} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-ink underline">
+          <Link prefetch={false} href={urls.service(service.slug)} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-ink underline">
             Read the full {service.name.toLowerCase()} guide: risks, alternatives and recovery
           </Link>
         </Section>
@@ -141,11 +141,11 @@ export function ServiceEmirateGuide({
           <Section eyebrow="Other emirates" title={`${service.shortName} elsewhere in the UAE`}>
             <div className="flex flex-wrap gap-2">
               {otherEmirates.map((e) => (
-                <Link key={e.slug} href={urls.serviceEmirate(e.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">
+                <Link prefetch={false} key={e.slug} href={urls.serviceEmirate(e.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-ink">
                   {service.shortName} in {e.name}
                 </Link>
               ))}
-              <Link href={urls.emirate(emirate.slug)} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
+              <Link prefetch={false} href={urls.emirate(emirate.slug)} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">
                 All dentists in {emirate.name}
               </Link>
             </div>

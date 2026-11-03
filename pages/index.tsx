@@ -31,7 +31,7 @@ export default function IndexPageWithSEO({ pageData }: { pageData: HomePageData 
 export const getStaticProps: GetStaticProps = async () => {
   try {
     const supabase = createServerSupabaseAdmin();
-    if (!supabase) return { props: { pageData: null }, revalidate: 3600 };
+    if (!supabase) return { props: { pageData: null }, revalidate: 86400 };
 
     const [
       { count: totalClinics },
@@ -144,10 +144,10 @@ export const getStaticProps: GetStaticProps = async () => {
 
     return {
       props: { pageData },
-      revalidate: 3600,
+      revalidate: 86400,
     };
   } catch (e) {
     console.error('Failed to fetch homepage data:', e);
-    return { props: { pageData: null }, revalidate: 60 };
+    return { props: { pageData: null }, revalidate: 86400 };
   }
 };

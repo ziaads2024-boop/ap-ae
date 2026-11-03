@@ -22,14 +22,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<DentistProfileProps> = async (ctx) => {
   const supabase = createServerSupabaseAdmin();
   const slug = ctx.params?.dentistSlug as string;
-  if (!slug || !supabase) return { notFound: true, revalidate: 60 };
+  if (!slug || !supabase || !/^[a-z0-9-]{1,120}$/i.test(slug)) return { notFound: true, revalidate: 86400 };
 
   const { data: d } = await supabase
     .from('dentists')
     .select('id, name, slug, title, professional_type, bio, photo_url, image_url, gender, languages, qualifications, specializations, years_experience, experience_years, clinic_id, is_active')
     .eq('slug', slug)
     .maybeSingle();
-  if (!d || !d.is_active) return { notFound: true, revalidate: 300 };
+  if (!d || !d.is_active) return { notFound: true, revalidate: 86400 };
 
   const [clinicRes, colleaguesRes, treatmentsRes] = d.clinic_id
     ? await Promise.all([
@@ -74,7 +74,7 @@ export const getStaticProps: GetStaticProps<DentistProfileProps> = async (ctx) =
         new Map(((treatmentsRes.data || []) as any[]).filter((t) => t.treatment).map((t) => [t.treatment.slug, { name: t.treatment.name, slug: t.treatment.slug }])).values()
       ),
     },
-    revalidate: 600,
+    revalidate: 86400,
   };
 };
 

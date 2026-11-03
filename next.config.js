@@ -19,6 +19,12 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // Retired pages: redirected here (served by the CDN) rather than by a
+      // server function on every request.
+      { source: '/ai-search', destination: '/find-clinics/', permanent: true },
+      { source: '/find-dentist', destination: '/find-clinics/', permanent: true },
+      { source: '/tools/insurance-checker', destination: '/insurance/', permanent: true },
+      { source: '/compare/:path*', destination: '/emirates/', permanent: true },
       {
         source: '/emirates/:state(abu-dhabi|ajman|dubai|fujairah|ras-al-khaimah|sharjah|umm-al-quwain)',
         destination: '/:state/',
@@ -81,6 +87,10 @@ const nextConfig = {
 
   // WebP + AVIF auto-conversion, expanded domain list
   images: {
+    // Serve images as they are: the guide photos are pre-sized JPEGs (2.5 MB in
+    // total) and on-demand AVIF/WebP resizing counts against the Vercel Hobby
+    // transformation limit and function CPU.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },

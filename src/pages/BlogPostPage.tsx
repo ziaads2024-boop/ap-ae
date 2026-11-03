@@ -137,7 +137,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
               The blog post you're looking for doesn't exist.
             </p>
             <Button asChild className="rounded-xl font-bold">
-              <Link href="/blog/">Back to Blog</Link>
+              <Link prefetch={false} href="/blog/">Back to Blog</Link>
             </Button>
           </div>
         </Section>
@@ -547,8 +547,8 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                   <p className="mt-1 text-lg font-semibold">{guide.name}: cost, steps and what to ask</p>
                   <p className="mt-1 text-sm leading-relaxed text-ink/80">{guide.summary}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <Link href={urls.service(guide.slug)} className="btn-ink">Read the guide</Link>
-                    <Link href={`/find-clinics/?specialty=${guide.slug}`} className="btn-ghost">Find clinics in Dubai</Link>
+                    <Link prefetch={false} href={urls.service(guide.slug)} className="btn-ink">Read the guide</Link>
+                    <Link prefetch={false} href={`/find-clinics/?specialty=${guide.slug}`} className="btn-ghost">Find clinics in Dubai</Link>
                   </div>
                 </div>
               )}
@@ -647,7 +647,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                 Looking for a dentist? Compare listed clinics in Dubai and request an appointment.
               </p>
               <Button asChild className="w-full rounded-xl font-bold">
-                <Link href="/find-clinics/">
+                <Link prefetch={false} href="/find-clinics/">
                   Browse Dentists
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -737,7 +737,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                 Our team can help you find the right dentist for your needs.
               </p>
               <Button asChild variant="outline" className="w-full rounded-xl font-bold border-coral/30 hover:bg-coral/10">
-                <Link href="/contact/">Contact Us</Link>
+                <Link prefetch={false} href="/contact/">Contact Us</Link>
               </Button>
             </div>
           </aside>
@@ -746,7 +746,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
         {/* Back to Blog */}
         <div className="mt-8">
           <Button asChild variant="outline" className="rounded-xl font-bold">
-            <Link href="/blog/">
+            <Link prefetch={false} href="/blog/">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Blog
             </Link>
@@ -803,13 +803,13 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-              <Link href="/find-clinics/">
+              <Link prefetch={false} href="/find-clinics/">
                 Find a Dentist
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-2xl font-bold bg-transparent border-white/30 text-white hover:bg-white/10">
-              <Link href="/services/">
+              <Link prefetch={false} href="/services/">
                 Browse Services
               </Link>
             </Button>

@@ -158,7 +158,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
             {['toothache', 'checkup-and-cleaning', 'crooked-teeth', 'missing-tooth', 'broken-tooth', 'childs-first-visit'].map((slug) => {
               const r = visitReasons.find((x) => x.slug === slug)!;
               return (
-                <Link key={slug} href={urls.dubaiReason(slug)} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm font-medium text-ink hover:bg-white">
+                <Link prefetch={false} key={slug} href={urls.dubaiReason(slug)} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm font-medium text-ink hover:bg-white">
                   {r.label}
                 </Link>
               );
@@ -202,7 +202,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
       <section className="mx-auto max-w-6xl px-5 pb-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Dentists across Dubai</h2>
-          <Link href={urls.emirate('dubai')} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Dubai guide <ArrowRight className="h-4 w-4" /></Link>
+          <Link prefetch={false} href={urls.emirate('dubai')} className="inline-flex items-center gap-1 text-sm font-semibold text-ink">Dubai guide <ArrowRight className="h-4 w-4" /></Link>
         </div>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {DUBAI_AREA_GROUPS.map((group) => (
@@ -211,7 +211,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
               <ul className="mt-3 flex flex-wrap gap-2">
                 {dubaiAreas.filter((a) => a.group === group).map((a) => (
                   <li key={a.slug}>
-                    <Link href={urls.dubaiArea(a.slug)} className={cn('inline-block rounded-full px-3 py-1.5 text-sm font-medium text-ink', toneClass[a.tone])}>{a.name}</Link>
+                    <Link prefetch={false} href={urls.dubaiArea(a.slug)} className={cn('inline-block rounded-full px-3 py-1.5 text-sm font-medium text-ink', toneClass[a.tone])}>{a.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -230,7 +230,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
           {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e) => {
             const photo = imageForEmirate(e.slug);
             return (
-              <Link key={e.slug} href={urls.emirate(e.slug)} className="group relative flex min-h-[180px] flex-col justify-end overflow-hidden rounded-[1.25rem]">
+              <Link prefetch={false} key={e.slug} href={urls.emirate(e.slug)} className="group relative flex min-h-[180px] flex-col justify-end overflow-hidden rounded-[1.25rem]">
                 <Image src={photo.src} alt="" fill sizes="(min-width: 1024px) 33vw, 50vw" className="object-cover grayscale-[40%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0" />
                 <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent" />
                 <span className="relative p-5">
@@ -254,7 +254,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
             <h2 className="display mt-5 text-[clamp(2.4rem,6vw,4.5rem)] text-white">Understand it{' '}<br />before you book it</h2>
             <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {services.map((s) => (
-                <Link key={s.slug} href={urls.service(s.slug)} className="group overflow-hidden rounded-3xl bg-white/[0.06] ring-1 ring-white/10 transition-colors hover:bg-white/[0.12]">
+                <Link prefetch={false} key={s.slug} href={urls.service(s.slug)} className="group overflow-hidden rounded-3xl bg-white/[0.06] ring-1 ring-white/10 transition-colors hover:bg-white/[0.12]">
                   <span className="relative block aspect-[16/10] overflow-hidden">
                     <Image src={imageForService(s.slug).src} alt="" width={imageForService(s.slug).width} height={imageForService(s.slug).height} sizes="(min-width: 1024px) 22vw, 50vw" className="h-full w-full object-cover opacity-90 transition duration-500 group-hover:scale-105 group-hover:opacity-100" />
                     <span className={cn('absolute left-3 top-3 size-3 rounded-full ring-2 ring-white', toneClass[s.tone])} aria-hidden="true" />
@@ -293,13 +293,13 @@ export default function IndexPage({ pageData }: IndexPageProps) {
         <section className="mx-auto max-w-6xl px-5 py-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="display text-[clamp(2.4rem,6vw,4.5rem)] text-ink">Most-reviewed clinics</h2>
-            <Link href="/find-clinics/" className="inline-flex items-center gap-1 text-sm font-semibold text-ink">All clinics <ArrowRight className="h-4 w-4" /></Link>
+            <Link prefetch={false} href="/find-clinics/" className="inline-flex items-center gap-1 text-sm font-semibold text-ink">All clinics <ArrowRight className="h-4 w-4" /></Link>
           </div>
           <p className="mt-3 max-w-2xl text-sm text-zinc-500">Sorted by number of Google reviews. This is not a ranking of quality or a recommendation.</p>
           <ul className="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             {topClinics.map((c) => (
               <li key={c.id}>
-                <Link href={`/clinic/${c.slug}/`} className="block-card block overflow-hidden">
+                <Link prefetch={false} href={`/clinic/${c.slug}/`} className="block-card block overflow-hidden">
                   <div className="aspect-[16/9] bg-paper">
                     {c.coverImageUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -334,7 +334,7 @@ export default function IndexPage({ pageData }: IndexPageProps) {
             const service = serviceBySlug(s)!;
             const area = dubaiAreas.find((x) => x.slug === a)!;
             return (
-              <Link key={`${a}-${s}`} href={urls.dubaiAreaService(a, s)} className="block-card group flex items-center justify-between gap-4 p-5">
+              <Link prefetch={false} key={`${a}-${s}`} href={urls.dubaiAreaService(a, s)} className="block-card group flex items-center justify-between gap-4 p-5">
                 <span>
                   <span className="block font-semibold text-ink">{service.shortName} in {area.name}</span>
                   <span className="block text-sm text-zinc-500">Typically from {formatAed(service.price.from)}</span>
@@ -387,8 +387,8 @@ export default function IndexPage({ pageData }: IndexPageProps) {
           <h2 className="display mx-auto text-[clamp(3rem,9vw,7.5rem)] text-ink">Find your{' '}<br />dentist.</h2>
           <p className="mx-auto mt-4 max-w-md text-ink/75">Use your location to see licensed clinics closest to you.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/find-clinics/?near=me" className="btn-ink"><LocateFixed className="h-4 w-4" /> Dentists near me</Link>
-            <Link href="/list-your-practice/" className="btn-ghost">List your clinic</Link>
+            <Link prefetch={false} href="/find-clinics/?near=me" className="btn-ink"><LocateFixed className="h-4 w-4" /> Dentists near me</Link>
+            <Link prefetch={false} href="/list-your-practice/" className="btn-ghost">List your clinic</Link>
           </div>
         </div>
       </section>

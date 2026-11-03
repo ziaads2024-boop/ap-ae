@@ -71,7 +71,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     // Hand-written guides (src/content) render without the database; clinics are a live extra.
     if (slug && serviceBySlug(slug)) {
         const guideClinics = await fetchGuideClinics({ treatmentSlug: slug, limit: 10 });
-        return { props: { guideSlug: slug, guideClinics, serviceSlug: slug }, revalidate: 3600 };
+        return { props: { guideSlug: slug, guideClinics, serviceSlug: slug }, revalidate: 86400 };
     }
     return legacyGetStaticProps(ctx);
 };
@@ -106,7 +106,7 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
                 statesData: [],
                 priceRangesData: [],
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -266,6 +266,6 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
             statesData: statesResult.data || [],
             priceRangesData: priceRangesResult.data || [],
         },
-        revalidate: 600,
+        revalidate: 86400,
     };
 };

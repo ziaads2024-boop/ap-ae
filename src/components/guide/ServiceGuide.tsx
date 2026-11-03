@@ -44,8 +44,8 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
         image={heroImage}
         badge={{ label: 'Indicative cost', value: `From ${formatAed(service.price.from)}` }}
       >
-        <Link href={`/find-clinics/?specialty=${service.slug}`} className="btn-ink">Find a clinic <ArrowRight className="h-4 w-4" /></Link>
-        <Link href={`/find-clinics/?specialty=${service.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
+        <Link prefetch={false} href={`/find-clinics/?specialty=${service.slug}`} className="btn-ink">Find a clinic <ArrowRight className="h-4 w-4" /></Link>
+        <Link prefetch={false} href={`/find-clinics/?specialty=${service.slug}&near=me`} className="btn-ghost"><LocateFixed className="h-4 w-4" /> Near me</Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
@@ -119,7 +119,7 @@ export function ServiceGuide({ service, clinics }: { service: ServiceContent; cl
                 <ul className="space-y-3">
                   {service.alternatives.map((a) => (
                     <li key={a.name} className="text-[15px] leading-relaxed text-zinc-700">
-                      {a.slug ? <Link href={urls.service(a.slug)} className="font-semibold text-ink underline">{a.name}</Link> : <strong className="text-ink">{a.name}</strong>}
+                      {a.slug ? <Link prefetch={false} href={urls.service(a.slug)} className="font-semibold text-ink underline">{a.name}</Link> : <strong className="text-ink">{a.name}</strong>}
                       {' '}— {a.note}
                     </li>
                   ))}

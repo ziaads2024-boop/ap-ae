@@ -1,7 +1,7 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { DubaiAreaServiceGuide } from '@/components/guide/DubaiAreaServiceGuide';
 import { dubaiAreaBySlug } from '@/content/dubai';
-import { INDEX_COMING_SOON, isLiveEmirate, serviceBySlug, urls } from '@/content';
+import { emirateBySlug, INDEX_COMING_SOON, isLiveEmirate, serviceBySlug, urls } from '@/content';
 import { canonicalTreatment, fetchAreaServiceData, type AreaServiceData } from '@/lib/dubaiData';
 import { normalizeStateSlug as normalizeDubaiState } from '@/lib/slug/normalizeStateSlug';
 import Head from 'next/head';
@@ -198,6 +198,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     const stateParam = normalizeDubaiState(ctx.params?.stateSlug as string);
     const cityParam = ctx.params?.citySlug as string;
     const serviceParam = ctx.params?.serviceSlug as string;
+    if (!emirateBySlug(stateParam) || ![cityParam, serviceParam].every((x) => /^[a-z0-9-]{1,80}$/.test(x || ''))) return { notFound: true, revalidate: 86400 };
     if (stateParam === 'dubai' && cityParam && serviceParam) {
         const area = dubaiAreaBySlug(cityParam);
         const canonicalService = canonicalTreatment(serviceParam);
@@ -207,7 +208,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
                 return { redirect: { destination: urls.dubaiAreaService(area.slug, service.slug), permanent: true } };
             }
             const areaServiceData = await fetchAreaServiceData(area.slug, service.slug);
-            return { props: { dubaiAreaService: { area: area.slug, service: service.slug }, areaServiceData }, revalidate: 3600 };
+            return { props: { dubaiAreaService: { area: area.slug, service: service.slug }, areaServiceData }, revalidate: 86400 };
         }
     }
     return legacyGetStaticProps(ctx);
@@ -250,7 +251,7 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
                 clinicProfilesProp: [],
                 allEmirateCitiesProp: [],
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -402,6 +403,6 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
             clinicProfilesProp: clinicProfiles || [],
             allEmirateCitiesProp: allEmirateCities || [],
         },
-        revalidate: 600,
+        revalidate: 86400,
     };
 };

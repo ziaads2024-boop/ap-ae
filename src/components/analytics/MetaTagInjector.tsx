@@ -43,7 +43,7 @@ export function MetaTagInjector() {
       }
       return map;
     },
-    staleTime: 5 * 60 * 1000, // cache 5 min
+    staleTime: 60 * 60 * 1000, // settings change rarely
   });
 
   // Inject Google Search Console verification meta tags

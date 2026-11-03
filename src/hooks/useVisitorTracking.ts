@@ -62,8 +62,16 @@ const extractPathData = (path: string) => {
   return {};
 };
 
+// Crawlers that run JavaScript (Googlebot, Lighthouse, headless browsers) would
+// otherwise call the tracking function on every page they render.
+const isAutomated = () =>
+  typeof navigator === 'undefined'
+  || (navigator as Navigator & { webdriver?: boolean }).webdriver === true
+  || /bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|embedly|whatsapp/i.test(navigator.userAgent);
+
 export function useVisitorTracking() {
   const router = useRouter();
+  const skip = useRef<boolean>(isAutomated());
   const sessionId = useRef<string>(generateSessionId());
   const pageStartTime = useRef<number>(Date.now());
   const scrollDepth = useRef<number>(0);
@@ -88,7 +96,7 @@ export function useVisitorTracking() {
 
   // Initialize session
   useEffect(() => {
-    if (initialized.current) return;
+    if (initialized.current || skip.current) return;
     initialized.current = true;
 
     const initSession = async () => {
@@ -118,8 +126,8 @@ export function useVisitorTracking() {
   // Track page views
   useEffect(() => {
     const trackPageView = async () => {
-      // Don't track admin pages
-      if (router.pathname.startsWith('/admin')) return;
+      // Don't track admin pages or crawlers
+      if (skip.current || router.pathname.startsWith('/admin')) return;
 
       totalPageviews.current++;
       pageStartTime.current = Date.now();
@@ -152,24 +160,7 @@ export function useVisitorTracking() {
 
     trackPageView();
 
-    // Track time on previous page when leaving
-    return () => {
-      const timeOnPage = Math.round((Date.now() - pageStartTime.current) / 1000);
-      if (timeOnPage > 1) {
-        supabase.functions.invoke('track-visitor', {
-          body: {
-            type: 'pageview',
-            sessionId: sessionId.current,
-            data: {
-              pagePath: router.pathname,
-              timeOnPage,
-              scrollDepth: scrollDepth.current,
-              exitPage: true,
-            },
-          },
-        }).catch(() => { });
-      }
-    };
+    // No exit ping: it doubled the calls per page view for little value.
   }, [router.pathname]);
 
   // Track events
@@ -178,6 +169,7 @@ export function useVisitorTracking() {
     eventCategory: string,
     metadata?: Record<string, any>
   ) => {
+    if (skip.current) return;
     totalEvents.current++;
 
     try {
@@ -205,6 +197,7 @@ export function useVisitorTracking() {
     clinicId?: string,
     dentistId?: string
   ) => {
+    if (skip.current) return;
     try {
       await supabase.functions.invoke('track-visitor', {
         body: {
@@ -232,6 +225,7 @@ export function useVisitorTracking() {
     patientId?: string,
     appointmentId?: string
   ) => {
+    if (skip.current) return;
     try {
       // Link patient to session
       await supabase.functions.invoke('track-visitor', {

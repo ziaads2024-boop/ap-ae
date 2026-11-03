@@ -22,5 +22,27 @@ Disallow: /rq/
 Disallow: /*?*utm_
 Disallow: /*?*gclid=
 Disallow: /*?*fbclid=
+Disallow: /find-clinics/?
+Disallow: /book/
+
+# Commercial SEO and scraping crawlers: they fetch thousands of pages a day,
+# which uses the hosting plan's function and CPU limits, and send no visitors.
+User-agent: AhrefsBot
+User-agent: SemrushBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+User-agent: DataForSeoBot
+User-agent: PetalBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: MegaIndex
+User-agent: SeekportBot
+User-agent: serpstatbot
+User-agent: Barkrowler
+User-agent: ImagesiftBot
+User-agent: omgili
+User-agent: Timpibot
+Disallow: /
 
 Sitemap: https://www.appointpanda.ae/sitemap.xml

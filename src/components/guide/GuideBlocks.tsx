@@ -30,7 +30,7 @@ export function Crumbs({ items }: { items: { name: string; path: string }[] }) {
             {i === items.length - 1 ? (
               <span aria-current="page" className="text-ink">{item.name}</span>
             ) : (
-              <Link href={item.path} className="hover:text-ink hover:underline">{item.name}</Link>
+              <Link prefetch={false} href={item.path} className="hover:text-ink hover:underline">{item.name}</Link>
             )}
           </li>
         ))}
@@ -66,7 +66,7 @@ export function GuideHero({
             <p className="mt-5 text-xs text-ink/60">
               Written by the AppointPanda editorial team · Last reviewed{' '}
               <time dateTime={CONTENT_REVIEWED}>{CONTENT_REVIEWED_LABEL}</time> ·{' '}
-              <Link href="/editorial-policy/" className="underline">How we write our guides</Link>
+              <Link prefetch={false} href="/editorial-policy/" className="underline">How we write our guides</Link>
             </p>
             {children && <div className="mt-8 flex flex-wrap gap-3">{children}</div>}
           </div>
@@ -150,7 +150,7 @@ export function LinkTiles({ links, columns = 3 }: { links: { href: string; title
   return (
     <div className={cn('grid gap-3 sm:grid-cols-2', columns === 3 && 'lg:grid-cols-3', columns === 4 && 'lg:grid-cols-4')}>
       {links.map((l) => (
-        <Link key={l.href} href={l.href} className={cn('block-card group flex flex-col overflow-hidden', l.tone && toneClass[l.tone], l.tone && 'border-transparent')}>
+        <Link prefetch={false} key={l.href} href={l.href} className={cn('block-card group flex flex-col overflow-hidden', l.tone && toneClass[l.tone], l.tone && 'border-transparent')}>
           {l.image && (
             <span className="relative block aspect-[16/10] overflow-hidden">
               {/* Decorative thumbnail; credited in the page's image credits list */}
@@ -186,7 +186,7 @@ export function ClinicList({ clinics, emptyText, moreHref }: { clinics: ClinicSu
     return (
       <div className="rounded-3xl border border-dashed border-black/20 bg-white p-6 text-sm text-zinc-600">
         {emptyText}{' '}
-        <Link href={moreHref} className="font-semibold text-ink underline">Search all clinics</Link>
+        <Link prefetch={false} href={moreHref} className="font-semibold text-ink underline">Search all clinics</Link>
       </div>
     );
   }
@@ -195,7 +195,7 @@ export function ClinicList({ clinics, emptyText, moreHref }: { clinics: ClinicSu
       <ul className="grid gap-3 md:grid-cols-2">
         {clinics.map((c) => (
           <li key={c.id}>
-            <Link href={`/clinic/${c.slug}/`} className="block-card flex items-start justify-between gap-4 p-5">
+            <Link prefetch={false} href={`/clinic/${c.slug}/`} className="block-card flex items-start justify-between gap-4 p-5">
               <span>
                 <span className="block font-semibold text-ink">{c.name}</span>
                 {c.area && (
@@ -217,9 +217,9 @@ export function ClinicList({ clinics, emptyText, moreHref }: { clinics: ClinicSu
       </ul>
       <p className="mt-3 text-xs text-zinc-500">
         Listings are sorted by Google rating and review count. Ratings come from Google and are not edited by AppointPanda.{' '}
-        <Link href="/verification-policy/" className="underline">What &ldquo;verified&rdquo; means</Link>.
+        <Link prefetch={false} href="/verification-policy/" className="underline">What &ldquo;verified&rdquo; means</Link>.
       </p>
-      <Link href={moreHref} className="btn-ghost mt-5">See all clinics <ArrowRight className="h-4 w-4" /></Link>
+      <Link prefetch={false} href={moreHref} className="btn-ghost mt-5">See all clinics <ArrowRight className="h-4 w-4" /></Link>
     </div>
   );
 }
@@ -230,7 +230,7 @@ export function GuideCta({ title, text, href, cta }: { title: string; text: stri
       <div className="mx-auto max-w-[1400px] rounded-[2rem] bg-tone-lemon px-6 py-14 text-center lg:py-20">
         <h2 className="display mx-auto max-w-4xl text-[clamp(2.4rem,6vw,5rem)] text-ink">{title}</h2>
         <p className="mx-auto mt-4 max-w-xl text-ink/75">{text}</p>
-        <Link href={href} className="btn-ink mt-8">{cta} <ArrowRight className="h-4 w-4" /></Link>
+        <Link prefetch={false} href={href} className="btn-ink mt-8">{cta} <ArrowRight className="h-4 w-4" /></Link>
       </div>
     </section>
   );
@@ -260,7 +260,7 @@ export function PageImageCredits({ images }: { images: SiteImage[] }) {
           </li>
         ))}
       </ul>
-      <p className="mt-1">Treatment photos are illustrative and do not show clinics listed on AppointPanda. <Link href="/image-credits/" className="underline">All image credits</Link></p>
+      <p className="mt-1">Treatment photos are illustrative and do not show clinics listed on AppointPanda. <Link prefetch={false} href="/image-credits/" className="underline">All image credits</Link></p>
     </aside>
   );
 }

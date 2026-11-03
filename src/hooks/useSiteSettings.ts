@@ -183,10 +183,10 @@ export function useSiteSettings() {
         return DEFAULT_SITE_SETTINGS;
       }
     },
-    staleTime: 0, // Always consider data stale to force refetch
-    gcTime: 5 * 60 * 1000, // Keep in cache for 5 minutes
-    refetchOnMount: 'always', // Always refetch when component mounts
-    refetchOnWindowFocus: true, // Refetch when window gains focus
-    refetchInterval: 30 * 1000, // Refetch every 30 seconds in background
+    // Settings change rarely. This hook runs on every page (favicon, footer),
+    // so polling it every 30 seconds sent a database query per open tab.
+    staleTime: 60 * 60 * 1000,
+    gcTime: 2 * 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }

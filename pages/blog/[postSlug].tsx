@@ -97,8 +97,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     const supabase = createServerSupabaseAdmin();
     const postSlug = ctx.params?.postSlug as string;
 
-    if (!postSlug) {
-        return { notFound: true };
+    if (!postSlug || !/^[a-z0-9-]{1,160}$/i.test(postSlug)) {
+        return { notFound: true, revalidate: 86400 };
     }
 
     if (!supabase) {
@@ -112,7 +112,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
                     canonical: `/blog/${postSlug}/`,
                 },
             },
-            revalidate: 60,
+            revalidate: 86400,
         };
     }
 
@@ -168,6 +168,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
             },
             authorData,
         },
-        revalidate: 600
+        revalidate: 86400
     };
 };

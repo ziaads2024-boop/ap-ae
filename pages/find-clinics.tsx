@@ -300,7 +300,7 @@ export default function FindClinicsPage() {
                 {reason.urgency === 'emergency' && <AlertTriangle className="h-5 w-5 shrink-0" />}
                 <p>
                   <strong>{reason.label}:</strong> {reason.advice}{' '}
-                  <Link href={urls.dubaiReason(reason.slug)} className="font-semibold underline">What to expect</Link>
+                  <Link prefetch={false} href={urls.dubaiReason(reason.slug)} className="font-semibold underline">What to expect</Link>
                 </p>
               </div>
             )}
@@ -346,7 +346,7 @@ export default function FindClinicsPage() {
                 const place = c.area?.name || c.city?.name || 'UAE';
                 return (
                   <li key={c.id} className="block-card grid gap-4 p-4 sm:grid-cols-[112px_1fr_auto] sm:items-center">
-                    <Link href={`/clinic/${c.slug}/`} className="block size-28 overflow-hidden rounded-2xl bg-paper" tabIndex={-1} aria-hidden="true">
+                    <Link prefetch={false} href={`/clinic/${c.slug}/`} className="block size-28 overflow-hidden rounded-2xl bg-paper" tabIndex={-1} aria-hidden="true">
                       {liveImage(c.cover_image_url) ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={liveImage(c.cover_image_url)!} alt="" loading="lazy" width={112} height={112} className="h-full w-full object-cover" />
@@ -355,7 +355,7 @@ export default function FindClinicsPage() {
                       )}
                     </Link>
                     <div className="min-w-0">
-                      <Link href={`/clinic/${c.slug}/`} className="text-lg font-semibold leading-snug text-ink hover:underline">{c.name}</Link>
+                      <Link prefetch={false} href={`/clinic/${c.slug}/`} className="text-lg font-semibold leading-snug text-ink hover:underline">{c.name}</Link>
                       <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-600">
                         <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {place}</span>
                         {c.distanceKm != null && <span className="font-medium text-ink">{c.distanceKm < 1 ? '<1' : c.distanceKm.toFixed(1)} km away</span>}
@@ -375,7 +375,7 @@ export default function FindClinicsPage() {
                       {requestsOpen && (
                         <button type="button" onClick={() => setRequestFor(c)} className="btn-ink flex-1 !py-2.5 text-sm"><CalendarCheck2 className="h-4 w-4" /> Request appointment</button>
                       )}
-                      <Link href={`/clinic/${c.slug}/`} className="btn-ghost flex-1 !py-2.5 text-sm">View profile</Link>
+                      <Link prefetch={false} href={`/clinic/${c.slug}/`} className="btn-ghost flex-1 !py-2.5 text-sm">View profile</Link>
                     </div>
                   </li>
                 );
@@ -391,13 +391,13 @@ export default function FindClinicsPage() {
 
         <p className="mt-8 text-xs text-zinc-500">
           Ratings come from Google and are shown as reported. Results are ordered by your sort choice; inclusion is not a recommendation and no clinic pays to rank higher.{' '}
-          <Link href="/verification-policy/" className="underline">How we check listings</Link>
+          <Link prefetch={false} href="/verification-policy/" className="underline">How we check listings</Link>
         </p>
 
         <div className="mt-8 flex flex-wrap gap-2">
-          {areaName && emirate === 'dubai' && <Link href={`/dubai/${dubaiAreaBySlug(area)!.slug}/`} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Guide to dentists in {areaName}</Link>}
-          {service && <Link href={urls.service(service.slug)} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Read the {service.name.toLowerCase()} guide</Link>}
-          {emirateName && !areaName && <Link href={urls.emirate(emirate)} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Guide to dentists in {emirateName}</Link>}
+          {areaName && emirate === 'dubai' && <Link prefetch={false} href={`/dubai/${dubaiAreaBySlug(area)!.slug}/`} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Guide to dentists in {areaName}</Link>}
+          {service && <Link prefetch={false} href={urls.service(service.slug)} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Read the {service.name.toLowerCase()} guide</Link>}
+          {emirateName && !areaName && <Link prefetch={false} href={urls.emirate(emirate)} className="rounded-full bg-white px-4 py-2 text-sm font-medium ring-1 ring-black/10">Guide to dentists in {emirateName}</Link>}
         </div>
       </div>
 

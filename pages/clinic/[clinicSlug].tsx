@@ -29,7 +29,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) => {
   const supabase = createServerSupabaseAdmin();
   const clinicSlug = ctx.params?.clinicSlug as string;
-  if (!clinicSlug || !supabase) return { notFound: true, revalidate: 60 };
+  if (!clinicSlug || !supabase || !/^[a-z0-9-]{1,120}$/i.test(clinicSlug)) return { notFound: true, revalidate: 86400 };
 
   const { data: clinic, error } = await supabase
     .from('clinics')
@@ -38,7 +38,7 @@ export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) =>
     .eq('is_active', true)
     .maybeSingle();
 
-  if (error || !clinic) return { notFound: true, revalidate: 300 };
+  if (error || !clinic) return { notFound: true, revalidate: 86400 };
   const c = clinic as any;
 
   const seoSlug = `clinic/${clinicSlug}`;
@@ -107,7 +107,7 @@ export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) =>
       faqs,
       nearby: (nearby.data || []).map((n: any) => ({ name: n.name, slug: n.slug, rating: Number(n.rating) || null, reviewCount: Number(n.review_count) || null, imageUrl: liveImage(n.cover_image_url) })),
     },
-    revalidate: 600,
+    revalidate: 86400,
   };
 };
 

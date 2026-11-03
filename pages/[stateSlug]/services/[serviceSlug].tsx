@@ -48,6 +48,7 @@ export const getStaticPaths: GetStaticPaths = async () => ({ paths: guidePaths, 
 export const getStaticProps: GetStaticProps<StateServiceRouteProps | GuideProps> = async (ctx) => {
   const emirateSlug = normalizeStateSlug((ctx.params?.stateSlug as string) || '');
   const serviceSlug = ctx.params?.serviceSlug as string | undefined;
+  if (!emirateBySlug(emirateSlug) || !/^[a-z0-9-]{1,80}$/.test(serviceSlug || '')) return { notFound: true, revalidate: 86400 };
 
   if (serviceSlug && emirateBySlug(emirateSlug) && isRenamedTreatment(serviceSlug)) {
     const target = canonicalTreatment(serviceSlug);
@@ -59,7 +60,7 @@ export const getStaticProps: GetStaticProps<StateServiceRouteProps | GuideProps>
       return { redirect: { destination: urls.serviceEmirate(emirateSlug, serviceSlug), permanent: true } };
     }
     const clinics = await fetchGuideClinics({ emirateSlug, treatmentSlug: serviceSlug, limit: 10 });
-    return { props: { guide: { emirate: emirateSlug, service: serviceSlug }, clinics }, revalidate: 3600 };
+    return { props: { guide: { emirate: emirateSlug, service: serviceSlug }, clinics }, revalidate: 86400 };
   }
 
   // A treatment with a national guide but no local guide yet: send readers to the
@@ -208,6 +209,6 @@ const legacyGetStaticProps: GetStaticProps<StateServiceRouteProps> = async ({ pa
       profilesProp,
       priceRangesProp: priceRangesResult.data || [],
     },
-    revalidate: 600,
+    revalidate: 86400,
   };
 };

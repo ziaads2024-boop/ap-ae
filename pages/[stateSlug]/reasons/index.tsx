@@ -56,7 +56,7 @@ export default function DubaiReasonsIndex() {
             <Section key={g.key} title={g.title}>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((r) => (
-                  <Link key={r.slug} href={urls.dubaiReason(r.slug)} className={cn('block-card group flex flex-col justify-between border-transparent p-6', toneClass[TONE[r.urgency]])}>
+                  <Link prefetch={false} key={r.slug} href={urls.dubaiReason(r.slug)} className={cn('block-card group flex flex-col justify-between border-transparent p-6', toneClass[TONE[r.urgency]])}>
                     <span>
                       <span className="display block text-3xl text-ink">{r.label}</span>
                       <span className="mt-3 block text-sm leading-relaxed text-ink/75">{r.advice}</span>
