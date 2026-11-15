@@ -126,7 +126,8 @@ export function ClinicProfile(props: ClinicProfileProps) {
   const title = fitTitle(nameHasPlace ? `${clinic.name}, Dubai Dentist` : `${clinic.name}${areaName ? ` – Dentist in ${areaName}` : ''}`, ', Dubai', 50);
   const summary = factualSummary(props, place, regulator);
   const phone = uaePhone(clinic.phone);
-  const indexable = clinicIndexable({ name: clinic.name, phone: clinic.phone, hasHours: hours.some((h) => !h.closed && h.open), reviewCount: clinic.reviewCount, claimed: clinic.claimed });
+  // Emirates that are not live yet stay out of the index, like their hub pages
+  const indexable = (!clinic.emirate || isLiveEmirate(clinic.emirate.slug)) && clinicIndexable({ name: clinic.name, phone: clinic.phone, hasHours: hours.some((h) => !h.closed && h.open), reviewCount: clinic.reviewCount, claimed: clinic.claimed });
   const googleReviewsHref = clinic.googlePlaceId ? `https://search.google.com/local/reviews?placeid=${encodeURIComponent(clinic.googlePlaceId)}` : clinic.googleMapsUrl;
   const description = clip(`${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See opening hours, location and Google rating, and request an appointment.`);
   const heroImage = clinic.coverImageUrl || images[0]?.url || null;
