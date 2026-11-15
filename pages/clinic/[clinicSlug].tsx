@@ -2,7 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import { ClinicProfile, type ClinicProfileProps } from '@/components/profile/ClinicProfile';
 import { liveImage } from '@/lib/liveImage';
-import { isNonDental } from '@/lib/clinicQuality';
+import { isJunkSlug, isNonDental } from '@/lib/clinicQuality';
 
 // Public clinic profile. Only public listing fields are selected: the clinics
 // table also holds scraped claim emails, owner ids and raw GMB data, which must
@@ -30,7 +30,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<ClinicProfileProps> = async (ctx) => {
   const supabase = createServerSupabaseAdmin();
   const clinicSlug = ctx.params?.clinicSlug as string;
-  if (!clinicSlug || !supabase || !/^[a-z0-9-]{1,120}$/i.test(clinicSlug)) return { notFound: true, revalidate: 86400 };
+  if (!clinicSlug || !supabase || isJunkSlug(clinicSlug) || clinicSlug.length > 120) return { notFound: true, revalidate: 86400 };
 
   const { data: clinic, error } = await supabase
     .from('clinics')

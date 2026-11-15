@@ -3,16 +3,22 @@
 // index rule; keep them in step).
 
 // Businesses imported with the clinics that are not places a patient books a
-// dentist: pharmacies, dental laboratories (trade only), home nursing, labs.
-export const NON_DENTAL = /\b(pharmacy|pharmacies|pharma|chemist|dental lab|dental laboratory|laboratory|diagnostic lab|home (nursing|care|health(care)?)|nursing|iv (drip|infusion|therapy)|optic(al|ians?)|opticals|veterinar\w*|pet clinic|salon|spa|beauty|hair|physiotherapy|radiology|800doctor)\b/i;
+// dentist: pharmacies, dental laboratories (trade only), home nursing, labs,
+// supermarkets.
+export const NON_DENTAL = /\b(pharmacy|pharmacies|pharma|chemist|laboratory|diagnostic lab|home (nursing|care|health(care)?)|nursing|iv (drip|infusion|therapy)|optic(al|ians?)|opticals|veterinar\w*|pet clinic|salon|spa|beauty|hair|physiotherapy|radiology|800doctor|supermarket|hypermarket|carrefour|lulu|nesto|grocery)\b/i;
 const DENTAL_SIGNAL = /\b(dent\w*|orthodont\w*|endodont\w*|periodont\w*|smile|teeth|tooth|oral)\b/i;
 
 /** True when the listing is not a dental practice a patient can book. */
 export function isNonDental(name: string | null | undefined): boolean {
   const n = name || '';
-  if (/\bdental lab(oratory)?\b/i.test(n)) return true;
-  return NON_DENTAL.test(n) && !/\b(dentist|dental (clinic|centre|center|care|studio|hospital)|dentistry|orthodont\w*)\b/i.test(n);
+  if (/\bdental (lab|laboratory|supplies|supply|depot)\b/i.test(n)) return true;
+  // Any dental word in the name (dentist, dental spa, dental beauty clinic) means a practice
+  if (DENTAL_SIGNAL.test(n)) return false;
+  return NON_DENTAL.test(n);
 }
+
+/** Slugs that cannot be a real listing ("-1", "-2" left over from imports). */
+export const isJunkSlug = (slug: string) => !/^[a-z0-9][a-z0-9-]{2,}$/i.test(slug) || /^-?\d+$/.test(slug);
 
 /** Dental signal in the name (used to soften wording for multi-specialty centres). */
 export const hasDentalName = (name: string) => DENTAL_SIGNAL.test(name);
@@ -31,8 +37,8 @@ export function uaePhone(raw: string | null | undefined): string | null {
 }
 
 /** Index a clinic profile only when it is a real dental listing with enough to show. */
-export function clinicIndexable(c: { name: string; phone: string | null; hasHours: boolean; reviewCount: number | null; claimed: boolean }): boolean {
-  if (isNonDental(c.name)) return false;
+export function clinicIndexable(c: { name: string; slug?: string; phone: string | null; hasHours: boolean; reviewCount: number | null; claimed: boolean }): boolean {
+  if (isNonDental(c.name) || (c.slug !== undefined && isJunkSlug(c.slug))) return false;
   if (!uaePhone(c.phone) || !c.hasHours) return false;
   return c.claimed || (c.reviewCount || 0) >= 5;
 }
