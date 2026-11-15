@@ -5,22 +5,22 @@ Source: https://www.appointpanda.ae. Last reviewed 2026-10-21. General informati
 ## Dental Implants
 URL: https://www.appointpanda.ae/services/dental-implants/
 
-A dental implant is a small titanium or zirconia post placed in the jawbone to replace a missing tooth root, topped with a crown that looks and works like a natural tooth.
+A dental implant (also called a tooth implant) is a small titanium or zirconia post placed in the jawbone to replace a missing tooth root, topped with a crown that looks and works like a natural tooth.
 
 An implant replaces the part of a tooth you cannot see: the root. Once the post has fused with the bone (osseointegration), it anchors a crown, a bridge or even a full set of teeth. Because it is fixed in bone, it does not rely on neighbouring teeth the way a traditional bridge does.
 
 Implant treatment is a planned, multi-visit process rather than a single appointment. Most of the work happens before anything is placed: a 3D scan (CBCT) to measure bone height and width, a check of gum health, and a plan for where each post should sit.
 
-In the UAE, implants are almost always paid for privately or through a dental add-on with a capped annual limit, so it pays to understand what is included in a quote before you commit.
+In Dubai, implants are almost always paid for privately or through a dental benefit with a capped annual limit. Ask whether the CBCT scan, abutment and crown are in the quote, because clinics bundle these differently.
 
-Indicative UAE cost: AED 3,500 to AED 9,500 per implant, including the crown. Bone grafting, sinus lifts and premium implant brands are usually charged on top.
+Indicative UAE cost: AED 5,000 to AED 12,000 per tooth, including the abutment and crown. Bone grafting, sinus lifts and CBCT scans are usually charged on top.
 Treatment time: 3 to 9 months from first visit to final crown, depending on healing and grafting
 Recovery: Most people return to desk work the next day. Expect swelling for 2 to 4 days and soft foods for about a week.
 
 Steps:
 1. Consultation and 3D scan: The dentist examines your mouth, reviews your medical history and takes a CBCT scan to check bone volume and nerve position.
 2. Treatment plan and quote: You receive a written plan listing the implant system, any bone graft, the type of crown and the number of visits.
-3. Placing the implant: Under local anaesthetic the post is placed in the bone. Most people describe the next few days as sore rather than painful.
+3. Placing the implant: Under local anaesthetic the post is placed in the bone. Expect soreness for 2 to 4 days, usually managed with paracetamol or ibuprofen.
 4. Healing (osseointegration): The bone fuses to the implant over roughly 2 to 6 months. A temporary tooth can often be worn meanwhile.
 5. Abutment and crown: A connector (abutment) is fitted and a custom crown is made from a digital or traditional impression.
 6. Review and maintenance: Regular check-ups and hygienist visits keep the gum around the implant healthy for the long term.
@@ -35,7 +35,9 @@ Q: Does getting a dental implant hurt?
 A: The placement is done under local anaesthetic, so you should feel pressure rather than pain. Afterwards, most people manage the soreness with over-the-counter painkillers for a few days.
 Q: How long do dental implants last?
 A: The implant post can last decades with good cleaning and regular check-ups. The crown on top typically needs replacing after 10 to 15 years because it wears like any restoration.
-Q: Does insurance in the UAE cover implants?
+Q: How much is a dental implant in Dubai?
+A: At private clinics, a single implant with abutment and crown usually costs AED 5,000 to 12,000. A CBCT scan, bone grafting or a sinus lift add to that. These are indicative ranges, not quotes; ask for an itemised written plan.
+Q: Does insurance in Dubai cover implants?
 A: Basic mandatory plans generally do not. Some employer plans include a dental benefit that pays part of the cost up to an annual cap; ask the clinic to request pre-approval from your insurer before treatment.
 Q: Can I get an implant the same day a tooth is removed?
 A: Sometimes. Immediate implants are possible when the bone is healthy and there is no infection. Your dentist will confirm this after reviewing the 3D scan.
@@ -43,15 +45,15 @@ A: Sometimes. Immediate implants are possible when the bone is healthy and there
 ## Invisalign & Clear Aligners
 URL: https://www.appointpanda.ae/services/invisalign/
 
-Invisalign is a brand of clear, removable aligners that move teeth gradually using a series of custom trays, each worn for about 22 hours a day.
+Invisalign is a brand of clear, removable aligners that move teeth gradually using a series of custom trays, each worn for 20 to 22 hours a day.
 
 Clear aligners straighten teeth with a sequence of thin plastic trays. Each tray is slightly different from the last, so wearing them in order nudges teeth into a planned position. Invisalign is the best-known brand; several others work on the same principle.
 
 The result depends heavily on two things: the quality of the digital plan made by the dentist or orthodontist, and how consistently you wear the trays. Taking them out for long stretches is the most common reason treatment runs late.
 
-Aligners are removed to eat and brush, which makes them easier to keep clean than fixed braces, but it also means the discipline sits with you rather than with the appliance.
+Aligners are removed to eat and brush, which makes them easier to keep clean than fixed braces. Results depend on you wearing the trays 20 to 22 hours a day.
 
-Indicative UAE cost: AED 9,000 to AED 25,000 for a full course. Short "lite" courses for minor corrections cost less; retainers are sometimes extra.
+Indicative UAE cost: AED 6,000 to AED 25,000 for a full course. Short courses for minor corrections sit at the lower end; retainers are sometimes extra.
 Treatment time: About 6 to 18 months for most adult cases
 Recovery: No recovery time. Each new tray feels tight for a day or two.
 
@@ -73,8 +75,10 @@ A: For simple cases it can be similar or slightly faster. For complex cases brac
 Q: Can I drink coffee with aligners in?
 A: Plain water is fine. Anything else, including coffee and juices, is best taken with trays out, followed by rinsing or brushing, to avoid staining and decay.
 Q: Do I need to see an orthodontist for clear aligners?
-A: Not always. Many general dentists offer aligners for straightforward cases. For bite problems or significant crowding, a specialist orthodontist is a sensible choice.
-Q: Does insurance pay for Invisalign in the UAE?
+A: Not always. General dentists also provide aligners for straightforward cases. For bite problems or significant crowding, a specialist orthodontist is a sensible choice.
+Q: How many hours a day do I need to wear aligners?
+A: Align Technology advises 20 to 22 hours a day. Take them out only to eat, drink anything other than water, and clean your teeth.
+Q: Does insurance pay for Invisalign in Dubai?
 A: Orthodontic treatment for adults is rarely covered. A few premium plans include orthodontics for children or have a separate orthodontic limit; check your policy wording.
 
 ## Braces
@@ -82,13 +86,13 @@ URL: https://www.appointpanda.ae/services/braces/
 
 Braces are fixed brackets and wires that apply steady pressure to move teeth and correct the bite, suitable for children, teens and adults.
 
-Braces are the most versatile way to straighten teeth. Brackets are bonded to each tooth and connected by an archwire; the orthodontist adjusts the wire over time to guide teeth into place.
+Brackets are bonded to each tooth and connected by an archwire; the orthodontist adjusts the wire over time to guide teeth into place. Braces can make movements that aligners struggle with, such as large rotations and closing extraction spaces.
 
 Metal braces are the most economical and robust. Ceramic brackets blend in with the teeth, and lingual braces sit on the inside surface so they are hidden from view, at a higher cost.
 
-Because braces cannot be taken out, they suit people who want a predictable result without relying on daily willpower, including younger patients.
+Because braces cannot be taken out, they do not depend on wear time, which is one reason orthodontists often use them for younger patients.
 
-Indicative UAE cost: AED 6,000 to AED 20,000 for a full course. Ceramic and lingual braces sit at the upper end; retainers may be charged separately.
+Indicative UAE cost: AED 6,000 to AED 35,000 for a full course. Metal braces sit at the lower end and lingual braces at the upper end; retainers may be charged separately.
 Treatment time: Usually 12 to 24 months
 Recovery: Soreness for a few days after fitting and after each adjustment.
 
@@ -118,16 +122,16 @@ Veneers are thin shells of porcelain or composite bonded to the front of teeth t
 
 A veneer covers the visible surface of a tooth. Porcelain veneers are made in a lab and are highly stain-resistant; composite veneers are sculpted directly onto the tooth in the chair and cost less, but they wear and stain faster.
 
-Most porcelain veneers need a thin layer of enamel removed so they sit flush. That step cannot be undone, which is why a careful consultation, a mock-up and an honest conversation about expectations matter more than the price.
+Most porcelain veneers need a thin layer of enamel removed so they sit flush. That step cannot be undone, so ask for a mock-up before any enamel is removed.
 
 Veneers change appearance; they do not straighten a bite or treat decay. Good candidates have healthy gums and teeth, or have had those problems treated first.
 
-Indicative UAE cost: AED 800 to AED 4,000 per tooth. Composite veneers start lower; lab-made porcelain or E.max veneers sit at the higher end.
+Indicative UAE cost: AED 800 to AED 5,000 per tooth. Composite veneers start lower; lab-made porcelain or E.max veneers sit at the higher end.
 Treatment time: Two to three visits over about 1 to 3 weeks for porcelain; one visit for composite
 Recovery: Some temperature sensitivity for a few days is common.
 
 Steps:
-1. Smile consultation: Photos, a scan and a discussion of shade and shape. Many clinics offer a digital smile design.
+1. Smile consultation: Photos, a scan and a discussion of shade and shape, sometimes with a digital smile design.
 2. Mock-up: A temporary trial lets you see and feel the proposed shape before any enamel is removed.
 3. Preparation: A thin layer of enamel is removed where needed and an impression or scan is taken. Temporaries are fitted.
 4. Bonding: The finished veneers are checked for fit and colour, then bonded in place and the bite is adjusted.
@@ -150,13 +154,13 @@ URL: https://www.appointpanda.ae/services/hollywood-smile/
 
 A "Hollywood smile" is a full smile makeover, usually veneers or crowns on most visible upper and lower teeth, planned to give an even, bright result.
 
-The term is popular in the Gulf for a smile makeover that treats many front teeth at once, typically 16 to 20 veneers or crowns. Done well, it looks natural. Done in a rush, it can look bulky or unnaturally white.
+The term is used in the Gulf for a smile makeover that treats many front teeth at once, often 16 to 20 veneers or crowns. Poorly planned makeovers usually fail in one of two ways: teeth that are too thick, or a shade too white for the face.
 
-Because it is a large, mostly irreversible change, the planning stage is the treatment. A good clinic will check gums and bite, may suggest whitening or orthodontics first, and will let you test the shape with a mock-up.
+Most of the decisions (shape, length, shade, how many teeth) are made at the mock-up stage, before any tooth is prepared. Expect the dentist to check gums and bite first and to say whether whitening or aligners would reduce the number of teeth that need covering.
 
 Ask to see before-and-after photos of the dentist's own cases, and look at the proposed shade in daylight as well as under clinic lights.
 
-Indicative UAE cost: AED 15,000 to AED 60,000 for a full upper and lower makeover. Depends mainly on the number of teeth and the material used.
+Indicative UAE cost: AED 12,000 to AED 100,000 for a full makeover. Depends mainly on the number of teeth and the material used.
 Treatment time: Typically 2 to 4 weeks once planning is complete
 Recovery: Short-term sensitivity and a period of getting used to the new shape and bite.
 
@@ -176,6 +180,10 @@ Q: Is a Hollywood smile permanent?
 A: It is long-lasting but not permanent. Porcelain veneers and crowns generally need replacing after 10 to 15 years, and the underlying teeth will always need covering.
 Q: Will it look fake?
 A: Not if the shade, length and shape are matched to your face. Ask for a mock-up and choose a shade that looks natural in daylight.
+Q: How much is a Hollywood smile in Dubai?
+A: It depends on the number of teeth and the material. Indicative private-clinic prices run from about AED 12,000 for composite on 16 to 20 teeth to AED 32,000 to 100,000 for porcelain or E.max on the same number. Ask for a per-tooth price in writing.
+Q: How many teeth does a Hollywood smile cover?
+A: Usually the teeth that show when you smile: often 8 to 10 on the upper jaw, and sometimes the same on the lower. Ask the dentist why each tooth is included.
 
 ## Teeth Whitening
 URL: https://www.appointpanda.ae/services/teeth-whitening/
@@ -188,7 +196,7 @@ Whitening only lightens natural tooth structure. Crowns, veneers and fillings st
 
 Sensitivity during and after whitening is common and usually temporary. Your dentist can adjust strength and timing, and recommend a desensitising toothpaste.
 
-Indicative UAE cost: AED 700 to AED 3,000 per treatment. Take-home tray kits sit at the lower end; in-clinic systems at the higher end.
+Indicative UAE cost: AED 700 to AED 4,000 per course. Take-home tray kits sit at the lower end; in-clinic sessions combined with trays at the higher end.
 Treatment time: One clinic visit, or 1 to 2 weeks with home trays
 Recovery: Avoid strongly coloured food and drinks for 48 hours.
 
@@ -214,7 +222,7 @@ A: Used as directed, professional peroxide whitening does not damage enamel. Ove
 ## Root Canal Treatment
 URL: https://www.appointpanda.ae/services/root-canal/
 
-Root canal treatment removes infected or inflamed pulp from inside a tooth, cleans and seals the canals, and lets you keep the tooth instead of extracting it.
+Root canal treatment (endodontic treatment) removes infected or inflamed pulp from inside a tooth, cleans and seals the canals, and lets you keep the tooth instead of extracting it.
 
 Inside each tooth is soft tissue called pulp. Deep decay, a crack or trauma can let bacteria reach it, causing pain, swelling or an abscess. A root canal removes that tissue, disinfects the canals and fills them.
 
@@ -222,7 +230,7 @@ Modern root canal treatment is usually no more uncomfortable than a large fillin
 
 Back teeth that have had a root canal are more brittle, so a crown is often recommended afterwards to stop the tooth cracking.
 
-Indicative UAE cost: AED 1,000 to AED 4,500 per tooth. Molars cost more than front teeth; the crown is usually a separate fee.
+Indicative UAE cost: AED 1,000 to AED 6,000 per tooth, crown extra. Molars and retreatments cost more than front teeth; the crown is usually a separate fee.
 Treatment time: 1 to 2 visits of about 60 to 90 minutes each
 Recovery: Tenderness for a few days. Avoid chewing hard food on the tooth until it is fully restored.
 
@@ -243,21 +251,21 @@ Q: Is root canal treatment painful?
 A: With local anaesthetic it should feel similar to having a filling. You may be tender for a few days afterwards.
 Q: Is it better to pull the tooth?
 A: Keeping your natural tooth is usually best if it can be restored. Extraction is quicker but replacing the tooth with an implant or bridge costs more over time.
-Q: Does insurance cover root canals in the UAE?
-A: Many employer plans with dental cover treat root canals as basic restorative care, usually with a co-payment and an annual limit. Mandatory basic plans often exclude it.
+Q: Does insurance cover root canals in Dubai?
+A: Employer plans with dental cover usually treat root canals as basic restorative care, with a co-payment and an annual limit. Basic mandatory plans generally exclude it beyond emergency pain relief.
 
 ## Teeth Cleaning (Scale & Polish)
 URL: https://www.appointpanda.ae/services/teeth-cleaning/
 
-A professional scale and polish removes hardened plaque (tartar) and surface stains that brushing cannot shift, helping prevent gum disease and decay.
+A professional scale and polish (also called a dental cleaning or hygiene visit) removes hardened plaque (tartar) and surface stains that brushing cannot shift, helping prevent gum disease and decay.
 
 Even with good brushing, plaque hardens into tartar in places a toothbrush misses, especially behind the lower front teeth and along the gumline. A hygienist or dentist removes it with ultrasonic and hand instruments, then polishes the teeth.
 
-Regular cleaning is one of the most cost-effective things you can do for your teeth. It lets the dentist spot problems early, when they are cheaper and simpler to treat.
+A scale and polish costs AED 250 to 800 in Dubai; treating the gum disease it helps prevent costs several times that. The visit also lets the dentist spot decay early, when a small filling is enough.
 
 If your gums bleed easily or you have pockets around the teeth, a deeper cleaning below the gumline may be recommended, often over more than one visit.
 
-Indicative UAE cost: AED 200 to AED 700 per visit. Deep cleaning for gum disease is usually charged per quadrant and costs more.
+Indicative UAE cost: AED 250 to AED 1,000 per visit. Deep cleaning for gum disease is usually charged per quarter of the mouth and costs more.
 Treatment time: 30 to 60 minutes
 Recovery: None. Gums may feel tender for a day.
 
@@ -273,7 +281,7 @@ Risks:
 
 FAQ:
 Q: How often should I get my teeth cleaned?
-A: Every 6 months suits most people. If you have gum disease or build tartar quickly, your dentist may suggest every 3 to 4 months.
+A: Every 6 to 12 months suits most adults. The UK's NICE guidance sets recall intervals by individual risk, so if you have gum disease or build tartar quickly, your dentist may suggest every 3 to 4 months.
 Q: Does cleaning damage enamel?
 A: No. Professional scaling removes tartar, not enamel. Teeth can feel different afterwards simply because the tartar has gone.
 Q: Is teeth cleaning covered by insurance?
@@ -284,7 +292,7 @@ URL: https://www.appointpanda.ae/services/emergency-dentist/
 
 An emergency dentist treats urgent problems such as severe toothache, swelling, a knocked-out tooth or a broken tooth, usually the same day.
 
-Dental emergencies are usually pain, swelling, trauma or bleeding that will not stop. Many private clinics in the UAE keep same-day slots for urgent cases, and some open late or at weekends. Always phone first to confirm they can see you.
+Dental emergencies are usually pain, swelling, trauma or bleeding that will not stop. Private clinics in Dubai set their own hours and some keep same-day slots for urgent cases, so phone first to confirm a dentist can see you.
 
 Go straight to a hospital emergency department, or call 998 for an ambulance, if swelling is spreading to your eye or neck, you have difficulty breathing or swallowing, or there was a serious injury to the face or head.
 
@@ -305,11 +313,11 @@ Risks:
 
 FAQ:
 Q: What should I do if a tooth is knocked out?
-A: Hold it by the crown, not the root. Rinse briefly if dirty, try to place it back in the socket, or keep it in milk, and see a dentist within the hour if possible.
+A: Hold it by the crown, not the root. If it is dirty, rinse it briefly in milk or cold water. Replant it in the socket straight away if you can and bite on a clean cloth. If not, store it in milk and see a dentist within 30 minutes. Do not replant a baby tooth.
 Q: Can I go to a hospital for toothache?
 A: Hospital emergency departments manage serious swelling, trauma and infection. For toothache alone, an emergency dental clinic is usually quicker and better equipped.
 Q: Does insurance cover emergency dental treatment?
-A: Many UAE health plans, including some basic plans, cover emergency dental care to relieve pain or treat infection. Cosmetic or follow-up work is usually not covered under that benefit.
+A: Emergency treatment to relieve pain or control infection is the dental care most often covered, but what a basic plan pays depends on its wording. Check your policy or call your insurer. Follow-up work such as a crown is usually assessed separately.
 
 ## Children's Dentistry
 URL: https://www.appointpanda.ae/services/pediatric-dentistry/
@@ -339,22 +347,22 @@ FAQ:
 Q: When should my child first see a dentist?
 A: When the first tooth appears or by age one. Early visits make later ones easier.
 Q: Are fissure sealants worth it?
-A: For many children, yes. They protect the grooves of back teeth, where most childhood decay starts.
+A: For many children, yes. They protect the grooves of back teeth, where childhood decay often starts. They are usually placed when the adult molars come through, around ages 6 and 12.
 Q: Does insurance cover children's dental care?
-A: Family plans with dental benefits often cover check-ups and basic treatment. Some government programmes for UAE nationals include children's dental care.
+A: Family plans with dental benefits often cover check-ups and basic treatment, usually up to an annual limit. Check your policy for age rules and whether sealants are included.
 
 ## Wisdom Tooth Removal
 URL: https://www.appointpanda.ae/services/wisdom-tooth-removal/
 
 Wisdom tooth removal is the extraction of one or more third molars, usually because they are impacted, infected or damaging neighbouring teeth.
 
-Wisdom teeth are the last molars to come through, usually between 17 and 25. Many people have no room for them, so they come in at an angle or stay partly under the gum (impacted).
+Wisdom teeth are the last molars to come through, usually between 17 and 25. When the jaw has no room for them, they come in at an angle or stay partly under the gum (impacted).
 
-Not every wisdom tooth needs removing. Extraction is usually advised when there is repeated infection, decay, damage to the tooth in front, or a cyst.
+Not every wisdom tooth needs removing. UK NICE guidance advises against removing healthy, symptom-free wisdom teeth; extraction is usually advised when there is repeated infection, decay, damage to the tooth in front, or a cyst.
 
 A simple extraction is quick. An impacted tooth needs a minor surgical procedure, which an oral surgeon or experienced dentist performs, sometimes with sedation.
 
-Indicative UAE cost: AED 400 to AED 3,500 per tooth. Surgical removal of impacted teeth and sedation sit at the upper end.
+Indicative UAE cost: AED 500 to AED 4,500 per tooth. Surgical removal of impacted teeth sits at the upper end; sedation is extra.
 Treatment time: 20 to 60 minutes per tooth
 Recovery: Swelling peaks at 2 to 3 days; most people take 1 to 3 days off work after surgical removal.
 
@@ -380,13 +388,13 @@ A: Sometimes it is convenient, particularly under sedation. Your dentist will ad
 ## Dental Crowns
 URL: https://www.appointpanda.ae/services/dental-crowns/
 
-A dental crown is a custom cap that covers a damaged or weakened tooth to restore its shape, strength and appearance.
+A dental crown (also called a cap) is a custom cover for a damaged or weakened tooth that restores its shape, strength and appearance.
 
 Crowns protect teeth that are cracked, heavily filled or root-canal treated, and they cap dental implants. The tooth is shaped, scanned, and a crown is made to fit over it.
 
 Zirconia is very strong and suits back teeth; lithium disilicate (E.max) and layered porcelain give the most natural look for front teeth. Metal-based crowns are now less common but still durable.
 
-Some clinics mill crowns on site and can fit them the same day; others use an external lab, which usually means a temporary crown for a week or two.
+Clinics with an in-house milling unit can make and fit a crown the same day. Clinics that use an external lab fit a temporary crown for a week or two while the final one is made.
 
 Indicative UAE cost: AED 1,200 to AED 4,500 per crown. Zirconia and E.max cost more than metal-based crowns.
 Treatment time: One visit with same-day milling, or two visits about 1 to 2 weeks apart
@@ -408,6 +416,352 @@ Q: How long does a crown last?
 A: Commonly 10 to 15 years or more, depending on material, bite forces and hygiene.
 Q: Does getting a crown hurt?
 A: The tooth is numbed while it is prepared. It may feel sensitive for a few days afterwards.
+Q: Which is better, zirconia or E.max?
+A: Zirconia is stronger and suits back teeth and people who grind. E.max is more translucent and is often chosen for front teeth. Your dentist will recommend one based on the tooth, your bite and the space available.
+Q: How much is a crown in Dubai?
+A: Indicative private-clinic prices are AED 1,200 to 2,500 for porcelain fused to metal, AED 1,500 to 3,500 for zirconia and AED 1,800 to 4,500 for E.max. Ask for a written quote that includes any build-up and the temporary crown.
+
+## All-on-4 & Full-Arch Implants
+URL: https://www.appointpanda.ae/services/all-on-4-implants/
+
+All-on-4 replaces a full arch of teeth with a fixed bridge held on four to six implants. Dubai private clinics typically charge AED 25,000 to 65,000 per arch. A temporary bridge is often fitted within days of surgery and the final bridge 3 to 6 months later. It suits adults who have lost most teeth in one jaw.
+
+All-on-4 (also called full-arch implants, fixed implant dentures or "teeth in a day") replaces every tooth in the upper or lower jaw with one fixed bridge. The bridge is screwed onto four implants: two straight at the front and two angled at the back. Angling the back implants lets the surgeon use the denser bone at the front of the jaw, so a bone graft or sinus lift is needed less often than when each tooth gets its own implant.
+
+All-on-4 is a brand name from Nobel Biocare, but most implant systems offer a similar concept. Some clinics place five or six implants per arch, especially in the upper jaw where bone is softer. The bridge cannot be removed at home; only the dentist can unscrew it.
+
+Treatment is usually done in two stages. On surgery day, remaining teeth are removed, the implants are placed, and a temporary acrylic bridge is often attached within 24 to 72 hours. After the implants have fused with the bone, the final bridge is made, usually from zirconia or an acrylic or composite bridge on a metal frame.
+
+Indicative UAE cost: AED 25,000 to AED 65,000 per arch (upper or lower), including the temporary and final bridge. Indicative only. Zirconia final bridges, extra implants, extractions and IV sedation can each add to the total; some quotes cover the temporary bridge only.
+Treatment time: Surgery and temporary teeth within about 1 to 3 days; final bridge 3 to 6 months later
+Recovery: Expect swelling and bruising for 3 to 5 days, and plan 2 to 5 days off work. A soft diet is needed for the first 6 to 8 weeks while the implants heal.
+
+Steps:
+1. Consultation and CBCT scan: The dentist reviews your medical history, takes a 3D CBCT scan and photographs, and checks the health of any remaining teeth and gums.
+2. Digital plan and written quote: Implant positions are planned on the scan. The quote should list the number of implants, the implant system, the temporary bridge, the final bridge material and all follow-up visits.
+3. Surgery day: Remaining teeth are removed and four to six implants placed under local anaesthetic, usually with IV sedation. The procedure takes about 2 to 4 hours per arch.
+4. Temporary bridge: If the implants are stable enough, a fixed acrylic bridge is fitted within 1 to 3 days. You eat soft food only while the implants heal.
+5. Healing: The implants fuse with the bone over roughly 3 to 6 months. The temporary bridge may be adjusted during this time.
+6. Final bridge: New scans are taken and the final bridge is made and screwed in, usually over 2 to 4 appointments.
+7. Maintenance: Hygiene visits every 3 to 6 months. The bridge is removed by the dentist from time to time for a deeper clean and check.
+
+Risks:
+- One or more implants failing to fuse, which may mean a replacement implant and a remade bridge
+- Peri-implantitis (gum and bone infection around implants) if cleaning is poor
+- Fracture of the temporary or acrylic bridge, especially in people who grind their teeth
+- Speech changes and a feeling of bulk while you adapt, usually for a few weeks
+- Nerve or sinus complications, which careful 3D planning aims to avoid
+
+FAQ:
+Q: How much does All-on-4 cost in Dubai?
+A: At private clinics, indicative prices are around AED 25,000 to 65,000 per arch. Lower quotes often cover only the temporary acrylic bridge, so ask whether the final bridge, extractions, sedation and scans are included.
+Q: Is All-on-4 covered by insurance in the UAE?
+A: Usually not. Basic plans exclude implants, and employer plans with dental cover tend to have annual limits far below the cost of a full arch. Some insurers contribute towards extractions; ask the clinic to request pre-approval.
+Q: Do I really get teeth on the same day?
+A: Often, but not always. A temporary bridge is attached within 1 to 3 days only if the implants are firmly anchored at surgery. If they are not, you wear a denture while they heal.
+Q: How long does an All-on-4 bridge last?
+A: The implants can last many years with good care. Acrylic bridges commonly need replacing or relining after several years; zirconia bridges are harder wearing but can chip.
+Q: Is All-on-4 painful?
+A: Surgery is done under local anaesthetic, usually with sedation. Afterwards, expect soreness and swelling for several days, managed with painkillers your dentist prescribes.
+Q: What is the difference between All-on-4 and All-on-6?
+A: All-on-6 uses six implants per arch. The extra implants spread the load, which some dentists prefer in the upper jaw or for people with a strong bite. It costs more.
+
+## Gum Disease Treatment
+URL: https://www.appointpanda.ae/services/gum-treatment/
+
+Gum disease treatment removes the plaque and tartar that inflame the gums (gingivitis) or destroy the bone around teeth (periodontitis). In Dubai, a full-mouth deep clean typically costs AED 600 to 3,000 at private clinics, over 1 to 4 visits. It suits anyone with bleeding gums, gum pockets or loose teeth.
+
+Gum disease starts as gingivitis: red, swollen gums that bleed when you brush. At this stage it can be reversed with a professional clean and better brushing. Left alone, it can progress to periodontitis, where the gum pulls away from the tooth to form pockets, the supporting bone is slowly lost and teeth can become loose.
+
+The main treatment for periodontitis is non-surgical periodontal therapy, often called a deep clean or scaling and root planing. Under local anaesthetic, the dentist or hygienist cleans below the gum line to remove hardened tartar and bacteria from the root surfaces. This is more thorough than a routine scale and polish.
+
+Periodontitis is managed rather than cured. After treatment you will need more frequent hygiene visits, often every 3 to 4 months. A periodontist (gum specialist) may be involved if pockets stay deep, if bone loss is advanced, or if surgery or regenerative treatment is considered.
+
+Indicative UAE cost: AED 600 to AED 3,000 for a full-mouth deep clean (scaling and root planing). Indicative only. Some clinics charge per quarter of the mouth. Gum surgery, grafts and laser treatment by a periodontist are priced separately and cost more.
+Treatment time: Deep cleaning over 1 to 4 visits of 45 to 90 minutes, with a review 6 to 12 weeks later
+Recovery: Gums may be tender and teeth sensitive to cold for a few days to a couple of weeks. Gums often shrink slightly as swelling goes down, which can make teeth look longer.
+
+Steps:
+1. Gum assessment: The dentist measures the pocket depth around each tooth with a thin probe and takes X-rays to check bone levels. This produces a periodontal chart and a diagnosis.
+2. Home care plan: You are shown how to clean between teeth with interdental brushes or floss. Treatment works far less well if plaque returns within days.
+3. Deep cleaning: Under local anaesthetic, the root surfaces are cleaned with ultrasonic and hand instruments. This is done in one long visit or split by quarter or half of the mouth.
+4. Re-evaluation: About 6 to 12 weeks later, the pockets are measured again to see how the gums have responded.
+5. Further treatment if needed: Pockets that remain deep may need further cleaning or gum surgery from a periodontist. Antibiotics are used only in selected cases.
+6. Maintenance: Regular periodontal maintenance visits, usually every 3 to 4 months, keep the disease stable.
+
+Risks:
+- Tooth sensitivity, especially to cold, as the roots are exposed after cleaning
+- Gum recession and small gaps between teeth as inflammation settles
+- Disease returning if home cleaning and maintenance visits lapse
+- Tooth loss if periodontitis is advanced or left untreated
+
+FAQ:
+Q: How much does deep cleaning cost in Dubai?
+A: Indicative prices at private clinics range from about AED 600 to 3,000 for the full mouth, depending on severity and who does it. Ask whether the clinic charges per quarter of the mouth, and whether X-rays and the review are included.
+Q: Is gum treatment covered by insurance in the UAE?
+A: Plans that include a dental benefit often cover periodontal treatment as basic care, subject to a co-payment and an annual limit. Basic plans usually exclude it. Ask the clinic to request pre-approval with your periodontal chart.
+Q: Is deep cleaning painful?
+A: It is normally done with local anaesthetic, so you should feel vibration and pressure rather than pain. Gums can be sore and teeth sensitive for a few days afterwards.
+Q: Can gum disease be cured?
+A: Gingivitis can be fully reversed. Periodontitis can be stopped from getting worse, but lost bone does not grow back by itself, so long-term maintenance is needed.
+Q: What is the difference between a scale and polish and a deep clean?
+A: A scale and polish removes tartar above and just below the gum line. A deep clean reaches further down the root surface inside gum pockets and usually needs anaesthetic.
+Q: Why do my gums bleed when I brush?
+A: Bleeding is usually a sign of gum inflammation caused by plaque. Keep brushing gently and see a dentist; bleeding that does not settle should be checked.
+
+## Tooth Extraction
+URL: https://www.appointpanda.ae/services/tooth-extraction/
+
+A tooth extraction removes a tooth that cannot be saved, either simply with forceps or surgically through a small cut in the gum. In Dubai, private clinics typically charge AED 300 to 2,500 per tooth. Most extractions take one visit of 20 to 60 minutes. It suits teeth that are badly broken, infected or loose.
+
+Dentists usually try to save a tooth with a filling, root canal or crown. Extraction is advised when a tooth is too broken down to restore, has severe infection or gum disease, is blocking other teeth during orthodontic treatment, or is a problem wisdom tooth.
+
+A simple extraction is done on a tooth that is visible in the mouth. After numbing, the dentist loosens it and lifts it out. A surgical extraction is needed for teeth that are broken at the gum line, have curved roots or are not fully through the gum. The dentist makes a small cut, may remove a little bone, and sometimes divides the tooth into pieces. Stitches are often placed afterwards.
+
+Before an extraction, think about what will replace the tooth. A gap at the back may not need filling, but gaps elsewhere can let neighbouring teeth tilt and affect your bite. If an implant is planned, the dentist may place a bone graft in the socket at the same visit.
+
+Indicative UAE cost: AED 300 to AED 2,500 per tooth. Indicative only. Simple extractions sit at the lower end; surgical extractions, sedation and bone grafts at the upper end. Wisdom teeth have their own guide.
+Treatment time: One visit; 20 to 30 minutes for a simple extraction, up to an hour for a surgical one
+Recovery: Bleeding usually stops within a few hours. Soreness and swelling are common for 2 to 3 days, longer after surgical extraction. The gum closes over in 1 to 2 weeks and the bone fills in over a few months.
+
+Steps:
+1. Examination and X-ray: The dentist checks the tooth, its roots and nearby structures such as nerves and sinuses, and reviews your medical history and medicines.
+2. Local anaesthetic: The area is numbed. Sedation can be offered to anxious patients or for surgical extractions.
+3. Removal: For a simple extraction, the tooth is loosened and removed. For a surgical extraction, a small gum flap is lifted and the tooth may be sectioned.
+4. Closing the socket: You bite on gauze to form a blood clot. Stitches may be placed, and a bone graft can be added if an implant is planned.
+5. Aftercare and review: You receive written aftercare instructions. A review is booked if stitches need removing or healing needs checking.
+
+Risks:
+- Dry socket, when the blood clot is lost and the bone is exposed, causing pain a few days later
+- Infection of the socket
+- Prolonged bleeding, particularly in people on blood thinners
+- Temporary or, rarely, lasting numbness when lower teeth sit close to the nerve
+- A small opening into the sinus after removing upper back teeth
+
+FAQ:
+Q: How much does a tooth extraction cost in Dubai?
+A: Indicative private-clinic prices range from about AED 300 to 800 for a simple extraction and AED 1,000 to 2,500 for a surgical one. Sedation and bone grafting are extra.
+Q: Is tooth extraction covered by insurance in Dubai?
+A: Plans with a dental benefit commonly cover extractions as basic or surgical treatment, subject to a co-payment and an annual limit. Basic plans may only cover emergency treatment. Check your policy and ask the clinic to get pre-approval.
+Q: Does having a tooth pulled hurt?
+A: The area is numbed, so you should feel pressure but not sharp pain. Once the anaesthetic wears off, soreness is usually controlled with paracetamol or ibuprofen if these are suitable for you.
+Q: What can I eat after a tooth extraction?
+A: Stick to soft, lukewarm food for the first day or two, and chew on the other side. Avoid hot drinks while you are numb.
+Q: How do I avoid dry socket?
+A: For the first few days, do not smoke, use straws or rinse hard. From the next day, gentle warm salt-water rinses help keep the area clean.
+Q: Do I need to replace an extracted tooth?
+A: Not always. Your dentist will explain whether the gap affects your bite or appearance. Options include an implant, a bridge or a partial denture.
+
+## Dental Fillings
+URL: https://www.appointpanda.ae/services/dental-fillings/
+
+A dental filling repairs a tooth damaged by decay or a small fracture, using tooth-coloured composite, silver amalgam or glass ionomer. In Dubai, private clinics typically charge AED 250 to 900 per tooth. Most fillings take a single visit of 20 to 60 minutes. It suits small to medium cavities.
+
+When decay breaks through the enamel it forms a cavity. The dentist removes the decayed part of the tooth and fills the space to stop the decay spreading and restore the shape of the tooth. Small cavities often cause no symptoms, which is why many are found on check-up X-rays.
+
+Most fillings placed in Dubai clinics today are composite resin, a tooth-coloured material bonded to the tooth and set with a blue light. Amalgam (silver) fillings are hard wearing but have become less common, partly for appearance and partly because international agreements are phasing down its use. Glass ionomer releases fluoride and is often used for children, for decay near the gum line and as a temporary filling.
+
+If a cavity is too large for a filling to stay strong, the dentist may suggest an inlay, onlay or crown instead. If decay has reached the nerve, root canal treatment may be needed first.
+
+Indicative UAE cost: AED 250 to AED 900 per tooth. Indicative only. Glass-ionomer and small composite fillings sit at the lower end; large composite fillings on back teeth at the upper end. Inlays and onlays cost more.
+Treatment time: One visit of 20 to 60 minutes per tooth
+Recovery: You can eat once the numbness wears off. Mild sensitivity to cold or biting is common for a few days to a couple of weeks after a deep filling.
+
+Steps:
+1. Check and X-ray: The dentist confirms the size and depth of the decay, often with a bitewing X-ray.
+2. Local anaesthetic: The tooth is numbed. Very small or shallow fillings can sometimes be done without it.
+3. Removing decay: Decayed tooth is removed with a drill or hand instruments, and the cavity is shaped.
+4. Placing the filling: For composite, the tooth is kept dry and the material is built up in layers and set with a curing light. Amalgam is packed into place.
+5. Shaping and bite check: The filling is shaped, your bite is checked with marking paper and the surface is polished.
+
+Risks:
+- Sensitivity after the filling, which usually settles
+- A high spot on the filling that makes the bite feel uneven, fixed with a quick adjustment
+- New decay at the edges of the filling over time
+- Inflammation of the nerve after deep fillings, which may lead to root canal treatment
+
+FAQ:
+Q: How much does a filling cost in Dubai?
+A: Indicative private-clinic prices are around AED 250 to 900 per tooth. Size, number of surfaces and material are the main factors.
+Q: Are fillings covered by insurance in Dubai?
+A: Plans with dental cover usually treat fillings as basic restorative care, often with a co-payment and an annual limit. Some policies only pay the amalgam rate for back teeth. Basic plans often exclude routine dental work.
+Q: Are white fillings better than silver fillings?
+A: Composite fillings match the tooth and need less healthy tooth removed. Amalgam is very durable on back teeth. Your dentist will advise based on cavity size and position.
+Q: How long does a filling last?
+A: It varies with size, material, bite and hygiene. Many fillings last for years, but they wear and can develop new decay at the edges, so check-ups matter.
+Q: Should I replace my old amalgam fillings?
+A: If they are intact and decay-free, most dental bodies do not recommend replacing them routinely. Removing sound fillings also removes some healthy tooth.
+Q: Does getting a filling hurt?
+A: With local anaesthetic you should feel pressure and vibration, not pain. Tell the dentist if you feel anything sharp so they can top up the anaesthetic.
+
+## Dentures
+URL: https://www.appointpanda.ae/services/dentures/
+
+Dentures are removable replacement teeth: a full denture replaces every tooth in a jaw, a partial fills gaps between natural teeth, and implant-retained dentures clip onto implants. In Dubai, conventional dentures typically cost AED 1,500 to 8,000 each at private clinics, over 4 to 6 visits. They suit people missing several or all teeth.
+
+A full (complete) denture sits on the gums and replaces all the teeth in the upper or lower jaw. Upper dentures stay in place by suction against the palate. Lower dentures have less to grip, so they tend to move more when eating and speaking.
+
+A partial denture replaces one or more missing teeth and is held by clasps around remaining teeth. The base can be acrylic, which is cheaper and easier to add teeth to, or a cast metal (cobalt-chrome) frame, which is thinner and stronger. Flexible nylon partials are another option for some gaps.
+
+Implant-retained dentures (overdentures) clip onto two to four implants. They still come out for cleaning, but they move far less than a conventional denture. Two implants under a lower denture can make a large difference to stability. A fully fixed bridge on implants is covered in our All-on-4 guide.
+
+Indicative UAE cost: AED 1,500 to AED 8,000 per conventional denture (one arch, full or partial). Indicative only. Acrylic partials sit at the lower end and cast-metal or premium full dentures at the upper end. Implant-retained overdentures are typically AED 15,000 to 35,000 per arch including the implants.
+Treatment time: Usually 4 to 6 visits over 3 to 6 weeks for a conventional denture
+Recovery: Expect a period of adjustment: extra saliva, sore spots and changes in speech are common in the first 2 to 4 weeks. Eating takes practice; start with soft food cut into small pieces.
+
+Steps:
+1. Examination and plan: The dentist checks your gums, remaining teeth and bone, takes X-rays and agrees the type of denture with you. Any decay, gum disease or extractions are dealt with first.
+2. Impressions: Moulds or digital scans of the gums and teeth are taken, often in two stages for a better fit.
+3. Bite records: The dentist records how your jaws meet and helps you choose tooth shape and shade.
+4. Try-in: Teeth set in wax are tried in so you can check the look, bite and speech before the denture is finished.
+5. Fitting: The finished denture is fitted and adjusted. You are shown how to put it in, take it out and clean it.
+6. Adjustments: Sore spots are common in the first weeks. Review visits to ease pressure points are usually needed.
+
+Risks:
+- Sore spots and ulcers from pressure points, eased by adjustments
+- Looseness over time as the jawbone shrinks, needing a reline or new denture
+- Fungal infection under the denture (denture stomatitis) if it is worn overnight or not cleaned well
+- Extra plaque build-up and decay on teeth that hold a partial denture
+
+FAQ:
+Q: How much do dentures cost in Dubai?
+A: Indicative private-clinic prices range from about AED 1,500 to 8,000 per denture for conventional full or partial dentures. Implant-retained dentures cost substantially more because of the implants.
+Q: Are dentures covered by insurance in the UAE?
+A: Some plans with dental cover include dentures as major restorative treatment, often with a waiting period, co-payment and annual limit. Basic plans usually exclude them. Ask the clinic to request pre-approval.
+Q: How long does it take to get used to dentures?
+A: Most people need a few weeks to adapt to eating and speaking with new dentures. Reading aloud and starting with soft food help.
+Q: Should I sleep with my dentures in?
+A: Dentists generally advise taking them out at night to let the gums rest and to reduce the risk of fungal infection. Keep them clean and moist overnight.
+Q: How long do dentures last?
+A: The gums and bone change shape over time, so dentures usually need relining after a few years and replacing after several more. Your dentist will check the fit at reviews.
+Q: Can I get dentures the same day my teeth are removed?
+A: Yes. An immediate denture is made before extraction and fitted on the day. It needs relining or replacing once the gums have healed, which adds to the cost.
+
+## Dental Bridges
+URL: https://www.appointpanda.ae/services/dental-bridges/
+
+A dental bridge is a fixed replacement for one or more missing teeth, made of a false tooth joined to crowns on the neighbouring teeth or on implants. In Dubai, private clinics typically charge AED 1,200 to 4,000 per unit, so a three-unit bridge is around AED 3,600 to 12,000. It takes 2 to 3 visits.
+
+A bridge "bridges" a gap left by a missing tooth. In a traditional bridge, the teeth on either side of the gap are shaped and covered with crowns, and a false tooth (called a pontic) is attached between them. The whole piece is cemented and cannot be removed at home.
+
+A resin-bonded or Maryland bridge is more conservative: the false tooth has a thin wing glued to the back of a neighbouring tooth, so little or no drilling is needed. It suits front teeth with a light bite. A cantilever bridge is held by a crown on one side only. An implant-supported bridge uses implants instead of natural teeth and is used for longer gaps.
+
+Bridges are priced per unit, meaning each crown and each false tooth. A three-unit bridge to replace one tooth has two crowns and one pontic. The main trade-off against a single implant is that healthy neighbouring teeth are reshaped to support a traditional bridge.
+
+Indicative UAE cost: AED 1,200 to AED 4,000 per unit (each crown or false tooth). Indicative only. A three-unit bridge replacing one tooth is about three times the unit price. Zirconia and E.max cost more than metal-based units; implant bridges also include implant fees.
+Treatment time: Usually 2 to 3 visits over 1 to 3 weeks for a tooth-supported bridge
+Recovery: Supporting teeth can be sensitive for a few days to weeks. Your bite should feel normal within days; ask for an adjustment if it does not.
+
+Steps:
+1. Assessment: X-rays check that the supporting teeth and gums are healthy enough. Your options, including an implant, are discussed.
+2. Preparing the supporting teeth: Under local anaesthetic, the teeth beside the gap are shaped to make room for crowns. Maryland bridges need little or no preparation.
+3. Scan and temporary bridge: A digital scan or impression is sent to the lab and a temporary bridge is fitted.
+4. Fitting: One to two weeks later, the final bridge is tried in, adjusted for fit and bite, and cemented.
+5. Cleaning under the bridge: You are shown how to clean under the false tooth with floss threaders, superfloss or a water flosser.
+
+Risks:
+- Decay or gum disease on the supporting teeth, especially at the edges of the crowns
+- Need for root canal treatment on a supporting tooth after preparation
+- Chipping of porcelain or a bridge coming loose
+- If one supporting tooth fails, the whole bridge usually needs replacing
+
+FAQ:
+Q: How much does a dental bridge cost in Dubai?
+A: Indicative private-clinic prices are about AED 1,200 to 4,000 per unit. A three-unit bridge replacing one tooth is therefore roughly AED 3,600 to 12,000, depending on material.
+Q: Are bridges covered by insurance in the UAE?
+A: Some plans with dental cover include bridges as major restorative treatment, with co-payments and annual limits. Basic plans usually exclude them. Pre-approval is normally required.
+Q: Bridge or implant: which is better?
+A: An implant avoids reshaping the neighbouring teeth and is easier to clean. A bridge is faster and has no surgery. If the neighbours already need crowns, a bridge can make sense.
+Q: How long does a bridge last?
+A: Many last 10 years or more with good cleaning and check-ups. The supporting teeth are the usual weak point.
+Q: Does getting a bridge hurt?
+A: The teeth are numbed while they are prepared. Some sensitivity afterwards is common and usually settles.
+Q: What is a Maryland bridge?
+A: A bridge with a false tooth held by thin wings bonded to the back of the neighbouring teeth. It needs little drilling but is less strong, so it is mainly used for front teeth.
+
+## Dental Bonding
+URL: https://www.appointpanda.ae/services/dental-bonding/
+
+Dental bonding uses tooth-coloured composite resin, shaped by hand and hardened with a light, to repair chips, close small gaps or reshape teeth. In Dubai, private clinics typically charge AED 400 to 1,500 per tooth. Most cases are done in one visit with little or no drilling. It suits minor cosmetic changes.
+
+Bonding (also called composite bonding or cosmetic bonding) adds resin to the surface of a tooth. The dentist roughens the enamel slightly, applies a bonding agent, then builds up the composite in layers, sets each one with a curing light and polishes it. Usually no enamel is removed, so the process can be reversed or redone.
+
+It is used to repair small chips, cover marks, close small gaps, even out uneven edges and make a tooth look slightly longer or wider. Composite veneers are a fuller version, where the whole front surface of the tooth is covered.
+
+Composite is less hard than porcelain. It can stain, chip and lose its shine over time, so bonded teeth need polishing and occasional repairs. If you plan to whiten your teeth, do it first, because composite does not change colour with whitening.
+
+Indicative UAE cost: AED 400 to AED 1,500 per tooth. Indicative only. Repairing a small chip sits at the lower end; full-coverage composite veneers at the upper end.
+Treatment time: One visit; about 30 to 60 minutes per tooth
+Recovery: No recovery time. Avoid strongly coloured food and drinks such as coffee, tea and turmeric for the first 48 hours, and avoid biting hard objects with bonded teeth.
+
+Steps:
+1. Consultation: The dentist checks your teeth and gums and discusses the change you want. Some clinics show a quick mock-up placed directly on the teeth.
+2. Shade selection: A composite shade is matched to your teeth. If whitening is planned, it is done first and the shade chosen afterwards.
+3. Preparation: The surface is cleaned and lightly etched. Anaesthetic is usually not needed.
+4. Building and curing: Composite is applied in layers, shaped and set with a curing light.
+5. Shaping and polishing: The final shape is refined, the bite checked and the surface polished to a natural shine.
+
+Risks:
+- Staining, especially with coffee, tea and smoking
+- Chipping or debonding, particularly on biting edges
+- Loss of surface shine over time
+- A bulky look if too much composite is added
+
+FAQ:
+Q: How much does dental bonding cost in Dubai?
+A: Indicative private-clinic prices are about AED 400 to 1,500 per tooth, depending on how much composite is used. Ask for a per-tooth price if several teeth are involved.
+Q: Is bonding covered by insurance in the UAE?
+A: Cosmetic bonding is usually excluded. Bonding to repair a broken tooth after an accident may be covered under a dental benefit with pre-approval.
+Q: How long does bonding last?
+A: It varies with diet, habits and bite. Expect to need polishing and some repairs over the years, and eventual replacement.
+Q: Bonding or veneers: which is better?
+A: Bonding is cheaper, done in one visit and usually removes no enamel. Porcelain veneers cost more but resist staining and chipping better.
+Q: Does bonding damage your teeth?
+A: Usually no enamel is drilled away, only lightly roughened. The composite can be removed or replaced later.
+Q: Can bonded teeth be whitened?
+A: No. Composite does not respond to whitening, so whiten first and match the bonding to the new shade.
+
+## Sedation Dentistry
+URL: https://www.appointpanda.ae/services/sedation-dentistry/
+
+Sedation dentistry uses medicine to help you relax during treatment: laughing gas (nitrous oxide), oral tablets or intravenous (IV) sedation. In Dubai, private clinics typically charge AED 300 to 4,000 per session on top of the treatment itself. It suits anxious patients, long procedures and people with a strong gag reflex.
+
+Sedation is not the same as general anaesthesia. With conscious sedation you stay awake and able to respond, but feel calm and often remember little afterwards. Local anaesthetic is still used to numb the tooth.
+
+There are three common types. Nitrous oxide (laughing gas) is breathed through a small nose mask, works within minutes and wears off quickly, so you can usually go home alone. Oral sedation is a tablet taken before the appointment. IV sedation is given through a vein in the arm or hand and is used for longer or more complex treatment such as implant surgery or several extractions.
+
+General anaesthesia, where you are fully asleep, is mostly used for major oral surgery and for some young children or people with special needs. It is given by an anaesthetist and is often done in a hospital or day-surgery setting.
+
+Indicative UAE cost: AED 300 to AED 4,000 per session, on top of the dental treatment. Indicative only. Laughing gas sits at the lower end and IV sedation at the upper end. General anaesthesia in a hospital or day-surgery unit costs more.
+Treatment time: Matches the length of the treatment; allow extra time to recover in the clinic, from a few minutes after laughing gas to an hour or more after IV sedation
+Recovery: Laughing gas wears off within minutes. After oral or IV sedation, do not drive, work, sign important documents or drink alcohol for the rest of the day, and have an adult with you for some hours.
+
+Steps:
+1. Medical assessment: The dentist reviews your medical history, medicines and allergies, checks blood pressure and decides which type of sedation is suitable.
+2. Pre-sedation instructions: You receive written instructions on eating and drinking beforehand, medicines and arranging an escort.
+3. Sedation: Laughing gas through a nose mask, a tablet before treatment, or IV sedation through a small cannula.
+4. Monitoring during treatment: Your oxygen level, pulse and blood pressure are monitored throughout by a trained team member.
+5. Recovery and discharge: You rest until you are steady. After oral or IV sedation, a responsible adult takes you home.
+
+Risks:
+- Drowsiness, nausea or headache after sedation
+- Over-sedation affecting breathing, which is why monitoring and emergency equipment are needed
+- Bruising at the IV site
+- Little memory of the appointment, which some people find unsettling
+
+FAQ:
+Q: How much does sedation dentistry cost in Dubai?
+A: Indicative private-clinic prices are about AED 300 to 800 for laughing gas and roughly AED 1,500 to 4,000 for IV sedation per session, charged on top of the treatment.
+Q: Is dental sedation covered by insurance in the UAE?
+A: Sometimes, when it is medically necessary for covered treatment such as surgical extractions, and usually only with pre-approval. Sedation for anxiety alone is often excluded.
+Q: Will I be asleep during sedation?
+A: Not with conscious sedation. You stay awake and can respond, but feel relaxed and may remember little. Only general anaesthesia puts you fully to sleep.
+Q: Is dental sedation safe?
+A: It is widely used when patients are assessed beforehand and monitored throughout by a trained team. Tell the dentist about every medical condition and medicine you take.
+Q: Can I drive after dental sedation?
+A: After laughing gas you can usually drive once you feel normal. After oral or IV sedation you should not drive for the rest of the day and need an adult to take you home.
+Q: Can children have dental sedation?
+A: Laughing gas is often used for children. Deeper sedation or general anaesthesia for children is handled by paediatric dentists and anaesthetists in suitable settings.
 
 ## Dentists in Dubai
 URL: https://www.appointpanda.ae/dubai/
@@ -436,119 +790,255 @@ A: Many clinics open until 9 or 10 pm and some open on weekends. Call ahead for 
 ## Dental Implants in Dubai
 URL: https://www.appointpanda.ae/dubai/services/dental-implants/
 
-Many Dubai clinics have their own CBCT scanner, which saves a separate trip to an imaging centre before implant planning. Check if the scan is included in the consultation fee; some clinics charge for it separately.
+Implant quotes in Dubai are often hard to compare because clinics bundle different things. Before comparing prices, ask each clinic to list the implant brand, the abutment, the crown material, the CBCT scan, any temporary tooth and the review visits. A low headline price sometimes covers the implant post only.
 
-Implant treatment spans several months, so think about where you will be living and working for the whole course. Commuting across the city at peak hours for each review appointment adds up quickly.
+Implant treatment runs over several months, so choose a clinic you can reach easily from home or work for every visit. If you may leave Dubai during treatment, ask for the implant brand, size and connection type in writing so another dentist can work on it later.
+
+Implants are placed by general dentists with implant training as well as by oral surgeons, periodontists and prosthodontists. For bone grafts, sinus lifts or full-arch treatment, ask who places the implant and who makes the teeth, because in some clinics these are two different people. Payment in instalments across the treatment stages is commonly offered; ask for the total in writing.
 
 Insurance: Surgical treatment is covered by some dental benefits when it is medically necessary, often with pre-approval. Implants in particular are frequently excluded or capped. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much is a dental implant in Dubai?
+A: A single implant with abutment and crown usually costs AED 5,000 to 12,000 at private clinics. A CBCT scan (AED 300 to 1,000) and bone grafting (AED 1,500 to 5,000 per site) are often extra. These are indicative ranges; ask for an itemised written quote.
 Q: Do Dubai clinics offer All-on-4 or full-arch implants?
-A: Several Dubai clinics offer full-arch options. They are a major treatment, so ask for the surgeon's experience with full-arch cases and a breakdown of temporary and final teeth costs.
+A: Yes, some clinics offer fixed full-arch treatment, with indicative prices of AED 25,000 to 65,000 per arch. Ask about the surgeon's full-arch experience and get the temporary and final teeth priced separately in the quote.
 Q: Can I start implants in Dubai and finish abroad?
-A: It is possible but not ideal. Components differ between implant systems, so finishing with the same clinic, or at least the same system, avoids compatibility problems.
+A: It is possible but not ideal. Components differ between implant systems, so finishing with the same clinic, or at least the same system, avoids compatibility problems. Ask for your implant records in writing.
+Q: Is the CBCT scan included in an implant consultation in Dubai?
+A: It depends on the clinic. Some include the scan in the consultation fee, others charge it separately or send you to an imaging centre. Ask when you book.
 
 ## Invisalign & Clear Aligners in Dubai
 URL: https://www.appointpanda.ae/dubai/services/invisalign/
 
-Clear aligners are widely offered in Dubai by both general dentists and specialist orthodontists. Ask who will plan your case and whether they review the digital plan themselves or rely on the manufacturer's automated set-up.
+Invisalign and other clear aligners are offered in Dubai by specialist orthodontists and by general dentists. Ask who will plan your case and whether they adjust the digital plan themselves or accept the manufacturer's automated set-up as it comes.
 
-Because aligner reviews are every 6 to 10 weeks, a clinic near work or home is easy to keep up with. If you travel a lot, ask about remote monitoring and getting several trays at once.
+Quotes differ mainly in what they leave out. Check whether refinement trays, attachments, retainers and review visits are included, and how many trays the plan allows before extra charges apply. Monthly instalment plans are common; ask for the total figure in writing.
+
+Reviews are every 6 to 10 weeks for a year or more, so a clinic near home or work is easier to keep up with. If you travel often, ask whether the clinic can give you several sets of trays at once or check progress from photos between visits.
 
 Insurance: Orthodontic treatment for adults is rarely covered. Some family plans have a separate orthodontic limit for children, usually with age rules. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much is Invisalign in Dubai?
+A: Indicative private-clinic prices are AED 6,000 to 12,000 for a short course, AED 10,000 to 16,000 for moderate cases and AED 14,000 to 25,000 for comprehensive treatment. Retainers add AED 800 to 2,500 if they are not included.
+Q: Is Invisalign cheaper in Dubai than in the UK?
+A: Prices overlap. Some Dubai quotes are lower and some higher than typical UK private prices, and the difference depends more on the length of the course and what is included than on the country. Compare itemised quotes.
 Q: Do Dubai clinics offer aligner brands other than Invisalign?
-A: Yes. Several clinics offer other clear aligner systems, sometimes at lower cost. The clinician's planning matters more than the brand.
+A: Yes. Several clinics offer other clear aligner systems, sometimes at lower cost. How carefully the clinician plans and monitors the case matters more than the brand.
 Q: Can I pay for aligners in instalments in Dubai?
-A: Many clinics offer payment plans spread over the treatment period. Ask for the total cost in writing.
+A: Instalment plans spread over the treatment period are commonly offered, and some card providers offer instalments too. Ask for the total cost in writing before signing.
+Q: How many hours a day do I need to wear aligners?
+A: Align Technology advises 20 to 22 hours a day. Take them out only to eat, drink anything other than water, and clean your teeth.
 
 ## Braces in Dubai
 URL: https://www.appointpanda.ae/dubai/services/braces/
 
-Both specialist orthodontists and general dentists fit braces in Dubai. For a child, an orthodontist's assessment is the best way to decide between starting early and waiting for more adult teeth to come through.
+Specialist orthodontists and general dentists both fit braces in Dubai. For a child, an orthodontist's assessment helps decide whether to start early or wait until more adult teeth have come through, and a second opinion before a long course is reasonable.
 
-Adjustment visits are every 4 to 8 weeks, often after school, so ask how easy it is to book late-afternoon slots.
+Adjustment visits are every 4 to 8 weeks for one to two years, often after school. Ask how easy it is to get late-afternoon slots and what happens if a bracket breaks between visits, including whether repair visits are charged.
+
+Quotes vary in what they cover. Check whether the price includes records (X-rays, photos and scans), all adjustment visits, emergency repairs and retainers, and whether payment can be spread over the course.
 
 Insurance: Orthodontic treatment for adults is rarely covered. Some family plans have a separate orthodontic limit for children, usually with age rules. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much do braces cost in Dubai?
+A: Indicative private-clinic prices for a full course are AED 6,000 to 12,000 for metal braces, AED 9,000 to 16,000 for ceramic or self-ligating braces and AED 18,000 to 35,000 for lingual braces. Retainers may add AED 800 to 2,500.
+Q: Do I need a DHA-licensed orthodontist for braces?
+A: Any dentist treating you in Dubai must hold a DHA licence, or a Dubai Healthcare City licence inside the free zone. Orthodontist is a separate specialist category. General dentists can fit braces, but for children and complex bites a specialist orthodontist is often the safer choice.
 Q: Are ceramic braces popular in Dubai?
-A: Many adults choose ceramic or lingual braces for a less visible option. They cost more than metal braces.
+A: Adults often choose ceramic or lingual braces because they are less visible. Both cost more than metal braces, and ceramic brackets can stain with frequent coffee or tea.
 Q: What happens if a bracket breaks?
-A: Call the clinic. Most repairs are quick and booked at your next convenient slot unless the wire is causing pain.
+A: Call the clinic. Most repairs are quick and can wait for your next convenient slot unless a wire is causing pain. Ask whether repair visits are included in your quote.
 
 ## Veneers in Dubai
 URL: https://www.appointpanda.ae/dubai/services/veneers/
 
-Dubai has a large cosmetic dentistry market, and veneer prices vary widely. A low headline price may be for composite rather than porcelain, or may exclude the mock-up and temporaries, so ask exactly what is included.
+Veneer prices in Dubai vary widely, and a low headline price is often for composite rather than porcelain, or leaves out the mock-up, temporaries or the lab fee. Ask each clinic to state the material, the number of teeth and what is included per tooth.
 
-Ask to see the dentist's own before-and-after cases, ideally of patients with a similar starting point, and take time to decide before any enamel is removed.
+Ask to see the dentist's own before-and-after cases, ideally of patients with a similar starting point, and look at the proposed shade in daylight. Approve a mock-up before any enamel is removed, and take time to decide between the consultation and the preparation visit.
+
+Visitors sometimes plan veneers during a short stay. Porcelain veneers need two or three visits over one to three weeks, and the bite is often checked again a week or two after bonding, so plan to be in Dubai for the whole course or choose composite.
 
 Insurance: Cosmetic treatment is generally excluded from insurance, so plan to pay for it yourself and ask for a written quote. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much are veneers in Dubai?
+A: Indicative private-clinic prices are AED 800 to 2,000 per tooth for composite, AED 2,000 to 4,500 for porcelain and AED 2,000 to 5,000 for E.max. Six porcelain or E.max veneers usually come to AED 12,000 to 30,000.
 Q: Why do veneer prices in Dubai vary so much?
-A: Material, the lab used, the dentist's experience and whether a mock-up and temporaries are included all change the price.
+A: Material, the lab, the dentist's experience and whether a mock-up and temporaries are included all change the price. Compare quotes for the same material and number of teeth.
 Q: Can I get veneers in one day in Dubai?
-A: Composite veneers can be done in a day. Porcelain veneers made by a lab usually take one to three weeks, unless the clinic mills them on site.
+A: Composite veneers can be done in one visit. Porcelain veneers made by a lab usually take one to three weeks, unless the clinic mills them on site.
+Q: Is it cheaper to get veneers in Turkey than in Dubai?
+A: Headline prices abroad can be lower, but follow-up is harder if a veneer chips or debonds, and a short trip limits time for a mock-up and adjustments. Consider the cost of repairs and return trips as well as the first quote.
+
+## Hollywood Smile in Dubai
+URL: https://www.appointpanda.ae/dubai/services/hollywood-smile/
+
+In Dubai the term "Hollywood smile" covers anything from composite bonding on a few front teeth to porcelain veneers or crowns on 20 teeth, so two quotes with the same name can describe very different treatments. Ask each clinic for the number of teeth, the material and the price per tooth.
+
+Ask whether whitening, gum contouring or a short course of aligners would let you treat fewer teeth, and why each tooth in the plan is included. Approve a mock-up of the shape and shade before any enamel is removed, and look at the shade in daylight.
+
+If you are visiting Dubai for treatment, allow for the full course: the design and mock-up visit, preparation, two or three weeks of temporaries while the lab works, and a bite check after bonding. Ask what happens, and who pays, if a veneer chips after you leave.
+
+Insurance: Cosmetic treatment is generally excluded from insurance, so plan to pay for it yourself and ask for a written quote. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
+
+FAQ:
+Q: How much does a Hollywood smile cost in Dubai?
+A: Indicative private-clinic prices are AED 12,000 to 40,000 for composite on 16 to 20 teeth, AED 20,000 to 50,000 for porcelain or E.max on 10 upper teeth, and AED 32,000 to 100,000 for porcelain or E.max on 16 to 20 teeth.
+Q: How many teeth does a Hollywood smile cover?
+A: It depends on how wide your smile is. Many people show 8 to 10 upper teeth when they smile, so treating those may be enough. Plans with 16 to 20 teeth include lower teeth as well. Ask why each tooth is included.
+Q: How long do I need to stay in Dubai for a Hollywood smile?
+A: For porcelain or E.max, plan on two to four weeks once the design is agreed, with three to five visits. Composite can often be finished in one or two long visits.
+Q: Is a Hollywood smile with crowns different from veneers?
+A: Crowns cover the whole tooth and need more of it removed; veneers cover the front. Crowns may suit heavily filled or broken teeth, while veneers keep more natural tooth. Ask why the clinic recommends one over the other for each tooth.
 
 ## Teeth Whitening in Dubai
 URL: https://www.appointpanda.ae/dubai/services/teeth-whitening/
 
-In Dubai, many clinics near offices in Downtown and Business Bay can fit an in-clinic whitening session into a long lunch break. One clinic session followed by custom take-home trays usually gives the most even, lasting result.
+Whitening offers in Dubai are often sold by the name of the system, such as "laser" or a branded lamp. The light matters less than the peroxide gel and how carefully the gums are protected. Ask which gel and concentration the clinic uses and whether custom trays for top-ups are included.
 
-Be wary of very cheap whitening offers that skip a check-up. Whitening over untreated decay or exposed roots can be painful.
+A check-up and a scale and polish should come before whitening, so decay and tartar are dealt with first. Offers that skip the examination are cheaper, but whitening over untreated decay or exposed roots can be painful. Ask whether the cleaning is in the price.
+
+Clinics near offices in Downtown and Business Bay can often fit an in-clinic session into a long lunch break or an evening. If you have crowns, veneers or fillings on front teeth, ask how they will match afterwards, because they do not whiten.
 
 Insurance: Cosmetic treatment is generally excluded from insurance, so plan to pay for it yourself and ask for a written quote. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
-Q: How long does an in-clinic whitening session take in Dubai?
-A: Usually 60 to 90 minutes, including preparation and protecting the gums.
-Q: Are cosmetic whitening offers safe?
-A: Professional whitening is safe when a dentist checks your teeth first. Avoid offers that skip the check-up.
+Q: How much is teeth whitening in Dubai?
+A: Indicative private-clinic prices are AED 700 to 1,800 for take-home trays, AED 1,200 to 3,000 for an in-clinic session and AED 1,800 to 4,000 for both. A scale and polish beforehand costs AED 250 to 800 if not included.
+Q: Is laser teeth whitening in Dubai better?
+A: The light or "laser" used in some systems is mainly there to speed the gel up. The result depends mostly on the peroxide gel, the time it is applied and your starting shade. Ask the clinic what results to expect for your teeth.
+Q: How long does an in-clinic whitening session take?
+A: Usually 60 to 90 minutes, including protecting the gums. You may be asked to avoid strongly coloured food and drink for about 48 hours afterwards.
+Q: Is whitening from a salon safe?
+A: Professional-strength whitening should follow a dental examination. Salon treatments may skip that check. If you have decay, gum problems or sensitive teeth, see a licensed dentist first.
 
 ## Root Canal Treatment in Dubai
 URL: https://www.appointpanda.ae/dubai/services/root-canal/
 
-Dubai has specialist endodontists as well as general dentists who perform root canals. For molars, retreatments or curved canals, a specialist with a microscope can make a difference.
+In Dubai, root canals are done by general dentists and by specialist endodontists. A general dentist routinely treats front teeth and straightforward premolars. For molars, curved canals or a tooth that has had a root canal before, ask whether the clinic has an endodontist who works with a microscope.
 
-If your plan has a dental benefit, root canals are often covered as basic restorative care with a co-payment. The crown afterwards may be covered at a different rate, so check both.
+Ask for the price of the root canal and the crown together, because back teeth usually need a crown within a few weeks to stop them cracking. Some quotes also leave out the X-rays and the temporary filling between visits.
+
+If you are in pain, say so when you call. Clinics can usually relieve pain on the day and book the full treatment afterwards, which also gives time for insurance pre-approval.
 
 Insurance: Restorative work such as fillings, root canals and crowns is commonly part of a dental benefit, with a co-payment and an annual limit. Crowns are sometimes covered at a lower rate. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much is a root canal in Dubai?
+A: Indicative private-clinic prices are AED 1,000 to 2,500 for a front tooth, AED 1,300 to 3,000 for a premolar, AED 1,800 to 4,500 for a molar and AED 2,500 to 6,000 for retreatment. The crown is usually extra.
 Q: Should I see an endodontist in Dubai?
-A: For molars, retreatments or complex anatomy, an endodontist is a good choice. Simple front-tooth root canals are routinely done by general dentists.
+A: For molars, retreatments or complex canals, an endodontist is a good choice. Simple front-tooth root canals are routinely done by general dentists.
+Q: Does insurance in Dubai cover root canals?
+A: Employer plans with a dental benefit often do, with a co-payment and an annual limit. The basic mandatory plan generally covers only emergency pain relief. Ask the clinic to request pre-approval for the root canal and the crown.
 Q: Can a root canal be done in one visit?
-A: Often, yes, if there is no significant infection. Otherwise it may take two visits.
+A: Often, yes, if there is no significant infection. Otherwise it may take two visits, with medicine placed in the tooth in between.
+
+## Teeth Cleaning (Scale & Polish) in Dubai
+URL: https://www.appointpanda.ae/dubai/services/teeth-cleaning/
+
+Cleaning is often the first visit with a new clinic in Dubai, so it is a practical way to try a clinic before you need larger treatment. Ask whether the price includes the dentist's examination and X-rays or covers the hygienist's cleaning only.
+
+Some clinics sell AirFlow or "guided biofilm therapy" as a premium clean. It uses a powder and water spray to remove stain and plaque and can feel gentler, but a standard scale and polish removes tartar too. Ask which one the clinic recommends for you and why.
+
+If your gums bleed or the hygienist finds deep pockets, you may be offered deep cleaning, charged per quadrant over more than one visit. Ask for the gum measurements and a written plan before agreeing.
+
+Insurance: Check-ups and cleaning are the treatments most often included when a plan has a dental benefit, usually once or twice a year. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
+
+FAQ:
+Q: How much is teeth cleaning in Dubai?
+A: Indicative private-clinic prices are AED 250 to 800 for a scale and polish, AED 400 to 1,000 for AirFlow, AED 350 to 1,000 for a check-up with cleaning and X-rays, and AED 200 to 750 per quadrant for deep cleaning.
+Q: Does insurance in Dubai cover a scale and polish?
+A: Employer plans with a dental benefit often cover one or two cleanings a year. The basic mandatory plan generally does not. Ask the clinic to check your cover before the visit.
+Q: Is AirFlow better than a normal cleaning?
+A: AirFlow removes stain and soft plaque well, and some people find it more comfortable. Hard tartar may still need an ultrasonic scaler. Both are acceptable ways to clean teeth; ask what your gums need.
+Q: How often should I get my teeth cleaned?
+A: Every six months suits most people. Your dentist may suggest every three to four months if you have gum disease or build tartar quickly, or a longer gap if your gums are healthy.
 
 ## Emergency Dentist in Dubai
 URL: https://www.appointpanda.ae/dubai/services/emergency-dentist/
 
-Many Dubai clinics hold same-day emergency slots and some open late or at weekends. Always phone before going so they can confirm a dentist is available, and ask about the consultation fee.
+Phone before you travel. Describe the problem, ask whether a dentist can see you today and ask the consultation fee, including any out-of-hours surcharge. Opening hours vary between clinics, and some open late in the evening or at weekends, so use the clinic's own phone line to confirm.
 
-For facial injuries, spreading swelling or difficulty breathing, go to a hospital emergency department or call 998.
+Dubai traffic at peak hours can add half an hour to a journey across the city, so the nearest clinic that can see you is usually the better choice than a preferred clinic further away. Bring your Emirates ID, insurance card and a list of any medicines you take.
+
+For a knocked-out adult tooth, hold it by the crown, put it back in the socket straight away if you can, or keep it in milk, and get to a dentist within 30 minutes. Go to a hospital emergency department or call 998 if swelling spreads towards the eye or neck, you have difficulty breathing or swallowing, or there is a serious facial injury.
 
 Insurance: Emergency treatment to relieve pain or control infection is the dental care most often covered, including under some basic plans. Follow-up work is usually assessed separately. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
-Q: Where can I find an emergency dentist in Dubai at night?
-A: Some clinics open late into the evening. Hospital emergency departments handle serious swelling and trauma around the clock.
+Q: Can I get an emergency dentist in Dubai on a Friday or Sunday?
+A: Some private clinics open at weekends and some open late in the evening, but hours vary. Phone the clinic to confirm before you travel. For serious swelling or trauma, hospital emergency departments are open around the clock.
+Q: How much does an emergency dentist cost in Dubai?
+A: Indicative private-clinic prices are AED 200 to 800 for the consultation and X-ray. Treatment on the day costs extra: AED 300 to 1,500 for pain relief or draining an abscess, or AED 400 to 1,200 for a simple extraction.
+Q: What should I do if a tooth is knocked out?
+A: Hold it by the crown, not the root. Rinse briefly if dirty and put it back in the socket if you can, or keep it in milk. Get to a dentist within 30 minutes. Do not replant a baby tooth.
 Q: Will my Dubai insurance cover emergency dental care?
-A: Many plans, including some basic plans, cover emergency treatment to relieve pain. Follow-up treatment may not be covered.
+A: Emergency treatment to relieve pain or treat infection is the dental care most often covered, including under the basic plan. Follow-up treatment may not be covered. Check your policy and ask the clinic about direct billing.
+Q: When should I go to hospital instead of a dentist?
+A: Go to a hospital emergency department or call 998 if swelling is spreading to your eye or neck, you have difficulty breathing or swallowing, bleeding will not stop, or you have a serious injury to the face or head.
 
 ## Children's Dentistry in Dubai
 URL: https://www.appointpanda.ae/dubai/services/pediatric-dentistry/
 
-Dubai has dedicated pediatric dental practices as well as family clinics that see children. Specialist pediatric dentists are trained in managing anxious children and in sedation when it is genuinely needed.
+In Dubai, children are seen by specialist pediatric dentists and by family dentists. For routine check-ups a family dentist is usually fine. For very young, anxious or medically complex children, or treatment that may need sedation, a pediatric dentist is trained for that work.
 
-After-school appointments are in high demand; booking your child's next check-up as you leave helps secure a convenient time.
+After-school and weekend appointments go quickly, so book the next check-up as you leave. Ask whether a parent can stay in the room and how the clinic handles a nervous first visit.
+
+If your child needs extensive treatment, a clinic may suggest sedation or a general anaesthetic. Ask where it would be done, who gives the anaesthetic, and for a written estimate that includes hospital or facility fees.
 
 Insurance: Family plans with dental benefits usually include children's check-ups and basic treatment. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
 
 FAQ:
+Q: How much is a children's dentist in Dubai?
+A: Indicative private-clinic prices are AED 200 to 500 for a check-up, AED 100 to 300 for fluoride varnish, AED 150 to 400 per tooth for sealants and AED 300 to 900 for a baby-tooth filling. Treatment under general anaesthetic can cost AED 4,000 to 15,000 including facility fees.
 Q: Do I need a specialist pediatric dentist in Dubai?
-A: For routine check-ups a family dentist is fine. For very young, anxious or medically complex children, a pediatric specialist is helpful.
-Q: Do schools in Dubai require dental check-ups?
-A: Requirements vary by school. Regular check-ups every 6 months are recommended regardless.
+A: For routine check-ups a family dentist is fine. For very young, anxious or medically complex children, or treatment that may need sedation, a pediatric specialist is helpful. You can check the licence category on the DHA register.
+Q: When should my child first see a dentist?
+A: When the first tooth appears or by the first birthday, as advised by the American Academy of Pediatric Dentistry. Early visits are short and help the child get used to the clinic.
+Q: Does family insurance in Dubai cover children's dental care?
+A: Plans with a dental benefit often cover check-ups and basic treatment for children. The basic mandatory plan generally does not include routine dental care. Check your policy wording.
+
+## Wisdom Tooth Removal in Dubai
+URL: https://www.appointpanda.ae/dubai/services/wisdom-tooth-removal/
+
+An X-ray, and sometimes a CBCT scan, shows whether a wisdom tooth needs a simple or a surgical extraction. Ask for the quote after the scan, because the price depends on how the tooth is positioned and how close it sits to the nerve.
+
+Impacted wisdom teeth in Dubai are removed by oral surgeons and by general dentists with surgical experience. If the tooth is deeply buried or close to the nerve, ask whether an oral and maxillofacial surgeon will do it.
+
+Book surgical removal before a weekend or a few quieter days at work, because swelling usually peaks on day two or three. If you want all four removed at once under sedation, ask whether that suits your case and where the sedation will be given.
+
+Insurance: Surgical treatment is covered by some dental benefits when it is medically necessary, often with pre-approval. Implants in particular are frequently excluded or capped. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
+
+FAQ:
+Q: How much is wisdom tooth removal in Dubai?
+A: Indicative private-clinic prices are AED 500 to 1,500 for a simple extraction, AED 1,200 to 3,000 for surgical removal of a partly erupted tooth and AED 2,000 to 4,500 for a tooth impacted in bone. IV sedation adds AED 1,000 to 3,000.
+Q: Do I need an oral surgeon in Dubai to remove a wisdom tooth?
+A: Not always. General dentists remove straightforward wisdom teeth. For deeply impacted teeth or teeth close to the nerve, an oral surgeon is often recommended. You can check the licence category on the DHA register.
+Q: How many days off work do I need?
+A: Expect to take one to three days off after surgical removal. Swelling usually peaks around day two or three. A simple extraction often needs no more than the rest of the day.
+Q: Does insurance in Dubai cover wisdom tooth removal?
+A: It depends on your plan. Employer plans with a dental benefit often cover medically necessary removal with pre-approval. The basic plan generally covers only emergency care.
+
+## Dental Crowns in Dubai
+URL: https://www.appointpanda.ae/dubai/services/dental-crowns/
+
+Some Dubai clinics mill crowns on site and fit them the same day, while others send the work to a dental lab, which means a temporary crown for one to two weeks. Same-day crowns are convenient if you are short of time; lab-made crowns may suit front teeth where shade matching is harder.
+
+Ask which material the dentist recommends for this tooth and why. Zirconia is very strong for back teeth, while E.max and layered porcelain are often chosen for front teeth. Check whether a core build-up or post (AED 300 to 1,200) is needed and included.
+
+If the crown follows a root canal, ask for both to be priced together and whether the same dentist will do both. Ask what the guarantee covers if the crown chips or comes loose.
+
+Insurance: Restorative work such as fillings, root canals and crowns is commonly part of a dental benefit, with a co-payment and an annual limit. Crowns are sometimes covered at a lower rate. Dubai's mandatory basic plans generally exclude routine dental care, so cover depends on your employer's plan.
+
+FAQ:
+Q: How much is a dental crown in Dubai?
+A: Indicative private-clinic prices per crown are AED 1,200 to 2,500 for porcelain fused to metal, AED 1,500 to 3,500 for zirconia, AED 1,800 to 4,500 for E.max and AED 1,800 to 4,000 for a same-day milled crown.
+Q: Which is better, zirconia or E.max?
+A: Zirconia is stronger and often used on back teeth and for people who grind. E.max is more translucent and often chosen for front teeth. Your dentist should explain the choice for each tooth.
+Q: Can I get a same-day crown in Dubai?
+A: Some clinics mill crowns on site and fit them in one visit of a few hours. Ask when booking whether the clinic has this option and whether it suits your tooth.
+Q: Does insurance in Dubai cover crowns?
+A: Employer plans with a dental benefit often cover crowns needed to restore a damaged tooth, with pre-approval and a co-payment. The basic plan generally does not. Crowns for appearance alone are rarely covered.

@@ -97,8 +97,64 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.appointpanda.ae/dubai/</loc>
+    <loc>https://www.appointpanda.ae/services/all-on-4-implants/</loc>
     <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/gum-treatment/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/tooth-extraction/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/dental-fillings/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/dentures/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/dental-bridges/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/dental-bonding/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/services/sedation-dentistry/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/dubai/</loc>
+    
     <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -136,6 +192,14 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.appointpanda.ae/dubai/services/hollywood-smile/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-room.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.appointpanda.ae/dubai/services/teeth-whitening/</loc>
     <lastmod>2026-10-21</lastmod>
     <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
@@ -148,6 +212,14 @@
     <lastmod>2026-10-21</lastmod>
     <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
     <image:image><image:loc>https://www.appointpanda.ae/images/treatments/xray-viewer.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/dubai/services/teeth-cleaning/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/toothbrush.jpg</image:loc></image:image>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -168,206 +240,186 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.appointpanda.ae/dubai/dubai-marina/</loc>
+    <loc>https://www.appointpanda.ae/dubai/services/wisdom-tooth-removal/</loc>
     <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/panoramic-xray.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/dubai/services/dental-crowns/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image><image:loc>https://www.appointpanda.ae/images/emirates/dubai.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.appointpanda.ae/images/treatments/clinic-chair-white.jpg</image:loc></image:image>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.appointpanda.ae/dubai/dubai-marina/</loc>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/jumeirah-beach-residence/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/jlt/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/palm-jumeirah/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/downtown-dubai/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/business-bay/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/difc/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/jumeirah/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/umm-suqeim/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-barsha/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-quoz/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/motor-city/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/arabian-ranches/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/dubai-hills/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/jvc/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/dubai-sports-city/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/bur-dubai/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/karama/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/oud-metha/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/healthcare-city/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/deira/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-qusais/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-nahda-dubai/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/mirdif/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-warqa/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/dubai-silicon-oasis/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/international-city/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-safa/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/dubai-investment-park/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/discovery-gardens/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/jvt/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/al-mamzar/</loc>
-    <lastmod>2026-10-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://www.appointpanda.ae/dubai/al-rashidiya/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.appointpanda.ae/dubai/dubai-festival-city/</loc>
-    <lastmod>2026-10-21</lastmod>
+    
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
