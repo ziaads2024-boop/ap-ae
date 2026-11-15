@@ -163,7 +163,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
                 canonical,
                 ogImage,
                 author: postData.author_name || 'AppointPanda Team',
-                publishedAt: postData.published_at || null,
+                // published_at was never filled for imported posts; fall back to when the row was created
+                publishedAt: postData.published_at || postData.created_at || null,
                 modifiedAt: postData.updated_at || null,
             },
             authorData,

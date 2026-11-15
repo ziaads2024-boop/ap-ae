@@ -25,6 +25,9 @@ const nextConfig = {
       { source: '/find-dentist', destination: '/find-clinics/', permanent: true },
       { source: '/tools/insurance-checker', destination: '/insurance/', permanent: true },
       { source: '/compare/:path*', destination: '/emirates/', permanent: true },
+      // Blog consolidation: posts that duplicated a treatment guide (with
+      // different prices), near-duplicate posts, and DIY/off-topic health advice.
+      ...Object.entries(require('./src/lib/retiredPosts.json')).map(([slug, destination]) => ({ source: `/blog/${slug}`, destination, permanent: true })),
       {
         source: '/emirates/:state(abu-dhabi|ajman|dubai|fujairah|ras-al-khaimah|sharjah|umm-al-quwain)',
         destination: '/:state/',
