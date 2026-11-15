@@ -1,5 +1,6 @@
 import { SITE_URL, CONTENT_REVIEWED, urls } from './index';
 import type { EmirateContent, Faq, ServiceContent } from './types';
+import { GUIDES_UPDATED } from './services';
 import { LICENSE_URLS, type SiteImage } from './images';
 
 /** ImageObject with licence metadata (Google image licence fields). */
@@ -18,34 +19,17 @@ export const imageObject = (img: SiteImage) => ({
 // JSON-LD builders. Only describe what is visibly on the page: no ratings,
 // reviews, prices or credentials that the page does not show.
 
-const ORG_ID = `${SITE_URL}/#organization`;
-const SITE_ID = `${SITE_URL}/#website`;
+// pages/_document.tsx emits the Organization (#organization) and WebSite
+// (#website) nodes on every page, so the builders here reference them by @id
+// only and never emit a second copy.
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const SITE_ID = `${SITE_URL}/#website`;
+const ORG_REF = { '@id': ORG_ID };
 
-export const organizationSchema = () => ({
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': ORG_ID,
-  name: 'AppointPanda',
-  url: `${SITE_URL}/`,
-  logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
-  description: 'AppointPanda is a directory that helps people in the UAE find and compare licensed dental clinics and understand dental treatments.',
-  areaServed: { '@type': 'Country', name: 'United Arab Emirates' },
-});
-
-export const websiteSchema = () => ({
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  '@id': SITE_ID,
-  name: 'AppointPanda',
-  url: `${SITE_URL}/`,
-  inLanguage: 'en-AE',
-  publisher: { '@id': ORG_ID },
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/find-clinics/?q={search_term_string}` },
-    'query-input': 'required name=search_term_string',
-  },
-});
+/** @deprecated The Organization node is emitted sitewide by pages/_document.tsx. Kept so old callers compile. */
+export const organizationSchema = (): null => null;
+/** @deprecated The WebSite node is emitted sitewide by pages/_document.tsx. Kept so old callers compile. */
+export const websiteSchema = (): null => null;
 
 export const breadcrumbSchema = (items: { name: string; path: string }[]) => ({
   '@context': 'https://schema.org',
@@ -71,7 +55,9 @@ export const faqSchema = (faqs: Faq[]) =>
         })),
       };
 
-const webPage = (path: string, name: string, description: string) => ({
+const DENTISTRY = 'https://schema.org/Dentistry';
+
+const webPage = (path: string, name: string, description: string, dateModified: string) => ({
   '@context': 'https://schema.org',
   '@type': 'MedicalWebPage',
   '@id': `${SITE_URL}${path}#webpage`,
@@ -80,39 +66,57 @@ const webPage = (path: string, name: string, description: string) => ({
   description,
   inLanguage: 'en-AE',
   isPartOf: { '@id': SITE_ID },
-  publisher: { '@id': ORG_ID },
+  publisher: ORG_REF,
+  author: ORG_REF,
   lastReviewed: CONTENT_REVIEWED,
+  dateModified,
+  specialty: DENTISTRY,
+  medicalAudience: 'https://schema.org/Patient',
   audience: { '@type': 'PeopleAudience', geographicArea: { '@type': 'Country', name: 'United Arab Emirates' } },
 });
 
-export const servicePageSchema = (s: ServiceContent, img?: SiteImage) => ({
-  ...webPage(urls.service(s.slug), s.metaTitle, s.metaDescription),
-  ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
-  about: {
-    '@type': 'MedicalProcedure',
-    name: s.name,
-    description: s.summary,
-    howPerformed: s.steps.map((st) => st.title).join('; '),
-    preparation: s.steps[0]?.detail,
-    followup: s.recovery,
-    procedureType: s.insuranceCategory === 'surgical' ? 'https://schema.org/SurgicalProcedure' : 'https://schema.org/NoninvasiveProcedure',
-  },
+/** The MedicalProcedure node for a guide, with a stable @id on the national guide URL. */
+export const procedureNode = (s: ServiceContent) => ({
+  '@type': s.schemaType ?? 'MedicalProcedure',
+  '@id': `${SITE_URL}${urls.service(s.slug)}#procedure`,
+  name: s.headingName ?? s.name,
+  ...(s.alternateName?.length ? { alternateName: s.alternateName } : {}),
+  description: s.answer ?? s.summary,
+  url: `${SITE_URL}${urls.service(s.slug)}`,
+  relevantSpecialty: DENTISTRY,
+  ...(s.bodyLocation ? { bodyLocation: s.bodyLocation } : {}),
+  // MedicalProcedureType has two values only; set it only when one applies.
+  ...(s.procedureType ? { procedureType: `https://schema.org/${s.procedureType}` } : {}),
+  howPerformed: s.steps.map((st) => `${st.title}: ${st.detail}`).join(' '),
+  preparation: s.steps[0]?.detail,
+  followup: s.recovery,
 });
 
+export const servicePageSchema = (s: ServiceContent, img?: SiteImage) => {
+  const procedure = procedureNode(s);
+  return {
+    ...webPage(urls.service(s.slug), s.metaTitle, s.metaDescription, GUIDES_UPDATED),
+    ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
+    about: procedure,
+    mainEntity: { '@id': procedure['@id'] },
+  };
+};
+
 export const emiratePageSchema = (e: EmirateContent, img?: SiteImage) => ({
-  ...webPage(urls.emirate(e.slug), e.metaTitle, e.metaDescription),
+  ...webPage(urls.emirate(e.slug), e.metaTitle, e.metaDescription, CONTENT_REVIEWED),
   ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
   about: { '@type': 'AdministrativeArea', name: `${e.name}, United Arab Emirates` },
 });
 
-export const serviceEmiratePageSchema = (s: ServiceContent, e: EmirateContent, title: string, description: string, img?: SiteImage) => ({
-  ...webPage(urls.serviceEmirate(e.slug, s.slug), title, description),
-  ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
-  about: [
-    { '@type': 'MedicalProcedure', name: s.name, description: s.summary },
-    { '@type': 'AdministrativeArea', name: `${e.name}, United Arab Emirates` },
-  ],
-});
+export const serviceEmiratePageSchema = (s: ServiceContent, e: EmirateContent, title: string, description: string, img?: SiteImage) => {
+  const procedure = procedureNode(s);
+  return {
+    ...webPage(urls.serviceEmirate(e.slug, s.slug), title, description, GUIDES_UPDATED),
+    ...(img ? { primaryImageOfPage: imageObject(img) } : {}),
+    about: [procedure, { '@type': e.slug === 'dubai' ? 'City' : 'AdministrativeArea', name: `${e.name}, United Arab Emirates` }],
+    mainEntity: { '@id': procedure['@id'] },
+  };
+};
 
 export const clinicListSchema = (name: string, clinics: { name: string; slug: string }[]) =>
   clinics.length === 0

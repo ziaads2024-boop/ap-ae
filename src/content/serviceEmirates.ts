@@ -4,19 +4,480 @@ import type { ServiceEmirateContent } from './types';
 // specific about getting that treatment in that emirate, so the pages are not
 // interchangeable templates with the place name swapped.
 
-export const serviceEmirates: ServiceEmirateContent[] = [
+// Dubai is the live market, so its local guides carry the most local detail:
+// regulation (DHA / DHCC), insurance norms, where clinics cluster, and an
+// indicative price table. Prices match the national guides' cost tables.
+
+const DHA = { label: 'Dubai Health Authority (DHA)', url: 'https://www.dha.gov.ae/' };
+const DHCC = { label: 'Dubai Healthcare City Authority', url: 'https://www.dhcc.ae/' };
+
+const DUBAI_LICENSING =
+  'Dentists and dental clinics in most of Dubai are licensed by the Dubai Health Authority (DHA). Clinics inside the Dubai Healthcare City free zone in Oud Metha are licensed by the Dubai Healthcare City Authority instead. Both regulators publish a way to look up a professional\'s licence, and the record shows whether the dentist is licensed as a general dentist or in a specialty.';
+
+const dubaiGuides: ServiceEmirateContent[] = [
   // ---------------------------------------------------------------- implants
   {
     service: 'dental-implants', emirate: 'dubai',
+    metaTitle: 'Dental Implant Clinics in Dubai: Prices, DHA & Areas',
+    metaDescription: 'Dental implants in Dubai: indicative AED prices per tooth, what a quote should include, DHA licensing, insurance and where implant clinics cluster.',
+    answer:
+      'At private clinics in Dubai, a single dental implant with its abutment and crown usually costs AED 5,000 to 12,000 per tooth, with bone grafting or a CBCT scan charged on top. Treatment takes 3 to 9 months over 4 to 6 visits and suits adults with healthy gums who are missing one or more teeth.',
     localNote: [
-      'Many Dubai clinics have their own CBCT scanner, which saves a separate trip to an imaging centre before implant planning. Check if the scan is included in the consultation fee; some clinics charge for it separately.',
-      'Implant treatment spans several months, so think about where you will be living and working for the whole course. Commuting across the city at peak hours for each review appointment adds up quickly.',
+      'Implant quotes in Dubai are often hard to compare because clinics bundle different things. Before comparing prices, ask each clinic to list the implant brand, the abutment, the crown material, the CBCT scan, any temporary tooth and the review visits. A low headline price sometimes covers the implant post only.',
+      'Implant treatment runs over several months, so choose a clinic you can reach easily from home or work for every visit. If you may leave Dubai during treatment, ask for the implant brand, size and connection type in writing so another dentist can work on it later.',
+      'Implants are placed by general dentists with implant training as well as by oral surgeons, periodontists and prosthodontists. For bone grafts, sinus lifts or full-arch treatment, ask who places the implant and who makes the teeth, because in some clinics these are two different people. Payment in instalments across the treatment stages is commonly offered; ask for the total in writing.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Oral surgery, periodontics and prosthodontics are separate specialist licence categories. If a clinic describes the person placing your implant as a specialist, you can check that title on the regulator\'s register before you book.',
+    ],
+    insurance: [
+      'Health insurance is mandatory for Dubai residents, but the basic plan generally excludes routine dental treatment, and implants are among the treatments most often excluded even on plans that have a dental benefit.',
+      'Where an employer plan does pay towards implants, it is usually capped by an annual dental limit and needs pre-approval. Ask the clinic to send the treatment plan to your insurer and get the answer in writing before the implant is placed.',
+    ],
+    costNote: 'Implant prices in Dubai tend to vary more with the implant brand and what is bundled than with the area. Clinics in Karama, Bur Dubai and Deira often quote lower than those in Downtown, Jumeirah or the Marina, so compare itemised quotes rather than headline prices.',
+    areas: [
+      { slug: 'healthcare-city', note: 'Specialist dental centres in the free zone, worth considering for complex cases such as grafting or full-arch work.' },
+      { slug: 'downtown-dubai', note: 'Clinics offering implant and cosmetic treatment close to offices and a Red Line station.' },
+      { slug: 'jumeirah', note: 'Villa-based practices with easier parking for the several visits that implant treatment needs.' },
+      { slug: 'al-barsha', note: 'Family clinics and medical centres near the metro, convenient for residents of the inland communities.' },
+      { slug: 'karama', note: 'Long-established clinics that often quote competitive prices; compare what each quote includes.' },
+      { slug: 'dubai-marina', note: 'Clinics in residential towers with evening slots, useful for people living in the Marina, JBR and JLT.' },
     ],
     faqs: [
-      { q: 'Do Dubai clinics offer All-on-4 or full-arch implants?', a: 'Several Dubai clinics offer full-arch options. They are a major treatment, so ask for the surgeon\'s experience with full-arch cases and a breakdown of temporary and final teeth costs.' },
-      { q: 'Can I start implants in Dubai and finish abroad?', a: 'It is possible but not ideal. Components differ between implant systems, so finishing with the same clinic, or at least the same system, avoids compatibility problems.' },
+      { q: 'How much is a dental implant in Dubai?', a: 'A single implant with abutment and crown usually costs AED 5,000 to 12,000 at private clinics. A CBCT scan (AED 300 to 1,000) and bone grafting (AED 1,500 to 5,000 per site) are often extra. These are indicative ranges; ask for an itemised written quote.' },
+      { q: 'Do Dubai clinics offer All-on-4 or full-arch implants?', a: 'Yes, some clinics offer fixed full-arch treatment, with indicative prices of AED 25,000 to 65,000 per arch. Ask about the surgeon\'s full-arch experience and get the temporary and final teeth priced separately in the quote.' },
+      { q: 'Can I start implants in Dubai and finish abroad?', a: 'It is possible but not ideal. Components differ between implant systems, so finishing with the same clinic, or at least the same system, avoids compatibility problems. Ask for your implant records in writing.' },
+      { q: 'Is the CBCT scan included in an implant consultation in Dubai?', a: 'It depends on the clinic. Some include the scan in the consultation fee, others charge it separately or send you to an imaging centre. Ask when you book.' },
     ],
+    sources: [DHA, DHCC, { label: 'American Dental Association (MouthHealthy): Dental implants', url: 'https://www.mouthhealthy.org/all-topics-a-z/implants' }],
   },
+
+  // --------------------------------------------------------------- invisalign
+  {
+    service: 'invisalign', emirate: 'dubai',
+    metaTitle: 'Invisalign Providers in Dubai: Prices by Package & Area',
+    metaDescription: 'Invisalign in Dubai: indicative AED prices for short, moderate and comprehensive courses, retainers, who plans your case, insurance and where to look.',
+    answer:
+      'In Dubai, Invisalign usually costs AED 6,000 to 12,000 for a short course fixing minor crowding and AED 14,000 to 25,000 for comprehensive treatment at private clinics. Most adult cases take 6 to 18 months, with reviews every 6 to 10 weeks. It suits adults and teens with mild to moderate crowding or spacing.',
+    localNote: [
+      'Invisalign and other clear aligners are offered in Dubai by specialist orthodontists and by general dentists. Ask who will plan your case and whether they adjust the digital plan themselves or accept the manufacturer\'s automated set-up as it comes.',
+      'Quotes differ mainly in what they leave out. Check whether refinement trays, attachments, retainers and review visits are included, and how many trays the plan allows before extra charges apply. Monthly instalment plans are common; ask for the total figure in writing.',
+      'Reviews are every 6 to 10 weeks for a year or more, so a clinic near home or work is easier to keep up with. If you travel often, ask whether the clinic can give you several sets of trays at once or check progress from photos between visits.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Orthodontics is a separate specialist licence category. A general dentist can provide aligners, but if a clinic calls the treating dentist an orthodontist you can confirm the licence category on the regulator\'s register.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally excludes dental treatment beyond emergencies, and adult orthodontics, including aligners, is rarely covered by any plan.',
+      'Some family plans include an orthodontic benefit for children with age limits and a cap. If you have one, ask the clinic to request pre-approval before treatment starts.',
+    ],
+    costNote: 'The brand, the length of the course and whether an orthodontist plans the case move the price more than the neighbourhood. Other aligner brands are often priced below Invisalign; compare the number of trays and what happens if you need more.',
+    areas: [
+      { slug: 'business-bay', note: 'Office-friendly hours make it easier to fit regular aligner reviews around work.' },
+      { slug: 'downtown-dubai', note: 'Clinics near the Burj Khalifa and Dubai Mall metro station, convenient for people working in the centre.' },
+      { slug: 'jlt', note: 'Clinics in the tower podiums suit residents and office workers who prefer early or lunchtime appointments.' },
+      { slug: 'al-barsha', note: 'Family clinics near the metro, useful when both parents and teenagers need orthodontic reviews.' },
+      { slug: 'dubai-hills', note: 'Clinics in the community\'s town centres for families in Dubai Hills and nearby areas.' },
+      { slug: 'mirdif', note: 'Community clinics on the eastern side of the city, closer for residents of Mirdif and Al Rashidiya.' },
+    ],
+    faqs: [
+      { q: 'How much is Invisalign in Dubai?', a: 'Indicative private-clinic prices are AED 6,000 to 12,000 for a short course, AED 10,000 to 16,000 for moderate cases and AED 14,000 to 25,000 for comprehensive treatment. Retainers add AED 800 to 2,500 if they are not included.' },
+      { q: 'Is Invisalign cheaper in Dubai than in the UK?', a: 'Prices overlap. Some Dubai quotes are lower and some higher than typical UK private prices, and the difference depends more on the length of the course and what is included than on the country. Compare itemised quotes.' },
+      { q: 'Do Dubai clinics offer aligner brands other than Invisalign?', a: 'Yes. Several clinics offer other clear aligner systems, sometimes at lower cost. How carefully the clinician plans and monitors the case matters more than the brand.' },
+      { q: 'Can I pay for aligners in instalments in Dubai?', a: 'Instalment plans spread over the treatment period are commonly offered, and some card providers offer instalments too. Ask for the total cost in writing before signing.' },
+      { q: 'How many hours a day do I need to wear aligners?', a: 'Align Technology advises 20 to 22 hours a day. Take them out only to eat, drink anything other than water, and clean your teeth.' },
+    ],
+    sources: [DHA, DHCC, { label: 'Invisalign (Align Technology)', url: 'https://www.invisalign.com/' }],
+  },
+
+  // ------------------------------------------------------------------ braces
+  {
+    service: 'braces', emirate: 'dubai',
+    metaTitle: 'Braces in Dubai: Orthodontist Prices, Insurance & Areas',
+    metaDescription: 'Braces in Dubai: indicative AED prices for metal, ceramic and lingual braces, retainers, orthodontist licensing, insurance for children and where to look.',
+    answer:
+      'At private clinics in Dubai, metal braces usually cost AED 6,000 to 12,000, ceramic or self-ligating braces AED 9,000 to 16,000 and lingual braces AED 18,000 to 35,000 for a full course. Treatment takes 12 to 24 months with adjustments every 4 to 8 weeks. Braces suit children, teens and adults with crowding or bite problems.',
+    localNote: [
+      'Specialist orthodontists and general dentists both fit braces in Dubai. For a child, an orthodontist\'s assessment helps decide whether to start early or wait until more adult teeth have come through, and a second opinion before a long course is reasonable.',
+      'Adjustment visits are every 4 to 8 weeks for one to two years, often after school. Ask how easy it is to get late-afternoon slots and what happens if a bracket breaks between visits, including whether repair visits are charged.',
+      'Quotes vary in what they cover. Check whether the price includes records (X-rays, photos and scans), all adjustment visits, emergency repairs and retainers, and whether payment can be spread over the course.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Orthodontics is a specialist licence category. If you want a specialist orthodontist, check the licence category on the DHA or Dubai Healthcare City register before your first visit.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally excludes orthodontic treatment, and adult braces are rarely covered by any plan.',
+      'Some employer family plans include an orthodontic benefit for children, usually with an age limit, a cap and pre-approval. Ask the clinic to submit the treatment plan to your insurer before the braces are fitted.',
+    ],
+    costNote: 'The type of bracket and the length of treatment drive the price. Clinics in older areas such as Karama and Deira often quote lower than central and coastal areas; check that retainers and repairs are in every quote you compare.',
+    areas: [
+      { slug: 'al-barsha', note: 'Family clinics near the metro and schools, convenient for regular after-school adjustments.' },
+      { slug: 'mirdif', note: 'Community clinics for families on the eastern side of the city.' },
+      { slug: 'arabian-ranches', note: 'Clinics in the local town centre save families in the villa communities a long drive for each adjustment.' },
+      { slug: 'jvc', note: 'Clinics close to home for families in Jumeirah Village Circle and the nearby communities.' },
+      { slug: 'karama', note: 'Established clinics that often quote competitive prices, with Green Line metro access.' },
+      { slug: 'healthcare-city', note: 'Specialist centres in the free zone for complex bites that may need an orthodontist working with a surgeon.' },
+    ],
+    faqs: [
+      { q: 'How much do braces cost in Dubai?', a: 'Indicative private-clinic prices for a full course are AED 6,000 to 12,000 for metal braces, AED 9,000 to 16,000 for ceramic or self-ligating braces and AED 18,000 to 35,000 for lingual braces. Retainers may add AED 800 to 2,500.' },
+      { q: 'Do I need a DHA-licensed orthodontist for braces?', a: 'Any dentist treating you in Dubai must hold a DHA licence, or a Dubai Healthcare City licence inside the free zone. Orthodontist is a separate specialist category. General dentists can fit braces, but for children and complex bites a specialist orthodontist is often the safer choice.' },
+      { q: 'Are ceramic braces popular in Dubai?', a: 'Adults often choose ceramic or lingual braces because they are less visible. Both cost more than metal braces, and ceramic brackets can stain with frequent coffee or tea.' },
+      { q: 'What happens if a bracket breaks?', a: 'Call the clinic. Most repairs are quick and can wait for your next convenient slot unless a wire is causing pain. Ask whether repair visits are included in your quote.' },
+    ],
+    sources: [DHA, DHCC, { label: 'NHS: Braces and orthodontics', url: 'https://www.nhs.uk/tests-and-treatments/braces/' }],
+  },
+
+  // ----------------------------------------------------------------- veneers
+  {
+    service: 'veneers', emirate: 'dubai',
+    metaTitle: 'Veneers in Dubai: Clinic Prices per Tooth & Where to Go',
+    metaDescription: 'Veneers in Dubai: indicative AED prices per tooth for composite, porcelain and E.max, what a quote includes, insurance and where cosmetic clinics cluster.',
+    answer:
+      'In Dubai, veneers usually cost AED 800 to 2,000 per tooth for composite and AED 2,000 to 5,000 per tooth for porcelain or E.max at private clinics, so six porcelain veneers come to roughly AED 12,000 to 30,000. Porcelain needs 2 to 3 visits over 1 to 3 weeks. Veneers suit chipped, worn or discoloured front teeth.',
+    localNote: [
+      'Veneer prices in Dubai vary widely, and a low headline price is often for composite rather than porcelain, or leaves out the mock-up, temporaries or the lab fee. Ask each clinic to state the material, the number of teeth and what is included per tooth.',
+      'Ask to see the dentist\'s own before-and-after cases, ideally of patients with a similar starting point, and look at the proposed shade in daylight. Approve a mock-up before any enamel is removed, and take time to decide between the consultation and the preparation visit.',
+      'Visitors sometimes plan veneers during a short stay. Porcelain veneers need two or three visits over one to three weeks, and the bite is often checked again a week or two after bonding, so plan to be in Dubai for the whole course or choose composite.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Prosthodontics is a specialist licence category for dentists who focus on crowns, veneers and replacing teeth. A general dentist can place veneers; if a clinic calls the dentist a specialist, check the licence category on the regulator\'s register.',
+    ],
+    insurance: [
+      'Veneers are treated as cosmetic, so health insurance in Dubai generally does not pay for them, whether you are on the basic mandatory plan or an employer plan with a dental benefit.',
+      'If a veneer or crown is needed to repair a broken tooth rather than for appearance, some dental benefits may consider part of the cost with pre-approval. Ask the clinic to submit the case and check your policy wording.',
+    ],
+    costNote: 'Material and the lab used drive the price. Clinics in Jumeirah, Downtown and the Marina tend to quote towards the higher end, while some clinics in Karama, Bur Dubai and Deira quote lower; compare the same material and number of teeth.',
+    areas: [
+      { slug: 'jumeirah', note: 'Villa-based cosmetic practices with easier parking for the two or three visits porcelain veneers need.' },
+      { slug: 'jumeirah-beach-residence', note: 'Cosmetic treatment is popular here; compare written quotes and ask for a mock-up.' },
+      { slug: 'downtown-dubai', note: 'Cosmetic and general clinics close to offices and the Red Line.' },
+      { slug: 'dubai-marina', note: 'Clinics in the residential towers with evening slots for people living nearby.' },
+      { slug: 'bur-dubai', note: 'Long-established clinics where quotes are often lower; check the material and lab.' },
+      { slug: 'healthcare-city', note: 'Specialist centres in the free zone, including prosthodontists for complex cases.' },
+    ],
+    faqs: [
+      { q: 'How much are veneers in Dubai?', a: 'Indicative private-clinic prices are AED 800 to 2,000 per tooth for composite, AED 2,000 to 4,500 for porcelain and AED 2,000 to 5,000 for E.max. Six porcelain or E.max veneers usually come to AED 12,000 to 30,000.' },
+      { q: 'Why do veneer prices in Dubai vary so much?', a: 'Material, the lab, the dentist\'s experience and whether a mock-up and temporaries are included all change the price. Compare quotes for the same material and number of teeth.' },
+      { q: 'Can I get veneers in one day in Dubai?', a: 'Composite veneers can be done in one visit. Porcelain veneers made by a lab usually take one to three weeks, unless the clinic mills them on site.' },
+      { q: 'Is it cheaper to get veneers in Turkey than in Dubai?', a: 'Headline prices abroad can be lower, but follow-up is harder if a veneer chips or debonds, and a short trip limits time for a mock-up and adjustments. Consider the cost of repairs and return trips as well as the first quote.' },
+    ],
+    sources: [DHA, DHCC, { label: 'American Dental Association (MouthHealthy): Veneers', url: 'https://www.mouthhealthy.org/all-topics-a-z/veneers' }],
+  },
+
+  // ----------------------------------------------------------- hollywood smile
+  {
+    service: 'hollywood-smile', emirate: 'dubai',
+    metaTitle: 'Hollywood Smile Dubai: Price Guide, Clinics & Areas',
+    metaDescription: 'Hollywood smile in Dubai: indicative AED prices by material and number of teeth, how to plan it, insurance and where cosmetic dentists cluster in the city.',
+    answer:
+      'A Hollywood smile in Dubai usually costs AED 20,000 to 50,000 for porcelain or E.max veneers on 10 upper teeth and AED 32,000 to 100,000 for 16 to 20 teeth at private clinics. Composite versions start around AED 12,000. Treatment takes 2 to 4 weeks after planning, over 3 to 5 visits, and suits several worn or discoloured teeth.',
+    localNote: [
+      'In Dubai the term "Hollywood smile" covers anything from composite bonding on a few front teeth to porcelain veneers or crowns on 20 teeth, so two quotes with the same name can describe very different treatments. Ask each clinic for the number of teeth, the material and the price per tooth.',
+      'Ask whether whitening, gum contouring or a short course of aligners would let you treat fewer teeth, and why each tooth in the plan is included. Approve a mock-up of the shape and shade before any enamel is removed, and look at the shade in daylight.',
+      'If you are visiting Dubai for treatment, allow for the full course: the design and mock-up visit, preparation, two or three weeks of temporaries while the lab works, and a bite check after bonding. Ask what happens, and who pays, if a veneer chips after you leave.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Cosmetic dental treatment, including veneers and crowns, must be carried out by a licensed dentist in a licensed facility. If a clinic describes the treating dentist as a prosthodontist or cosmetic specialist, check the licence category on the regulator\'s register.',
+    ],
+    insurance: [
+      'A Hollywood smile is cosmetic, so health insurance in Dubai generally does not pay for it, on the basic plan or on employer plans with a dental benefit.',
+      'Treatment of decay or gum disease needed before the makeover may be covered under a dental benefit. Ask the clinic to separate that work in the quote so you can claim it.',
+    ],
+    costNote: 'The number of teeth and the material decide most of the price, so a 10-tooth porcelain plan and a 20-tooth plan can differ by tens of thousands of dirhams. Clinics in Jumeirah, Downtown and the Marina tend to quote higher than those in Karama or Deira; compare like for like.',
+    areas: [
+      { slug: 'jumeirah', note: 'Cosmetic practices along the coast with parking for the several visits a makeover needs.' },
+      { slug: 'umm-suqeim', note: 'Villa-based clinics close to the beach communities.' },
+      { slug: 'downtown-dubai', note: 'Clinics offering cosmetic dentistry close to offices and the Red Line.' },
+      { slug: 'jumeirah-beach-residence', note: 'Clinics used to seeing visitors; ask for the self-pay price and the guarantee in writing.' },
+      { slug: 'healthcare-city', note: 'Specialist centres in the free zone, including prosthodontists for large or complex makeovers.' },
+      { slug: 'deira', note: 'Established clinics where quotes are often lower; confirm the material and lab.' },
+    ],
+    faqs: [
+      { q: 'How much does a Hollywood smile cost in Dubai?', a: 'Indicative private-clinic prices are AED 12,000 to 40,000 for composite on 16 to 20 teeth, AED 20,000 to 50,000 for porcelain or E.max on 10 upper teeth, and AED 32,000 to 100,000 for porcelain or E.max on 16 to 20 teeth.' },
+      { q: 'How many teeth does a Hollywood smile cover?', a: 'It depends on how wide your smile is. Many people show 8 to 10 upper teeth when they smile, so treating those may be enough. Plans with 16 to 20 teeth include lower teeth as well. Ask why each tooth is included.' },
+      { q: 'How long do I need to stay in Dubai for a Hollywood smile?', a: 'For porcelain or E.max, plan on two to four weeks once the design is agreed, with three to five visits. Composite can often be finished in one or two long visits.' },
+      { q: 'Is a Hollywood smile with crowns different from veneers?', a: 'Crowns cover the whole tooth and need more of it removed; veneers cover the front. Crowns may suit heavily filled or broken teeth, while veneers keep more natural tooth. Ask why the clinic recommends one over the other for each tooth.' },
+    ],
+    sources: [DHA, DHCC, { label: 'American Dental Association (MouthHealthy): Veneers', url: 'https://www.mouthhealthy.org/all-topics-a-z/veneers' }],
+  },
+
+  // -------------------------------------------------------------- whitening
+  {
+    service: 'teeth-whitening', emirate: 'dubai',
+    metaTitle: 'Teeth Whitening Dubai: Clinic Prices & Where to Go',
+    metaDescription: 'Teeth whitening in Dubai: indicative AED prices for in-clinic sessions and take-home trays, what to check before booking, insurance and where to look.',
+    answer:
+      'Professional teeth whitening in Dubai usually costs AED 700 to 1,800 for custom take-home trays and AED 1,200 to 3,000 for an in-clinic session at private clinics, or AED 1,800 to 4,000 for both. An in-clinic session takes 60 to 90 minutes; trays take 1 to 2 weeks. It suits healthy teeth yellowed by age, coffee or tea.',
+    localNote: [
+      'Whitening offers in Dubai are often sold by the name of the system, such as "laser" or a branded lamp. The light matters less than the peroxide gel and how carefully the gums are protected. Ask which gel and concentration the clinic uses and whether custom trays for top-ups are included.',
+      'A check-up and a scale and polish should come before whitening, so decay and tartar are dealt with first. Offers that skip the examination are cheaper, but whitening over untreated decay or exposed roots can be painful. Ask whether the cleaning is in the price.',
+      'Clinics near offices in Downtown and Business Bay can often fit an in-clinic session into a long lunch break or an evening. If you have crowns, veneers or fillings on front teeth, ask how they will match afterwards, because they do not whiten.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Professional whitening with clinical-strength gel should be done or supervised by a licensed dentist. If a salon or spa offers whitening, ask who carries it out and whether a dentist examines your teeth first.',
+    ],
+    insurance: [
+      'Whitening is cosmetic, so health insurance in Dubai generally does not cover it.',
+      'The check-up and scale and polish you should have first may be covered if your employer plan includes a dental benefit; the basic mandatory plan generally does not include them. Ask the clinic to bill the cleaning separately.',
+    ],
+    costNote: 'In-clinic systems cost more than take-home trays, and combined packages cost most. Clinics in Karama, Bur Dubai and Deira often price whitening lower than central and coastal areas; check whether the cleaning and trays are included before comparing.',
+    areas: [
+      { slug: 'downtown-dubai', note: 'Clinics close to offices that can fit a session around the working day.' },
+      { slug: 'business-bay', note: 'Office-friendly hours, useful for a lunchtime or after-work session.' },
+      { slug: 'difc', note: 'Clinics serving people who work in the financial centre, close to the Red Line.' },
+      { slug: 'dubai-marina', note: 'Evening slots in the residential towers for people living in the Marina and JBR.' },
+      { slug: 'al-barsha', note: 'Family clinics near the metro and Mall of the Emirates.' },
+      { slug: 'karama', note: 'Established clinics where whitening is often priced lower.' },
+    ],
+    faqs: [
+      { q: 'How much is teeth whitening in Dubai?', a: 'Indicative private-clinic prices are AED 700 to 1,800 for take-home trays, AED 1,200 to 3,000 for an in-clinic session and AED 1,800 to 4,000 for both. A scale and polish beforehand costs AED 250 to 800 if not included.' },
+      { q: 'Is laser teeth whitening in Dubai better?', a: 'The light or "laser" used in some systems is mainly there to speed the gel up. The result depends mostly on the peroxide gel, the time it is applied and your starting shade. Ask the clinic what results to expect for your teeth.' },
+      { q: 'How long does an in-clinic whitening session take?', a: 'Usually 60 to 90 minutes, including protecting the gums. You may be asked to avoid strongly coloured food and drink for about 48 hours afterwards.' },
+      { q: 'Is whitening from a salon safe?', a: 'Professional-strength whitening should follow a dental examination. Salon treatments may skip that check. If you have decay, gum problems or sensitive teeth, see a licensed dentist first.' },
+    ],
+    sources: [DHA, DHCC, { label: 'NHS: Teeth whitening', url: 'https://www.nhs.uk/tests-and-treatments/teeth-whitening/' }],
+  },
+
+  // ----------------------------------------------------------- root canal
+  {
+    service: 'root-canal', emirate: 'dubai',
+    metaTitle: 'Root Canal Dubai: Endodontists, Prices & Insurance',
+    metaDescription: 'Root canal treatment in Dubai: indicative AED prices from front teeth to molars, retreatment, the crown afterwards, endodontists and what insurance pays.',
+    answer:
+      'Root canal treatment in Dubai usually costs AED 1,000 to 2,500 for a front tooth and AED 1,800 to 4,500 for a molar at private clinics, with the crown afterwards (AED 1,500 to 4,500) charged separately. It takes 1 to 2 visits of 60 to 90 minutes and suits a painful or infected tooth that can still be saved.',
+    localNote: [
+      'In Dubai, root canals are done by general dentists and by specialist endodontists. A general dentist routinely treats front teeth and straightforward premolars. For molars, curved canals or a tooth that has had a root canal before, ask whether the clinic has an endodontist who works with a microscope.',
+      'Ask for the price of the root canal and the crown together, because back teeth usually need a crown within a few weeks to stop them cracking. Some quotes also leave out the X-rays and the temporary filling between visits.',
+      'If you are in pain, say so when you call. Clinics can usually relieve pain on the day and book the full treatment afterwards, which also gives time for insurance pre-approval.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Endodontics is a specialist licence category. If a clinic refers you to an endodontist, you can check that title on the DHA or Dubai Healthcare City register.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally covers only emergency dental care, such as relieving pain or treating an infection, rather than a full root canal.',
+      'Employer plans with a dental benefit often treat root canals as basic restorative care, with a co-payment and an annual limit. The crown may be covered at a different rate or need separate approval, so ask the clinic to request pre-approval for both.',
+    ],
+    costNote: 'The tooth (front, premolar or molar) and whether a specialist treats it decide most of the price. Clinics in Karama, Bur Dubai and Deira often quote lower than coastal areas; compare quotes that include X-rays and say whether the crown is extra.',
+    areas: [
+      { slug: 'healthcare-city', note: 'Specialist centres in the free zone, useful for molars and retreatments.' },
+      { slug: 'karama', note: 'Established clinics on the Green Line that often quote competitive prices.' },
+      { slug: 'al-barsha', note: 'Family clinics near the metro for residents of the inland communities.' },
+      { slug: 'business-bay', note: 'Office-friendly hours for treatment that may need two visits.' },
+      { slug: 'deira', note: 'Long-established clinics close to the Red and Green Lines.' },
+      { slug: 'dubai-silicon-oasis', note: 'Community clinics for residents on the eastern side of the city.' },
+    ],
+    faqs: [
+      { q: 'How much is a root canal in Dubai?', a: 'Indicative private-clinic prices are AED 1,000 to 2,500 for a front tooth, AED 1,300 to 3,000 for a premolar, AED 1,800 to 4,500 for a molar and AED 2,500 to 6,000 for retreatment. The crown is usually extra.' },
+      { q: 'Should I see an endodontist in Dubai?', a: 'For molars, retreatments or complex canals, an endodontist is a good choice. Simple front-tooth root canals are routinely done by general dentists.' },
+      { q: 'Does insurance in Dubai cover root canals?', a: 'Employer plans with a dental benefit often do, with a co-payment and an annual limit. The basic mandatory plan generally covers only emergency pain relief. Ask the clinic to request pre-approval for the root canal and the crown.' },
+      { q: 'Can a root canal be done in one visit?', a: 'Often, yes, if there is no significant infection. Otherwise it may take two visits, with medicine placed in the tooth in between.' },
+    ],
+    sources: [DHA, DHCC, { label: 'NHS: Root canal treatment', url: 'https://www.nhs.uk/tests-and-treatments/root-canal-treatment/' }],
+  },
+
+  // ----------------------------------------------------------- cleaning
+  {
+    service: 'teeth-cleaning', emirate: 'dubai',
+    metaTitle: 'Teeth Cleaning Dubai: Hygienist Prices & Insurance',
+    metaDescription: 'Teeth cleaning in Dubai: indicative AED prices for scale and polish, AirFlow and deep cleaning, check-up packages, insurance cover and where to book.',
+    answer:
+      'A scale and polish in Dubai usually costs AED 250 to 800 at private clinics, or AED 350 to 1,000 bundled with a check-up and X-rays. AirFlow cleaning costs AED 400 to 1,000 and deep cleaning AED 200 to 750 per quadrant. A visit takes 30 to 60 minutes and most adults benefit from one every six months.',
+    localNote: [
+      'Cleaning is often the first visit with a new clinic in Dubai, so it is a practical way to try a clinic before you need larger treatment. Ask whether the price includes the dentist\'s examination and X-rays or covers the hygienist\'s cleaning only.',
+      'Some clinics sell AirFlow or "guided biofilm therapy" as a premium clean. It uses a powder and water spray to remove stain and plaque and can feel gentler, but a standard scale and polish removes tartar too. Ask which one the clinic recommends for you and why.',
+      'If your gums bleed or the hygienist finds deep pockets, you may be offered deep cleaning, charged per quadrant over more than one visit. Ask for the gum measurements and a written plan before agreeing.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Dental hygienists are licensed health professionals too, and periodontics, the treatment of gum disease, is a specialist licence category. For advanced gum disease, ask whether a periodontist will be involved.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally excludes routine dental care, including check-ups and cleaning.',
+      'Employer plans with a dental benefit often include one or two cleanings a year as preventive care, usually with a co-payment. Check whether your plan has a network list and choose an in-network clinic so it can bill the insurer directly.',
+    ],
+    costNote: 'Prices depend mostly on what is bundled: examination, X-rays and polishing. Clinics in Karama, Deira, Al Qusais and Bur Dubai often price check-up packages lower than central and coastal areas; compare what each package includes.',
+    areas: [
+      { slug: 'jlt', note: 'Clinics in the tower podiums for early-morning or lunchtime cleaning near work.' },
+      { slug: 'business-bay', note: 'Office-friendly hours for a routine visit during the working day.' },
+      { slug: 'al-barsha', note: 'Family clinics near the metro where parents and children can book together.' },
+      { slug: 'karama', note: 'Established clinics where check-up packages are often priced lower.' },
+      { slug: 'al-qusais', note: 'Community clinics in the north-east of the city near the Green Line.' },
+      { slug: 'dubai-hills', note: 'Clinics in local town centres for families in the newer communities.' },
+    ],
+    faqs: [
+      { q: 'How much is teeth cleaning in Dubai?', a: 'Indicative private-clinic prices are AED 250 to 800 for a scale and polish, AED 400 to 1,000 for AirFlow, AED 350 to 1,000 for a check-up with cleaning and X-rays, and AED 200 to 750 per quadrant for deep cleaning.' },
+      { q: 'Does insurance in Dubai cover a scale and polish?', a: 'Employer plans with a dental benefit often cover one or two cleanings a year. The basic mandatory plan generally does not. Ask the clinic to check your cover before the visit.' },
+      { q: 'Is AirFlow better than a normal cleaning?', a: 'AirFlow removes stain and soft plaque well, and some people find it more comfortable. Hard tartar may still need an ultrasonic scaler. Both are acceptable ways to clean teeth; ask what your gums need.' },
+      { q: 'How often should I get my teeth cleaned?', a: 'Every six months suits most people. Your dentist may suggest every three to four months if you have gum disease or build tartar quickly, or a longer gap if your gums are healthy.' },
+    ],
+    sources: [DHA, DHCC, { label: 'NHS: Gum disease', url: 'https://www.nhs.uk/conditions/gum-disease/' }],
+  },
+
+  // ----------------------------------------------------------- emergency
+  {
+    service: 'emergency-dentist', emirate: 'dubai',
+    metaTitle: 'Emergency Dentist Dubai: Same-Day & Late Clinics',
+    metaDescription: 'Emergency dentist in Dubai: what to do first, indicative AED costs, when to go to hospital or call 998, insurance for urgent care and areas to search.',
+    answer:
+      'An emergency dental visit in Dubai usually costs AED 200 to 800 for the consultation and X-ray at a private clinic, with treatment such as draining an abscess (AED 300 to 1,500) charged on top. Most visits take 30 to 90 minutes on the same day. It is for severe pain, swelling, a broken or knocked-out tooth.',
+    localNote: [
+      'Phone before you travel. Describe the problem, ask whether a dentist can see you today and ask the consultation fee, including any out-of-hours surcharge. Opening hours vary between clinics, and some open late in the evening or at weekends, so use the clinic\'s own phone line to confirm.',
+      'Dubai traffic at peak hours can add half an hour to a journey across the city, so the nearest clinic that can see you is usually the better choice than a preferred clinic further away. Bring your Emirates ID, insurance card and a list of any medicines you take.',
+      'For a knocked-out adult tooth, hold it by the crown, put it back in the socket straight away if you can, or keep it in milk, and get to a dentist within 30 minutes. Go to a hospital emergency department or call 998 if swelling spreads towards the eye or neck, you have difficulty breathing or swallowing, or there is a serious facial injury.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Hospital emergency departments in Dubai treat serious facial swelling, trauma and bleeding at any hour. For toothache alone, a licensed dental clinic is usually quicker and better equipped.',
+    ],
+    insurance: [
+      'Emergency dental care to relieve pain or treat infection is the dental treatment most often covered by health plans in Dubai, and the basic mandatory plan generally includes some emergency cover. Follow-up treatment, such as a root canal or crown, is usually assessed separately.',
+      'Ask the clinic whether it bills your insurer directly for emergency care, and keep the receipt and the dentist\'s report if you have to claim later.',
+    ],
+    costNote: 'Out-of-hours visits can cost more, and treatment done on the day is charged on top of the consultation. Ask for the consultation fee and an estimate before treatment begins.',
+    areas: [
+      { slug: 'dubai-marina', note: 'Clinics in the residential towers, some with evening hours, for residents of the Marina, JBR and JLT.' },
+      { slug: 'downtown-dubai', note: 'Central clinics close to the Red Line for people who work in the centre.' },
+      { slug: 'al-barsha', note: 'Medical centres near the metro, central for the inland communities.' },
+      { slug: 'deira', note: 'Long-established clinics close to the Red and Green Lines.' },
+      { slug: 'bur-dubai', note: 'Clinics in the older part of the city, close to the Green Line.' },
+      { slug: 'mirdif', note: 'Community clinics on the eastern side of the city, closer for residents of Mirdif and nearby areas.' },
+    ],
+    faqs: [
+      { q: 'Can I get an emergency dentist in Dubai on a Friday or Sunday?', a: 'Some private clinics open at weekends and some open late in the evening, but hours vary. Phone the clinic to confirm before you travel. For serious swelling or trauma, hospital emergency departments are open around the clock.' },
+      { q: 'How much does an emergency dentist cost in Dubai?', a: 'Indicative private-clinic prices are AED 200 to 800 for the consultation and X-ray. Treatment on the day costs extra: AED 300 to 1,500 for pain relief or draining an abscess, or AED 400 to 1,200 for a simple extraction.' },
+      { q: 'What should I do if a tooth is knocked out?', a: 'Hold it by the crown, not the root. Rinse briefly if dirty and put it back in the socket if you can, or keep it in milk. Get to a dentist within 30 minutes. Do not replant a baby tooth.' },
+      { q: 'Will my Dubai insurance cover emergency dental care?', a: 'Emergency treatment to relieve pain or treat infection is the dental care most often covered, including under the basic plan. Follow-up treatment may not be covered. Check your policy and ask the clinic about direct billing.' },
+      { q: 'When should I go to hospital instead of a dentist?', a: 'Go to a hospital emergency department or call 998 if swelling is spreading to your eye or neck, you have difficulty breathing or swallowing, bleeding will not stop, or you have a serious injury to the face or head.' },
+    ],
+    sources: [DHA, DHCC, { label: 'International Association of Dental Traumatology: for patients', url: 'https://iadt-dentaltrauma.org/for-patients/' }],
+  },
+
+  // --------------------------------------------------------------- children
+  {
+    service: 'pediatric-dentistry', emirate: 'dubai',
+    metaTitle: 'Kids Dentist in Dubai: Pediatric Clinics, Costs & Areas',
+    metaDescription: 'Children\'s dentist in Dubai: indicative AED prices for check-ups, sealants and fillings, pediatric dentist licensing, family insurance and where to look.',
+    answer:
+      'A child\'s dental check-up in Dubai usually costs AED 200 to 500 at a private clinic, with fissure sealants at AED 150 to 400 per tooth and baby-tooth fillings at AED 300 to 900. Check-ups take 20 to 45 minutes every six months. The first visit is advised when the first tooth appears or by the first birthday.',
+    localNote: [
+      'In Dubai, children are seen by specialist pediatric dentists and by family dentists. For routine check-ups a family dentist is usually fine. For very young, anxious or medically complex children, or treatment that may need sedation, a pediatric dentist is trained for that work.',
+      'After-school and weekend appointments go quickly, so book the next check-up as you leave. Ask whether a parent can stay in the room and how the clinic handles a nervous first visit.',
+      'If your child needs extensive treatment, a clinic may suggest sedation or a general anaesthetic. Ask where it would be done, who gives the anaesthetic, and for a written estimate that includes hospital or facility fees.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Pediatric dentistry is a specialist licence category. Sedation and general anaesthesia are carried out in facilities licensed for them, with an anaesthetist. Ask the clinic to confirm both before agreeing to treatment under sedation.',
+    ],
+    insurance: [
+      'Health insurance is mandatory for residents in Dubai, including children, but the basic plan generally excludes routine dental care.',
+      'Employer family plans with a dental benefit often cover children\'s check-ups and basic treatment such as fillings, usually with a co-payment and an annual limit. Treatment under general anaesthetic usually needs pre-approval.',
+    ],
+    costNote: 'Specialist pediatric practices tend to charge more than family clinics for the same check-up. Family clinics in Karama, Al Qusais and Al Nahda often price check-ups lower; compare what the visit includes, such as fluoride varnish.',
+    areas: [
+      { slug: 'al-barsha', note: 'Family clinics near schools and the metro.' },
+      { slug: 'mirdif', note: 'Family-focused clinics on the eastern side of the city.' },
+      { slug: 'arabian-ranches', note: 'Clinics in the local town centre for families in the villa communities.' },
+      { slug: 'dubai-hills', note: 'Clinics in the community\'s town centres for young families.' },
+      { slug: 'jumeirah', note: 'Villa-based family practices with easier parking for pushchairs.' },
+      { slug: 'al-qusais', note: 'Community clinics in the north-east of the city, often priced lower.' },
+    ],
+    faqs: [
+      { q: 'How much is a children\'s dentist in Dubai?', a: 'Indicative private-clinic prices are AED 200 to 500 for a check-up, AED 100 to 300 for fluoride varnish, AED 150 to 400 per tooth for sealants and AED 300 to 900 for a baby-tooth filling. Treatment under general anaesthetic can cost AED 4,000 to 15,000 including facility fees.' },
+      { q: 'Do I need a specialist pediatric dentist in Dubai?', a: 'For routine check-ups a family dentist is fine. For very young, anxious or medically complex children, or treatment that may need sedation, a pediatric specialist is helpful. You can check the licence category on the DHA register.' },
+      { q: 'When should my child first see a dentist?', a: 'When the first tooth appears or by the first birthday, as advised by the American Academy of Pediatric Dentistry. Early visits are short and help the child get used to the clinic.' },
+      { q: 'Does family insurance in Dubai cover children\'s dental care?', a: 'Plans with a dental benefit often cover check-ups and basic treatment for children. The basic mandatory plan generally does not include routine dental care. Check your policy wording.' },
+    ],
+    sources: [DHA, DHCC, { label: 'American Academy of Pediatric Dentistry: resources for parents', url: 'https://www.aapd.org/resources/parent/' }],
+  },
+
+  // ----------------------------------------------------------- wisdom teeth
+  {
+    service: 'wisdom-tooth-removal', emirate: 'dubai',
+    metaTitle: 'Wisdom Tooth Extraction Dubai: Prices & Oral Surgeons',
+    metaDescription: 'Wisdom tooth removal in Dubai: indicative AED prices for simple and surgical extraction, sedation, oral surgeon licensing, insurance and recovery time.',
+    answer:
+      'Wisdom tooth removal in Dubai usually costs AED 500 to 1,500 for a simple extraction and AED 1,200 to 4,500 per tooth for surgical removal at private clinics, with IV sedation (AED 1,000 to 3,000) extra. Each tooth takes 20 to 60 minutes. Plan 2 to 3 days off after surgery. It suits impacted, infected or decayed wisdom teeth.',
+    localNote: [
+      'An X-ray, and sometimes a CBCT scan, shows whether a wisdom tooth needs a simple or a surgical extraction. Ask for the quote after the scan, because the price depends on how the tooth is positioned and how close it sits to the nerve.',
+      'Impacted wisdom teeth in Dubai are removed by oral surgeons and by general dentists with surgical experience. If the tooth is deeply buried or close to the nerve, ask whether an oral and maxillofacial surgeon will do it.',
+      'Book surgical removal before a weekend or a few quieter days at work, because swelling usually peaks on day two or three. If you want all four removed at once under sedation, ask whether that suits your case and where the sedation will be given.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Oral surgery and oral and maxillofacial surgery are specialist licence categories. IV sedation and general anaesthesia are given in facilities licensed for them; ask the clinic to confirm this before booking treatment under sedation.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally covers only emergency dental care. A wisdom tooth causing infection or severe pain may fall under emergency cover; planned removal usually does not.',
+      'Employer plans with a dental benefit often cover medically necessary extractions with pre-approval, sometimes under the medical part of the policy if the surgery is done in hospital. Ask the clinic to send the X-ray and plan to your insurer first.',
+    ],
+    costNote: 'The type of extraction and whether sedation is used decide most of the price. Clinics in Karama, Deira and Bur Dubai often quote lower than central areas; check whether the scan, stitches and review visit are included.',
+    areas: [
+      { slug: 'healthcare-city', note: 'Specialist and hospital-based centres in the free zone for deeply impacted teeth or general anaesthetic.' },
+      { slug: 'al-barsha', note: 'Medical centres near the metro for residents of the inland communities.' },
+      { slug: 'karama', note: 'Established clinics on the Green Line that often quote lower prices.' },
+      { slug: 'business-bay', note: 'Office-friendly hours; book surgery before a weekend so you can rest.' },
+      { slug: 'deira', note: 'Long-established clinics close to the Red and Green Lines.' },
+      { slug: 'jvc', note: 'Community clinics close to home for residents of JVC and nearby areas.' },
+    ],
+    faqs: [
+      { q: 'How much is wisdom tooth removal in Dubai?', a: 'Indicative private-clinic prices are AED 500 to 1,500 for a simple extraction, AED 1,200 to 3,000 for surgical removal of a partly erupted tooth and AED 2,000 to 4,500 for a tooth impacted in bone. IV sedation adds AED 1,000 to 3,000.' },
+      { q: 'Do I need an oral surgeon in Dubai to remove a wisdom tooth?', a: 'Not always. General dentists remove straightforward wisdom teeth. For deeply impacted teeth or teeth close to the nerve, an oral surgeon is often recommended. You can check the licence category on the DHA register.' },
+      { q: 'How many days off work do I need?', a: 'Expect to take one to three days off after surgical removal. Swelling usually peaks around day two or three. A simple extraction often needs no more than the rest of the day.' },
+      { q: 'Does insurance in Dubai cover wisdom tooth removal?', a: 'It depends on your plan. Employer plans with a dental benefit often cover medically necessary removal with pre-approval. The basic plan generally covers only emergency care.' },
+    ],
+    sources: [DHA, DHCC, { label: 'NHS: Wisdom tooth removal', url: 'https://www.nhs.uk/tests-and-treatments/wisdom-tooth-removal/' }],
+  },
+
+  // ----------------------------------------------------------------- crowns
+  {
+    service: 'dental-crowns', emirate: 'dubai',
+    metaTitle: 'Dental Crowns Dubai: Prices, Same-Day Options & Areas',
+    metaDescription: 'Dental crowns in Dubai: indicative AED prices for PFM, zirconia and E.max, same-day crowns, insurance after root canals and where to look.',
+    answer:
+      'A dental crown in Dubai usually costs AED 1,200 to 2,500 for porcelain fused to metal, AED 1,500 to 3,500 for zirconia and AED 1,800 to 4,500 for E.max at private clinics. It takes one visit with same-day milling or two visits 1 to 2 weeks apart. Crowns suit cracked, heavily filled or root-treated teeth.',
+    localNote: [
+      'Some Dubai clinics mill crowns on site and fit them the same day, while others send the work to a dental lab, which means a temporary crown for one to two weeks. Same-day crowns are convenient if you are short of time; lab-made crowns may suit front teeth where shade matching is harder.',
+      'Ask which material the dentist recommends for this tooth and why. Zirconia is very strong for back teeth, while E.max and layered porcelain are often chosen for front teeth. Check whether a core build-up or post (AED 300 to 1,200) is needed and included.',
+      'If the crown follows a root canal, ask for both to be priced together and whether the same dentist will do both. Ask what the guarantee covers if the crown chips or comes loose.',
+    ],
+    regulation: [
+      DUBAI_LICENSING,
+      'Prosthodontics is the specialist licence category for crowns, bridges and replacing teeth. General dentists place most crowns; for complex cases involving many teeth, ask whether a prosthodontist will plan the treatment.',
+    ],
+    insurance: [
+      'Health insurance is mandatory in Dubai, but the basic plan generally excludes crowns. Employer plans with a dental benefit often include crowns as restorative care, sometimes at a lower rate than fillings or root canals, and usually with pre-approval.',
+      'Crowns placed for appearance alone are treated as cosmetic and are generally not covered. Ask the clinic to send the X-ray and the reason for the crown to your insurer before treatment.',
+    ],
+    costNote: 'Material and whether the crown is milled on site or made by a lab drive the price. Clinics in Karama, Bur Dubai and Deira often quote lower than central and coastal areas; compare the same material and ask whether the build-up is included.',
+    areas: [
+      { slug: 'downtown-dubai', note: 'Clinics close to offices and the Red Line, some with same-day milling.' },
+      { slug: 'business-bay', note: 'Office-friendly hours for the one or two visits a crown needs.' },
+      { slug: 'al-barsha', note: 'Family clinics near the metro for residents of the inland communities.' },
+      { slug: 'karama', note: 'Established clinics where crowns are often priced lower.' },
+      { slug: 'healthcare-city', note: 'Specialist centres in the free zone, including prosthodontists for complex cases.' },
+      { slug: 'dubai-silicon-oasis', note: 'Community clinics for residents on the eastern side of the city.' },
+    ],
+    faqs: [
+      { q: 'How much is a dental crown in Dubai?', a: 'Indicative private-clinic prices per crown are AED 1,200 to 2,500 for porcelain fused to metal, AED 1,500 to 3,500 for zirconia, AED 1,800 to 4,500 for E.max and AED 1,800 to 4,000 for a same-day milled crown.' },
+      { q: 'Which is better, zirconia or E.max?', a: 'Zirconia is stronger and often used on back teeth and for people who grind. E.max is more translucent and often chosen for front teeth. Your dentist should explain the choice for each tooth.' },
+      { q: 'Can I get a same-day crown in Dubai?', a: 'Some clinics mill crowns on site and fit them in one visit of a few hours. Ask when booking whether the clinic has this option and whether it suits your tooth.' },
+      { q: 'Does insurance in Dubai cover crowns?', a: 'Employer plans with a dental benefit often cover crowns needed to restore a damaged tooth, with pre-approval and a co-payment. The basic plan generally does not. Crowns for appearance alone are rarely covered.' },
+    ],
+    sources: [DHA, DHCC, { label: 'American Dental Association (MouthHealthy): Crowns', url: 'https://www.mouthhealthy.org/all-topics-a-z/crowns' }],
+  },
+];
+
+export const serviceEmirates: ServiceEmirateContent[] = [
+  ...dubaiGuides,
+
+  // ---------------------------------------------------------------- implants
   {
     service: 'dental-implants', emirate: 'abu-dhabi',
     localNote: [
@@ -86,17 +547,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
 
   // --------------------------------------------------------------- invisalign
   {
-    service: 'invisalign', emirate: 'dubai',
-    localNote: [
-      'Clear aligners are widely offered in Dubai by both general dentists and specialist orthodontists. Ask who will plan your case and whether they review the digital plan themselves or rely on the manufacturer\'s automated set-up.',
-      'Because aligner reviews are every 6 to 10 weeks, a clinic near work or home is easy to keep up with. If you travel a lot, ask about remote monitoring and getting several trays at once.',
-    ],
-    faqs: [
-      { q: 'Do Dubai clinics offer aligner brands other than Invisalign?', a: 'Yes. Several clinics offer other clear aligner systems, sometimes at lower cost. The clinician\'s planning matters more than the brand.' },
-      { q: 'Can I pay for aligners in instalments in Dubai?', a: 'Many clinics offer payment plans spread over the treatment period. Ask for the total cost in writing.' },
-    ],
-  },
-  {
     service: 'invisalign', emirate: 'abu-dhabi',
     localNote: [
       'Aligner check-ins in Abu Dhabi are usually every six to ten weeks for a year or more. For mainland residents, a clinic on the same side of the bridges as home or work avoids crossing at rush hour for each visit.',
@@ -148,7 +598,7 @@ export const serviceEmirates: ServiceEmirateContent[] = [
     ],
     faqs: [
       { q: 'Are aligners or braces better if I live far from the clinic?', a: 'Aligners generally need fewer chairside visits, but braces do not depend on you wearing trays. Discuss both with your dentist.' },
-      { q: 'How many hours a day must I wear them?', a: 'About 22 hours a day, removing them only to eat, drink anything other than water, and clean.' },
+      { q: 'How many hours a day must I wear them?', a: 'Align advises 20 to 22 hours a day, removing them only to eat, drink anything other than water, and clean.' },
     ],
   },
   {
@@ -164,17 +614,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   },
 
   // ------------------------------------------------------------------ braces
-  {
-    service: 'braces', emirate: 'dubai',
-    localNote: [
-      'Both specialist orthodontists and general dentists fit braces in Dubai. For a child, an orthodontist\'s assessment is the best way to decide between starting early and waiting for more adult teeth to come through.',
-      'Adjustment visits are every 4 to 8 weeks, often after school, so ask how easy it is to book late-afternoon slots.',
-    ],
-    faqs: [
-      { q: 'Are ceramic braces popular in Dubai?', a: 'Many adults choose ceramic or lingual braces for a less visible option. They cost more than metal braces.' },
-      { q: 'What happens if a bracket breaks?', a: 'Call the clinic. Most repairs are quick and booked at your next convenient slot unless the wire is causing pain.' },
-    ],
-  },
   {
     service: 'braces', emirate: 'abu-dhabi',
     localNote: [
@@ -244,17 +683,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
 
   // ----------------------------------------------------------------- veneers
   {
-    service: 'veneers', emirate: 'dubai',
-    localNote: [
-      'Dubai has a large cosmetic dentistry market, and veneer prices vary widely. A low headline price may be for composite rather than porcelain, or may exclude the mock-up and temporaries, so ask exactly what is included.',
-      'Ask to see the dentist\'s own before-and-after cases, ideally of patients with a similar starting point, and take time to decide before any enamel is removed.',
-    ],
-    faqs: [
-      { q: 'Why do veneer prices in Dubai vary so much?', a: 'Material, the lab used, the dentist\'s experience and whether a mock-up and temporaries are included all change the price.' },
-      { q: 'Can I get veneers in one day in Dubai?', a: 'Composite veneers can be done in a day. Porcelain veneers made by a lab usually take one to three weeks, unless the clinic mills them on site.' },
-    ],
-  },
-  {
     service: 'veneers', emirate: 'abu-dhabi',
     localNote: [
       'Veneers are cosmetic, so in Abu Dhabi, as elsewhere in the UAE, expect to pay the full cost yourself, including Thiqa holders. Get the price per tooth in writing and confirm the material.',
@@ -322,17 +750,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   },
 
   // -------------------------------------------------------------- whitening
-  {
-    service: 'teeth-whitening', emirate: 'dubai',
-    localNote: [
-      'In Dubai, many clinics near offices in Downtown and Business Bay can fit an in-clinic whitening session into a long lunch break. One clinic session followed by custom take-home trays usually gives the most even, lasting result.',
-      'Be wary of very cheap whitening offers that skip a check-up. Whitening over untreated decay or exposed roots can be painful.',
-    ],
-    faqs: [
-      { q: 'How long does an in-clinic whitening session take in Dubai?', a: 'Usually 60 to 90 minutes, including preparation and protecting the gums.' },
-      { q: 'Are cosmetic whitening offers safe?', a: 'Professional whitening is safe when a dentist checks your teeth first. Avoid offers that skip the check-up.' },
-    ],
-  },
   {
     service: 'teeth-whitening', emirate: 'abu-dhabi',
     localNote: [
@@ -402,17 +819,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
 
   // ----------------------------------------------------------- root canal
   {
-    service: 'root-canal', emirate: 'dubai',
-    localNote: [
-      'Dubai has specialist endodontists as well as general dentists who perform root canals. For molars, retreatments or curved canals, a specialist with a microscope can make a difference.',
-      'If your plan has a dental benefit, root canals are often covered as basic restorative care with a co-payment. The crown afterwards may be covered at a different rate, so check both.',
-    ],
-    faqs: [
-      { q: 'Should I see an endodontist in Dubai?', a: 'For molars, retreatments or complex anatomy, an endodontist is a good choice. Simple front-tooth root canals are routinely done by general dentists.' },
-      { q: 'Can a root canal be done in one visit?', a: 'Often, yes, if there is no significant infection. Otherwise it may take two visits.' },
-    ],
-  },
-  {
     service: 'root-canal', emirate: 'abu-dhabi',
     localNote: [
       'In Abu Dhabi, clinics usually ask your insurer to approve a root canal and crown before starting, which can take a day or two. If you are in severe pain, say so: the clinic can relieve it while approval is pending.',
@@ -481,17 +887,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
 
   // ----------------------------------------------------------- emergency
   {
-    service: 'emergency-dentist', emirate: 'dubai',
-    localNote: [
-      'Many Dubai clinics hold same-day emergency slots and some open late or at weekends. Always phone before going so they can confirm a dentist is available, and ask about the consultation fee.',
-      'For facial injuries, spreading swelling or difficulty breathing, go to a hospital emergency department or call 998.',
-    ],
-    faqs: [
-      { q: 'Where can I find an emergency dentist in Dubai at night?', a: 'Some clinics open late into the evening. Hospital emergency departments handle serious swelling and trauma around the clock.' },
-      { q: 'Will my Dubai insurance cover emergency dental care?', a: 'Many plans, including some basic plans, cover emergency treatment to relieve pain. Follow-up treatment may not be covered.' },
-    ],
-  },
-  {
     service: 'emergency-dentist', emirate: 'abu-dhabi',
     localNote: [
       'In Abu Dhabi and Al Ain, private clinics and hospital dental departments see urgent cases. Phone ahead, describe the problem and check if they bill your insurer directly for emergency care.',
@@ -559,17 +954,6 @@ export const serviceEmirates: ServiceEmirateContent[] = [
   },
 
   // --------------------------------------------------------------- children
-  {
-    service: 'pediatric-dentistry', emirate: 'dubai',
-    localNote: [
-      'Dubai has dedicated pediatric dental practices as well as family clinics that see children. Specialist pediatric dentists are trained in managing anxious children and in sedation when it is genuinely needed.',
-      'After-school appointments are in high demand; booking your child\'s next check-up as you leave helps secure a convenient time.',
-    ],
-    faqs: [
-      { q: 'Do I need a specialist pediatric dentist in Dubai?', a: 'For routine check-ups a family dentist is fine. For very young, anxious or medically complex children, a pediatric specialist is helpful.' },
-      { q: 'Do schools in Dubai require dental check-ups?', a: 'Requirements vary by school. Regular check-ups every 6 months are recommended regardless.' },
-    ],
-  },
   {
     service: 'pediatric-dentistry', emirate: 'abu-dhabi',
     localNote: [

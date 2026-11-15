@@ -1,22 +1,59 @@
-import type { ServiceContent } from './types';
+import type { CostTable, ServiceContent, Source } from './types';
+import { extraServices } from './servicesExtra';
 
-// Prices are indicative private-sector ranges for the UAE, written as a guide
+// Prices are indicative private-clinic ranges for Dubai, written as a guide
 // for patients. They are not quotes; every page says so next to the figure.
+// Ranges are deliberately wide and kept consistent across guides (for example,
+// a Hollywood smile is priced as the veneer or crown range times the number
+// of teeth).
 
-export const services: ServiceContent[] = [
+/** Date the guide content and price tables in this file were last updated. */
+export const GUIDES_UPDATED = '2026-11-15';
+
+const DHA: Source = { label: 'Dubai Health Authority (DHA)', url: 'https://www.dha.gov.ae/' };
+const MH = (topic: string, label: string): Source => ({ label: `American Dental Association (MouthHealthy): ${label}`, url: `https://www.mouthhealthy.org/all-topics-a-z/${topic}` });
+
+const coreServices: ServiceContent[] = [
   {
     slug: 'dental-implants',
     name: 'Dental Implants',
     shortName: 'Implants',
+    headingName: 'Dental Implants',
+    h1: 'Dental implants: procedure, cost and recovery',
+    phrase: 'dental implants',
+    costQuestion: 'How much do dental implants cost in Dubai?',
     summary:
-      'A dental implant is a small titanium or zirconia post placed in the jawbone to replace a missing tooth root, topped with a crown that looks and works like a natural tooth.',
-    metaTitle: 'Dental Implants in the UAE: Process, Costs & How to Choose',
+      'A dental implant (also called a tooth implant) is a small titanium or zirconia post placed in the jawbone to replace a missing tooth root, topped with a crown that looks and works like a natural tooth.',
+    answer:
+      'A dental implant is a titanium or zirconia post placed in the jawbone to replace a tooth root, topped with a crown. At private clinics in Dubai, one implant with abutment and crown typically costs AED 5,000 to 12,000. It takes 3 to 9 months over 4 to 6 visits and suits adults with healthy gums and enough bone.',
+    metaTitle: 'Dental Implants in Dubai: Cost (AED), Procedure & Clinics',
     metaDescription:
-      'How dental implants work, who they suit, the step-by-step process, healing time and indicative AED costs in the UAE. Compare licensed implant clinics near you.',
+      'Dental implants explained: who they suit, each step from CBCT scan to crown, healing time, risks and indicative Dubai prices per tooth, graft and full arch.',
+    alternateName: ['tooth implant', 'implant crown'],
+    schemaType: 'SurgicalProcedure',
+    bodyLocation: 'Jaw bone and teeth',
+    costTable: {
+      caption: 'Indicative dental implant prices at private clinics in Dubai',
+      rows: [
+        { item: 'Single implant, abutment and crown (all-in)', from: 5000, to: 12000, unit: 'per tooth', note: 'Value systems sit at the lower end, premium brands at the upper end' },
+        { item: 'Implant post and abutment only', from: 3000, to: 8000, unit: 'per implant' },
+        { item: 'Crown on an implant (zirconia or porcelain)', from: 1500, to: 4000, unit: 'per crown' },
+        { item: 'CBCT (3D) scan', from: 300, to: 1000, unit: 'per scan', note: 'Sometimes included in the consultation' },
+        { item: 'Bone graft', from: 1500, to: 5000, unit: 'per site' },
+        { item: 'Sinus lift', from: 3000, to: 8000, unit: 'per side' },
+        { item: 'Full-arch fixed teeth (All-on-4 style)', from: 25000, to: 65000, unit: 'per arch' },
+      ],
+      note: 'Ask whether the scan, abutment, temporary tooth and review visits are in the quote. A low headline price sometimes covers the implant post only.',
+    },
+    sources: [
+      MH('implants', 'Dental implants'),
+      { label: 'International Team for Implantology (ITI)', url: 'https://www.iti.org/' },
+      DHA,
+    ],
     intro: [
       'An implant replaces the part of a tooth you cannot see: the root. Once the post has fused with the bone (osseointegration), it anchors a crown, a bridge or even a full set of teeth. Because it is fixed in bone, it does not rely on neighbouring teeth the way a traditional bridge does.',
       'Implant treatment is a planned, multi-visit process rather than a single appointment. Most of the work happens before anything is placed: a 3D scan (CBCT) to measure bone height and width, a check of gum health, and a plan for where each post should sit.',
-      'In the UAE, implants are almost always paid for privately or through a dental add-on with a capped annual limit, so it pays to understand what is included in a quote before you commit.',
+      'In Dubai, implants are almost always paid for privately or through a dental benefit with a capped annual limit. Ask whether the CBCT scan, abutment and crown are in the quote, because clinics bundle these differently.',
     ],
     goodFor: [
       'Replacing one or several missing teeth without filing down healthy neighbours',
@@ -31,12 +68,12 @@ export const services: ServiceContent[] = [
     steps: [
       { title: 'Consultation and 3D scan', detail: 'The dentist examines your mouth, reviews your medical history and takes a CBCT scan to check bone volume and nerve position.' },
       { title: 'Treatment plan and quote', detail: 'You receive a written plan listing the implant system, any bone graft, the type of crown and the number of visits.' },
-      { title: 'Placing the implant', detail: 'Under local anaesthetic the post is placed in the bone. Most people describe the next few days as sore rather than painful.' },
+      { title: 'Placing the implant', detail: 'Under local anaesthetic the post is placed in the bone. Expect soreness for 2 to 4 days, usually managed with paracetamol or ibuprofen.' },
       { title: 'Healing (osseointegration)', detail: 'The bone fuses to the implant over roughly 2 to 6 months. A temporary tooth can often be worn meanwhile.' },
       { title: 'Abutment and crown', detail: 'A connector (abutment) is fitted and a custom crown is made from a digital or traditional impression.' },
       { title: 'Review and maintenance', detail: 'Regular check-ups and hygienist visits keep the gum around the implant healthy for the long term.' },
     ],
-    price: { from: 3500, to: 9500, unit: 'per implant, including the crown', note: 'Bone grafting, sinus lifts and premium implant brands are usually charged on top.' },
+    price: { from: 5000, to: 12000, unit: 'per tooth, including the abutment and crown', note: 'Bone grafting, sinus lifts and CBCT scans are usually charged on top.' },
     priceFactors: [
       'Implant brand and whether the crown is zirconia or porcelain fused to metal',
       'Need for bone grafting or a sinus lift',
@@ -51,8 +88,9 @@ export const services: ServiceContent[] = [
       'Nerve or sinus complications, which careful 3D planning aims to avoid',
     ],
     alternatives: [
-      { name: 'Dental bridge', note: 'Fixed and quicker, but the neighbouring teeth are reshaped to support it.', slug: 'dental-crowns' },
-      { name: 'Partial or full dentures', note: 'Lower upfront cost and no surgery, but removable and less stable.' },
+      { name: 'Dental bridge', note: 'Fixed and quicker, but the neighbouring teeth are reshaped to support it.', slug: 'dental-bridges' },
+      { name: 'Partial or full dentures', note: 'Lower upfront cost and no surgery, but removable and less stable.', slug: 'dentures' },
+      { name: 'All-on-4 full-arch implants', note: 'Fixed teeth for a whole jaw on four to six implants, for people missing most teeth.', slug: 'all-on-4-implants' },
     ],
     questionsToAsk: [
       'Which implant system do you use, and is it widely available if I need repairs later?',
@@ -63,7 +101,8 @@ export const services: ServiceContent[] = [
     faqs: [
       { q: 'Does getting a dental implant hurt?', a: 'The placement is done under local anaesthetic, so you should feel pressure rather than pain. Afterwards, most people manage the soreness with over-the-counter painkillers for a few days.' },
       { q: 'How long do dental implants last?', a: 'The implant post can last decades with good cleaning and regular check-ups. The crown on top typically needs replacing after 10 to 15 years because it wears like any restoration.' },
-      { q: 'Does insurance in the UAE cover implants?', a: 'Basic mandatory plans generally do not. Some employer plans include a dental benefit that pays part of the cost up to an annual cap; ask the clinic to request pre-approval from your insurer before treatment.' },
+      { q: 'How much is a dental implant in Dubai?', a: 'At private clinics, a single implant with abutment and crown usually costs AED 5,000 to 12,000. A CBCT scan, bone grafting or a sinus lift add to that. These are indicative ranges, not quotes; ask for an itemised written plan.' },
+      { q: 'Does insurance in Dubai cover implants?', a: 'Basic mandatory plans generally do not. Some employer plans include a dental benefit that pays part of the cost up to an annual cap; ask the clinic to request pre-approval from your insurer before treatment.' },
       { q: 'Can I get an implant the same day a tooth is removed?', a: 'Sometimes. Immediate implants are possible when the bone is healthy and there is no infection. Your dentist will confirm this after reviewing the 3D scan.' },
     ],
     related: ['dental-crowns', 'wisdom-tooth-removal', 'veneers'],
@@ -74,15 +113,41 @@ export const services: ServiceContent[] = [
     slug: 'invisalign',
     name: 'Invisalign & Clear Aligners',
     shortName: 'Invisalign',
+    headingName: 'Invisalign & Clear Aligners',
+    h1: 'Invisalign and clear aligners: how they work and what they cost',
+    phrase: 'Invisalign',
+    costQuestion: 'How much does Invisalign cost in Dubai?',
     summary:
-      'Invisalign is a brand of clear, removable aligners that move teeth gradually using a series of custom trays, each worn for about 22 hours a day.',
-    metaTitle: 'Invisalign in the UAE: How It Works, Timeline & Costs',
+      'Invisalign is a brand of clear, removable aligners that move teeth gradually using a series of custom trays, each worn for 20 to 22 hours a day.',
+    answer:
+      'Invisalign is a brand of clear, removable aligners that straighten teeth with a series of custom trays worn 20 to 22 hours a day. At private clinics in Dubai, a short course for minor crowding typically costs AED 6,000 to 12,000 and comprehensive treatment AED 14,000 to 25,000. Most adult cases take 6 to 18 months.',
+    metaTitle: 'Invisalign Cost in Dubai: Prices, Timeline & Who It Suits',
     metaDescription:
-      'A clear guide to Invisalign and clear aligners in the UAE: who they suit, how treatment is planned, how long it takes and indicative AED costs. Find aligner providers near you.',
+      'How Invisalign and other clear aligners work, who they suit, wear time, how long treatment takes and indicative Dubai prices by package, plus retainers.',
+    alternateName: ['clear aligners', 'invisible braces', 'aligner treatment'],
+    schemaType: 'TherapeuticProcedure',
+    procedureType: 'NoninvasiveProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative Invisalign and clear aligner prices at private clinics in Dubai',
+      rows: [
+        { item: 'Short course for minor crowding or spacing (e.g. Invisalign Express or Lite)', from: 6000, to: 12000, unit: 'per course' },
+        { item: 'Moderate case', from: 10000, to: 16000, unit: 'per course' },
+        { item: 'Comprehensive case (both arches, bite correction)', from: 14000, to: 25000, unit: 'per course' },
+        { item: 'Other clear aligner brands', from: 5000, to: 15000, unit: 'per course', note: 'Depends on the brand and case' },
+        { item: 'Retainers after treatment', from: 800, to: 2500, unit: 'per set', note: 'Sometimes included' },
+      ],
+      note: 'Package names and tray limits differ between clinics. Ask whether refinement trays and retainers are included.',
+    },
+    sources: [
+      { label: 'Invisalign (Align Technology)', url: 'https://www.invisalign.com/' },
+      { label: 'American Association of Orthodontists: Treatment', url: 'https://aaoinfo.org/treatment/' },
+      DHA,
+    ],
     intro: [
       'Clear aligners straighten teeth with a sequence of thin plastic trays. Each tray is slightly different from the last, so wearing them in order nudges teeth into a planned position. Invisalign is the best-known brand; several others work on the same principle.',
       'The result depends heavily on two things: the quality of the digital plan made by the dentist or orthodontist, and how consistently you wear the trays. Taking them out for long stretches is the most common reason treatment runs late.',
-      'Aligners are removed to eat and brush, which makes them easier to keep clean than fixed braces, but it also means the discipline sits with you rather than with the appliance.',
+      'Aligners are removed to eat and brush, which makes them easier to keep clean than fixed braces. Results depend on you wearing the trays 20 to 22 hours a day.',
     ],
     goodFor: [
       'Mild to moderate crowding, spacing and some bite problems',
@@ -91,7 +156,7 @@ export const services: ServiceContent[] = [
     ],
     notIdealFor: [
       'Severe bite or jaw discrepancies that may need fixed braces or surgery',
-      'Anyone who cannot commit to wearing trays around 22 hours a day',
+      'Anyone who cannot commit to wearing trays 20 to 22 hours a day',
     ],
     steps: [
       { title: 'Assessment and scan', detail: 'An intraoral 3D scan replaces messy impressions. The clinician checks gums, existing fillings and bite.' },
@@ -100,7 +165,7 @@ export const services: ServiceContent[] = [
       { title: 'Regular reviews', detail: 'Check-ins every 6 to 10 weeks confirm teeth are tracking to plan; refinement trays are added if needed.' },
       { title: 'Retention', detail: 'Retainers are essential afterwards. Without them, teeth tend to drift back.' },
     ],
-    price: { from: 9000, to: 25000, unit: 'for a full course', note: 'Short "lite" courses for minor corrections cost less; retainers are sometimes extra.' },
+    price: { from: 6000, to: 25000, unit: 'for a full course', note: 'Short courses for minor corrections sit at the lower end; retainers are sometimes extra.' },
     priceFactors: [
       'Complexity of the case and the number of trays',
       'Whether refinements and retainers are included',
@@ -125,8 +190,9 @@ export const services: ServiceContent[] = [
     faqs: [
       { q: 'Is Invisalign faster than braces?', a: 'For simple cases it can be similar or slightly faster. For complex cases braces are often more predictable. Your clinician should explain the expected timeline for your specific bite.' },
       { q: 'Can I drink coffee with aligners in?', a: 'Plain water is fine. Anything else, including coffee and juices, is best taken with trays out, followed by rinsing or brushing, to avoid staining and decay.' },
-      { q: 'Do I need to see an orthodontist for clear aligners?', a: 'Not always. Many general dentists offer aligners for straightforward cases. For bite problems or significant crowding, a specialist orthodontist is a sensible choice.' },
-      { q: 'Does insurance pay for Invisalign in the UAE?', a: 'Orthodontic treatment for adults is rarely covered. A few premium plans include orthodontics for children or have a separate orthodontic limit; check your policy wording.' },
+      { q: 'Do I need to see an orthodontist for clear aligners?', a: 'Not always. General dentists also provide aligners for straightforward cases. For bite problems or significant crowding, a specialist orthodontist is a sensible choice.' },
+      { q: 'How many hours a day do I need to wear aligners?', a: 'Align Technology advises 20 to 22 hours a day. Take them out only to eat, drink anything other than water, and clean your teeth.' },
+      { q: 'Does insurance pay for Invisalign in Dubai?', a: 'Orthodontic treatment for adults is rarely covered. A few premium plans include orthodontics for children or have a separate orthodontic limit; check your policy wording.' },
     ],
     related: ['braces', 'teeth-whitening', 'veneers'],
     insuranceCategory: 'orthodontic',
@@ -136,15 +202,40 @@ export const services: ServiceContent[] = [
     slug: 'braces',
     name: 'Braces',
     shortName: 'Braces',
+    headingName: 'Braces',
+    h1: 'Braces: types, treatment time and cost',
+    phrase: 'braces',
+    costQuestion: 'How much do braces cost in Dubai?',
     summary:
       'Braces are fixed brackets and wires that apply steady pressure to move teeth and correct the bite, suitable for children, teens and adults.',
-    metaTitle: 'Braces in the UAE: Types, Treatment Time & Costs',
+    answer:
+      'Braces are brackets bonded to the teeth and joined by a wire that an orthodontist adjusts to move teeth and correct the bite. At private clinics in Dubai, metal braces typically cost AED 6,000 to 12,000 and ceramic AED 9,000 to 16,000 for a full course. Treatment usually lasts 12 to 24 months and suits children, teens and adults.',
+    metaTitle: 'Braces in Dubai: Metal, Ceramic & Lingual Costs (AED)',
     metaDescription:
-      'Metal, ceramic and lingual braces explained: how they work, how long treatment takes, aftercare and indicative AED costs in the UAE. Find orthodontists near you.',
+      'Metal, ceramic, self-ligating and lingual braces compared: how they work, treatment time, aftercare and indicative Dubai prices for a full course.',
+    alternateName: ['orthodontic braces', 'fixed braces', 'orthodontic treatment'],
+    schemaType: 'TherapeuticProcedure',
+    procedureType: 'NoninvasiveProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative braces prices at private clinics in Dubai (full course)',
+      rows: [
+        { item: 'Metal braces', from: 6000, to: 12000, unit: 'per course' },
+        { item: 'Ceramic (tooth-coloured) or self-ligating braces', from: 9000, to: 16000, unit: 'per course' },
+        { item: 'Lingual braces (behind the teeth)', from: 18000, to: 35000, unit: 'per course' },
+        { item: 'Retainers after treatment', from: 800, to: 2500, unit: 'per set', note: 'Sometimes included' },
+      ],
+      note: 'Single-arch or short courses cost less. Ask whether adjustment visits, breakages and retainers are in the price.',
+    },
+    sources: [
+      { label: 'NHS: Braces and orthodontics', url: 'https://www.nhs.uk/tests-and-treatments/braces/' },
+      { label: 'American Association of Orthodontists: Treatment', url: 'https://aaoinfo.org/treatment/' },
+      MH('braces', 'Braces'),
+    ],
     intro: [
-      'Braces are the most versatile way to straighten teeth. Brackets are bonded to each tooth and connected by an archwire; the orthodontist adjusts the wire over time to guide teeth into place.',
+      'Brackets are bonded to each tooth and connected by an archwire; the orthodontist adjusts the wire over time to guide teeth into place. Braces can make movements that aligners struggle with, such as large rotations and closing extraction spaces.',
       'Metal braces are the most economical and robust. Ceramic brackets blend in with the teeth, and lingual braces sit on the inside surface so they are hidden from view, at a higher cost.',
-      'Because braces cannot be taken out, they suit people who want a predictable result without relying on daily willpower, including younger patients.',
+      'Because braces cannot be taken out, they do not depend on wear time, which is one reason orthodontists often use them for younger patients.',
     ],
     goodFor: [
       'Children and teens with crowding or bite problems',
@@ -161,7 +252,7 @@ export const services: ServiceContent[] = [
       { title: 'Adjustments', detail: 'Visits every 4 to 8 weeks to change wires or elastics.' },
       { title: 'Removal and retainers', detail: 'Brackets are removed and polished off. Fixed or removable retainers hold the result.' },
     ],
-    price: { from: 6000, to: 20000, unit: 'for a full course', note: 'Ceramic and lingual braces sit at the upper end; retainers may be charged separately.' },
+    price: { from: 6000, to: 35000, unit: 'for a full course', note: 'Metal braces sit at the lower end and lingual braces at the upper end; retainers may be charged separately.' },
     priceFactors: [
       'Type of bracket: metal, ceramic, self-ligating or lingual',
       'Length and complexity of treatment',
@@ -195,14 +286,39 @@ export const services: ServiceContent[] = [
     slug: 'veneers',
     name: 'Veneers',
     shortName: 'Veneers',
+    headingName: 'Veneers',
+    h1: 'Veneers: composite, porcelain and E.max compared',
+    phrase: 'veneers',
+    costQuestion: 'How much do veneers cost in Dubai?',
     summary:
       'Veneers are thin shells of porcelain or composite bonded to the front of teeth to change their colour, shape or size.',
-    metaTitle: 'Veneers in the UAE: Porcelain vs Composite, Process & Costs',
+    answer:
+      'Veneers are thin composite or porcelain shells bonded to the front of teeth. At private clinics in Dubai, composite veneers typically cost AED 800 to 2,000 per tooth and porcelain or E.max AED 2,000 to 5,000. Porcelain takes 2 to 3 visits over 1 to 3 weeks. They suit healthy teeth that are chipped, worn or discoloured.',
+    metaTitle: 'Veneers in Dubai: Composite vs Porcelain vs E.max Prices',
     metaDescription:
-      'Porcelain and composite veneers compared: what they fix, how much enamel is removed, how long they last and indicative AED costs in the UAE. Find cosmetic dentists near you.',
+      'Composite, porcelain and E.max veneers compared: what they fix, enamel removal, lifespan, risks and indicative Dubai prices per tooth and for six teeth.',
+    alternateName: ['dental veneers', 'porcelain veneers', 'composite veneers'],
+    schemaType: 'MedicalProcedure',
+    bodyLocation: 'Front teeth',
+    costTable: {
+      caption: 'Indicative veneer prices at private clinics in Dubai',
+      rows: [
+        { item: 'Composite veneer (made in the chair)', from: 800, to: 2000, unit: 'per tooth', note: 'Usually one visit; lasts about 5 to 7 years' },
+        { item: 'Porcelain veneer (lab-made)', from: 2000, to: 4500, unit: 'per tooth' },
+        { item: 'E.max (lithium disilicate) veneer', from: 2000, to: 5000, unit: 'per tooth' },
+        { item: 'Six porcelain or E.max veneers', from: 12000, to: 30000, unit: 'for six upper teeth' },
+        { item: 'Mock-up or digital smile design', from: 500, to: 1500, unit: 'where charged', note: 'Often included in the treatment price' },
+      ],
+      note: 'A low headline price may be for composite rather than porcelain. Ask which material, which lab and how many teeth the quote covers.',
+    },
+    sources: [
+      MH('veneers', 'Veneers'),
+      { label: 'NHS: Cosmetic procedures', url: 'https://www.nhs.uk/tests-and-treatments/cosmetic-procedures/' },
+      DHA,
+    ],
     intro: [
       'A veneer covers the visible surface of a tooth. Porcelain veneers are made in a lab and are highly stain-resistant; composite veneers are sculpted directly onto the tooth in the chair and cost less, but they wear and stain faster.',
-      'Most porcelain veneers need a thin layer of enamel removed so they sit flush. That step cannot be undone, which is why a careful consultation, a mock-up and an honest conversation about expectations matter more than the price.',
+      'Most porcelain veneers need a thin layer of enamel removed so they sit flush. That step cannot be undone, so ask for a mock-up before any enamel is removed.',
       'Veneers change appearance; they do not straighten a bite or treat decay. Good candidates have healthy gums and teeth, or have had those problems treated first.',
     ],
     goodFor: [
@@ -216,12 +332,12 @@ export const services: ServiceContent[] = [
       'Significant crowding, which is often better treated with orthodontics first',
     ],
     steps: [
-      { title: 'Smile consultation', detail: 'Photos, a scan and a discussion of shade and shape. Many clinics offer a digital smile design.' },
+      { title: 'Smile consultation', detail: 'Photos, a scan and a discussion of shade and shape, sometimes with a digital smile design.' },
       { title: 'Mock-up', detail: 'A temporary trial lets you see and feel the proposed shape before any enamel is removed.' },
       { title: 'Preparation', detail: 'A thin layer of enamel is removed where needed and an impression or scan is taken. Temporaries are fitted.' },
       { title: 'Bonding', detail: 'The finished veneers are checked for fit and colour, then bonded in place and the bite is adjusted.' },
     ],
-    price: { from: 800, to: 4000, unit: 'per tooth', note: 'Composite veneers start lower; lab-made porcelain or E.max veneers sit at the higher end.' },
+    price: { from: 800, to: 5000, unit: 'per tooth', note: 'Composite veneers start lower; lab-made porcelain or E.max veneers sit at the higher end.' },
     priceFactors: [
       'Material: composite, porcelain or lithium disilicate (E.max)',
       'Number of teeth treated',
@@ -236,7 +352,7 @@ export const services: ServiceContent[] = [
     ],
     alternatives: [
       { name: 'Teeth whitening', note: 'Lightens natural teeth without removing enamel.', slug: 'teeth-whitening' },
-      { name: 'Composite bonding', note: 'Repairs small chips with no or minimal preparation.' },
+      { name: 'Composite bonding', note: 'Repairs small chips with no or minimal preparation.', slug: 'dental-bonding' },
       { name: 'Clear aligners', note: 'Straighten teeth first so fewer or thinner veneers are needed.', slug: 'invisalign' },
     ],
     questionsToAsk: [
@@ -257,14 +373,38 @@ export const services: ServiceContent[] = [
     slug: 'hollywood-smile',
     name: 'Hollywood Smile',
     shortName: 'Hollywood Smile',
+    headingName: 'Hollywood Smile',
+    h1: 'Hollywood smile: what it involves and what it costs',
+    phrase: 'a Hollywood smile',
+    costQuestion: 'How much does a Hollywood smile cost in Dubai?',
     summary:
       'A "Hollywood smile" is a full smile makeover, usually veneers or crowns on most visible upper and lower teeth, planned to give an even, bright result.',
-    metaTitle: 'Hollywood Smile in the UAE: What It Involves & What It Costs',
+    answer:
+      'A Hollywood smile is a makeover with veneers or crowns on the teeth that show when you smile. At private clinics in Dubai, porcelain or E.max on 16 to 20 teeth typically costs AED 32,000 to 100,000, and composite AED 12,000 to 40,000. It takes 2 to 4 weeks after planning and suits several worn or discoloured teeth.',
+    metaTitle: 'Hollywood Smile in Dubai: Cost, Process & Risks',
     metaDescription:
-      'What a Hollywood smile really involves, how it is planned, how to avoid an over-white or bulky result, and indicative AED costs in the UAE. Find cosmetic dentists near you.',
+      'What a Hollywood smile involves, how many teeth are treated, composite vs porcelain vs zirconia, risks of over-preparation and indicative Dubai prices.',
+    alternateName: ['smile makeover', 'full-mouth veneers'],
+    schemaType: 'MedicalProcedure',
+    bodyLocation: 'Front teeth',
+    costTable: {
+      caption: 'Indicative Hollywood smile prices at private clinics in Dubai',
+      rows: [
+        { item: 'Composite veneers on 16 to 20 teeth', from: 12000, to: 40000, unit: 'full makeover' },
+        { item: 'Porcelain or E.max veneers on 10 upper teeth', from: 20000, to: 50000, unit: 'upper arch' },
+        { item: 'Porcelain or E.max veneers on 16 to 20 teeth', from: 32000, to: 100000, unit: 'upper and lower' },
+        { item: 'Zirconia crowns on 16 to 20 teeth', from: 24000, to: 90000, unit: 'upper and lower', note: 'Crowns remove more tooth than veneers' },
+      ],
+      note: 'These are the per-tooth veneer and crown ranges multiplied by the number of teeth. Whitening, gum contouring or aligners done first are extra.',
+    },
+    sources: [
+      MH('veneers', 'Veneers'),
+      MH('crowns', 'Crowns'),
+      { label: 'NHS: Cosmetic procedures', url: 'https://www.nhs.uk/tests-and-treatments/cosmetic-procedures/' },
+    ],
     intro: [
-      'The term is popular in the Gulf for a smile makeover that treats many front teeth at once, typically 16 to 20 veneers or crowns. Done well, it looks natural. Done in a rush, it can look bulky or unnaturally white.',
-      'Because it is a large, mostly irreversible change, the planning stage is the treatment. A good clinic will check gums and bite, may suggest whitening or orthodontics first, and will let you test the shape with a mock-up.',
+      'The term is used in the Gulf for a smile makeover that treats many front teeth at once, often 16 to 20 veneers or crowns. Poorly planned makeovers usually fail in one of two ways: teeth that are too thick, or a shade too white for the face.',
+      'Most of the decisions (shape, length, shade, how many teeth) are made at the mock-up stage, before any tooth is prepared. Expect the dentist to check gums and bite first and to say whether whitening or aligners would reduce the number of teeth that need covering.',
       'Ask to see before-and-after photos of the dentist\'s own cases, and look at the proposed shade in daylight as well as under clinic lights.',
     ],
     goodFor: [
@@ -281,7 +421,7 @@ export const services: ServiceContent[] = [
       { title: 'Preparation and temporaries', detail: 'Teeth are prepared and a temporary smile is worn while the lab works.' },
       { title: 'Fit and fine-tune', detail: 'Final veneers or crowns are bonded and the bite is balanced. A night guard is often advised.' },
     ],
-    price: { from: 15000, to: 60000, unit: 'for a full upper and lower makeover', note: 'Depends mainly on the number of teeth and the material used.' },
+    price: { from: 12000, to: 100000, unit: 'for a full makeover', note: 'Depends mainly on the number of teeth and the material used.' },
     priceFactors: [
       'Number of teeth treated',
       'Composite, porcelain, E.max or zirconia',
@@ -295,7 +435,7 @@ export const services: ServiceContent[] = [
       'Gum inflammation if margins are not well finished',
     ],
     alternatives: [
-      { name: 'Whitening plus bonding', note: 'Less invasive and lower cost for mostly healthy teeth.', slug: 'teeth-whitening' },
+      { name: 'Whitening plus bonding', note: 'Less invasive and lower cost for mostly healthy teeth.', slug: 'dental-bonding' },
       { name: 'Fewer veneers', note: 'Treating only the 6 to 10 teeth that show when you smile.', slug: 'veneers' },
     ],
     questionsToAsk: [
@@ -306,6 +446,8 @@ export const services: ServiceContent[] = [
     faqs: [
       { q: 'Is a Hollywood smile permanent?', a: 'It is long-lasting but not permanent. Porcelain veneers and crowns generally need replacing after 10 to 15 years, and the underlying teeth will always need covering.' },
       { q: 'Will it look fake?', a: 'Not if the shade, length and shape are matched to your face. Ask for a mock-up and choose a shade that looks natural in daylight.' },
+      { q: 'How much is a Hollywood smile in Dubai?', a: 'It depends on the number of teeth and the material. Indicative private-clinic prices run from about AED 12,000 for composite on 16 to 20 teeth to AED 32,000 to 100,000 for porcelain or E.max on the same number. Ask for a per-tooth price in writing.' },
+      { q: 'How many teeth does a Hollywood smile cover?', a: 'Usually the teeth that show when you smile: often 8 to 10 on the upper jaw, and sometimes the same on the lower. Ask the dentist why each tooth is included.' },
     ],
     related: ['veneers', 'teeth-whitening', 'dental-crowns'],
     insuranceCategory: 'cosmetic',
@@ -315,11 +457,36 @@ export const services: ServiceContent[] = [
     slug: 'teeth-whitening',
     name: 'Teeth Whitening',
     shortName: 'Whitening',
+    headingName: 'Teeth Whitening',
+    h1: 'Teeth whitening: in-clinic vs home trays',
+    phrase: 'teeth whitening',
+    costQuestion: 'How much does teeth whitening cost in Dubai?',
     summary:
       'Professional teeth whitening uses a peroxide gel, applied in the clinic or with custom home trays, to lighten the natural colour of teeth by several shades.',
-    metaTitle: 'Teeth Whitening in the UAE: In-Clinic vs Home Kits & Costs',
+    answer:
+      'Professional teeth whitening lightens natural teeth with a peroxide gel, in the clinic or with custom trays at home. At private clinics in Dubai, take-home trays typically cost AED 700 to 1,800 and an in-clinic session AED 1,200 to 3,000. A session takes 60 to 90 minutes; trays take 1 to 2 weeks. It suits yellowing from age or coffee.',
+    metaTitle: 'Teeth Whitening in Dubai: In-Clinic vs Home Kit Prices',
     metaDescription:
-      'In-clinic and take-home teeth whitening compared: results, sensitivity, how long it lasts and indicative AED costs in the UAE. Find whitening providers near you.',
+      'In-clinic, take-home and combined teeth whitening compared: results, sensitivity, how long it lasts, what "laser" means and indicative Dubai prices.',
+    alternateName: ['tooth whitening', 'teeth bleaching', 'laser teeth whitening'],
+    schemaType: 'MedicalProcedure',
+    procedureType: 'NoninvasiveProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative teeth whitening prices at private clinics in Dubai',
+      rows: [
+        { item: 'Take-home whitening (custom trays and gel)', from: 700, to: 1800, unit: 'per course' },
+        { item: 'In-clinic whitening session (light- or laser-activated systems)', from: 1200, to: 3000, unit: 'per session' },
+        { item: 'In-clinic session plus take-home trays', from: 1800, to: 4000, unit: 'per course' },
+        { item: 'Scale and polish before whitening', from: 250, to: 800, unit: 'per visit' },
+        { item: 'Top-up gel', from: 150, to: 400, unit: 'per pack' },
+      ],
+      note: '"Laser" whitening uses a light to activate the gel; the peroxide does the whitening. Crowns, veneers and fillings do not change colour.',
+    },
+    sources: [
+      { label: 'NHS: Teeth whitening', url: 'https://www.nhs.uk/tests-and-treatments/teeth-whitening/' },
+      MH('teeth-whitening', 'Teeth whitening'),
+    ],
     intro: [
       'Whitening works by letting peroxide break down stain molecules inside the enamel. In-clinic whitening uses a stronger gel with the gums protected; take-home whitening uses custom trays with a milder gel over one to two weeks.',
       'Whitening only lightens natural tooth structure. Crowns, veneers and fillings stay the same colour, so if you have visible restorations near the front, plan for that before starting.',
@@ -340,7 +507,7 @@ export const services: ServiceContent[] = [
       { title: 'Whitening session or trays', detail: 'Either a 60 to 90 minute in-clinic session or custom trays for home use.' },
       { title: 'Maintenance', detail: 'Occasional top-ups with your trays keep the result.' },
     ],
-    price: { from: 700, to: 3000, unit: 'per treatment', note: 'Take-home tray kits sit at the lower end; in-clinic systems at the higher end.' },
+    price: { from: 700, to: 4000, unit: 'per course', note: 'Take-home tray kits sit at the lower end; in-clinic sessions combined with trays at the higher end.' },
     priceFactors: [
       'In-clinic system versus take-home trays, or both combined',
       'Whether a cleaning is included',
@@ -375,11 +542,35 @@ export const services: ServiceContent[] = [
     slug: 'root-canal',
     name: 'Root Canal Treatment',
     shortName: 'Root Canal',
+    headingName: 'Root Canal Treatment',
+    h1: 'Root canal treatment: what happens and what it costs',
+    phrase: 'root canal treatment',
+    costQuestion: 'How much does a root canal cost in Dubai?',
     summary:
-      'Root canal treatment removes infected or inflamed pulp from inside a tooth, cleans and seals the canals, and lets you keep the tooth instead of extracting it.',
-    metaTitle: 'Root Canal Treatment in the UAE: What to Expect & Costs',
+      'Root canal treatment (endodontic treatment) removes infected or inflamed pulp from inside a tooth, cleans and seals the canals, and lets you keep the tooth instead of extracting it.',
+    answer:
+      'Root canal treatment removes infected pulp from inside a tooth and seals the canals so the tooth can be kept. At private clinics in Dubai, it typically costs AED 1,000 to 2,500 for a front tooth and AED 1,800 to 4,500 for a molar, with the crown extra. It takes 1 to 2 visits and suits a painful, restorable tooth.',
+    metaTitle: 'Root Canal Cost in Dubai: Front Tooth to Molar (AED)',
     metaDescription:
-      'Why root canal treatment is needed, what happens during the procedure, recovery, whether you need a crown afterwards and indicative AED costs in the UAE.',
+      'Why a root canal is needed, what happens at each visit, recovery, whether you need a crown, and indicative Dubai prices for front teeth, molars and retreatment.',
+    alternateName: ['endodontic treatment', 'root canal therapy'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Tooth pulp and root canals',
+    costTable: {
+      caption: 'Indicative root canal prices at private clinics in Dubai (crown not included)',
+      rows: [
+        { item: 'Front tooth (usually one canal)', from: 1000, to: 2500, unit: 'per tooth' },
+        { item: 'Premolar (one or two canals)', from: 1300, to: 3000, unit: 'per tooth' },
+        { item: 'Molar (three or four canals)', from: 1800, to: 4500, unit: 'per tooth' },
+        { item: 'Retreatment of an old root canal', from: 2500, to: 6000, unit: 'per tooth', note: 'Often done by an endodontist' },
+        { item: 'Crown afterwards (usually back teeth)', from: 1500, to: 4500, unit: 'per crown' },
+      ],
+      note: 'X-rays and a temporary filling are sometimes charged separately. Ask for the root canal and the crown to be quoted together.',
+    },
+    sources: [
+      { label: 'NHS: Root canal treatment', url: 'https://www.nhs.uk/tests-and-treatments/root-canal-treatment/' },
+      MH('root-canals', 'Root canals'),
+    ],
     intro: [
       'Inside each tooth is soft tissue called pulp. Deep decay, a crack or trauma can let bacteria reach it, causing pain, swelling or an abscess. A root canal removes that tissue, disinfects the canals and fills them.',
       'Modern root canal treatment is usually no more uncomfortable than a large filling. The pain people associate with it is normally the infection beforehand, which the treatment relieves.',
@@ -400,7 +591,7 @@ export const services: ServiceContent[] = [
       { title: 'Filling and sealing', detail: 'Canals are filled with a rubber-like material and the access is sealed.' },
       { title: 'Crown if needed', detail: 'A crown protects back teeth from fracture.' },
     ],
-    price: { from: 1000, to: 4500, unit: 'per tooth', note: 'Molars cost more than front teeth; the crown is usually a separate fee.' },
+    price: { from: 1000, to: 6000, unit: 'per tooth, crown extra', note: 'Molars and retreatments cost more than front teeth; the crown is usually a separate fee.' },
     priceFactors: [
       'Front tooth, premolar or molar (number of canals)',
       'Whether a specialist endodontist treats it',
@@ -424,7 +615,7 @@ export const services: ServiceContent[] = [
     faqs: [
       { q: 'Is root canal treatment painful?', a: 'With local anaesthetic it should feel similar to having a filling. You may be tender for a few days afterwards.' },
       { q: 'Is it better to pull the tooth?', a: 'Keeping your natural tooth is usually best if it can be restored. Extraction is quicker but replacing the tooth with an implant or bridge costs more over time.' },
-      { q: 'Does insurance cover root canals in the UAE?', a: 'Many employer plans with dental cover treat root canals as basic restorative care, usually with a co-payment and an annual limit. Mandatory basic plans often exclude it.' },
+      { q: 'Does insurance cover root canals in Dubai?', a: 'Employer plans with dental cover usually treat root canals as basic restorative care, with a co-payment and an annual limit. Basic mandatory plans generally exclude it beyond emergency pain relief.' },
     ],
     related: ['dental-crowns', 'emergency-dentist', 'dental-implants'],
     insuranceCategory: 'restorative',
@@ -434,18 +625,43 @@ export const services: ServiceContent[] = [
     slug: 'teeth-cleaning',
     name: 'Teeth Cleaning (Scale & Polish)',
     shortName: 'Cleaning',
+    headingName: 'Teeth Cleaning',
+    h1: 'Teeth cleaning: scale and polish explained',
+    phrase: 'teeth cleaning',
+    costQuestion: 'How much does a scale and polish cost in Dubai?',
     summary:
-      'A professional scale and polish removes hardened plaque (tartar) and surface stains that brushing cannot shift, helping prevent gum disease and decay.',
-    metaTitle: 'Teeth Cleaning in the UAE: Scale & Polish, Frequency & Costs',
+      'A professional scale and polish (also called a dental cleaning or hygiene visit) removes hardened plaque (tartar) and surface stains that brushing cannot shift, helping prevent gum disease and decay.',
+    answer:
+      'A scale and polish is a professional cleaning that removes tartar and surface stain that brushing misses, helping prevent gum disease. At private clinics in Dubai, it typically costs AED 250 to 800, or AED 350 to 1,000 with a check-up and X-rays. A visit takes 30 to 60 minutes, and most adults need one every 6 to 12 months.',
+    metaTitle: 'Teeth Cleaning in Dubai: Scale & Polish Prices & Frequency',
     metaDescription:
-      'What happens during a professional teeth cleaning, how often you need one, deep cleaning for gum disease and indicative AED costs in the UAE. Find hygienists near you.',
+      'What happens at a scale and polish, AirFlow cleaning, deep cleaning for gum disease, how often to go and indicative Dubai prices, plus insurance cover.',
+    alternateName: ['scale and polish', 'dental cleaning', 'hygienist appointment', 'dental prophylaxis'],
+    schemaType: 'MedicalProcedure',
+    procedureType: 'NoninvasiveProcedure',
+    bodyLocation: 'Teeth and gums',
+    costTable: {
+      caption: 'Indicative teeth cleaning prices at private clinics in Dubai',
+      rows: [
+        { item: 'Scale and polish', from: 250, to: 800, unit: 'per visit' },
+        { item: 'AirFlow or guided biofilm therapy', from: 400, to: 1000, unit: 'per visit' },
+        { item: 'Check-up, cleaning and X-rays together', from: 350, to: 1000, unit: 'per visit' },
+        { item: 'Deep cleaning (scaling and root planing) for gum disease', from: 200, to: 750, unit: 'per quarter of the mouth', note: 'See the gum disease guide' },
+      ],
+      note: 'Plans with a dental benefit often cover one or two cleanings a year. Ask whether X-rays are included.',
+    },
+    sources: [
+      { label: 'NHS: Gum disease', url: 'https://www.nhs.uk/conditions/gum-disease/' },
+      { label: 'NICE: Dental checks, intervals between oral health reviews (CG19)', url: 'https://www.nice.org.uk/guidance/cg19' },
+      { label: 'European Federation of Periodontology: What is periodontitis?', url: 'https://www.efp.org/for-patients/what-is-periodontitis/' },
+    ],
     intro: [
       'Even with good brushing, plaque hardens into tartar in places a toothbrush misses, especially behind the lower front teeth and along the gumline. A hygienist or dentist removes it with ultrasonic and hand instruments, then polishes the teeth.',
-      'Regular cleaning is one of the most cost-effective things you can do for your teeth. It lets the dentist spot problems early, when they are cheaper and simpler to treat.',
+      'A scale and polish costs AED 250 to 800 in Dubai; treating the gum disease it helps prevent costs several times that. The visit also lets the dentist spot decay early, when a small filling is enough.',
       'If your gums bleed easily or you have pockets around the teeth, a deeper cleaning below the gumline may be recommended, often over more than one visit.',
     ],
     goodFor: [
-      'Everyone, typically every 6 months',
+      'Most adults, typically every 6 to 12 months',
       'People with bleeding gums, bad breath or visible tartar',
       'Before whitening, to get an even result',
     ],
@@ -456,7 +672,7 @@ export const services: ServiceContent[] = [
       { title: 'Polishing', detail: 'Teeth are polished to remove stain and make them smoother.' },
       { title: 'Advice', detail: 'You get tailored brushing and flossing tips and a recall date.' },
     ],
-    price: { from: 200, to: 700, unit: 'per visit', note: 'Deep cleaning for gum disease is usually charged per quadrant and costs more.' },
+    price: { from: 250, to: 1000, unit: 'per visit', note: 'Deep cleaning for gum disease is usually charged per quarter of the mouth and costs more.' },
     priceFactors: [
       'Routine scale and polish versus deep cleaning',
       'Air-polishing or stain removal add-ons',
@@ -465,14 +681,16 @@ export const services: ServiceContent[] = [
     duration: '30 to 60 minutes',
     recovery: 'None. Gums may feel tender for a day.',
     risks: ['Brief sensitivity', 'Minor gum bleeding, which settles quickly'],
-    alternatives: [],
+    alternatives: [
+      { name: 'Gum disease treatment', note: 'Deep cleaning below the gumline when pockets have formed.', slug: 'gum-treatment' },
+    ],
     questionsToAsk: [
       'Do I need a deeper cleaning, and why?',
       'Is the check-up and X-ray included?',
       'How often should I come back?',
     ],
     faqs: [
-      { q: 'How often should I get my teeth cleaned?', a: 'Every 6 months suits most people. If you have gum disease or build tartar quickly, your dentist may suggest every 3 to 4 months.' },
+      { q: 'How often should I get my teeth cleaned?', a: 'Every 6 to 12 months suits most adults. The UK\'s NICE guidance sets recall intervals by individual risk, so if you have gum disease or build tartar quickly, your dentist may suggest every 3 to 4 months.' },
       { q: 'Does cleaning damage enamel?', a: 'No. Professional scaling removes tartar, not enamel. Teeth can feel different afterwards simply because the tartar has gone.' },
       { q: 'Is teeth cleaning covered by insurance?', a: 'Plans that include dental often cover one or two cleanings a year as preventive care. Basic mandatory plans typically do not.' },
     ],
@@ -484,13 +702,39 @@ export const services: ServiceContent[] = [
     slug: 'emergency-dentist',
     name: 'Emergency Dentist',
     shortName: 'Emergency',
+    headingName: 'Emergency Dentist',
+    h1: 'Emergency dentist: what to do and what it costs',
+    phrase: 'emergency dental care',
+    costQuestion: 'How much does an emergency dental visit cost in Dubai?',
     summary:
       'An emergency dentist treats urgent problems such as severe toothache, swelling, a knocked-out tooth or a broken tooth, usually the same day.',
-    metaTitle: 'Emergency Dentist in the UAE: What Counts as Urgent & What to Do',
+    answer:
+      'An emergency dentist treats severe toothache, facial swelling, a knocked-out or broken tooth, or bleeding that will not stop, usually the same day. At private clinics in Dubai, an emergency consultation with an X-ray typically costs AED 200 to 800, with treatment extra. The visit takes 30 to 90 minutes. Spreading swelling or breathing difficulty needs a hospital: call 998.',
+    metaTitle: 'Emergency Dentist in Dubai: What to Do, Costs & When to Go',
     metaDescription:
-      'What counts as a dental emergency, what to do before you reach the clinic, when to go to a hospital instead and typical emergency visit costs in the UAE.',
+      'What counts as a dental emergency, first aid for a knocked-out or broken tooth, when to go to hospital instead, and indicative Dubai emergency visit costs.',
+    alternateName: ['urgent dental care', 'emergency dental treatment', '24 hour dentist'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Teeth and gums',
+    costTable: {
+      caption: 'Indicative emergency dental prices at private clinics in Dubai',
+      rows: [
+        { item: 'Emergency consultation and X-ray', from: 200, to: 800, unit: 'per visit' },
+        { item: 'Out-of-hours surcharge', from: 100, to: 500, unit: 'where charged' },
+        { item: 'Pain relief: opening the tooth or draining an abscess', from: 300, to: 1500, unit: 'per tooth' },
+        { item: 'Temporary filling', from: 200, to: 600, unit: 'per tooth' },
+        { item: 'Simple extraction', from: 400, to: 1200, unit: 'per tooth' },
+      ],
+      note: 'The first visit aims to relieve pain and control infection. A root canal, crown or implant is quoted separately.',
+    },
+    sources: [
+      { label: 'International Association of Dental Traumatology: For patients', url: 'https://iadt-dentaltrauma.org/for-patients/' },
+      { label: 'NHS: Knocked-out tooth', url: 'https://www.nhs.uk/conditions/knocked-out-tooth/' },
+      { label: 'NHS: Dental abscess', url: 'https://www.nhs.uk/conditions/dental-abscess/' },
+      MH('dental-emergencies', 'Dental emergencies'),
+    ],
     intro: [
-      'Dental emergencies are usually pain, swelling, trauma or bleeding that will not stop. Many private clinics in the UAE keep same-day slots for urgent cases, and some open late or at weekends. Always phone first to confirm they can see you.',
+      'Dental emergencies are usually pain, swelling, trauma or bleeding that will not stop. Private clinics in Dubai set their own hours and some keep same-day slots for urgent cases, so phone first to confirm a dentist can see you.',
       'Go straight to a hospital emergency department, or call 998 for an ambulance, if swelling is spreading to your eye or neck, you have difficulty breathing or swallowing, or there was a serious injury to the face or head.',
       'A first emergency visit aims to relieve pain and control infection. The full repair, such as a root canal or crown, is often booked separately.',
     ],
@@ -521,9 +765,9 @@ export const services: ServiceContent[] = [
       'Do you bill my insurance directly for emergency care?',
     ],
     faqs: [
-      { q: 'What should I do if a tooth is knocked out?', a: 'Hold it by the crown, not the root. Rinse briefly if dirty, try to place it back in the socket, or keep it in milk, and see a dentist within the hour if possible.' },
+      { q: 'What should I do if a tooth is knocked out?', a: 'Hold it by the crown, not the root. If it is dirty, rinse it briefly in milk or cold water. Replant it in the socket straight away if you can and bite on a clean cloth. If not, store it in milk and see a dentist within 30 minutes. Do not replant a baby tooth.' },
       { q: 'Can I go to a hospital for toothache?', a: 'Hospital emergency departments manage serious swelling, trauma and infection. For toothache alone, an emergency dental clinic is usually quicker and better equipped.' },
-      { q: 'Does insurance cover emergency dental treatment?', a: 'Many UAE health plans, including some basic plans, cover emergency dental care to relieve pain or treat infection. Cosmetic or follow-up work is usually not covered under that benefit.' },
+      { q: 'Does insurance cover emergency dental treatment?', a: 'Emergency treatment to relieve pain or control infection is the dental care most often covered, but what a basic plan pays depends on its wording. Check your policy or call your insurer. Follow-up work such as a crown is usually assessed separately.' },
     ],
     related: ['root-canal', 'wisdom-tooth-removal', 'dental-crowns'],
     insuranceCategory: 'emergency',
@@ -533,11 +777,36 @@ export const services: ServiceContent[] = [
     slug: 'pediatric-dentistry',
     name: 'Children\'s Dentistry',
     shortName: 'Kids',
+    headingName: 'Children\'s Dentist',
+    h1: 'Children\'s dentist: first visits, prevention and cost',
+    phrase: 'children\'s dentistry',
+    costQuestion: 'How much does a children\'s dental visit cost in Dubai?',
     summary:
       'Pediatric dentistry is dental care for babies, children and teens, focused on prevention, gentle treatment and keeping young patients comfortable.',
-    metaTitle: 'Children\'s Dentist in the UAE: First Visits, Prevention & Costs',
+    answer:
+      'A pediatric dentist looks after babies, children and teens, with a focus on prevention. At private clinics in Dubai, a child\'s check-up typically costs AED 200 to 500 and a fissure sealant AED 150 to 400 per tooth. Check-ups take 20 to 45 minutes. The first visit is advised when the first tooth appears or by age one.',
+    metaTitle: 'Pediatric Dentist in Dubai: Children\'s Visits & Costs',
     metaDescription:
-      'When to book your child\'s first dental visit, fissure sealants and fluoride, handling nervous children and indicative AED costs in the UAE. Find family dentists near you.',
+      'When to book a child\'s first dental visit, fluoride varnish and sealants, help for nervous children, sedation, and indicative Dubai prices for kids\' dentistry.',
+    alternateName: ['pediatric dentistry', 'paediatric dentist', 'kids dentist'],
+    schemaType: 'MedicalProcedure',
+    bodyLocation: 'Teeth and gums',
+    costTable: {
+      caption: 'Indicative children\'s dentistry prices at private clinics in Dubai',
+      rows: [
+        { item: 'Child\'s check-up', from: 200, to: 500, unit: 'per visit' },
+        { item: 'Fluoride varnish', from: 100, to: 300, unit: 'per application' },
+        { item: 'Fissure sealant', from: 150, to: 400, unit: 'per tooth' },
+        { item: 'Filling on a baby tooth', from: 300, to: 900, unit: 'per tooth' },
+        { item: 'Treatment under general anaesthetic', from: 4000, to: 15000, unit: 'per session, including facility fees', note: 'Only when genuinely needed' },
+      ],
+      note: 'A specialist pediatric dentist may charge more than a family dentist. Family plans with a dental benefit often cover check-ups.',
+    },
+    sources: [
+      { label: 'American Academy of Pediatric Dentistry: Resources for parents', url: 'https://www.aapd.org/resources/parent/' },
+      { label: 'NHS: Taking care of children\'s teeth', url: 'https://www.nhs.uk/live-well/healthy-teeth-and-gums/taking-care-of-childrens-teeth/' },
+      MH('sealants', 'Sealants'),
+    ],
     intro: [
       'Children\'s teeth are smaller, have thinner enamel and decay faster than adult teeth. A pediatric dentist or family dentist focuses on prevention: check-ups, fluoride varnish, fissure sealants and diet advice.',
       'The first visit is recommended when the first tooth appears or by the first birthday. Early visits are short and mostly about getting the child comfortable in the chair.',
@@ -568,8 +837,8 @@ export const services: ServiceContent[] = [
     ],
     faqs: [
       { q: 'When should my child first see a dentist?', a: 'When the first tooth appears or by age one. Early visits make later ones easier.' },
-      { q: 'Are fissure sealants worth it?', a: 'For many children, yes. They protect the grooves of back teeth, where most childhood decay starts.' },
-      { q: 'Does insurance cover children\'s dental care?', a: 'Family plans with dental benefits often cover check-ups and basic treatment. Some government programmes for UAE nationals include children\'s dental care.' },
+      { q: 'Are fissure sealants worth it?', a: 'For many children, yes. They protect the grooves of back teeth, where childhood decay often starts. They are usually placed when the adult molars come through, around ages 6 and 12.' },
+      { q: 'Does insurance cover children\'s dental care?', a: 'Family plans with dental benefits often cover check-ups and basic treatment, usually up to an annual limit. Check your policy for age rules and whether sealants are included.' },
     ],
     related: ['teeth-cleaning', 'braces', 'emergency-dentist'],
     insuranceCategory: 'pediatric',
@@ -579,14 +848,39 @@ export const services: ServiceContent[] = [
     slug: 'wisdom-tooth-removal',
     name: 'Wisdom Tooth Removal',
     shortName: 'Wisdom Teeth',
+    headingName: 'Wisdom Tooth Removal',
+    h1: 'Wisdom tooth removal: surgery, cost and recovery',
+    phrase: 'wisdom tooth removal',
+    costQuestion: 'How much does wisdom tooth removal cost in Dubai?',
     summary:
       'Wisdom tooth removal is the extraction of one or more third molars, usually because they are impacted, infected or damaging neighbouring teeth.',
-    metaTitle: 'Wisdom Tooth Removal in the UAE: When It\'s Needed, Recovery & Costs',
+    answer:
+      'Wisdom tooth removal takes out a third molar that is impacted, infected or damaging the tooth in front. At private clinics in Dubai, a simple extraction typically costs AED 500 to 1,500 and a surgical removal AED 1,200 to 4,500 per tooth, with sedation extra. It takes 20 to 60 minutes per tooth, plus 1 to 3 days off.',
+    metaTitle: 'Wisdom Tooth Removal in Dubai: Cost, Surgery & Recovery',
     metaDescription:
-      'When wisdom teeth need removing, simple versus surgical extraction, recovery tips and indicative AED costs in the UAE. Find oral surgeons and dentists near you.',
+      'When wisdom teeth need removing, simple vs surgical extraction, sedation, day-by-day recovery and dry socket, and indicative Dubai prices per tooth.',
+    alternateName: ['wisdom teeth extraction', 'third molar removal'],
+    schemaType: 'SurgicalProcedure',
+    bodyLocation: 'Third molars and jaw',
+    costTable: {
+      caption: 'Indicative wisdom tooth removal prices at private clinics in Dubai',
+      rows: [
+        { item: 'Simple extraction (fully erupted tooth)', from: 500, to: 1500, unit: 'per tooth' },
+        { item: 'Surgical removal, partly erupted or under the gum', from: 1200, to: 3000, unit: 'per tooth' },
+        { item: 'Surgical removal, impacted in bone', from: 2000, to: 4500, unit: 'per tooth' },
+        { item: 'IV sedation', from: 1000, to: 3000, unit: 'per session' },
+        { item: 'CBCT (3D) scan', from: 300, to: 1000, unit: 'per scan', note: 'When the tooth is close to the nerve' },
+      ],
+      note: 'Removing several teeth in one session usually costs less per tooth. General anaesthetic in a hospital adds facility fees.',
+    },
+    sources: [
+      { label: 'NHS: Wisdom tooth removal', url: 'https://www.nhs.uk/tests-and-treatments/wisdom-tooth-removal/' },
+      { label: 'NICE: Guidance on the extraction of wisdom teeth (TA1)', url: 'https://www.nice.org.uk/guidance/ta1' },
+      MH('wisdom-teeth', 'Wisdom teeth'),
+    ],
     intro: [
-      'Wisdom teeth are the last molars to come through, usually between 17 and 25. Many people have no room for them, so they come in at an angle or stay partly under the gum (impacted).',
-      'Not every wisdom tooth needs removing. Extraction is usually advised when there is repeated infection, decay, damage to the tooth in front, or a cyst.',
+      'Wisdom teeth are the last molars to come through, usually between 17 and 25. When the jaw has no room for them, they come in at an angle or stay partly under the gum (impacted).',
+      'Not every wisdom tooth needs removing. UK NICE guidance advises against removing healthy, symptom-free wisdom teeth; extraction is usually advised when there is repeated infection, decay, damage to the tooth in front, or a cyst.',
       'A simple extraction is quick. An impacted tooth needs a minor surgical procedure, which an oral surgeon or experienced dentist performs, sometimes with sedation.',
     ],
     goodFor: [
@@ -601,7 +895,7 @@ export const services: ServiceContent[] = [
       { title: 'Removal', detail: 'Simple extraction, or a small incision and sectioning of the tooth if impacted.' },
       { title: 'Aftercare', detail: 'Stitches if needed, written instructions and a review appointment.' },
     ],
-    price: { from: 400, to: 3500, unit: 'per tooth', note: 'Surgical removal of impacted teeth and sedation sit at the upper end.' },
+    price: { from: 500, to: 4500, unit: 'per tooth', note: 'Surgical removal of impacted teeth sits at the upper end; sedation is extra.' },
     priceFactors: ['Simple versus surgical extraction', 'Sedation or general anaesthetic', 'Oral surgeon versus general dentist'],
     duration: '20 to 60 minutes per tooth',
     recovery: 'Swelling peaks at 2 to 3 days; most people take 1 to 3 days off work after surgical removal.',
@@ -627,15 +921,39 @@ export const services: ServiceContent[] = [
     slug: 'dental-crowns',
     name: 'Dental Crowns',
     shortName: 'Crowns',
+    headingName: 'Dental Crowns',
+    h1: 'Dental crowns: materials, process and cost',
+    phrase: 'dental crowns',
+    costQuestion: 'How much does a dental crown cost in Dubai?',
     summary:
-      'A dental crown is a custom cap that covers a damaged or weakened tooth to restore its shape, strength and appearance.',
-    metaTitle: 'Dental Crowns in the UAE: Materials, Process & Costs',
+      'A dental crown (also called a cap) is a custom cover for a damaged or weakened tooth that restores its shape, strength and appearance.',
+    answer:
+      'A dental crown is a custom cap that covers a cracked, heavily filled or root-treated tooth. At private clinics in Dubai, a crown typically costs AED 1,200 to 2,500 in porcelain fused to metal, AED 1,500 to 3,500 in zirconia and AED 1,800 to 4,500 in E.max. It takes one same-day visit or two visits 1 to 2 weeks apart.',
+    metaTitle: 'Dental Crown Cost in Dubai: Zirconia vs E.max vs PFM',
     metaDescription:
-      'When you need a crown, zirconia vs porcelain vs E.max, how they are fitted, how long they last and indicative AED costs in the UAE. Find dentists near you.',
+      'When you need a crown, zirconia vs E.max vs porcelain fused to metal, same-day crowns, how long they last and indicative Dubai prices per crown.',
+    alternateName: ['tooth crown', 'dental cap', 'zirconia crown', 'E.max crown'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative dental crown prices at private clinics in Dubai',
+      rows: [
+        { item: 'Porcelain fused to metal (PFM)', from: 1200, to: 2500, unit: 'per crown' },
+        { item: 'Full zirconia', from: 1500, to: 3500, unit: 'per crown', note: 'Strong; often used on back teeth' },
+        { item: 'E.max (lithium disilicate) or layered zirconia', from: 1800, to: 4500, unit: 'per crown', note: 'Often chosen for front teeth' },
+        { item: 'Same-day milled crown', from: 1800, to: 4000, unit: 'per crown' },
+        { item: 'Core build-up or post before the crown', from: 300, to: 1200, unit: 'per tooth' },
+      ],
+      note: 'A root canal, if needed first, is quoted separately. Ask whether the temporary crown is included.',
+    },
+    sources: [
+      MH('crowns', 'Crowns'),
+      { label: 'NHS: Root canal treatment (crowns after treatment)', url: 'https://www.nhs.uk/tests-and-treatments/root-canal-treatment/' },
+    ],
     intro: [
       'Crowns protect teeth that are cracked, heavily filled or root-canal treated, and they cap dental implants. The tooth is shaped, scanned, and a crown is made to fit over it.',
       'Zirconia is very strong and suits back teeth; lithium disilicate (E.max) and layered porcelain give the most natural look for front teeth. Metal-based crowns are now less common but still durable.',
-      'Some clinics mill crowns on site and can fit them the same day; others use an external lab, which usually means a temporary crown for a week or two.',
+      'Clinics with an in-house milling unit can make and fit a crown the same day. Clinics that use an external lab fit a temporary crown for a week or two while the final one is made.',
     ],
     goodFor: ['Cracked or heavily filled teeth', 'Back teeth after a root canal', 'Covering an implant'],
     notIdealFor: ['Teeth that only need a small filling'],
@@ -652,12 +970,14 @@ export const services: ServiceContent[] = [
     risks: ['Sensitivity', 'Chipping of porcelain', 'Decay at the edge if hygiene is poor'],
     alternatives: [
       { name: 'Onlay', note: 'A partial crown that keeps more natural tooth.' },
-      { name: 'Large filling', note: 'Cheaper short-term, but weaker on heavily damaged teeth.' },
+      { name: 'Large filling', note: 'Cheaper short-term, but weaker on heavily damaged teeth.', slug: 'dental-fillings' },
     ],
     questionsToAsk: ['Which material do you recommend for this tooth, and why?', 'Is the crown made on site or by a lab?', 'Is there a guarantee?'],
     faqs: [
       { q: 'How long does a crown last?', a: 'Commonly 10 to 15 years or more, depending on material, bite forces and hygiene.' },
       { q: 'Does getting a crown hurt?', a: 'The tooth is numbed while it is prepared. It may feel sensitive for a few days afterwards.' },
+      { q: 'Which is better, zirconia or E.max?', a: 'Zirconia is stronger and suits back teeth and people who grind. E.max is more translucent and is often chosen for front teeth. Your dentist will recommend one based on the tooth, your bite and the space available.' },
+      { q: 'How much is a crown in Dubai?', a: 'Indicative private-clinic prices are AED 1,200 to 2,500 for porcelain fused to metal, AED 1,500 to 3,500 for zirconia and AED 1,800 to 4,500 for E.max. Ask for a written quote that includes any build-up and the temporary crown.' },
     ],
     related: ['root-canal', 'dental-implants', 'veneers'],
     insuranceCategory: 'restorative',
@@ -665,7 +985,211 @@ export const services: ServiceContent[] = [
   },
 ];
 
+/**
+ * Fields added on top of the guides in servicesExtra.ts (headings, cost
+ * tables, sources and schema type), kept here so that file stays as written.
+ * Ranges match each guide's own price note.
+ */
+const extraEnrichment: Record<string, Partial<ServiceContent> & { costTable: CostTable }> = {
+  'all-on-4-implants': {
+    headingName: 'All-on-4 & Full-Arch Implants',
+    h1: 'All-on-4 and full-arch implants: process, cost and recovery',
+    phrase: 'All-on-4 implants',
+    costQuestion: 'How much do All-on-4 implants cost in Dubai?',
+    alternateName: ['full-arch implants', 'All-on-6', 'implant-supported bridge', 'teeth in a day'],
+    schemaType: 'SurgicalProcedure',
+    bodyLocation: 'Jaw bone',
+    costTable: {
+      caption: 'Indicative All-on-4 and full-arch implant prices at private clinics in Dubai',
+      rows: [
+        { item: 'Full arch on four to six implants, temporary and final bridge', from: 25000, to: 65000, unit: 'per arch' },
+        { item: 'Implant-retained overdenture (removable, clips on)', from: 15000, to: 35000, unit: 'per arch, including implants' },
+        { item: 'CBCT (3D) scan', from: 300, to: 1000, unit: 'per scan' },
+        { item: 'IV sedation', from: 1000, to: 3000, unit: 'per session' },
+      ],
+      note: 'Some quotes cover the temporary bridge only. Ask for the final bridge material (acrylic or zirconia) and any extractions to be listed.',
+    },
+    sources: [MH('implants', 'Dental implants'), { label: 'International Team for Implantology (ITI)', url: 'https://www.iti.org/' }, DHA],
+  },
+  'gum-treatment': {
+    headingName: 'Gum Disease Treatment',
+    h1: 'Gum disease treatment: deep cleaning, cost and recovery',
+    phrase: 'gum disease treatment',
+    costQuestion: 'How much does gum disease treatment cost in Dubai?',
+    alternateName: ['periodontal treatment', 'deep cleaning', 'scaling and root planing'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Gums and supporting bone',
+    costTable: {
+      caption: 'Indicative gum disease treatment prices at private clinics in Dubai',
+      rows: [
+        { item: 'Full-mouth deep clean (scaling and root planing)', from: 600, to: 3000, unit: 'per course' },
+        { item: 'Deep cleaning charged by section', from: 200, to: 750, unit: 'per quarter of the mouth' },
+        { item: 'Periodontal review and re-measurement', from: 200, to: 600, unit: 'per visit' },
+        { item: 'Gum surgery or grafting by a periodontist', from: 2000, to: 8000, unit: 'per area', note: 'Only for advanced cases' },
+      ],
+      note: 'Ask for your pocket measurements and a written plan before agreeing to treatment.',
+    },
+    sources: [
+      { label: 'NHS: Gum disease', url: 'https://www.nhs.uk/conditions/gum-disease/' },
+      { label: 'European Federation of Periodontology: What is periodontitis?', url: 'https://www.efp.org/for-patients/what-is-periodontitis/' },
+      { label: 'American Academy of Periodontology: For patients', url: 'https://www.perio.org/for-patients/' },
+      MH('gum-disease', 'Gum disease'),
+    ],
+  },
+  'tooth-extraction': {
+    headingName: 'Tooth Extraction',
+    h1: 'Tooth extraction: what happens, cost and aftercare',
+    phrase: 'a tooth extraction',
+    costQuestion: 'How much does a tooth extraction cost in Dubai?',
+    alternateName: ['tooth removal', 'dental extraction', 'pulling a tooth'],
+    schemaType: 'SurgicalProcedure',
+    bodyLocation: 'Teeth and jaw',
+    costTable: {
+      caption: 'Indicative tooth extraction prices at private clinics in Dubai',
+      rows: [
+        { item: 'Simple extraction', from: 300, to: 1000, unit: 'per tooth' },
+        { item: 'Surgical extraction (broken or buried root)', from: 1000, to: 2500, unit: 'per tooth' },
+        { item: 'Bone graft to preserve the socket', from: 1500, to: 5000, unit: 'per site', note: 'If an implant is planned' },
+        { item: 'IV sedation', from: 1000, to: 3000, unit: 'per session' },
+      ],
+      note: 'Wisdom teeth are priced in their own guide. Ask what replacement the dentist suggests and its cost before the tooth comes out.',
+    },
+    sources: [MH('extractions', 'Extractions'), { label: 'NHS: Dental abscess', url: 'https://www.nhs.uk/conditions/dental-abscess/' }],
+  },
+  'dental-fillings': {
+    headingName: 'Dental Fillings',
+    h1: 'Dental fillings: types, cost and what to expect',
+    phrase: 'dental fillings',
+    costQuestion: 'How much does a dental filling cost in Dubai?',
+    alternateName: ['tooth filling', 'white filling', 'composite filling'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative dental filling prices at private clinics in Dubai',
+      rows: [
+        { item: 'Glass ionomer filling', from: 250, to: 500, unit: 'per tooth' },
+        { item: 'Small composite (white) filling', from: 300, to: 600, unit: 'per tooth' },
+        { item: 'Large composite filling on a back tooth', from: 500, to: 900, unit: 'per tooth' },
+        { item: 'Inlay or onlay (lab-made)', from: 1500, to: 3500, unit: 'per tooth', note: 'For larger cavities' },
+      ],
+      note: 'X-rays are sometimes charged separately. Plans with a dental benefit usually cover fillings with a co-payment.',
+    },
+    sources: [
+      { label: 'NHS: Tooth decay', url: 'https://www.nhs.uk/conditions/tooth-decay/' },
+      MH('cavities', 'Cavities'),
+    ],
+  },
+  dentures: {
+    headingName: 'Dentures',
+    h1: 'Dentures: types, cost and implant options',
+    phrase: 'dentures',
+    costQuestion: 'How much do dentures cost in Dubai?',
+    alternateName: ['false teeth', 'partial denture', 'full denture', 'overdenture'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Jaw and gums',
+    costTable: {
+      caption: 'Indicative denture prices at private clinics in Dubai',
+      rows: [
+        { item: 'Acrylic partial denture', from: 1500, to: 3500, unit: 'per arch' },
+        { item: 'Cast-metal (chrome) partial denture', from: 3000, to: 6000, unit: 'per arch' },
+        { item: 'Full denture', from: 2500, to: 8000, unit: 'per arch' },
+        { item: 'Implant-retained overdenture', from: 15000, to: 35000, unit: 'per arch, including implants' },
+        { item: 'Reline or repair', from: 300, to: 1200, unit: 'per denture' },
+      ],
+      note: 'Premium materials and extra try-in visits sit at the upper end. Ask whether adjustments in the first months are included.',
+    },
+    sources: [
+      { label: 'NHS: Dentures', url: 'https://www.nhs.uk/tests-and-treatments/dentures/' },
+      MH('dentures', 'Dentures'),
+    ],
+  },
+  'dental-bridges': {
+    headingName: 'Dental Bridges',
+    h1: 'Dental bridges: types, cost and alternatives',
+    phrase: 'dental bridges',
+    costQuestion: 'How much does a dental bridge cost in Dubai?',
+    alternateName: ['tooth bridge', 'fixed bridge', 'Maryland bridge'],
+    schemaType: 'TherapeuticProcedure',
+    bodyLocation: 'Teeth',
+    costTable: {
+      caption: 'Indicative dental bridge prices at private clinics in Dubai',
+      rows: [
+        { item: 'Bridge unit, porcelain fused to metal', from: 1200, to: 2500, unit: 'per unit' },
+        { item: 'Bridge unit, zirconia or E.max', from: 1500, to: 4000, unit: 'per unit' },
+        { item: 'Three-unit bridge replacing one tooth', from: 3600, to: 12000, unit: 'per bridge' },
+        { item: 'Resin-bonded (Maryland) bridge', from: 1500, to: 4000, unit: 'per bridge' },
+      ],
+      note: 'Implant bridges also include implant fees. Ask how many units the quote covers.',
+    },
+    sources: [MH('bridges', 'Bridges'), MH('crowns', 'Crowns')],
+  },
+  'dental-bonding': {
+    headingName: 'Dental Bonding',
+    h1: 'Dental bonding: cost, results and lifespan',
+    phrase: 'dental bonding',
+    costQuestion: 'How much does dental bonding cost in Dubai?',
+    alternateName: ['composite bonding', 'tooth bonding', 'edge bonding'],
+    schemaType: 'MedicalProcedure',
+    procedureType: 'NoninvasiveProcedure',
+    bodyLocation: 'Front teeth',
+    costTable: {
+      caption: 'Indicative dental bonding prices at private clinics in Dubai',
+      rows: [
+        { item: 'Small chip repair', from: 400, to: 800, unit: 'per tooth' },
+        { item: 'Gap closing or edge reshaping', from: 600, to: 1200, unit: 'per tooth' },
+        { item: 'Full-coverage composite (composite veneer)', from: 800, to: 1500, unit: 'per tooth', note: 'See the veneers guide for lab-made options' },
+      ],
+      note: 'Bonding usually needs polishing or repair after a few years. Ask whether a review and polish visit is included.',
+    },
+    sources: [MH('veneers', 'Veneers'), { label: 'NHS: Chipped, broken or cracked tooth', url: 'https://www.nhs.uk/conditions/chipped-broken-or-cracked-tooth/' }],
+  },
+  'sedation-dentistry': {
+    headingName: 'Sedation Dentistry',
+    h1: 'Sedation dentistry: options, cost and safety',
+    phrase: 'sedation dentistry',
+    costQuestion: 'How much does dental sedation cost in Dubai?',
+    alternateName: ['sleep dentistry', 'IV sedation', 'laughing gas', 'conscious sedation'],
+    schemaType: 'MedicalProcedure',
+    costTable: {
+      caption: 'Indicative dental sedation prices at private clinics in Dubai (on top of treatment)',
+      rows: [
+        { item: 'Laughing gas (nitrous oxide)', from: 300, to: 800, unit: 'per session' },
+        { item: 'Oral sedation (tablet)', from: 300, to: 1000, unit: 'per session' },
+        { item: 'IV sedation', from: 1000, to: 4000, unit: 'per session' },
+        { item: 'General anaesthetic in a hospital or day-surgery unit', from: 4000, to: 15000, unit: 'per session, including facility fees', note: 'For extensive work or special needs' },
+      ],
+      note: 'Sedation is priced separately from the dental treatment. Ask who gives and monitors the sedation and what fees the hospital adds.',
+    },
+    sources: [
+      MH('anesthesia-and-sedation', 'Anesthesia and sedation'),
+      { label: 'NHS: General anaesthesia', url: 'https://www.nhs.uk/tests-and-treatments/general-anaesthesia/' },
+      DHA,
+    ],
+  },
+};
+
+export const services: ServiceContent[] = [
+  ...coreServices,
+  // The extra guide's own fields win; enrichment only fills fields it leaves unset.
+  ...extraServices.map((s) => ({ ...extraEnrichment[s.slug], ...s })),
+];
+
 export const serviceBySlug = (slug: string) => services.find((s) => s.slug === slug);
+
+/** Name for titles and headings. Never use shortName (a chip label) here. */
+export const headingOf = (s: ServiceContent) => s.headingName ?? s.name;
+/** Mid-sentence form, e.g. "dental implants", "Invisalign", "a Hollywood smile". */
+export const phraseOf = (s: ServiceContent) => s.phrase ?? s.name.toLowerCase();
+/** The quotable answer under the H1 (falls back to the summary). */
+export const answerOf = (s: ServiceContent) => s.answer ?? s.summary;
+export const costQuestionOf = (s: ServiceContent) => s.costQuestion ?? `How much does ${phraseOf(s)} cost in Dubai?`;
+/** Cost table, or a one-row table built from the overall range. */
+export const costTableOf = (s: ServiceContent): CostTable =>
+  s.costTable ?? {
+    caption: `Indicative ${phraseOf(s)} prices at private clinics in Dubai`,
+    rows: [{ item: headingOf(s), from: s.price.from, to: s.price.to, unit: s.price.unit }],
+    note: s.price.note,
+  };
 
 /** Services that have hand-written service + emirate guides */
 export const LOCAL_GUIDE_SERVICES = [
@@ -673,8 +1197,13 @@ export const LOCAL_GUIDE_SERVICES = [
   'invisalign',
   'braces',
   'veneers',
+  'hollywood-smile',
   'teeth-whitening',
   'root-canal',
+  'teeth-cleaning',
   'emergency-dentist',
   'pediatric-dentistry',
+  'wisdom-tooth-removal',
+  'dental-crowns',
 ];
+
