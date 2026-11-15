@@ -1,11 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addDays, format } from 'date-fns';
 import { CalendarCheck2, CheckCircle2, Loader2, Phone } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { visitReasons } from '@/content/dubai';
 import { cn } from '@/lib/utils';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 // Request-an-appointment form. Clinics do not publish live calendars on
 // AppointPanda yet, so this never shows "available" times: the patient picks a
@@ -19,6 +20,9 @@ const TIME_WINDOWS = [
 ];
 
 const UAE_PHONE = /^(\+971|00971|0)?5\d{8}$|^(\+971|00971|0)?[2-9]\d{7}$/;
+// Visitors may use a home-country mobile: any international number in + format
+const INTL_PHONE = /^\+(?!971)\d{8,15}$/;
+const ASAP = 'asap';
 
 interface Props {
   clinicId: string;
@@ -28,12 +32,21 @@ interface Props {
   defaultReason?: string;
   /** The clinic manages its own requests on AppointPanda. Otherwise the AppointPanda team contacts the clinic for the patient. */
   clinicClaimed?: boolean;
+  /** Weekdays (0 = Sunday) the clinic lists as closed; they are left out of the day picker. */
+  closedDays?: number[];
   compact?: boolean;
   onDone?: () => void;
 }
 
-export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhone, defaultReason = '', clinicClaimed = false, compact = false, onDone }: Props) {
-  const days = useMemo(() => Array.from({ length: 14 }, (_, i) => addDays(new Date(), i + 1)), []);
+export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhone, defaultReason = '', clinicClaimed = false, closedDays = [], compact = false, onDone }: Props) {
+  // Built in the browser: pages are cached for a day, so dates rendered on the server would go stale
+  const [days, setDays] = useState<Date[]>([]);
+  const closedKey = closedDays.join(',');
+  useEffect(() => {
+    const closed = new Set(closedKey ? closedKey.split(',').map(Number) : []);
+    setDays(Array.from({ length: 21 }, (_, i) => addDays(new Date(), i + 1)).filter((d) => !closed.has(d.getDay())).slice(0, 14));
+  }, [closedKey]);
+  const { trackAppointmentRequest } = useAnalytics();
   const [reason, setReason] = useState(defaultReason);
   const [day, setDay] = useState<string>('');
   const [timeWindow, setTimeWindow] = useState('any');
@@ -52,7 +65,7 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
     setError('');
     const cleanPhone = phone.replace(/[\s-]/g, '');
     if (name.trim().length < 2) return setError('Please enter your name.');
-    if (!UAE_PHONE.test(cleanPhone)) return setError('Please enter a UAE phone number, for example 050 123 4567.');
+    if (!UAE_PHONE.test(cleanPhone) && !INTL_PHONE.test(cleanPhone)) return setError('Please enter a mobile number, for example 050 123 4567, or an international number starting with +.');
     if (!day) return setError('Please choose a preferred day.');
     if (!consent) return setError('Please confirm the clinic may contact you about this request.');
 
@@ -67,10 +80,11 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
       patient_name: name.trim(),
       patient_phone: cleanPhone,
       patient_email: email.trim() || null,
-      preferred_date: day,
+      preferred_date: day === ASAP ? format(new Date(), 'yyyy-MM-dd') : day,
       preferred_time: windowLabel,
       notes: [
         `Visit reason: ${reasonLabel}`,
+        day === ASAP ? 'Wants the first available appointment (as soon as possible).' : '',
         insurance.trim() ? `Insurance: ${insurance.trim()}` : 'Insurance: not given / self-pay',
         notes.trim() ? `Notes: ${notes.trim()}` : '',
         allowAlternative
@@ -95,6 +109,7 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
         .invoke('send-booking-email', { body: { appointmentId, type: 'new_booking', newStatus: 'pending' } })
         .catch(() => {});
     }
+    trackAppointmentRequest({ clinic_id: clinicId, clinic_name: clinicName, ...(dentistId ? { dentist_id: dentistId } : {}), treatment_type: reasonLabel });
     setState('sent');
     onDone?.();
   };
@@ -138,7 +153,15 @@ export function AppointmentRequest({ clinicId, clinicName, dentistId, clinicPhon
 
       <fieldset className="min-w-0">
         <legend className="mb-1 text-xs font-semibold text-zinc-600">Preferred day</legend>
-        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          <button
+            type="button"
+            aria-pressed={day === ASAP}
+            onClick={() => setDay(ASAP)}
+            className={cn('flex w-20 shrink-0 flex-col items-center justify-center rounded-xl border py-2 text-xs font-semibold', day === ASAP ? 'border-ink bg-ink text-white' : 'border-black/10 bg-white text-ink')}
+          >
+            As soon as possible
+          </button>
           {days.map((d) => {
             const value = format(d, 'yyyy-MM-dd');
             return (

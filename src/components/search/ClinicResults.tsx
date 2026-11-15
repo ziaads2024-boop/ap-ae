@@ -20,6 +20,8 @@ export interface ClinicResult {
   distanceKm?: number;
   /** Clinic-listed starting price for the treatment being viewed */
   priceFrom?: number | null;
+  /** The clinic manages requests itself on AppointPanda */
+  claimed?: boolean;
 }
 
 /** Zocdoc-style result cards with a request-an-appointment dialog. */
@@ -71,7 +73,7 @@ export function ClinicResults({ clinics, defaultReason = '', priceLabel }: { cli
         <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto rounded-3xl">
           <DialogTitle className="sr-only">Request an appointment</DialogTitle>
           {requestFor && (
-            <AppointmentRequest clinicId={requestFor.id} clinicName={requestFor.name} clinicPhone={requestFor.phone} defaultReason={defaultReason} />
+            <AppointmentRequest clinicId={requestFor.id} clinicName={requestFor.name} clinicPhone={requestFor.phone} clinicClaimed={!!requestFor.claimed} defaultReason={defaultReason} />
           )}
         </DialogContent>
       </Dialog>

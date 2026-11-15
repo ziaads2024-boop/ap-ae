@@ -13,6 +13,7 @@ import { dbSlugsFor, emirates, isLiveEmirate, services, urls } from '@/content';
 import { dubaiAreas, dubaiAreaBySlug, visitReasons, visitReasonBySlug } from '@/content/dubai';
 import { cn } from '@/lib/utils';
 import { liveImage } from '@/lib/liveImage';
+import { isNonDental } from '@/lib/clinicQuality';
 
 // Zocdoc-style clinic search, Dubai first. Results are live directory data
 // (public, RLS-protected reads); filter URLs canonicalise to /find-clinics/.
@@ -25,6 +26,7 @@ interface ClinicRow {
   rating: number | null;
   review_count: number | null;
   cover_image_url: string | null;
+  claim_status?: string | null;
   latitude: number | null;
   longitude: number | null;
   city: { name: string; slug: string } | null;
@@ -64,7 +66,7 @@ async function insuranceFilter(slug: string): Promise<{ id: string; hasData: boo
   return { id: ins.id, hasData: (count || 0) > 0 };
 }
 
-const dedupe = (rows: ClinicRow[]) => Array.from(new Map(rows.map((r) => [r.id, r])).values());
+const dedupe = (rows: ClinicRow[]) => Array.from(new Map(rows.filter((r) => !isNonDental(r.name)).map((r) => [r.id, r])).values());
 
 export interface SearchResult {
   rows: ClinicRow[];
@@ -98,7 +100,7 @@ async function fetchClinics(opts: { emirate: string; area: string; treatments: s
   const build = (radiusDeg?: number) => {
     // Filters are inner joins, so no long id lists go into the request URL
     const select = [
-      'id, name, slug, phone, rating, review_count, cover_image_url, latitude, longitude, city:cities(name, slug), area:areas(name), clinic_insurances(insurance:insurances(name))',
+      'id, name, slug, phone, rating, review_count, cover_image_url, claim_status, latitude, longitude, city:cities(name, slug), area:areas(name), clinic_insurances(insurance:insurances(name))',
       useTreatment ? 'tf:clinic_treatments!inner(treatment_id)' : '',
       useInsurance ? 'inf:clinic_insurances!inner(insurance_id)' : '',
     ].filter(Boolean).join(', ');
@@ -227,6 +229,9 @@ export default function FindClinicsPage() {
         title="Find a Dentist in Dubai: Search by Area, Treatment & Insurance"
         description="Search dentists in Dubai by area, reason for visit or insurance, compare Google ratings, and request an appointment online."
         canonical="/find-clinics/"
+        // Results load in the browser, so the server HTML has no clinics to index;
+        // /dubai/ and the area pages rank for these searches instead.
+        noindex
       />
 
       <section className="px-3 pt-4 lg:px-6">
@@ -405,7 +410,7 @@ export default function FindClinicsPage() {
         <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto rounded-3xl">
           <DialogTitle className="sr-only">Request an appointment</DialogTitle>
           {requestFor && (
-            <AppointmentRequest clinicId={requestFor.id} clinicName={requestFor.name} clinicPhone={requestFor.phone} defaultReason={reasonSlug} />
+            <AppointmentRequest clinicId={requestFor.id} clinicName={requestFor.name} clinicPhone={requestFor.phone} clinicClaimed={requestFor.claim_status === 'claimed'} defaultReason={reasonSlug} />
           )}
         </DialogContent>
       </Dialog>

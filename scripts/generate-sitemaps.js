@@ -241,7 +241,6 @@ function buildStaticUrls() {
     { loc: normalizeUrl('/'), priority: 1.0, changefreq: 'daily' },
     { loc: normalizeUrl('/insurance'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/blog'), priority: 0.8, changefreq: 'daily' },
-    { loc: normalizeUrl('/find-clinics'), priority: 0.8, changefreq: 'weekly' },
     { loc: normalizeUrl('/tools/dental-cost-calculator'), priority: 0.6, changefreq: 'monthly' },
     { loc: normalizeUrl('/for-clinics'), priority: 0.7, changefreq: 'weekly' },
     { loc: normalizeUrl('/about'), priority: 0.5, changefreq: 'monthly' },
@@ -360,14 +359,28 @@ async function buildServiceLocationUrls(supabase, content) {
   return urls;
 }
 
+// Same rule as the page's robots tag (clinicIndexable in src/lib/clinicQuality.ts):
+// only dental listings with a valid phone, opening hours and 5+ Google reviews
+// (or a claimed profile) are listed.
 async function buildProfileUrls(supabase) {
-  const clinics = await fetchAll(supabase, 'clinics', 'slug, updated_at', {
-    is_active: true,
-    is_duplicate: false,
-  });
+  const quality = require('jiti')(__filename)(path.join(process.cwd(), 'src/lib/clinicQuality.ts'));
+  const [clinics, hours] = await Promise.all([
+    fetchAll(supabase, 'clinics', 'id, slug, name, phone, review_count, claim_status, updated_at', {
+      is_active: true,
+      is_duplicate: false,
+    }),
+    fetchAll(supabase, 'clinic_hours', 'clinic_id, is_closed, open_time'),
+  ]);
+  const withHours = new Set(hours.filter((h) => !h.is_closed && h.open_time).map((h) => h.clinic_id));
 
   return clinics
-    .filter((clinic) => clinic.slug)
+    .filter((clinic) => clinic.slug && quality.clinicIndexable({
+      name: clinic.name,
+      phone: clinic.phone,
+      hasHours: withHours.has(clinic.id),
+      reviewCount: clinic.review_count,
+      claimed: clinic.claim_status === 'claimed',
+    }))
     .map((clinic) => ({
       loc: normalizeUrl(`/clinic/${clinic.slug}`),
       lastmod: clinic.updated_at?.split('T')[0],

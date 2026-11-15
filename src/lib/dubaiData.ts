@@ -3,6 +3,7 @@ import { dubaiAreaBySlug } from '@/content/dubai';
 import { dbSlugsFor, guideSlugForDb } from '@/content';
 import type { ClinicResult } from '@/components/search/ClinicResults';
 import { liveImage } from '@/lib/liveImage';
+import { isNonDental } from '@/lib/clinicQuality';
 
 // Live data for the Dubai area pages. Duplicate slugs in the database
 // (e.g. jbr / jumeirah-beach-residence, veneers / dental-veneers) are merged so
@@ -23,7 +24,7 @@ async function cityIdsFor(areaSlug: string) {
   return { supabase, ids: (data || []).map((c) => c.id) };
 }
 
-const CLINIC_SELECT = 'id, name, slug, phone, rating, review_count, cover_image_url, city:cities(name), area:areas(name), clinic_insurances(insurance:insurances(name))';
+const CLINIC_SELECT = 'id, name, slug, phone, rating, review_count, cover_image_url, claim_status, city:cities(name), area:areas(name), clinic_insurances(insurance:insurances(name))';
 
 function toResult(c: any, priceFrom?: number | null): ClinicResult {
   return {
@@ -37,6 +38,7 @@ function toResult(c: any, priceFrom?: number | null): ClinicResult {
     place: c.area?.name || c.city?.name || null,
     insurances: (c.clinic_insurances || []).map((x: any) => x.insurance?.name).filter(Boolean),
     priceFrom: priceFrom ?? null,
+    claimed: c.claim_status === 'claimed',
   };
 }
 
@@ -53,7 +55,7 @@ export async function fetchAreaData(areaSlug: string): Promise<AreaData> {
     const { supabase, ids } = await cityIdsFor(areaSlug);
     if (!supabase || ids.length === 0) return empty;
     const [{ data: clinics, count }, { data: links }] = await Promise.all([
-      supabase.from('clinics').select(CLINIC_SELECT, { count: 'exact' }).in('city_id', ids).eq('is_active', true).order('review_count', { ascending: false, nullsFirst: false }).limit(12),
+      supabase.from('clinics').select(CLINIC_SELECT, { count: 'exact' }).in('city_id', ids).eq('is_active', true).order('review_count', { ascending: false, nullsFirst: false }).limit(16),
       supabase.from('clinic_treatments').select('clinic_id, treatment:treatments(slug), clinic:clinics!inner(city_id, is_active)').in('clinic.city_id', ids).eq('clinic.is_active', true).limit(10000),
     ]);
     const treatmentCounts: Record<string, number> = {};
@@ -67,7 +69,7 @@ export async function fetchAreaData(areaSlug: string): Promise<AreaData> {
       }
       seen.forEach((set, slug) => { treatmentCounts[slug] = set.size; });
     }
-    return { clinics: (clinics || []).map((c) => toResult(c)), clinicCount: count || 0, treatmentCounts };
+    return { clinics: (clinics || []).filter((c: any) => !isNonDental(c.name)).slice(0, 12).map((c) => toResult(c)), clinicCount: count || 0, treatmentCounts };
   } catch (err) {
     console.error('[dubai area] fetch failed', err);
     return empty;
@@ -89,7 +91,7 @@ export async function fetchAreaServiceData(areaSlug: string, serviceSlug: string
     const { supabase, ids } = await cityIdsFor(areaSlug);
     if (!supabase || ids.length === 0) return empty;
     const { data: top } = await supabase.from('clinics').select(CLINIC_SELECT).in('city_id', ids).eq('is_active', true).order('review_count', { ascending: false, nullsFirst: false }).limit(12);
-    const areaClinics = (top || []).map((c: any) => toResult(c));
+    const areaClinics = (top || []).filter((c: any) => !isNonDental(c.name)).map((c: any) => toResult(c));
     const { data: treatments } = await supabase.from('treatments').select('id').in('slug', dbSlugsFor(serviceSlug));
     const tIds = (treatments || []).map((t) => t.id);
     if (tIds.length === 0) return { ...empty, areaClinics };
@@ -112,7 +114,7 @@ export async function fetchAreaServiceData(areaSlug: string, serviceSlug: string
     const { data: clinics } = await supabase.from('clinics').select(CLINIC_SELECT).in('id', clinicIds.slice(0, 60)).order('review_count', { ascending: false, nullsFirst: false }).limit(30);
     const prices = Array.from(priceBy.values()).filter((p): p is number => !!p && p > 0);
     return {
-      clinics: (clinics || []).map((c: any) => toResult(c, priceBy.get(c.id))),
+      clinics: (clinics || []).filter((c: any) => !isNonDental(c.name)).map((c: any) => toResult(c, priceBy.get(c.id))),
       clinicCount: clinicIds.length,
       areaClinics,
       priceRange: prices.length >= 2 ? { min: Math.min(...prices), max: Math.max(...prices), n: prices.length } : null,

@@ -9,19 +9,18 @@ import { dubaiAreaBySlug } from '@/content/dubai';
 import { breadcrumbSchema, faqSchema } from '@/content/schema';
 import { cn } from '@/lib/utils';
 import { clip, fitTitle } from '@/lib/metaText';
+import { clinicIndexable, hasDentalName, uaePhone } from '@/lib/clinicQuality';
 
 export interface ClinicProfileProps {
   clinic: {
     id: string; name: string; slug: string; description: string | null; address: string | null;
     phone: string | null; whatsapp: string | null; website: string | null; googleMapsUrl: string | null;
     coverImageUrl: string | null; logoUrl: string | null; latitude: number | null; longitude: number | null;
-    rating: number | null; reviewCount: number | null; verified: boolean; claimed: boolean; updatedAt: string | null;
+    rating: number | null; reviewCount: number | null; verified: boolean; claimed: boolean; updatedAt: string | null; googlePlaceId?: string | null;
     city: { name: string; slug: string } | null; emirate: { name: string; slug: string } | null; area: { name: string } | null;
   };
   treatments: { name: string; slug: string; priceFrom: number | null; priceTo: number | null }[];
   dentists: { name: string; slug: string; title: string | null; specializations: string[]; languages: string[]; photoUrl: string | null; yearsExperience: number | null }[];
-  internalReviews: { id: string; rating: number | null; text: string; date: string }[];
-  googleReviews: { id: string; author: string; rating: number | null; text: string; date: string | null }[];
   images: { url: string; alt: string | null }[];
   hours: { day: number; open: string | null; close: string | null; closed: boolean }[];
   insurances: { name: string; slug: string | null }[];
@@ -69,8 +68,43 @@ function dataFaqs(p: ClinicProfileProps): Faq[] {
   return out;
 }
 
+/** Opening days in plain words, e.g. "Saturday to Thursday; closed Friday". */
+function openingSummary(hours: ClinicProfileProps['hours']): string | null {
+  const open = new Set(hours.filter((h) => !h.closed && h.open).map((h) => h.day));
+  if (open.size === 0) return null;
+  if (open.size === 7) return 'every day';
+  const closed = [0, 1, 2, 3, 4, 5, 6].filter((d) => !open.has(d)).map((d) => DAYS[d]);
+  return `${open.size} days a week; closed ${closed.join(' and ')}`;
+}
+
+/** Latest closing time across open days ("until 22:00" etc.), useful for evening visits. */
+function latestClose(hours: ClinicProfileProps['hours']): string | null {
+  const closes = hours.filter((h) => !h.closed && h.close).map((h) => hhmm(h.close)).sort();
+  return closes.length ? closes[closes.length - 1] : null;
+}
+
+/**
+ * Factual summary built only from listing data. Imported descriptions are
+ * mostly marketing copy written for the clinic, so they are shown only once
+ * the clinic has claimed its profile and taken responsibility for them.
+ */
+function factualSummary(p: ClinicProfileProps, place: string, regulator: string | undefined): string {
+  const { clinic, hours } = p;
+  const parts: string[] = [];
+  const kind = hasDentalName(clinic.name) ? 'a dental practice' : 'a medical centre listed for dental care';
+  parts.push(`${clinic.name} is ${kind}${place ? ` in ${place}` : ''}${clinic.address ? `, at ${clinic.address}` : ''}.`);
+  const days = openingSummary(hours);
+  const late = latestClose(hours);
+  if (days) parts.push(`Its listing shows it open ${days}${late && late >= '20:00' ? `, with some days until ${late}` : ''}.`);
+  if (clinic.rating && clinic.reviewCount) {
+    parts.push(`On Google it has a rating of ${clinic.rating.toFixed(1)} from ${clinic.reviewCount.toLocaleString()} reviews; ratings are set by reviewers, not checked by AppointPanda.`);
+  }
+  if (regulator) parts.push(`Dental clinics here are licensed by the ${regulator}, and you can check a dentist's licence with it before treatment.`);
+  return parts.join(' ');
+}
+
 export function ClinicProfile(props: ClinicProfileProps) {
-  const { clinic, treatments, dentists, internalReviews, googleReviews, images, hours, insurances, nearby } = props;
+  const { clinic, treatments, dentists, images, hours, insurances, nearby } = props;
   const emirate = clinic.emirate ? emirateBySlug(clinic.emirate.slug) : undefined;
   const area = clinic.city && clinic.emirate?.slug === 'dubai' ? dubaiAreaBySlug(clinic.city.slug) : undefined;
   const inHealthcareCity = clinic.city?.slug === 'healthcare-city';
@@ -86,8 +120,15 @@ export function ClinicProfile(props: ClinicProfileProps) {
   const faqs = [...props.faqs, ...dataFaqs(props)].slice(0, 8);
   const mapsHref = clinic.googleMapsUrl || (clinic.latitude && clinic.longitude ? `https://www.google.com/maps/search/?api=1&query=${clinic.latitude},${clinic.longitude}` : null);
   const whatsappHref = clinic.whatsapp ? `https://wa.me/${clinic.whatsapp.replace(/[^\d]/g, '')}` : null;
-  const title = fitTitle(`${clinic.name}${place ? ` – Dentist in ${place}` : ''}`, ': Reviews & Prices');
-  const description = clip(`${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See hours, location and Google reviews, and request an appointment.`);
+  const areaName = clinic.area?.name || clinic.city?.name || '';
+  // Avoid "Marina Clinic Dubai Marina – Dentist in Dubai Marina": skip the place when the name already has it
+  const nameHasPlace = areaName && clinic.name.toLowerCase().includes(areaName.toLowerCase());
+  const title = fitTitle(nameHasPlace ? `${clinic.name}, Dubai Dentist` : `${clinic.name}${areaName ? ` – Dentist in ${areaName}` : ''}`, ', Dubai', 50);
+  const summary = factualSummary(props, place, regulator);
+  const phone = uaePhone(clinic.phone);
+  const indexable = clinicIndexable({ name: clinic.name, phone: clinic.phone, hasHours: hours.some((h) => !h.closed && h.open), reviewCount: clinic.reviewCount, claimed: clinic.claimed });
+  const googleReviewsHref = clinic.googlePlaceId ? `https://search.google.com/local/reviews?placeid=${encodeURIComponent(clinic.googlePlaceId)}` : clinic.googleMapsUrl;
+  const description = clip(`${clinic.name}${place ? ` in ${place}` : ''}: ${treatments.length ? `${treatments.slice(0, 4).map((t) => t.name.toLowerCase()).join(', ')}` : 'dental care'}${insurances.length ? `, accepts ${insurances.slice(0, 3).map((i) => i.name).join(', ')}` : ''}. See opening hours, location and Google rating, and request an appointment.`);
   const heroImage = clinic.coverImageUrl || images[0]?.url || null;
   const avatar = clinic.logoUrl || heroImage || '';
 
@@ -99,13 +140,12 @@ export function ClinicProfile(props: ClinicProfileProps) {
     url: `${SITE_URL}${path}`,
     ...(heroImage ? { image: heroImage } : {}),
     ...(clinic.logoUrl ? { logo: clinic.logoUrl } : {}),
-    ...(clinic.description ? { description: clinic.description.slice(0, 500) } : {}),
-    ...(clinic.phone ? { telephone: clinic.phone } : {}),
+    description: clinic.claimed && clinic.description ? clinic.description.slice(0, 500) : summary,
+    ...(phone ? { telephone: phone } : {}),
     address: {
       '@type': 'PostalAddress',
       ...(clinic.address ? { streetAddress: clinic.address } : {}),
-      ...(clinic.city ? { addressLocality: clinic.city.name } : {}),
-      ...(clinic.emirate ? { addressRegion: clinic.emirate.name } : {}),
+      ...(clinic.emirate ? { addressLocality: clinic.emirate.name, addressRegion: clinic.emirate.name } : {}),
       addressCountry: 'AE',
     },
     ...(clinic.latitude && clinic.longitude ? { geo: { '@type': 'GeoCoordinates', latitude: clinic.latitude, longitude: clinic.longitude } } : {}),
@@ -119,12 +159,13 @@ export function ClinicProfile(props: ClinicProfileProps) {
     ...(insurances.length ? { paymentAccepted: insurances.map((i) => i.name).join(', ') } : {}),
     medicalSpecialty: 'https://schema.org/Dentistry',
     ...(treatments.length ? { availableService: treatments.slice(0, 20).map((t) => ({ '@type': 'MedicalProcedure', name: t.name })) } : {}),
-    ...([clinic.website, clinic.googleMapsUrl].filter(Boolean).length ? { sameAs: [clinic.website, clinic.googleMapsUrl].filter(Boolean) } : {}),
+    ...(mapsHref ? { hasMap: mapsHref } : {}),
+    ...(clinic.website ? { sameAs: [clinic.website] } : {}),
   };
 
   return (
     <PageLayout>
-      <SEOHead title={title} description={description} canonical={path} ogImage={heroImage || undefined} />
+      <SEOHead title={title} description={description} canonical={path} ogImage={heroImage || undefined} noindex={!indexable} />
       <JsonLd data={[dentistSchema, breadcrumbSchema(crumbs), faqSchema(faqs)]} />
 
       <div className="mx-auto max-w-6xl px-5 pt-6">
@@ -164,20 +205,23 @@ export function ClinicProfile(props: ClinicProfileProps) {
                     <BadgeCheck className="h-4 w-4" /> Verified listing
                   </Link>
                 )}
-                {regulator && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-tone-sky px-3 py-1.5 font-medium text-ink">
-                    <ShieldCheck className="h-4 w-4" /> Licensed by {regulator}
-                  </span>
-                )}
               </div>
               {regulator && (
-                <p className="mt-3 text-xs text-zinc-500">
-                  Licensing body for this area. You can check a dentist&apos;s individual licence with the {regulator}.
+                <p className="mt-3 flex items-start gap-1.5 text-xs text-zinc-600">
+                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  <span>
+                    Regulator: {regulator}. AppointPanda has not checked this clinic&apos;s licence;{' '}
+                    {clinic.emirate?.slug === 'dubai' && !inHealthcareCity ? (
+                      <a href="https://services.dha.gov.ae/sheryan/wps/portal/home/medical-directory" target="_blank" rel="noopener noreferrer" className="underline">look it up in the DHA medical directory</a>
+                    ) : (
+                      <>you can check it with the {regulator}</>
+                    )}.
+                  </span>
                 </p>
               )}
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {clinic.phone && <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ink"><Phone className="h-4 w-4" /> Call</a>}
+                {phone && <a href={`tel:${phone}`} className="btn-ink"><Phone className="h-4 w-4" /> Call</a>}
                 {whatsappHref && <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="btn-ghost"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
                 {mapsHref && <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="btn-ghost"><Navigation className="h-4 w-4" /> Directions</a>}
                 {clinic.website && <a href={clinic.website} target="_blank" rel="noopener noreferrer nofollow" className="btn-ghost"><Globe className="h-4 w-4" /> Website</a>}
@@ -199,13 +243,23 @@ export function ClinicProfile(props: ClinicProfileProps) {
 
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 py-10 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="min-w-0 space-y-10">
-          {clinic.description && (
-            <section>
-              <h2 className="display text-4xl text-ink">About the clinic</h2>
-              <p className="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-zinc-700">{clinic.description}</p>
-              <p className="mt-2 text-xs text-zinc-500">Description provided by the clinic or taken from its public listing.</p>
-            </section>
-          )}
+          <section>
+            <h2 className="display text-4xl text-ink">About the clinic</h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-zinc-700">{summary}</p>
+            {clinic.claimed && clinic.description && (
+              <>
+                <h3 className="mt-6 font-semibold text-ink">From the clinic</h3>
+                <p className="mt-2 whitespace-pre-line text-[15px] leading-relaxed text-zinc-700">{clinic.description}</p>
+                <p className="mt-2 text-xs text-zinc-500">Written by the clinic, which manages this profile.</p>
+              </>
+            )}
+            {area && (
+              <p className="mt-4 rounded-2xl bg-paper p-4 text-sm leading-relaxed text-zinc-700">
+                <span className="font-semibold text-ink">Getting to {area.name}: </span>{area.gettingThere}{' '}
+                <Link prefetch={false} href={urls.dubaiArea(area.slug)} className="underline">Dentists in {area.name}</Link>
+              </p>
+            )}
+          </section>
 
           {treatments.length > 0 && (
             <section>
@@ -233,15 +287,16 @@ export function ClinicProfile(props: ClinicProfileProps) {
             </section>
           )}
 
+          {insurances.length > 0 && (
           <section>
             <h2 className="display text-4xl text-ink">Insurance</h2>
-            {insurances.length ? (
+            {insurances.length > 0 && (
               <>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {insurances.map((i) => (
                     <li key={i.name}>
                       {i.slug && clinic.emirate ? (
-                        <Link prefetch={false} href={`/insurance/${i.slug}/${clinic.emirate.slug}/`} className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</Link>
+                        <Link prefetch={false} href={`/insurance/${i.slug}/`} className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</Link>
                       ) : (
                         <span className="inline-block rounded-full bg-tone-sky px-3 py-1.5 text-sm font-medium text-ink">{i.name}</span>
                       )}
@@ -250,10 +305,9 @@ export function ClinicProfile(props: ClinicProfileProps) {
                 </ul>
                 <p className="mt-2 text-xs text-zinc-500">Insurers listed by the clinic. Your cover depends on your plan; the clinic can check before treatment.</p>
               </>
-            ) : (
-              <p className="mt-3 text-sm text-zinc-600">This clinic has not listed its insurance networks. Ask when you request an appointment.</p>
             )}
           </section>
+          )}
 
           {dentists.length > 0 && (
             <section>
@@ -326,36 +380,21 @@ export function ClinicProfile(props: ClinicProfileProps) {
             </section>
           )}
 
-          <section>
-            <h2 className="display text-4xl text-ink">Reviews</h2>
-            {googleReviews.length === 0 && internalReviews.length === 0 ? (
-              <p className="mt-3 text-sm text-zinc-600">No reviews to show yet.</p>
-            ) : (
-              <div className="mt-4 space-y-3">
-                {googleReviews.map((r) => (
-                  <article key={r.id} className="rounded-2xl border border-black/10 bg-white p-5">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="font-semibold text-ink">{r.author}</p>
-                      {r.rating && <span className="flex items-center gap-2 text-sm"><Stars rating={r.rating} /> <span className="sr-only">{r.rating} out of 5</span></span>}
-                    </div>
-                    <p className="mt-2 text-[15px] leading-relaxed text-zinc-700">{r.text}</p>
-                    <p className="mt-2 text-xs text-zinc-500">Google review{r.date ? ` · ${new Date(r.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}` : ''}</p>
-                  </article>
-                ))}
-                {internalReviews.map((r) => (
-                  <article key={r.id} className="rounded-2xl border border-black/10 bg-white p-5">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="font-semibold text-ink">Patient feedback</p>
-                      {r.rating && <Stars rating={r.rating} />}
-                    </div>
-                    <p className="mt-2 text-[15px] leading-relaxed text-zinc-700">{r.text}</p>
-                    <p className="mt-2 text-xs text-zinc-500">Left through the clinic&apos;s AppointPanda feedback link · {new Date(r.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</p>
-                  </article>
-                ))}
-                <p className="text-xs text-zinc-500">We show reviews as written and do not edit them. Google reviews are copied from the clinic&apos;s public Google profile.</p>
+          {clinic.rating && clinic.reviewCount ? (
+            <section>
+              <h2 className="display text-4xl text-ink">Reviews</h2>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-black/10 bg-white p-5">
+                <div className="flex items-center gap-3">
+                  <Stars rating={clinic.rating} />
+                  <p className="text-sm text-zinc-700"><strong className="text-ink">{clinic.rating.toFixed(1)}</strong> from {clinic.reviewCount.toLocaleString()} Google reviews</p>
+                </div>
+                {googleReviewsHref && (
+                  <a href={googleReviewsHref} target="_blank" rel="noopener noreferrer nofollow" className="btn-ghost text-sm">Read reviews on Google <ExternalLink className="h-4 w-4" /></a>
+                )}
               </div>
-            )}
-          </section>
+              <p className="mt-2 text-xs text-zinc-500">Rating and count as shown on Google. AppointPanda does not collect, filter or edit these reviews.</p>
+            </section>
+          ) : null}
 
           {faqs.length > 0 && (
             <section>
@@ -388,12 +427,12 @@ export function ClinicProfile(props: ClinicProfileProps) {
         <aside id="request" className="min-w-0 scroll-mt-24 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
             {!clinic.emirate || isLiveEmirate(clinic.emirate.slug) ? (
-              <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={clinic.phone} clinicClaimed={clinic.claimed} compact />
+              <AppointmentRequest clinicId={clinic.id} clinicName={clinic.name} clinicPhone={phone} clinicClaimed={clinic.claimed} closedDays={hours.filter((h) => h.closed).map((h) => h.day)} compact />
             ) : (
               <div className="text-sm leading-relaxed text-zinc-700">
                 <p className="text-base font-semibold text-ink">Online requests coming soon to {clinic.emirate.name}</p>
                 <p className="mt-2">AppointPanda currently takes appointment requests for Dubai clinics only. To book with {clinic.name}, contact the clinic directly.</p>
-                {clinic.phone && <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ink mt-4 w-full"><Phone className="h-4 w-4" /> Call {clinic.phone}</a>}
+                {phone && <a href={`tel:${phone}`} className="btn-ink mt-4 w-full"><Phone className="h-4 w-4" /> Call {clinic.phone}</a>}
                 <Link prefetch={false} href="/dubai/" className="btn-ghost mt-2 w-full">Find a dentist in Dubai</Link>
               </div>
             )}
@@ -411,8 +450,8 @@ export function ClinicProfile(props: ClinicProfileProps) {
         {(!clinic.emirate || isLiveEmirate(clinic.emirate.slug)) && (
           <a href="#request" className="btn-ink flex-1">Request appointment</a>
         )}
-        {clinic.phone && (
-          <a href={`tel:${clinic.phone.replace(/\s/g, '')}`} className="btn-ghost flex-1"><Phone className="h-4 w-4" /> Call</a>
+        {phone && (
+          <a href={`tel:${phone}`} className="btn-ghost flex-1"><Phone className="h-4 w-4" /> Call</a>
         )}
       </div>
       <div className="h-20 lg:hidden" aria-hidden="true" />
