@@ -50,7 +50,11 @@ const VisitorTracker = dynamic(
   { ssr: false }
 );
 
-export default function App({ Component, pageProps }: AppProps) {
+// The chat button competes with the request form on booking pages
+const NO_CHAT = ['/clinic/', '/dentist/', '/find-clinics', '/appointment/', '/review/', '/rq/', '/form/'];
+
+export default function App({ Component, pageProps, router }: AppProps) {
+  const showChat = !NO_CHAT.some((p) => router.pathname.startsWith(p));
   const fontClass = `${arabicFont.variable} ${displayFont.variable}`;
   const [queryClient] = useState(
     () =>
@@ -77,7 +81,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <VisitorTracker />
               <DynamicFavicon />
               <CriticalResourceLoader delay={3000} />
-              <PandaBot />
+              {showChat && <PandaBot />}
             </AnalyticsProvider>
           </AuthProvider>
         </HydrationBoundary>
