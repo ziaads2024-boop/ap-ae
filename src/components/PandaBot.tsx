@@ -207,7 +207,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                 a: ({ href, children }) => (
                   <button
                     onClick={() => href && handleLinkClick(href)}
-                    className="text-primary underline hover:text-primary/80 font-medium"
+                    className="text-ink underline underline-offset-2 font-medium"
                   >
                     {children}
                   </button>
@@ -227,10 +227,10 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
               <button
                 key={i}
                 onClick={() => handleLinkClick(link.url)}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-medium rounded-full transition-colors border border-primary/20"
+                className="inline-flex min-h-9 items-center gap-1 px-3 py-1.5 bg-white hover:border-ink text-ink text-xs font-semibold rounded-full transition-colors border border-black/15"
               >
                 {link.label}
-                <span className="text-[10px]">→</span>
+                <span aria-hidden="true" className="text-[10px]">→</span>
               </button>
             ))}
           </div>
@@ -242,21 +242,23 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
   if (!isOpen) {
     return (
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
+        aria-label="Open the AppointPanda chat assistant"
         className={cn(
-          "fixed bottom-24 right-4 lg:bottom-6 md:right-6 w-12 h-12 md:w-14 md:h-14 rounded-full shadow-2xl z-50",
-          "bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70",
-          "text-primary-foreground transition-all duration-300 hover:scale-110",
-          "border border-primary-foreground/10 flex items-center justify-center",
-          "animate-pulse hover:animate-none",
+          // Plain ink circle; sits above the mobile sticky action bar and the iOS home indicator
+          "fixed right-4 z-40 grid size-12 place-items-center rounded-full bg-ink text-white md:right-6 md:size-14",
+          "bottom-[calc(5.5rem+env(safe-area-inset-bottom))] lg:bottom-6",
+          "shadow-[0_6px_20px_rgba(18,18,18,0.22)] ring-1 ring-white/20 transition-colors hover:bg-[#2a2a2a]",
+          "focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-ink",
           className
         )}
-        style={{ animationDuration: '3s' }}
       >
         <img
           src={iconUrl}
-          alt="Chat"
-          className="h-6 w-6 md:h-8 md:w-8 object-contain"
+          alt=""
+          aria-hidden="true"
+          className="h-6 w-6 object-contain md:h-7 md:w-7"
           onError={(e) => {
             e.currentTarget.src = '/logo.png';
           }}
@@ -268,10 +270,10 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
   return (
     <div
       className={cn(
-        "fixed z-50 shadow-2xl overflow-hidden",
+        "fixed z-50 shadow-[0_20px_50px_rgba(0,0,0,0.18)] overflow-hidden",
         "bg-card border border-border",
         // Mobile: Full width bottom sheet style
-        "bottom-0 right-0 left-0 md:bottom-6 md:right-6 md:left-auto",
+        "bottom-0 right-0 left-0 pb-[env(safe-area-inset-bottom)] md:pb-0 md:bottom-6 md:right-6 md:left-auto",
         "rounded-t-2xl md:rounded-2xl",
         isMinimized ? "h-14 md:w-72" : "h-[85vh] md:h-[500px] md:w-[360px]",
         "transition-all duration-300 ease-in-out flex flex-col",
@@ -279,7 +281,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
       )}
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-3 flex items-center justify-between shrink-0">
+      <div className="bg-ink text-white p-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center overflow-hidden">
             <img
@@ -302,16 +304,18 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-primary-foreground hover:bg-primary-foreground/20"
+            className="h-10 w-10 text-white hover:bg-white/15 hover:text-white"
             onClick={() => setIsMinimized(!isMinimized)}
+            aria-label={isMinimized ? 'Expand chat' : 'Minimise chat'}
           >
             {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7 text-primary-foreground hover:bg-primary-foreground/20"
+            className="h-10 w-10 text-white hover:bg-white/15 hover:text-white"
             onClick={() => setIsOpen(false)}
+            aria-label="Close chat"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -324,7 +328,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
           <ScrollArea className="flex-1 p-3" ref={scrollRef}>
             {messages.length === 0 && (
               <div className="text-center py-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3 overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-paper flex items-center justify-center mx-auto mb-3 overflow-hidden">
                   <img
                     src={iconUrl}
                     alt=""
@@ -334,20 +338,20 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                     }}
                   />
                 </div>
-                <p className="text-sm font-medium text-foreground mb-1">Hi! I'm your dental assistant 🦷</p>
+                <p className="text-sm font-medium text-foreground mb-1">Hi, I can help you find a dentist in Dubai</p>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Tell me what you're looking for and I'll help you find the perfect dentist.
+                  Tell me what you need and where you are, and I will point you to clinics and guides. I am not a dentist and cannot give medical advice.
                 </p>
                 <div className="space-y-1.5">
                   {[
-                    "Find a dentist in Dubai for cleaning",
-                    "What dental clinics accept insurance in Abu Dhabi?",
-                    "I need emergency dental care in Sharjah"
+                    "Find a dentist in Dubai for a cleaning",
+                    "Which clinics in Dubai Marina take my insurance?",
+                    "I need an emergency dentist in Dubai"
                   ].map((q, i) => (
                     <button
                       key={i}
                       onClick={() => sendMessage(q)}
-                      className="block w-full text-left px-3 py-2 bg-muted/50 hover:bg-muted rounded-lg text-xs font-medium text-foreground transition-colors"
+                      className="block min-h-11 w-full text-left px-3 py-2.5 bg-paper hover:bg-zinc-100 rounded-lg text-sm font-medium text-ink transition-colors"
                     >
                       {q}
                     </button>
@@ -365,7 +369,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                   )}
                 >
                   {message.role === 'assistant' && (
-                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <div className="w-6 h-6 rounded-full bg-paper flex items-center justify-center flex-shrink-0 overflow-hidden">
                       <img
                         src={iconUrl}
                         alt=""
@@ -380,7 +384,7 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                     className={cn(
                       "max-w-[85%] rounded-xl px-3 py-2 text-sm",
                       message.role === 'user'
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-ink text-white"
                         : "bg-muted"
                     )}
                   >
@@ -393,15 +397,15 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                     )}
                   </div>
                   {message.role === 'user' && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <User className="h-3 w-3 text-primary-foreground" />
+                    <div className="w-6 h-6 rounded-full bg-ink flex items-center justify-center flex-shrink-0">
+                      <User className="h-3 w-3 text-white" />
                     </div>
                   )}
                 </div>
               ))}
               {isLoading && messages[messages.length - 1]?.role === 'user' && (
                 <div className="flex gap-2 justify-start">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <div className="w-6 h-6 rounded-full bg-paper flex items-center justify-center flex-shrink-0 overflow-hidden">
                     <img
                       src={iconUrl}
                       alt=""
@@ -432,13 +436,15 @@ export function PandaBot({ className, iconUrl = '/favicon.png' }: PandaBotProps)
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask me anything..."
                 disabled={isLoading}
-                className="flex-1 text-sm h-9"
+                className="flex-1 text-base md:text-sm h-11"
+                aria-label="Message the assistant"
               />
               <Button
                 type="submit"
                 size="icon"
                 disabled={isLoading || !input.trim()}
-                className="h-9 w-9"
+                className="h-11 w-11 bg-ink text-white hover:bg-[#2a2a2a]"
+                aria-label="Send message"
               >
                 <Send className="h-4 w-4" />
               </Button>

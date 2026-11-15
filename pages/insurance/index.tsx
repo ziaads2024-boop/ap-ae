@@ -29,13 +29,18 @@ export default function InsuranceHub({ insurers }: Props) {
         subtitle="Most dental cover in the UAE comes with an enhanced or employer plan, with an annual limit and a co-payment. Here is what to check before treatment, and how to find a clinic in your network."
         breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Insurance' }]}
         tone="lime"
-      />
+      >
+        <div className="flex flex-wrap gap-3">
+          <a href="#insurers" className="btn-ink">Find clinics by insurer <ChevronRight className="h-4 w-4" aria-hidden="true" /></a>
+          <Link href="/find-clinics/" className="btn-ghost">Search all clinics</Link>
+        </div>
+      </PageHero>
 
       <div className="mx-auto max-w-5xl px-5">
         <Section eyebrow="The basics" title="How dental insurance works here">
           <div className="grid gap-4 md:grid-cols-2">
             {insuranceBasics.map((b) => (
-              <div key={b.title} className="rounded-3xl border border-black/10 bg-white p-6">
+              <div key={b.title} className="block-card-static p-6">
                 <h3 className="font-semibold text-ink">{b.title}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-zinc-700">{b.text}</p>
               </div>
@@ -47,23 +52,23 @@ export default function InsuranceHub({ insurers }: Props) {
           <BulletList items={insuranceQuestions} tone="lime" />
         </Section>
 
-        <Section eyebrow="Insurers" title="Find clinics by insurer">
+        <Section id="insurers" eyebrow="Insurers" title="Find clinics by insurer">
           <p className="mb-5 max-w-3xl text-sm leading-relaxed text-zinc-600">
             Each page shows clinics that have confirmed on AppointPanda that they accept the plan. Networks change and differ between plans
             from the same insurer, so always confirm with the clinic before treatment.
           </p>
           <ul className="grid gap-3 md:grid-cols-2">
-            {insurers.map((ins) => (
+            {[...insurers].sort((a, b) => b.clinicCount - a.clinicCount).map((ins) => (
               <li key={ins.slug}>
                 <Link href={`/insurance/${ins.slug}/`} className="block-card flex items-center gap-4 p-5">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-tone-lime" aria-hidden="true"><ShieldCheck className="h-5 w-5" /></span>
                   <span className="min-w-0 flex-1">
                     <span className="block font-semibold text-ink">{ins.name}</span>
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-zinc-600">
                       {ins.clinicCount > 0 ? `${ins.clinicCount} clinic${ins.clinicCount === 1 ? '' : 's'} confirmed` : 'No clinics confirmed yet'}
                     </span>
                   </span>
-                  <ChevronRight className="h-4 w-4 shrink-0" />
+                  <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
                 </Link>
               </li>
             ))}

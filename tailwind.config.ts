@@ -40,6 +40,10 @@ const config: Config = {
           lime: "var(--tone-lime)",
           sand: "var(--tone-sand)",
         },
+        // Legacy names still referenced by older pages; mapped to accessible brand-safe values
+        teal: { DEFAULT: "var(--primary)", foreground: "#FFFFFF" },
+        gold: { DEFAULT: "#8A6100", light: "#F6EBCB", foreground: "#FFFFFF" },
+        coral: { DEFAULT: "#B4235A", light: "#F9DCE8", foreground: "#FFFFFF" },
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",

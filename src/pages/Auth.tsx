@@ -7,11 +7,13 @@ import { buildGmbAuthCallbackUrl, clearAllGmbCache, hasActiveGmbFlow } from '@/l
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Logo } from '@/components/Navbar';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -159,20 +161,25 @@ export default function Auth() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex items-center justify-center bg-paper" role="status" aria-label="Loading">
+        <Loader2 className="h-8 w-8 animate-spin text-ink" aria-hidden="true" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen flex-col bg-paper text-ink">
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5">
+        <Logo />
+        <Link href="/" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-ink hover:underline">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to site
+        </Link>
+      </header>
+      <main id="main" className="flex flex-1 items-start justify-center px-4 pb-12 pt-4 sm:items-center">
+      <Card className="w-full max-w-md rounded-[1.5rem] border-black/10 shadow-none">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-coral bg-clip-text text-transparent">
-            AppointPanda
-          </CardTitle>
-          <CardDescription>
+          <h1 className="text-2xl font-semibold tracking-tight text-ink">Log in to AppointPanda</h1>
+          <CardDescription className="text-zinc-600">
             Sign in to manage your dental practice or your appointment requests
           </CardDescription>
         </CardHeader>
@@ -180,7 +187,7 @@ export default function Auth() {
           {/* Google Sign In Button */}
           <Button
             variant="outline"
-            className="w-full mb-6 h-12"
+            className="w-full mb-6 h-12 rounded-full border-black/15 text-base font-semibold"
             onClick={handleGoogleSignIn}
             disabled={isGoogleLoading}
           >
@@ -189,7 +196,7 @@ export default function Auth() {
             ) : (
               <img
                 src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"
-                alt="Google"
+                alt=""
                 className="h-5 w-5 mr-2"
               />
             )}
@@ -201,14 +208,14 @@ export default function Auth() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-3 text-muted-foreground">Or continue with email</span>
+              <span className="bg-card px-3 text-zinc-600">Or continue with email</span>
             </div>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid h-12 w-full grid-cols-2 rounded-full bg-paper p-1">
+              <TabsTrigger value="login" className="rounded-full data-[state=active]:bg-white">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="rounded-full data-[state=active]:bg-white">Sign Up</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
@@ -219,6 +226,8 @@ export default function Auth() {
                     id="login-email"
                     type="email"
                     placeholder="you@example.com"
+                    autoComplete="email"
+                    className="h-12"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     required
@@ -230,12 +239,14 @@ export default function Auth() {
                     id="login-password"
                     type="password"
                     placeholder="••••••••"
+                    autoComplete="current-password"
+                    className="h-12"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="h-12 w-full rounded-full bg-ink text-base font-semibold text-white hover:bg-[#2a2a2a]" disabled={isSubmitting} aria-busy={isSubmitting}>
                   {isSubmitting ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
@@ -249,6 +260,8 @@ export default function Auth() {
                     id="signup-name"
                     type="text"
                     placeholder="Dr. John Smith"
+                    autoComplete="name"
+                    className="h-12"
                     value={signupName}
                     onChange={(e) => setSignupName(e.target.value)}
                   />
@@ -259,6 +272,8 @@ export default function Auth() {
                     id="signup-email"
                     type="email"
                     placeholder="you@example.com"
+                    autoComplete="email"
+                    className="h-12"
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     required
@@ -270,12 +285,14 @@ export default function Auth() {
                     id="signup-password"
                     type="password"
                     placeholder="••••••••"
+                    autoComplete="new-password"
+                    className="h-12"
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="h-12 w-full rounded-full bg-ink text-base font-semibold text-white hover:bg-[#2a2a2a]" disabled={isSubmitting} aria-busy={isSubmitting}>
                   {isSubmitting ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
@@ -283,6 +300,7 @@ export default function Auth() {
           </Tabs>
         </CardContent>
       </Card>
+      </main>
     </div>
   );
 }

@@ -3,10 +3,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { Section } from "@/components/layout/Section";
-import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { GuideCta } from "@/components/guide/GuideBlocks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { getContentBody, calculateReadingTime } from "@/lib/blogContent";
@@ -15,7 +12,7 @@ import { BlogDentistList } from "@/components/blog/BlogDentistList";
 import { BlogFAQList } from "@/components/blog/BlogFAQList";
 import {
   Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin,
-  MapPin, Search, Phone, Star, Shield, ArrowRight
+  MapPin, Search, Phone, ArrowRight, BookOpen
 } from "lucide-react";
 import { format } from "date-fns";
 import { liveImage, stripBlockedImages } from '@/lib/liveImage';
@@ -115,7 +112,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
           title="Loading..."
           description="Loading blog post..."
         />
-        <div className="container py-8">
+        <div className="mx-auto max-w-6xl px-5 py-8">
           <Skeleton className="h-96 rounded-3xl mb-8" />
           <div className="max-w-3xl mx-auto space-y-4">
             <Skeleton className="h-12 w-3/4" />
@@ -130,17 +127,15 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
   if (!post) {
     return (
       <PageLayout>
-        <Section>
+        <section className="mx-auto max-w-6xl px-5">
           <div className="text-center py-20">
-            <h1 className="font-display text-3xl font-bold mb-4">Post Not Found</h1>
-            <p className="text-muted-foreground mb-8">
+            <h1 className="heading-section mb-4">Post not found</h1>
+            <p className="text-zinc-600 mb-8">
               The blog post you're looking for doesn't exist.
             </p>
-            <Button asChild className="rounded-xl font-bold">
-              <Link prefetch={false} href="/blog/">Back to Blog</Link>
-            </Button>
+            <Link prefetch={false} href="/blog/" className="btn-ink">Back to articles</Link>
           </div>
-        </Section>
+        </section>
       </PageLayout>
     );
   }
@@ -250,25 +245,25 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
       .split('\n')
       .map((line, i) => {
         if (line.startsWith('# ')) {
-          return <h2 key={i} className="text-3xl font-bold mt-8 mb-4">{renderInlineContent(line.slice(2))}</h2>;
+          return <h2 key={i}>{renderInlineContent(line.slice(2))}</h2>;
         } else if (line.startsWith('## ')) {
-          return <h2 key={i} className="text-2xl font-bold mt-8 mb-4">{renderInlineContent(line.slice(3))}</h2>;
+          return <h2 key={i}>{renderInlineContent(line.slice(3))}</h2>;
         } else if (line.startsWith('### ')) {
-          return <h3 key={i} className="text-xl font-bold mt-6 mb-3">{renderInlineContent(line.slice(4))}</h3>;
+          return <h3 key={i}>{renderInlineContent(line.slice(4))}</h3>;
         } else if (line.startsWith('- **')) {
           const match = line.match(/- \*\*(.+?)\*\*:?\s*(.*)/);
           if (match) {
             return (
-              <li key={i} className="ml-6 mb-2">
-                <strong className="text-foreground">{match[1]}</strong>
+              <li key={i} className="ml-6 list-disc">
+                <strong>{match[1]}</strong>
                 {match[2] && <span>: {renderInlineContent(match[2])}</span>}
               </li>
             );
           }
         } else if (line.startsWith('- ')) {
-          return <li key={i} className="ml-6 mb-2">{renderInlineContent(line.slice(2))}</li>;
+          return <li key={i} className="ml-6 list-disc">{renderInlineContent(line.slice(2))}</li>;
         } else if (line.match(/^\d+\.\s/)) {
-          return <li key={i} className="ml-6 mb-2 list-decimal">{renderInlineContent(line.replace(/^\d+\.\s/, ''))}</li>;
+          return <li key={i} className="ml-6 list-decimal">{renderInlineContent(line.replace(/^\d+\.\s/, ''))}</li>;
         } else if (line.match(/^!\[.*?\]\(.*?\)$/)) {
           // Image markdown: ![alt](url)
           const imgMatch = line.match(/^!\[(.*?)\]\((.*?)\)$/);
@@ -283,7 +278,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
                   loading="lazy"
                 />
                 {imgMatch[1] && (
-                  <figcaption className="text-sm text-muted-foreground text-center mt-2">
+                  <figcaption className="mt-2 text-center text-sm text-zinc-600">
                     {imgMatch[1]}
                   </figcaption>
                 )}
@@ -291,11 +286,11 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
             );
           }
         } else if (line.trim() === '') {
-          return <div key={i} className="h-4" />;
+          return null;
         } else {
-          return <p key={i} className="mb-4 leading-relaxed">{renderInlineContent(line)}</p>;
+          return <p key={i}>{renderInlineContent(line)}</p>;
         }
-        return <p key={i} className="mb-4 leading-relaxed">{line}</p>;
+        return <p key={i}>{line}</p>;
       });
   };
 
@@ -324,7 +319,6 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
               href={linkUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
             >
               {match[2]}
             </a>
@@ -332,7 +326,6 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
             <Link
               key={`link-${match.index}`}
               href={linkUrl}
-              className="text-primary hover:underline"
             >
               {match[2]}
             </Link>
@@ -383,7 +376,7 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
               loading="lazy"
             />
             {b.imageAlt && (
-              <figcaption className="text-sm text-muted-foreground text-center mt-2">
+              <figcaption className="mt-2 text-center text-sm text-zinc-600">
                 {b.imageAlt}
               </figcaption>
             )}
@@ -394,14 +387,10 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
       if (b.type === "heading") {
         // Never use h1 for content headings - only h2 and h3 (main title is already h1)
         const HTag = (b.headingLevel === "h3" ? "h3" : "h2") as "h2" | "h3";
-        const headingClass =
-          HTag === "h3"
-            ? "text-xl font-bold mt-6 mb-3"
-            : "text-2xl font-bold mt-8 mb-4";
 
         return (
           <div key={b.id || `heading-${i}`}>
-            {b.headingText ? <HTag className={headingClass}>{renderInlineContent(b.headingText)}</HTag> : null}
+            {b.headingText ? <HTag>{renderInlineContent(b.headingText)}</HTag> : null}
             {b.content ? <div>{renderTextContent(b.content)}</div> : null}
           </div>
         );
@@ -453,369 +442,266 @@ const BlogPostPage = ({ postSlugProp, postDataProp, seoDataProp, dehydratedState
       />
       {/* Article and breadcrumb schema are rendered once by pages/blog/[postSlug].tsx */}
 
-      {/* Breadcrumb Section - Clean Header */}
-      <Section size="sm" className="border-b border-border bg-muted/30">
-        <Breadcrumbs items={breadcrumbs} />
-      </Section>
+      <div className="mx-auto max-w-6xl px-5 pb-6 pt-8 lg:pt-12">
+        {/* Breadcrumb: the current title is truncated so it never wraps to two lines on phones */}
+        <nav aria-label="Breadcrumb" className="mb-6">
+          <ol className="flex min-w-0 items-center gap-1 text-xs font-medium text-zinc-600">
+            {breadcrumbs.map((b, i) => (
+              <li key={`${b.label}-${i}`} className={i === breadcrumbs.length - 1 ? 'flex min-w-0 items-center gap-1' : 'flex shrink-0 items-center gap-1'}>
+                {i > 0 && <span aria-hidden="true">/</span>}
+                {b.href
+                  ? <Link prefetch={false} href={b.href} className="inline-flex min-h-6 items-center hover:text-ink hover:underline">{b.label}</Link>
+                  : <span aria-current="page" className="truncate text-ink">{b.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
 
-      <Section size="lg">
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
           {/* Main Article */}
-          <article className="lg:col-span-2">
-            {/* Article Header Card */}
-            <div className="card-modern p-6 md:p-8 mb-6">
-              {/* Category & Reading Time */}
-              <div className="flex flex-wrap items-center gap-3 mb-4">
-                {post.category && (
-                  <Badge className="bg-primary text-primary-foreground rounded-full px-4 py-1">
-                    {post.category}
-                  </Badge>
-                )}
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Clock className="h-4 w-4" />
+          <article className="min-w-0 lg:col-span-2">
+            <header>
+              <div className="mb-4 flex flex-wrap items-center gap-3">
+                {post.category && <span className="chip-label">{post.category}</span>}
+                <span className="flex items-center gap-1.5 text-sm text-zinc-600">
+                  <Clock className="h-4 w-4" aria-hidden="true" />
                   {readingTime} min read
                 </span>
               </div>
 
-              {/* Title */}
-              <h1 className="display text-[clamp(2rem,4.5vw,3.5rem)] text-ink mb-6">
+              <h1 className="display text-[clamp(2.1rem,5vw,3.5rem)] text-ink">
                 {displayTitle(post.title)}
               </h1>
 
-              {/* Author & Date */}
-              <div className="flex flex-wrap items-center gap-4 pb-6 border-b border-border">
-                <div className="flex items-center gap-3">
+              <div className="mt-6 flex flex-wrap items-center gap-4 border-b border-black/10 pb-6">
+                <div className="flex min-w-0 items-center gap-3">
                   {post.author_avatar_url ? (
-                    <img 
-                      src={post.author_avatar_url} 
-                      alt={post.author_name || "Author"} 
-                      className="w-12 h-12 rounded-full object-cover"
+                    <img
+                      src={post.author_avatar_url}
+                      alt=""
+                      className="h-11 w-11 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                      <User className="h-6 w-6 text-primary" />
+                    <div className="grid h-11 w-11 place-items-center rounded-full bg-tone-sky" aria-hidden="true">
+                      <User className="h-5 w-5 text-ink" />
                     </div>
                   )}
-                  <div>
-                    <p className="font-bold">{post.author_name || "AppointPanda Team"}</p>
-                    {(post.author_credentials || post.author_title) && (
-                      <p className="text-sm text-primary font-medium">{post.author_credentials || post.author_title}</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-ink">{post.author_name || "AppointPanda Team"}</p>
+                    {/* Job title only: no credential line, which could imply a clinical review we have not documented */}
+                    {post.author_title && (
+                      <p className="text-sm text-zinc-600">{post.author_title}</p>
                     )}
                     {post.author_bio && (
-                      <p className="text-xs text-muted-foreground line-clamp-1">{post.author_bio}</p>
+                      <p className="line-clamp-1 text-xs text-zinc-600">{post.author_bio}</p>
                     )}
                   </div>
                 </div>
                 {post.published_at && (
-                  <div className="text-sm text-muted-foreground flex items-center gap-2 ml-auto">
-                    <Calendar className="h-4 w-4" />
-                    {format(new Date(post.published_at), "MMMM d, yyyy")}
-                  </div>
+                  <p className="flex items-center gap-2 text-sm text-zinc-600 sm:ml-auto">
+                    <Calendar className="h-4 w-4" aria-hidden="true" />
+                    <time dateTime={post.published_at}>{format(new Date(post.published_at), "MMMM d, yyyy")}</time>
+                  </p>
                 )}
               </div>
+            </header>
+
+            {featuredImage && (
+              <div className="mt-8 overflow-hidden rounded-[1.25rem] bg-white">
+                <img
+                  src={featuredImage}
+                  alt={post.title}
+                  className="aspect-video h-full w-full object-cover"
+                />
+              </div>
+            )}
+
+            <div className="blog-content mt-8">
+              {post.content ? (
+                renderContent(post.content)
+              ) : (
+                <p className="text-zinc-600">No content available.</p>
+              )}
             </div>
 
-            {/* Featured Image Card */}
-            {featuredImage && (
-              <div className="card-modern overflow-hidden mb-6">
-                <div className="relative aspect-video">
-                  <img
-                    src={featuredImage}
-                    alt={post.title}
-                    className="w-full h-full object-cover"
-                  />
+            {guide && (
+              <div className="mt-10 rounded-[1.25rem] bg-tone-sky p-6 text-ink">
+                <p className="text-xs font-semibold uppercase tracking-wider text-ink/80">Treatment guide</p>
+                <p className="mt-1 text-lg font-semibold">{guide.name}: cost, steps and what to ask</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink/80">{guide.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Link prefetch={false} href={urls.service(guide.slug)} className="btn-ink">Read the guide</Link>
+                  <Link prefetch={false} href={`/find-clinics/?specialty=${guide.slug}`} className="btn-ghost">Find clinics in Dubai</Link>
                 </div>
               </div>
             )}
 
-            {/* Content Card */}
-            <div className="card-modern p-6 md:p-8">
-              {/* Main Content */}
-              <div className="prose prose-lg max-w-none text-foreground blog-content">
-                {post.content ? (
-                  <div className="leading-relaxed">
-                    {renderContent(post.content)}
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground">No content available.</p>
-                )}
+            {post.tags && post.tags.length > 0 && (
+              <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-black/10 pt-6">
+                <span className="mr-1 text-sm font-medium text-zinc-600">Tags:</span>
+                {post.tags.map((tag: string) => (
+                  <span key={tag} className="rounded-full border border-black/10 bg-white px-3 py-1 text-sm text-ink">
+                    {tag}
+                  </span>
+                ))}
               </div>
+            )}
 
-              {guide && (
-                <div className="not-prose mt-8 rounded-3xl bg-tone-sky p-6 text-ink">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-ink/70">Treatment guide</p>
-                  <p className="mt-1 text-lg font-semibold">{guide.name}: cost, steps and what to ask</p>
-                  <p className="mt-1 text-sm leading-relaxed text-ink/80">{guide.summary}</p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Link prefetch={false} href={urls.service(guide.slug)} className="btn-ink">Read the guide</Link>
-                    <Link prefetch={false} href={`/find-clinics/?specialty=${guide.slug}`} className="btn-ghost">Find clinics in Dubai</Link>
-                  </div>
-                </div>
-              )}
+            {/* General references */}
+            <div className="block-card-static mt-8 p-5">
+              <h2 className="flex items-center gap-2 font-semibold text-ink">
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
+                Sources &amp; references
+              </h2>
+              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-zinc-700">
+                <li>Dubai Health Authority (DHA). <em>Dental Health Guidelines</em>. Available at: dha.gov.ae</li>
+                <li>World Health Organization (WHO). <em>Oral Health</em>. Available at: who.int</li>
+                <li>American Dental Association (ADA). <em>Clinical Recommendations</em>. Available at: ada.org</li>
+              </ol>
+              <p className="mt-3 border-t border-black/10 pt-3 text-[13px] text-zinc-600">
+                Last updated: {post.updated_at ? new Date(post.updated_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently'}.{' '}
+                <Link prefetch={false} href="/editorial-policy/" className="underline">How we write our articles</Link>
+              </p>
+            </div>
 
-              {/* Tags */}
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-border">
-                  <span className="text-sm font-medium text-muted-foreground mr-2">Tags:</span>
-                  {post.tags.map((tag: string) => (
-                    <Badge key={tag} variant="secondary" className="rounded-full">
-                      #{tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
-
-              {/* Clinical References - E-E-A-T Signal */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <div className="bg-muted/50 rounded-xl p-5">
-                  <h3 className="font-bold text-foreground mb-3 flex items-center gap-2">
-                    <svg className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    Sources & References
-                  </h3>
-                  <ul className="text-sm text-muted-foreground space-y-2">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary font-medium">[1]</span>
-                      <span>Dubai Health Authority (DHA). <em>Dental Health Guidelines</em>. Available at: dha.gov.ae</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary font-medium">[2]</span>
-                      <span>World Health Organization (WHO). <em>Oral Health</em>. Available at: who.int</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary font-medium">[3]</span>
-                      <span>American Dental Association (ADA). <em>Clinical Recommendations</em>. Available at: ada.org</span>
-                    </li>
-                  </ul>
-                  <p className="text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
-                    Last reviewed: {post.updated_at ? new Date(post.updated_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently'}. Content verified by licensed dental professionals.
-                  </p>
-                </div>
-              </div>
-
-              {/* Share Section */}
-              <div className="flex items-center gap-4 mt-6 pt-6 border-t border-border">
-                <span className="font-bold text-sm flex items-center gap-2">
-                  <Share2 className="h-4 w-4" />
-                  Share this article:
-                </span>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-10 w-10 hover:bg-blue-500/10 hover:border-blue-500/50"
-                    onClick={() => window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
-                  >
-                    <Facebook className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-10 w-10 hover:bg-sky-500/10 hover:border-sky-500/50"
-                    onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}`, '_blank')}
-                  >
-                    <Twitter className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="rounded-full h-10 w-10 hover:bg-blue-700/10 hover:border-blue-700/50"
-                    onClick={() => window.open(`https://linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}`, '_blank')}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </Button>
-                </div>
+            {/* Share */}
+            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-black/10 pt-6">
+              <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                <Share2 className="h-4 w-4" aria-hidden="true" />
+                Share this article
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  aria-label="Share on Facebook"
+                  className="grid size-11 place-items-center rounded-full border border-black/15 bg-white text-ink hover:border-ink"
+                  onClick={() => window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
+                >
+                  <Facebook className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Share on X (Twitter)"
+                  className="grid size-11 place-items-center rounded-full border border-black/15 bg-white text-ink hover:border-ink"
+                  onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}`, '_blank')}
+                >
+                  <Twitter className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Share on LinkedIn"
+                  className="grid size-11 place-items-center rounded-full border border-black/15 bg-white text-ink hover:border-ink"
+                  onClick={() => window.open(`https://linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post.title)}`, '_blank')}
+                >
+                  <Linkedin className="h-4 w-4" aria-hidden="true" />
+                </button>
               </div>
             </div>
+
+            <Link prefetch={false} href="/blog/" className="btn-ghost mt-8">
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back to articles
+            </Link>
           </article>
 
           {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* CTA Card */}
-            <div className="card-modern p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
-                  <Search className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Find a Dentist</h3>
-                  <p className="text-sm text-muted-foreground">Near you</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
+          <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-[1.25rem] bg-tone-lemon p-6">
+              <Search className="h-6 w-6 text-ink" aria-hidden="true" />
+              <h2 className="mt-3 text-lg font-semibold text-ink">Find a dentist</h2>
+              <p className="mt-1 text-sm text-ink/80">
                 Looking for a dentist? Compare listed clinics in Dubai and request an appointment.
               </p>
-              <Button asChild className="w-full rounded-xl font-bold">
-                <Link prefetch={false} href="/find-clinics/">
-                  Browse Dentists
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <Link prefetch={false} href="/find-clinics/" className="btn-ink mt-4 w-full">
+                Browse dentists <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
 
-            {/* Browse by Location */}
-            <div className="card-modern p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <MapPin className="h-5 w-5 text-primary" />
-                <h3 className="font-bold">Browse by Location</h3>
+            {popularStates && popularStates.length > 0 && (
+              <div className="block-card-static p-6">
+                <h2 className="flex items-center gap-2 font-semibold text-ink">
+                  <MapPin className="h-4 w-4" aria-hidden="true" /> Browse by location
+                </h2>
+                <ul className="mt-3 space-y-1">
+                  {popularStates.map((state) => (
+                    <li key={state.slug}>
+                      <Link
+                        href={`/${state.slug}/`}
+                        className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-medium text-ink hover:bg-paper"
+                      >
+                        {state.name}
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="space-y-2">
-                {popularStates?.map((state) => (
-                  <Link
-                    key={state.slug}
-                    href={`/${state.slug}/`}
-                    className="flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-primary/10 transition-colors group"
-                  >
-                    <span className="font-medium group-hover:text-primary">{state.name}</span>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  </Link>
-                ))}
-              </div>
-            </div>
+            )}
 
-            {/* Popular Treatments */}
-            <div className="card-modern p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Star className="h-5 w-5 text-gold" />
-                <h3 className="font-bold">Popular Services</h3>
+            {popularTreatments && popularTreatments.length > 0 && (
+              <div className="block-card-static p-6">
+                <h2 className="font-semibold text-ink">Popular treatments</h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {popularTreatments.map((treatment) => (
+                    <Link key={treatment.slug} href={`/services/${treatment.slug}/`} className="chip">
+                      {treatment.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {popularTreatments?.map((treatment) => (
-                  <Link
-                    key={treatment.slug}
-                    href={`/services/${treatment.slug}/`}
-                    className="px-3 py-1.5 text-sm rounded-full bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
-                  >
-                    {treatment.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            )}
 
-            {/* Trust Signals */}
-            <div className="card-modern p-6 bg-muted/30">
-              <div className="flex items-center gap-2 mb-4">
-                <Shield className="h-5 w-5 text-emerald-500" />
-                <h3 className="font-bold">Why AppointPanda?</h3>
-              </div>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start gap-2">
-                  <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-emerald-500 text-xs">✓</span>
-                  </div>
-                  <span>Dental clinics across Dubai</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-emerald-500 text-xs">✓</span>
-                  </div>
-                  <span>Book appointments in 60 seconds</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-emerald-500 text-xs">✓</span>
-                  </div>
-                  <span>Read real patient reviews</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-emerald-500 text-xs">✓</span>
-                  </div>
-                  <span>Compare prices & insurance</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contact CTA */}
-            <div className="card-modern p-6 border-coral/20 bg-coral/5">
-              <div className="flex items-center gap-2 mb-3">
-                <Phone className="h-5 w-5 text-coral" />
-                <h3 className="font-bold">Need Help?</h3>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="block-card-static p-6">
+              <h2 className="flex items-center gap-2 font-semibold text-ink">
+                <Phone className="h-4 w-4" aria-hidden="true" /> Need help?
+              </h2>
+              <p className="mt-1 text-sm text-zinc-600">
                 Our team can help you find the right dentist for your needs.
               </p>
-              <Button asChild variant="outline" className="w-full rounded-xl font-bold border-coral/30 hover:bg-coral/10">
-                <Link prefetch={false} href="/contact/">Contact Us</Link>
-              </Button>
+              <Link prefetch={false} href="/contact/" className="btn-ghost mt-4 w-full">Contact us</Link>
             </div>
           </aside>
         </div>
+      </div>
 
-        {/* Back to Blog */}
-        <div className="mt-8">
-          <Button asChild variant="outline" className="rounded-xl font-bold">
-            <Link prefetch={false} href="/blog/">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Blog
-            </Link>
-          </Button>
-        </div>
-      </Section>
-
-      {/* Related Posts */}
       {relatedPosts && relatedPosts.length > 0 && (
-        <Section variant="muted" size="lg">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-display text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {relatedPosts.map((relatedPost) => (
-                  <Link
-                    key={relatedPost.id}
-                    href={`/blog/${relatedPost.slug}/`}
-                    className="card-modern overflow-hidden group card-hover"
-                  >
-                  <div className="h-40 relative overflow-hidden">
-                    {liveImage(relatedPost.featured_image_url) ? (
-                      <img
-                        src={liveImage(relatedPost.featured_image_url)!}
-                        alt={relatedPost.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <Badge variant="secondary" className="rounded-full mb-2">
-                      {relatedPost.category}
-                    </Badge>
-                    <h3 className="font-display font-bold group-hover:text-primary transition-colors line-clamp-2">
-                      {relatedPost.title}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
-            </div>
+        <section className="mx-auto max-w-6xl px-5 py-10">
+          <h2 className="heading-section">Related articles</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {relatedPosts.map((relatedPost) => (
+              <Link
+                key={relatedPost.id}
+                href={`/blog/${relatedPost.slug}/`}
+                className="block-card group overflow-hidden"
+              >
+                <div className="relative h-40 overflow-hidden bg-tone-sand">
+                  {liveImage(relatedPost.featured_image_url) && (
+                    <img
+                      src={liveImage(relatedPost.featured_image_url)!}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
+                </div>
+                <div className="p-5">
+                  {relatedPost.category && <p className="text-xs font-semibold uppercase tracking-wider text-zinc-600">{relatedPost.category}</p>}
+                  <h3 className="mt-1 line-clamp-2 font-semibold text-ink group-hover:underline">
+                    {relatedPost.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
           </div>
-        </Section>
+        </section>
       )}
 
-      {/* CTA Section */}
-      <Section variant="primary" size="md">
-        <div className="text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Ready to Find Your Perfect Dentist?
-          </h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Browse listed dental clinics in Dubai by area, treatment and insurance.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-              <Link prefetch={false} href="/find-clinics/">
-                Find a Dentist
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-2xl font-bold bg-transparent border-white/30 text-white hover:bg-white/10">
-              <Link prefetch={false} href="/services/">
-                Browse Services
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </Section>
+      <GuideCta
+        title="Find your dentist"
+        text="Browse listed dental clinics in Dubai by area, treatment and insurance."
+        href="/find-clinics/"
+        cta="Find a dentist"
+      />
     </PageLayout>
   );
 };

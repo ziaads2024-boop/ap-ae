@@ -76,7 +76,7 @@ export default function InsurerPage({ insurer, others }: Props) {
             </div>
           </Section>
         )}
-        <p className="pb-14 text-xs text-zinc-500">
+        <p className="pb-14 text-xs text-zinc-600">
           AppointPanda is not an insurer or broker and is not affiliated with {insurer.name}. Plan names are used only to help you find clinics.
         </p>
       </div>

@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { buildGmbAuthCallbackUrl, setGmbFlowFlag } from '@/lib/gmbAuth';
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
+import { PageHero } from "@/components/layout/PageHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,12 +80,12 @@ const ServiceCheckbox = React.memo<ServiceCheckboxProps>(({ treatment, isSelecte
   const treatmentKey = treatment.id || (treatment as any).treatment_id || `treatment-${index}`;
   
   return (
-    <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/30'}`}>
+    <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isSelected ? 'border-ink bg-paper' : 'border-border hover:border-ink'}`}>
       <input
         type="checkbox"
         checked={isSelected}
         onChange={(e) => onToggle(treatmentKey, e.target.checked)}
-        className="w-5 h-5 rounded border-border text-primary focus:ring-primary cursor-pointer"
+        className="w-5 h-5 rounded border-border text-ink focus:ring-ink cursor-pointer"
       />
       <span className="text-sm font-medium">{treatment.name}</span>
     </label>
@@ -403,52 +404,38 @@ const ListYourPracticePage = () => {
         canonical="/list-your-practice/"
         keywords={['list dental practice', 'dental directory listing', 'dentist marketing', 'dental practice growth']}
       />
-      {/* Compact Hero Section */}
-      <div className="bg-gradient-to-br from-primary/10 via-background to-teal/5 border-b">
-        <div className="container py-12 md:py-16">
-          <div className="max-w-2xl mx-auto text-center">
-            {/* Promotion Banner */}
-            <div className="mb-6">
-            </div>
+      <PageHero
+        kicker="For dental professionals"
+        title="List your practice"
+        subtitle="Add your clinic to AppointPanda so patients searching for dental care in your area can find and contact you."
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "For clinics", href: "/for-clinics/" }, { label: "List your practice" }]}
+        tone="lime"
+      />
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-              <Building2 className="h-4 w-4" />
-              For Dental Professionals
-            </div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
-              List Your <span className="text-primary">Practice</span>
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Add your clinic to AppointPanda so patients searching for dental care in your area can find and contact you.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <Section size="lg">
+      <Section size="lg" className="!bg-transparent">
         <div className="max-w-5xl mx-auto">
           <div className="grid lg:grid-cols-5 gap-8">
             {/* Form - 3 columns */}
             <div className="lg:col-span-3">
-              <div className="card-modern p-6 md:p-8">
+              <div className="block-card-static p-6 md:p-8">
                 {/* Method Selection */}
                 {!listingMethod && (
                   <div className="space-y-6">
                     <div className="text-center">
-                      <h2 className="font-display text-2xl font-bold mb-2">How would you like to list?</h2>
-                      <p className="text-muted-foreground">Choose the fastest way to get started</p>
+                      <h2 className="text-2xl font-bold mb-2">How would you like to list?</h2>
+                      <p className="text-zinc-600">Choose the fastest way to get started</p>
                     </div>
 
                     {/* GMB Option */}
                     <Card
-                      className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-teal/5 cursor-pointer hover:border-primary/50 transition-all"
+                      className="border-2 border-black/10 bg-white cursor-pointer hover:border-ink transition-all"
                       onClick={handleGoogleSignIn}
                     >
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           <div className="h-14 w-14 rounded-2xl bg-white shadow-md flex items-center justify-center flex-shrink-0">
                             {isConnectingGoogle ? (
-                              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                              <Loader2 className="h-8 w-8 animate-spin text-ink" />
                             ) : (
                               <img
                                 src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"
@@ -460,18 +447,18 @@ const ListYourPracticePage = () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="font-bold text-lg">Continue with Google</h3>
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-teal/20 text-teal font-medium">Recommended</span>
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-paper text-ink font-medium">Recommended</span>
                             </div>
-                            <p className="text-sm text-muted-foreground mb-3">
+                            <p className="text-sm text-zinc-600 mb-3">
                               Import your business info, photos, and reviews from Google Business Profile
                             </p>
                             <div className="flex flex-wrap gap-2">
-                              <span className="text-xs px-2 py-1 rounded-full bg-muted">Auto-fill</span>
-                              <span className="text-xs px-2 py-1 rounded-full bg-muted">Show Google rating</span>
-                              <span className="text-xs px-2 py-1 rounded-full bg-muted">Verified</span>
+                              <span className="text-xs px-2 py-1 rounded-full bg-paper">Auto-fill</span>
+                              <span className="text-xs px-2 py-1 rounded-full bg-paper">Show Google rating</span>
+                              <span className="text-xs px-2 py-1 rounded-full bg-paper">Verified</span>
                             </div>
                           </div>
-                          <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                          <ArrowRight className="h-5 w-5 text-zinc-600" />
                         </div>
                       </CardContent>
                     </Card>
@@ -481,33 +468,33 @@ const ListYourPracticePage = () => {
                         <span className="w-full border-t" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-3 text-muted-foreground">Or</span>
+                        <span className="bg-card px-3 text-zinc-600">Or</span>
                       </div>
                     </div>
 
                     {/* Manual Option */}
                     <Card
-                      className="border border-border cursor-pointer hover:border-primary/30 transition-all"
+                      className="border border-border cursor-pointer hover:border-ink transition-all"
                       onClick={() => setListingMethod('manual')}
                     >
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
-                          <div className="h-14 w-14 rounded-2xl bg-muted flex items-center justify-center flex-shrink-0">
-                            <Building2 className="h-7 w-7 text-muted-foreground" />
+                          <div className="h-14 w-14 rounded-2xl bg-paper flex items-center justify-center flex-shrink-0">
+                            <Building2 className="h-7 w-7 text-zinc-600" />
                           </div>
                           <div className="flex-1">
                             <h3 className="font-bold text-lg mb-1">Fill Out Manually</h3>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-zinc-600">
                               Enter your practice details manually. Connect Google later.
                             </p>
                           </div>
-                          <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                          <ArrowRight className="h-5 w-5 text-zinc-600" />
                         </div>
                       </CardContent>
                     </Card>
 
-                    <p className="text-xs text-center text-muted-foreground">
-                      By continuing, you agree to our <Link href="/terms/" className="text-primary hover:underline">Terms</Link> and <Link href="/privacy/" className="text-primary hover:underline">Privacy Policy</Link>
+                    <p className="text-xs text-center text-zinc-600">
+                      By continuing, you agree to our <Link href="/terms/" className="text-ink hover:underline">Terms</Link> and <Link href="/privacy/" className="text-ink hover:underline">Privacy Policy</Link>
                     </p>
                   </div>
                 )}
@@ -518,7 +505,7 @@ const ListYourPracticePage = () => {
                     <button
                       type="button"
                       onClick={() => setListingMethod(null)}
-                      className="text-sm text-muted-foreground hover:text-foreground mb-6"
+                      className="text-sm text-zinc-600 hover:text-foreground mb-6"
                     >
                       ← Back to options
                     </button>
@@ -527,12 +514,12 @@ const ListYourPracticePage = () => {
                     <div className="flex items-center gap-2 mb-8">
                       {[1, 2, 3].map((s) => (
                         <div key={s} className="flex items-center gap-2 flex-1">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= s ? "bg-ink text-white" : "bg-paper text-zinc-600"
                             }`}>
                             {step > s ? <CheckCircle className="h-5 w-5" /> : s}
                           </div>
                           {s < 3 && (
-                            <div className={`h-1 flex-1 rounded-full ${step > s ? "bg-primary" : "bg-muted"}`} />
+                            <div className={`h-1 flex-1 rounded-full ${step > s ? "bg-ink" : "bg-paper"}`} />
                           )}
                         </div>
                       ))}
@@ -543,15 +530,15 @@ const ListYourPracticePage = () => {
                       {step === 1 && (
                         <div className="space-y-6">
                           <div>
-                            <h2 className="font-display text-2xl font-bold">Practice Information</h2>
-                            <p className="text-muted-foreground">Tell us about your practice</p>
+                            <h2 className="text-2xl font-bold">Practice Information</h2>
+                            <p className="text-zinc-600">Tell us about your practice</p>
                           </div>
 
                           <div className="space-y-4">
                             <div>
                               <Label htmlFor="clinicName" className="font-bold">Clinic Name *</Label>
                               <div className="relative mt-2">
-                                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="clinicName"
                                   name="clinicName"
@@ -567,7 +554,7 @@ const ListYourPracticePage = () => {
                             <div>
                               <Label htmlFor="dentistName" className="font-bold">Your Name *</Label>
                               <div className="relative mt-2">
-                                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="dentistName"
                                   name="dentistName"
@@ -594,7 +581,7 @@ const ListYourPracticePage = () => {
                             <div>
                               <Label htmlFor="streetAddress" className="font-bold">Street Address (Optional)</Label>
                               <div className="relative mt-2">
-                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="streetAddress"
                                   name="streetAddress"
@@ -618,15 +605,15 @@ const ListYourPracticePage = () => {
                       {step === 2 && (
                         <div className="space-y-6">
                           <div>
-                            <h2 className="font-display text-2xl font-bold">Contact Information</h2>
-                            <p className="text-muted-foreground">How can patients reach you?</p>
+                            <h2 className="text-2xl font-bold">Contact Information</h2>
+                            <p className="text-zinc-600">How can patients reach you?</p>
                           </div>
 
                           <div className="space-y-4">
                             <div>
                               <Label htmlFor="email" className="font-bold">Business Email *</Label>
                               <div className="relative mt-2">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="email"
                                   name="email"
@@ -643,7 +630,7 @@ const ListYourPracticePage = () => {
                             <div>
                               <Label htmlFor="phone" className="font-bold">Phone Number *</Label>
                               <div className="relative mt-2">
-                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="phone"
                                   name="phone"
@@ -654,14 +641,14 @@ const ListYourPracticePage = () => {
                                   className={`pl-12 h-12 rounded-xl ${errors.phone ? "border-destructive" : ""}`}
                                 />
                               </div>
-                              <p className="text-xs text-muted-foreground mt-1">UAE format: +971 XX XXX XXXX</p>
+                              <p className="text-xs text-zinc-600 mt-1">UAE format: +971 XX XXX XXXX</p>
                               {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone}</p>}
                             </div>
 
                             <div>
                               <Label htmlFor="website" className="font-bold">Website (Optional)</Label>
                               <div className="relative mt-2">
-                                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
                                 <Input
                                   id="website"
                                   name="website"
@@ -691,8 +678,8 @@ const ListYourPracticePage = () => {
                       {step === 3 && (
                         <div className="space-y-6">
                           <div>
-                            <h2 className="font-display text-2xl font-bold">Account Setup</h2>
-                            <p className="text-muted-foreground">Set up your login credentials</p>
+                            <h2 className="text-2xl font-bold">Account Setup</h2>
+                            <p className="text-zinc-600">Set up your login credentials</p>
                           </div>
 
                           <div className="space-y-4">
@@ -700,7 +687,7 @@ const ListYourPracticePage = () => {
                             <div>
                               <Label htmlFor="password" className="font-bold">Create Password *</Label>
                               <div className="relative mt-2">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                 </div>
                                 <Input
@@ -716,7 +703,7 @@ const ListYourPracticePage = () => {
                               {errors.password ? (
                                 <p className="text-sm text-destructive mt-1">{errors.password}</p>
                               ) : (
-                                <p className="text-xs text-muted-foreground mt-1">
+                                <p className="text-xs text-zinc-600 mt-1">
                                   Min 8 characters with uppercase, lowercase, and number
                                 </p>
                               )}
@@ -724,8 +711,8 @@ const ListYourPracticePage = () => {
                           </div>
 
                           <div className="border-t pt-6">
-                            <h2 className="font-display text-xl font-bold mb-2">Services Offered</h2>
-                            <p className="text-muted-foreground text-sm mb-4">Select the services you provide</p>
+                            <h2 className="text-xl font-bold mb-2">Services Offered</h2>
+                            <p className="text-zinc-600 text-sm mb-4">Select the services you provide</p>
                           </div>
 
                           <div className="space-y-4">
@@ -750,7 +737,7 @@ const ListYourPracticePage = () => {
                                 })}
                               </div>
                               {selectedServices.length > 0 && (
-                                <p className="text-xs text-muted-foreground mt-2">
+                                <p className="text-xs text-zinc-600 mt-2">
                                   {selectedServices.length} service{selectedServices.length > 1 ? 's' : ''} selected
                                 </p>
                               )}
@@ -768,14 +755,14 @@ const ListYourPracticePage = () => {
                               />
                             </div>
 
-                            <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50">
+                            <div className="flex items-start gap-3 p-4 rounded-xl bg-paper">
                               <Checkbox
                                 id="agreeTerms"
                                 checked={formData.agreeTerms}
                                 onCheckedChange={(checked) => setFormData(prev => ({ ...prev, agreeTerms: checked === true }))}
                               />
                               <Label htmlFor="agreeTerms" className="text-sm leading-relaxed cursor-pointer">
-                                I agree to the <Link href="/terms/" className="text-primary hover:underline">Terms & Conditions</Link> and <Link href="/privacy/" className="text-primary hover:underline">Privacy Policy</Link>. I confirm that I am authorized to list this practice.
+                                I agree to the <Link href="/terms/" className="text-ink hover:underline">Terms & Conditions</Link> and <Link href="/privacy/" className="text-ink hover:underline">Privacy Policy</Link>. I confirm that I am authorized to list this practice.
                               </Label>
                             </div>
                           </div>
@@ -798,24 +785,24 @@ const ListYourPracticePage = () => {
 
             {/* Benefits - 2 columns */}
             <div className="lg:col-span-2">
-              <h2 className="font-display text-xl font-bold mb-4">Why List With Us?</h2>
+              <h2 className="text-xl font-bold mb-4">Why List With Us?</h2>
               <div className="space-y-3">
                 {benefits.map((benefit, i) => (
-                  <div key={i} className="card-modern p-4 flex gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="h-5 w-5 text-primary" />
+                  <div key={i} className="block-card-static p-4 flex gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-paper flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="h-5 w-5 text-ink" />
                     </div>
                     <div>
                       <h3 className="font-bold text-sm">{benefit.title}</h3>
-                      <p className="text-xs text-muted-foreground">{benefit.description}</p>
+                      <p className="text-xs text-zinc-600">{benefit.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 rounded-xl bg-muted/50">
+              <div className="mt-6 p-4 rounded-xl bg-paper">
                 <h3 className="font-bold text-sm mb-2">Already have a profile?</h3>
-                <p className="text-xs text-muted-foreground mb-3">
+                <p className="text-xs text-zinc-600 mb-3">
                   If your clinic is already listed, claim and verify it instead.
                 </p>
                 <Button asChild variant="outline" size="sm" className="rounded-xl font-bold w-full">

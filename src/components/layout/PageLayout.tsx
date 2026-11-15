@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { emirateBySlug, emirateOfPath, isLiveEmirate } from '@/content';
+import { navEmirateBySlug as emirateBySlug, navEmirateOfPath as emirateOfPath, isLiveEmirate } from '@/lib/navLinks';
 
 /** Shown on every page in an emirate that is not live yet. */
 function ComingSoonBanner() {
@@ -34,10 +34,13 @@ export function PageLayout({
   hideFooter = false,
 }: PageLayoutProps) {
   return (
-    <div className="relative min-h-screen bg-paper text-ink overflow-x-hidden" style={{ fontFamily: "'Instrument Sans', system-ui, -apple-system, sans-serif" }}>
+    // overflow-x-clip (not hidden): hidden turns this wrapper into a scroll
+    // container, which stops position:sticky (header, profile request panel).
+    <div className="relative min-h-screen bg-paper text-ink overflow-x-clip" style={{ fontFamily: "'Instrument Sans', system-ui, -apple-system, sans-serif" }}>
+      <a href="#main" className="skip-link">Skip to content</a>
       {!hideNavbar && <Navbar />}
       <ComingSoonBanner />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1} className="outline-none">{children}</main>
       {!hideFooter && <Footer />}
     </div>
   );

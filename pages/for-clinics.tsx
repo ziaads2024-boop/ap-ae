@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowRight, BarChart3, CalendarCheck, ShieldCheck, Users, Zap, Star, CheckCircle } from 'lucide-react';
+import { ArrowRight, BarChart3, CalendarCheck, ShieldCheck, Users, Eye, Star } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
-import { SITE_NAME, SITE_DOMAIN, clinics } from '@/lib/site-data';
+import { SITE_NAME } from '@/lib/site-data';
+import { PageHero } from '@/components/layout/PageHero';
+import { FaqList } from '@/components/guide/GuideBlocks';
 
 const BASE_URL = 'https://www.appointpanda.ae';
 
@@ -10,7 +12,7 @@ export default function ForClinicsPage() {
   return (
     <PageLayout>
       <Head>
-        <title>List Your Dental Clinic — {SITE_NAME}.ae</title>
+        <title>{`List Your Dental Clinic — ${SITE_NAME}.ae`}</title>
         <meta name="description" content={`List your dental clinic on ${SITE_NAME}, reach patients searching by emirate and treatment, and manage your profile, bookings and reviews in one place.`} />
         <link rel="canonical" href={`${BASE_URL}/for-clinics/`} />
         <meta name="robots" content="index, follow" />
@@ -31,125 +33,87 @@ export default function ForClinicsPage() {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
-      {/* Hero */}
-      <section className="gradient-dark-hero py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 text-center relative z-10">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-400 mb-4">For dental clinics</p>
-          <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-white max-w-3xl mx-auto">
-            Grow your practice with {SITE_NAME}
-          </h1>
-          <p className="text-zinc-400 text-sm md:text-base mt-4 max-w-xl mx-auto">
-            Claim or create your clinic profile, keep your treatments and hours up to date, and let patients searching your emirate find you.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mt-8">
-            <Link
-              href="/list-your-practice/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200"
-            >
-              List your clinic <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 font-semibold text-sm rounded-full transition-all duration-200"
-            >
-              See pricing
-            </Link>
-          </div>
+      <PageHero
+        kicker="For dental clinics"
+        title={`Grow your practice with ${SITE_NAME}`}
+        subtitle="Claim or create your clinic profile, keep your treatments and hours up to date, and let patients searching your emirate find you."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'For clinics' }]}
+        tone="lime"
+      >
+        <div className="flex flex-wrap gap-3">
+          <Link href="/list-your-practice/" className="btn-ink">
+            List your clinic <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link href="/pricing/" className="btn-ghost">See pricing</Link>
+          <Link href="/claim-profile/" className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-ink underline underline-offset-4">Claim an existing profile</Link>
         </div>
-      </section>
+      </PageHero>
 
       {/* Features grid */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Everything you need to grow</h2>
-            <p className="text-zinc-500 text-sm mt-3 max-w-lg mx-auto">From profile management to analytics — we handle the platform so you can focus on patients.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { icon: <CalendarCheck className="h-6 w-6" />, title: 'Appointment requests', desc: 'Patients send a request with a preferred day and time of day; you see it in your dashboard and call them to confirm.' },
-              { icon: <BarChart3 className="h-6 w-6" />, title: 'Analytics Dashboard', desc: 'Track profile views, bookings, and revenue. See exactly where your patients come from.' },
-              { icon: <Users className="h-6 w-6" />, title: 'Patient list', desc: 'Keep track of the patients who contacted you through AppointPanda and their requests.' },
-              { icon: <Star className="h-6 w-6" />, title: 'Review Management', desc: 'Respond to reviews, showcase testimonials, and build your reputation.' },
-              { icon: <ShieldCheck className="h-6 w-6" />, title: 'Insurance Integration', desc: 'Show which insurers you accept so patients can filter by their plan.' },
-              { icon: <Zap className="h-6 w-6" />, title: 'Instant Visibility', desc: 'Appear in emirate, treatment and "near me" searches once your listing is live.' },
-            ].map((feature) => (
-              <div key={feature.title} className="card-hover-amber p-6">
-                <div className="w-12 h-12 rounded-xl bg-amber-700/10 flex items-center justify-center text-amber-700 mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="font-semibold text-zinc-900 text-[15px]">{feature.title}</h3>
-                <p className="text-zinc-500 text-xs mt-2 leading-relaxed">{feature.desc}</p>
+      <section className="mx-auto max-w-6xl px-5 py-12 lg:py-16">
+        <h2 className="heading-section">Everything you need to grow</h2>
+        <p className="mt-3 max-w-xl text-zinc-700">From profile management to analytics — we handle the platform so you can focus on patients.</p>
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { icon: <CalendarCheck className="h-5 w-5" aria-hidden="true" />, title: 'Appointment requests', desc: 'Patients send a request with a preferred day and time of day; you see it in your dashboard and call them to confirm.' },
+            { icon: <BarChart3 className="h-5 w-5" aria-hidden="true" />, title: 'Analytics dashboard', desc: 'Track profile views, bookings, and revenue. See exactly where your patients come from.' },
+            { icon: <Users className="h-5 w-5" aria-hidden="true" />, title: 'Patient list', desc: 'Keep track of the patients who contacted you through AppointPanda and their requests.' },
+            { icon: <Star className="h-5 w-5" aria-hidden="true" />, title: 'Review management', desc: 'Respond to reviews, showcase testimonials, and build your reputation.' },
+            { icon: <ShieldCheck className="h-5 w-5" aria-hidden="true" />, title: 'Insurance list', desc: 'Show which insurers you accept so patients can filter by their plan.' },
+            { icon: <Eye className="h-5 w-5" aria-hidden="true" />, title: 'Visibility in search', desc: 'Appear in emirate, treatment and "near me" searches once your listing is live.' },
+          ].map((feature) => (
+            <div key={feature.title} className="block-card-static p-6">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-paper text-ink">
+                {feature.icon}
               </div>
-            ))}
-          </div>
+              <h3 className="mt-4 font-semibold text-ink">{feature.title}</h3>
+              <p className="mt-1 text-[15px] leading-relaxed text-zinc-700">{feature.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Onboarding steps */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">How onboarding works</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { step: '01', title: 'Sign up', desc: 'Create your clinic profile in minutes.' },
-              { step: '02', title: 'Verify', desc: 'We verify your regulatory license.' },
-              { step: '03', title: 'Optimise', desc: 'Add treatments, photos, and team.' },
-              { step: '04', title: 'Go live', desc: 'Patients can send you appointment requests once your profile is live.' },
-            ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-12 h-12 rounded-full bg-amber-700/10 flex items-center justify-center mx-auto mb-3">
-                  <span className="text-amber-700 font-bold text-sm">{item.step}</span>
-                </div>
-                <h3 className="font-semibold text-zinc-900 text-sm">{item.title}</h3>
-                <p className="text-zinc-500 text-xs mt-1">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="mx-auto max-w-6xl px-5 pb-12 lg:pb-16">
+        <h2 className="heading-section">How onboarding works</h2>
+        <ol className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { step: '1', title: 'Sign up', desc: 'Create your clinic profile in minutes.' },
+            { step: '2', title: 'Verify', desc: 'We verify your regulatory license.' },
+            { step: '3', title: 'Optimise', desc: 'Add treatments, photos, and team.' },
+            { step: '4', title: 'Go live', desc: 'Patients can send you appointment requests once your profile is live.' },
+          ].map((item) => (
+            <li key={item.step} className="block-card-static p-6">
+              <span className="grid size-9 place-items-center rounded-full bg-ink text-sm font-semibold text-white" aria-hidden="true">{item.step}</span>
+              <h3 className="mt-4 font-semibold text-ink"><span className="sr-only">Step {item.step}: </span>{item.title}</h3>
+              <p className="mt-1 text-[15px] text-zinc-700">{item.desc}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* FAQ */}
-      <section className="py-16 bg-[#fafafa] border-t border-zinc-200">
-        <div className="max-w-3xl mx-auto px-4 lg:px-6">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-zinc-900">Clinic FAQs</h2>
-          </div>
-          <div className="space-y-3">
-            {[
+      <section className="mx-auto max-w-4xl px-5 pb-12 lg:pb-16">
+        <h2 className="heading-section">Clinic FAQs</h2>
+        <div className="mt-6">
+          <FaqList
+            faqs={[
               { q: 'How long does it take to get listed?', a: 'A claimed profile can be edited straight away. Verification follows the checks in our verification policy and depends on how quickly we can confirm your licence.' },
               { q: 'Is there a minimum commitment?', a: 'No. You can cancel at any time. We\'re confident you\'ll stay once you see the results.' },
               { q: 'Do you charge commission on bookings?', a: 'No commission whatsoever. You keep 100% of treatment fees. Our model is subscription-based only.' },
               { q: 'Can I manage my own profile?', a: 'Absolutely. You get full access to your clinic dashboard where you can update treatments, prices, photos and opening hours.' },
-            ].map((faq, i) => (
-              <details key={i} className="group border border-zinc-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-amber-500/40">
-                <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none text-sm font-semibold text-zinc-900">
-                  {faq.q}
-                  <span className="text-zinc-400 group-open:rotate-90 transition-transform duration-200 shrink-0">
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
-                </summary>
-                <div className="px-5 pb-4">
-                  <p className="text-zinc-500 text-sm leading-relaxed">{faq.a}</p>
-                </div>
-              </details>
-            ))}
-          </div>
+            ]}
+          />
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="gradient-dark-hero py-16">
-        <div className="max-w-2xl mx-auto px-4 lg:px-6 text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">Ready to grow your practice?</h2>
-          <p className="text-zinc-400 text-sm mt-4">Questions? Contact our team before you sign up.</p>
-          <Link
-            href="#"
-            className="mt-6 inline-flex items-center gap-2 px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-full transition-all duration-200"
-          >
-            List your clinic today <ArrowRight className="h-4 w-4" />
+      <section className="px-3 pb-10 lg:px-6">
+        <div className="mx-auto max-w-[1400px] rounded-[2rem] bg-ink px-6 py-14 text-center lg:py-20">
+          <h2 className="heading-section !text-white">Ready to grow your practice?</h2>
+          <p className="mt-3 text-zinc-300">Questions? <Link href="/contact/" className="font-semibold text-white underline underline-offset-2">Contact our team</Link> before you sign up.</p>
+          <Link href="/list-your-practice/" className="btn-ink mt-6 !bg-white !text-ink hover:!bg-zinc-100">
+            List your clinic today <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </section>

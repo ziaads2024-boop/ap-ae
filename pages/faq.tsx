@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageHero } from '@/components/layout/PageHero';
 import { SEOHead } from '@/components/seo/SEOHead';
-import { FaqList, JsonLd, Section } from '@/components/guide/GuideBlocks';
+import { FaqList, GuideCta, JsonLd, Section } from '@/components/guide/GuideBlocks';
 import { formatAed, serviceBySlug, urls, type Faq } from '@/content';
 import { breadcrumbSchema, faqSchema } from '@/content/schema';
 
@@ -106,14 +106,15 @@ export default function FaqPage() {
         </Section>
         <Section eyebrow="Keep reading" title="More help">
           <div className="flex flex-wrap gap-2 pb-14">
-            <Link href={urls.services} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Treatment guides</Link>
-            <Link href="/insurance/" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">Insurance guide</Link>
-            <Link href={urls.emirate('dubai')} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">Dentists in Dubai</Link>
-            <Link href="/verification-policy/" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">Verification policy</Link>
-            <Link href="/contact/" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">Contact us</Link>
+            <Link href={urls.services} className="chip chip-active">Treatment guides</Link>
+            <Link href="/insurance/" className="chip">Insurance guide</Link>
+            <Link href={urls.emirate('dubai')} className="chip">Dentists in Dubai</Link>
+            <Link href="/verification-policy/" className="chip">Verification policy</Link>
+            <Link href="/contact/" className="chip">Contact us</Link>
           </div>
         </Section>
       </div>
+      <GuideCta title="Find your dentist" text="Compare licensed clinics in Dubai by area, treatment and insurance, and request an appointment." href="/find-clinics/" cta="Find a dentist" />
     </PageLayout>
   );
 }

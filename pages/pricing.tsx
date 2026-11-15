@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { CheckCircle, ArrowRight, Sparkles, Building2, Star } from 'lucide-react';
+import { Check, Minus, ArrowRight, Store, Star, Building2 } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageHero } from '@/components/layout/PageHero';
 import { SITE_NAME } from '@/lib/site-data';
@@ -9,17 +9,17 @@ const BASE_URL = 'https://www.appointpanda.ae';
 
 const plans = [
   {
-    name: 'Starter', price: 'Free', icon: <Sparkles className="h-5 w-5" />,
+    name: 'Starter', price: 'Free', icon: <Store className="h-5 w-5" aria-hidden="true" />,
     features: ['Single clinic profile', 'Basic listing on directory', 'Manual profile updates', 'Email support'],
     cta: 'Get started', featured: false,
   },
   {
-    name: 'Growth', price: 'AED 499', period: '/mo', icon: <Star className="h-5 w-5" />,
+    name: 'Growth', price: 'AED 499', period: '/mo', icon: <Star className="h-5 w-5" aria-hidden="true" />,
     features: ['Everything in Starter', 'Appointment requests in your dashboard', 'Analytics dashboard', 'Review management', 'Insurance list on your profile', 'Priority support'],
     cta: 'Start free trial', featured: true,
   },
   {
-    name: 'Network', price: 'AED 1,499', period: '/mo', icon: <Building2 className="h-5 w-5" />,
+    name: 'Network', price: 'AED 1,499', period: '/mo', icon: <Building2 className="h-5 w-5" aria-hidden="true" />,
     features: ['Everything in Growth', 'Multi-branch management', 'Dedicated account manager'],
     cta: 'Contact sales', featured: false,
   },
@@ -29,7 +29,7 @@ export default function PricingPage() {
   return (
     <PageLayout>
       <Head>
-        <title>Pricing — {SITE_NAME}.ae</title>
+        <title>{`Pricing — ${SITE_NAME}.ae`}</title>
         <meta name="description" content={`Simple, transparent pricing for dental clinics. From free listing to premium multi-branch plans with analytics, booking, and priority placement.`} />
         <link rel="canonical" href={`${BASE_URL}/pricing/`} />
         <meta name="robots" content="index, follow" />
@@ -54,50 +54,40 @@ export default function PricingPage() {
         kicker="Simple, transparent"
         title="Pricing for every practice"
         subtitle="From a free starter listing to a full growth platform. No commission, no hidden fees."
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'For clinics', href: '/for-clinics/' }, { label: 'Pricing' }]}
+        tone="lime"
       >
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-zinc-400 mt-4">
-          <span className="flex items-center gap-1"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> No setup fee</span>
-          <span className="flex items-center gap-1"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Cancel anytime</span>
-          <span className="flex items-center gap-1"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Zero commission</span>
-        </div>
+        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-ink">
+          <li className="flex items-center gap-1.5"><Check className="h-4 w-4" aria-hidden="true" /> No setup fee</li>
+          <li className="flex items-center gap-1.5"><Check className="h-4 w-4" aria-hidden="true" /> Cancel anytime</li>
+          <li className="flex items-center gap-1.5"><Check className="h-4 w-4" aria-hidden="true" /> Zero commission</li>
+        </ul>
       </PageHero>
 
-      <div className="max-w-6xl mx-auto px-4 lg:px-6 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="mx-auto max-w-6xl px-5 py-12 lg:py-16">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan.name} className={`relative bg-white border rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${plan.featured ? 'border-amber-500 shadow-md ring-1 ring-amber-500/20' : 'border-zinc-200'}`}>
-              {plan.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-600 text-white text-[10px] font-semibold rounded-full uppercase tracking-wider">
-                  Most popular
-                </div>
-              )}
-              <div className="flex items-center gap-2 mb-4">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${plan.featured ? 'bg-amber-700/10 text-amber-700' : 'bg-zinc-100 text-zinc-500'}`}>
+            <div key={plan.name} className={`flex flex-col rounded-[1.25rem] bg-white p-6 ${plan.featured ? 'border-2 border-ink' : 'border border-black/10'}`}>
+              <div className="mb-4 flex items-center gap-2">
+                <div className={`grid h-10 w-10 place-items-center rounded-xl ${plan.featured ? 'bg-ink text-white' : 'bg-paper text-ink'}`}>
                   {plan.icon}
                 </div>
-                <span className="font-semibold text-zinc-900">{plan.name}</span>
+                <h2 className="font-semibold text-ink">{plan.name}</h2>
               </div>
-              <div className="mb-6">
-                <span className="text-3xl font-bold text-zinc-900">{plan.price}</span>
-                {plan.period && <span className="text-zinc-400 text-sm">{plan.period}</span>}
-              </div>
-              <ul className="space-y-3 mb-8">
+              <p className="mb-6">
+                <span className="text-3xl font-bold tracking-tight text-ink">{plan.price}</span>
+                {plan.period && <span className="text-sm text-zinc-600">{plan.period}</span>}
+              </p>
+              <ul className="mb-8 space-y-3">
                 {plan.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-zinc-600">
-                    <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <li key={i} className="flex items-start gap-2 text-[15px] text-zinc-700">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden="true" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/for-clinics"
-                className={`w-full inline-flex items-center justify-center gap-2 h-11 px-4 text-sm font-semibold rounded-full transition-all duration-200 ${
-                  plan.featured
-                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
-                    : 'border border-zinc-300 text-zinc-700 hover:bg-zinc-900 hover:text-white hover:border-zinc-900'
-                }`}
-              >
-                {plan.cta} <ArrowRight className="h-4 w-4" />
+              <Link href="/for-clinics/" className={`${plan.featured ? 'btn-ink' : 'btn-ghost'} mt-auto w-full`}>
+                {plan.cta} <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           ))}
@@ -105,33 +95,36 @@ export default function PricingPage() {
 
         {/* Feature comparison table */}
         <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-zinc-900 text-center mb-8">Compare plans</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+          <h2 className="heading-section">Compare plans</h2>
+          <div className="mt-6 overflow-x-auto rounded-[1.25rem] border border-black/10 bg-white">
+            <table className="w-full min-w-[520px] text-sm">
+              <caption className="sr-only">Features included in each plan</caption>
               <thead>
-                <tr className="border-b border-zinc-200">
-                  <th className="text-left py-3 px-4 font-semibold text-zinc-900">Feature</th>
-                  <th className="text-center py-3 px-4 font-semibold text-zinc-900">Starter</th>
-                  <th className="text-center py-3 px-4 font-semibold text-amber-700">Growth</th>
-                  <th className="text-center py-3 px-4 font-semibold text-zinc-900">Network</th>
+                <tr className="border-b border-black/10">
+                  <th scope="col" className="px-4 py-3 text-left font-semibold text-ink">Feature</th>
+                  <th scope="col" className="px-4 py-3 text-center font-semibold text-ink">Starter</th>
+                  <th scope="col" className="px-4 py-3 text-center font-semibold text-ink">Growth</th>
+                  <th scope="col" className="px-4 py-3 text-center font-semibold text-ink">Network</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['Clinic profile', '✓', '✓', '✓'],
-                  ['Treatments, prices and hours', '✓', '✓', '✓'],
-                  ['Appointment requests', '—', '✓', '✓'],
-                  ['Analytics dashboard', '—', '✓', '✓'],
-                  ['Review management', '—', '✓', '✓'],
-                  ['Insurance list on profile', '—', '✓', '✓'],
-                  ['Multi-branch', '—', '—', '✓'],
-                  ['Dedicated manager', '—', '—', '✓'],
-                ].map((row, i) => (
-                  <tr key={i} className="border-b border-zinc-100">
-                    <td className="py-3 px-4 text-zinc-700">{row[0]}</td>
-                    {[1, 2, 3].map(j => (
-                      <td key={j} className={`text-center py-3 px-4 ${row[j] === '✓' ? 'text-emerald-600' : row[j] === '—' ? 'text-zinc-300' : 'text-zinc-900'}`}>
-                        {row[j] === '✓' ? <CheckCircle className="h-4 w-4 inline" /> : row[j]}
+                  ['Clinic profile', true, true, true],
+                  ['Treatments, prices and hours', true, true, true],
+                  ['Appointment requests', false, true, true],
+                  ['Analytics dashboard', false, true, true],
+                  ['Review management', false, true, true],
+                  ['Insurance list on profile', false, true, true],
+                  ['Multi-branch', false, false, true],
+                  ['Dedicated manager', false, false, true],
+                ].map((row) => (
+                  <tr key={row[0] as string} className="border-b border-black/5 last:border-0">
+                    <th scope="row" className="px-4 py-3 text-left font-normal text-zinc-700">{row[0]}</th>
+                    {[1, 2, 3].map((j) => (
+                      <td key={j} className="px-4 py-3 text-center">
+                        {row[j]
+                          ? <Check className="inline h-4 w-4 text-ink" aria-label="Included" />
+                          : <Minus className="inline h-4 w-4 text-zinc-400" aria-label="Not included" />}
                       </td>
                     ))}
                   </tr>

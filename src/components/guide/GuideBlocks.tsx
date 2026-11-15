@@ -23,14 +23,14 @@ export function JsonLd({ data }: { data: (object | null)[] }) {
 export function Crumbs({ items }: { items: { name: string; path: string }[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex flex-wrap items-center gap-1 text-xs font-medium text-ink/60">
+      <ol className="flex flex-wrap items-center gap-1 text-xs font-medium text-ink/80">
         {items.map((item, i) => (
           <li key={item.path} className="flex items-center gap-1">
             {i > 0 && <ChevronRight className="h-3 w-3" aria-hidden="true" />}
             {i === items.length - 1 ? (
               <span aria-current="page" className="text-ink">{item.name}</span>
             ) : (
-              <Link prefetch={false} href={item.path} className="hover:text-ink hover:underline">{item.name}</Link>
+              <Link prefetch={false} href={item.path} className="inline-flex min-h-6 items-center hover:text-ink hover:underline">{item.name}</Link>
             )}
           </li>
         ))}
@@ -55,15 +55,14 @@ export function GuideHero({
   return (
     <section className="px-3 pt-4 lg:px-6">
       <div className={cn('relative mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] px-6 pb-12 pt-10 lg:px-14 lg:pb-16 lg:pt-14', toneClass[tone])}>
-        <div aria-hidden="true" className="pointer-events-none absolute -left-24 -top-24 size-72 rounded-full bg-white/25" />
         <div className={cn('relative mx-auto', image ? 'grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]' : 'max-w-5xl')}>
           <div>
             <Crumbs items={crumbs} />
             <span className="chip-label">{label}</span>
-            <h1 className="display mt-5 text-[clamp(2.6rem,7vw,5.75rem)] text-ink">{title}</h1>
+            <h1 className="display mt-5 text-[clamp(2.4rem,7vw,5.75rem)] text-ink">{title}</h1>
             {/* The quick answer: a self-contained summary that search and AI answers can quote */}
             <p className="mt-6 max-w-3xl text-lg leading-relaxed text-ink/80 md:text-xl">{answer}</p>
-            <p className="mt-5 text-xs text-ink/60">
+            <p className="mt-5 text-xs text-ink/80">
               Written by the AppointPanda editorial team · Last reviewed{' '}
               <time dateTime={CONTENT_REVIEWED}>{CONTENT_REVIEWED_LABEL}</time> ·{' '}
               <Link prefetch={false} href="/editorial-policy/" className="underline">How we write our guides</Link>
@@ -81,7 +80,7 @@ export function GuideHero({
               />
               {badge && (
                 <div className="absolute -bottom-5 left-5 rounded-2xl bg-white px-4 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{badge.label}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-600">{badge.label}</p>
                   <p className="text-sm font-semibold text-ink">{badge.value}</p>
                 </div>
               )}
@@ -93,11 +92,18 @@ export function GuideHero({
   );
 }
 
-export function Section({ id, eyebrow, title, children, className }: { id?: string; eyebrow?: string; title: string; children: ReactNode; className?: string }) {
+/**
+ * Content section with an H2. The default "plain" heading is sentence-case
+ * Instrument Sans; use variant="statement" (Anton) for at most one short
+ * statement heading per page.
+ */
+export function Section({ id, eyebrow, title, children, className, variant = 'plain' }: { id?: string; eyebrow?: string; title: string; children: ReactNode; className?: string; variant?: 'plain' | 'statement' }) {
   return (
     <section id={id} className={cn('scroll-mt-24 py-10 lg:py-14', className)}>
-      {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{eyebrow}</p>}
-      <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] text-ink">{title}</h2>
+      {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">{eyebrow}</p>}
+      {variant === 'statement'
+        ? <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] text-ink">{title}</h2>
+        : <h2 className="heading-section">{title}</h2>}
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -108,9 +114,9 @@ export function FactGrid({ facts }: { facts: { label: string; value: string; not
     <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {facts.map((f) => (
         <div key={f.label} className="rounded-2xl border border-black/10 bg-white p-5">
-          <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-500">{f.label}</dt>
+          <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">{f.label}</dt>
           <dd className="mt-2 text-lg font-semibold leading-snug text-ink">{f.value}</dd>
-          {f.note && <dd className="mt-1 text-sm text-zinc-500">{f.note}</dd>}
+          {f.note && <dd className="mt-1 text-sm text-zinc-600">{f.note}</dd>}
         </div>
       ))}
     </dl>
@@ -135,7 +141,7 @@ export function FaqList({ faqs }: { faqs: Faq[] }) {
     <div className="divide-y divide-black/10 rounded-3xl border border-black/10 bg-white">
       {faqs.map((f) => (
         <details key={f.q} className="group px-6 py-5 [&_summary::-webkit-details-marker]:hidden">
-          <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-base font-semibold text-ink">
+          <summary className="flex min-h-11 cursor-pointer list-none items-start justify-between gap-4 text-base font-semibold text-ink">
             <h3>{f.q}</h3>
             <span className="mt-1 grid size-6 shrink-0 place-items-center rounded-full bg-paper text-sm transition-transform group-open:rotate-45" aria-hidden="true">+</span>
           </summary>
@@ -154,7 +160,7 @@ export function LinkTiles({ links, columns = 3 }: { links: { href: string; title
           {l.image && (
             <span className="relative block aspect-[16/10] overflow-hidden">
               {/* Decorative thumbnail; credited in the page's image credits list */}
-              <Image src={l.image.src} alt="" width={l.image.width} height={l.image.height} sizes="(min-width: 1024px) 25vw, 50vw" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <Image src={l.image.src} alt="" width={l.image.width} height={l.image.height} sizes="(min-width: 1024px) 25vw, 50vw" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
             </span>
           )}
           <span className="flex flex-1 flex-col justify-between p-5">
@@ -199,14 +205,14 @@ export function ClinicList({ clinics, emptyText, moreHref }: { clinics: ClinicSu
               <span>
                 <span className="block font-semibold text-ink">{c.name}</span>
                 {c.area && (
-                  <span className="mt-1 flex items-center gap-1 text-sm text-zinc-500"><MapPin className="h-3.5 w-3.5" /> {c.area}</span>
+                  <span className="mt-1 flex items-center gap-1 text-sm text-zinc-600"><MapPin className="h-3.5 w-3.5" /> {c.area}</span>
                 )}
               </span>
               <span className="flex shrink-0 flex-col items-end gap-1 text-xs">
                 {c.rating && c.reviewCount ? (
                   <span className="flex items-center gap-1 font-semibold text-ink">
                     <Star className="h-3.5 w-3.5 fill-ink" /> {c.rating.toFixed(1)}
-                    <span className="font-normal text-zinc-500">({c.reviewCount} Google reviews)</span>
+                    <span className="font-normal text-zinc-600">({c.reviewCount} Google reviews)</span>
                   </span>
                 ) : null}
                 {c.verified && <span className="flex items-center gap-1 text-primary"><BadgeCheck className="h-3.5 w-3.5" /> Verified listing</span>}
@@ -215,7 +221,7 @@ export function ClinicList({ clinics, emptyText, moreHref }: { clinics: ClinicSu
           </li>
         ))}
       </ul>
-      <p className="mt-3 text-xs text-zinc-500">
+      <p className="mt-3 text-[13px] text-zinc-600">
         Listings are sorted by Google rating and review count. Ratings come from Google and are not edited by AppointPanda.{' '}
         <Link prefetch={false} href="/verification-policy/" className="underline">What &ldquo;verified&rdquo; means</Link>.
       </p>
@@ -249,7 +255,7 @@ export function PageImageCredits({ images }: { images: SiteImage[] }) {
   const unique = images.filter((img, i) => images.findIndex((x) => x.src === img.src) === i);
   if (unique.length === 0) return null;
   return (
-    <aside aria-label="Image credits" className="mt-4 text-xs leading-relaxed text-zinc-500">
+    <aside aria-label="Image credits" className="mt-4 text-xs leading-relaxed text-zinc-600">
       <p className="font-semibold text-zinc-600">Image credits</p>
       <ul className="mt-1 space-y-0.5">
         {unique.map((img) => (

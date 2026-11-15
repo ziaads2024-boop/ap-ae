@@ -1,17 +1,15 @@
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { Section } from "@/components/layout/Section";
-import { SectionHeader } from "@/components/layout/SectionHeader";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHero } from "@/components/layout/PageHero";
+import { GuideCta } from "@/components/guide/GuideBlocks";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { useRealCounts } from "@/hooks/useRealCounts";
-import { Calendar, User, ArrowRight, Clock, Tag, MapPin, Search, Star, Sparkles, BookOpen, TrendingUp } from "lucide-react";
+import { Calendar, User, ArrowRight, Clock, MapPin, Search, BookOpen } from "lucide-react";
 import { format } from "date-fns";
 import { liveImage } from '@/lib/liveImage';
 import { displayTitle } from '@/lib/displayTitle';
@@ -22,6 +20,8 @@ interface BlogPageProps {
   popularStates?: { name: string; slug: string }[];
   popularTreatments?: { name: string; slug: string }[];
 }
+
+const PAGE_SIZE = 10;
 
 const BlogPage = ({
   posts: postsProp = [],
@@ -88,11 +88,18 @@ const BlogPage = ({
     initialData: popularTreatmentsProp,
   });
 
-  const categories = ["Dental Health", "Cosmetic Dentistry", "Oral Hygiene", "Treatments", "Industry News"];
+  // Category filters come from the published posts, so every filter returns results
+  const categories = useMemo(
+    () => Array.from(new Set((posts || []).map((p: any) => p.category).filter(Boolean))) as string[],
+    [posts]
+  );
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const filteredPosts = (posts || []).filter((p: any) => !activeCategory || p.category === activeCategory);
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Blog" },
+    { label: "Articles" },
   ];
 
   return (
@@ -111,99 +118,87 @@ const BlogPage = ({
       />
 
       <PageHero
-        badge="Blog"
-        title="Dental Health"
-        highlight="Insights & Guides"
+        badge="Articles"
+        title="Dental health"
+        highlight="guides & articles"
         description="Articles on dental care, treatment costs, oral hygiene and finding a dentist in Dubai and the UAE."
+        breadcrumbs={breadcrumbs}
+        tone="sand"
       />
 
       {/* Featured Posts */}
       {featuredPosts && featuredPosts.length > 0 && (
-        <Section size="md" className="-mt-8 relative z-10">
-          <div className="grid md:grid-cols-3 gap-6">
+        <section className="mx-auto max-w-6xl px-5 pt-10">
+          <h2 className="heading-section">Featured</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
             {featuredPosts.map((post, i) => (
               <Link
                 key={post.id}
                 href={`/blog/${post.slug}/`}
-                className={`card-modern overflow-hidden group ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
+                className={`block-card group flex flex-col overflow-hidden ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}
               >
-                <div className={`relative ${i === 0 ? "h-80 md:h-full" : "h-48"}`}>
-                  {liveImage(post.featured_image_url) ? (
+                <div className={`relative overflow-hidden bg-tone-sand ${i === 0 ? "aspect-[16/9] md:aspect-auto md:min-h-[18rem] md:flex-1" : "aspect-[16/9]"}`}>
+                  {liveImage(post.featured_image_url) && (
                     <img
                       src={liveImage(post.featured_image_url)!}
-                      alt={displayTitle(post.title)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/10 to-gold/20" />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-primary text-primary-foreground rounded-full">
-                      <Sparkles className="h-3 w-3 mr-1" />
-                      Featured
-                    </Badge>
-                  </div>
-                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                    <Badge className="w-fit bg-white/20 backdrop-blur-sm text-white rounded-full mb-3">
-                      {post.category || "Dental Health"}
-                    </Badge>
-                    <h3 className={`font-display font-bold text-white group-hover:text-primary transition-colors ${i === 0 ? "text-2xl md:text-3xl" : "text-lg"}`}>
-                      {displayTitle(post.title)}
-                    </h3>
-                    <div className="flex items-center gap-4 mt-3 text-sm text-white/60">
-                      {post.author_name && (
-                        <span className="flex items-center gap-1">
-                          <User className="h-3 w-3" />
-                          {post.author_name}
-                        </span>
-                      )}
-                      {post.published_at && (
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {format(new Date(post.published_at), "MMM d, yyyy")}
-                        </span>
-                      )}
-                    </div>
+                </div>
+                <div className="p-5">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-600">{post.category || "Dental Health"}</p>
+                  <h3 className={`mt-1 font-semibold leading-snug text-ink group-hover:underline ${i === 0 ? "text-xl md:text-2xl" : "text-lg"}`}>
+                    {displayTitle(post.title)}
+                  </h3>
+                  <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-zinc-600">
+                    {post.author_name && (
+                      <span className="flex items-center gap-1">
+                        <User className="h-3.5 w-3.5" aria-hidden="true" />
+                        {post.author_name}
+                      </span>
+                    )}
+                    {post.published_at && (
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                        {format(new Date(post.published_at), "MMM d, yyyy")}
+                      </span>
+                    )}
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-        </Section>
+        </section>
       )}
 
-      {/* Categories */}
-      <Section variant="muted" size="sm">
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button variant="default" className="rounded-full font-bold">
-            All Posts
-          </Button>
-          {categories.map((cat) => (
-            <Button key={cat} variant="outline" className="rounded-full font-bold">
-              {cat}
-            </Button>
-          ))}
-        </div>
-      </Section>
-
       {/* Main Content Grid */}
-      <Section size="lg">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <section className="mx-auto max-w-6xl px-5 py-10 lg:py-14">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
           {/* Posts Grid */}
-          <div className="lg:col-span-2">
-            <SectionHeader
-              label="Latest Articles"
-              title="All Blog"
-              highlight="Posts"
-            />
+          <div className="min-w-0 lg:col-span-2">
+            <h2 className="heading-section">Latest articles</h2>
 
+            {categories.length > 1 && (
+              <div className="mt-5 flex flex-wrap gap-2" role="group" aria-label="Filter articles by category">
+                <button type="button" className="chip" aria-pressed={activeCategory === null} onClick={() => { setActiveCategory(null); setVisible(PAGE_SIZE); }}>
+                  All articles
+                </button>
+                {categories.map((cat) => (
+                  <button key={cat} type="button" className="chip" aria-pressed={activeCategory === cat} onClick={() => { setActiveCategory(cat); setVisible(PAGE_SIZE); }}>
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="mt-6">
             {isLoading ? (
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid gap-4 md:grid-cols-2">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="card-modern p-0">
-                    <Skeleton className="h-48 rounded-t-3xl" />
-                    <div className="p-5 space-y-3">
+                  <div key={i} className="block-card-static overflow-hidden">
+                    <Skeleton className="h-48 rounded-none" />
+                    <div className="space-y-3 p-5">
                       <Skeleton className="h-4 w-24" />
                       <Skeleton className="h-6 w-full" />
                       <Skeleton className="h-4 w-3/4" />
@@ -211,171 +206,136 @@ const BlogPage = ({
                   </div>
                 ))}
               </div>
-            ) : posts && posts.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-6">
-                {posts.map((post) => (
+            ) : filteredPosts.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-2">
+                {filteredPosts.slice(0, visible).map((post) => (
                   <Link
                     key={post.id}
                     href={`/blog/${post.slug}/`}
-                    className="card-modern overflow-hidden group card-hover"
+                    className="block-card group flex flex-col overflow-hidden"
                   >
-                    <div className="h-48 relative overflow-hidden">
+                    <div className="relative h-48 overflow-hidden bg-tone-sand">
                       {liveImage(post.featured_image_url) ? (
                         <img
                           src={liveImage(post.featured_image_url)!}
-                          alt={displayTitle(post.title)}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/10 to-gold/20 flex items-center justify-center">
-                          <BookOpen className="h-12 w-12 text-primary/40" />
+                        <div className="grid h-full w-full place-items-center">
+                          <BookOpen className="h-10 w-10 text-ink/30" aria-hidden="true" />
                         </div>
                       )}
                     </div>
-                    <div className="p-5">
-                      <div className="flex items-center gap-2 mb-3">
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600">
                         {post.category && (
-                          <Badge variant="secondary" className="rounded-full text-xs">
-                            <Tag className="h-3 w-3 mr-1" />
-                            {post.category}
-                          </Badge>
+                          <span className="font-semibold uppercase tracking-wider">{post.category}</span>
                         )}
                         {post.published_at && (
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" aria-hidden="true" />
                             {format(new Date(post.published_at), "MMM d, yyyy")}
                           </span>
                         )}
                       </div>
-                      <h3 className="font-display text-lg font-bold group-hover:text-primary transition-colors line-clamp-2">
+                      <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-ink group-hover:underline">
                         {displayTitle(post.title)}
                       </h3>
-                      <div className="flex items-center gap-2 mt-4 text-sm font-bold text-primary">
-                        Read More
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </div>
+                      <span className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-semibold text-ink">
+                        Read article
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                      </span>
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 card-modern">
-                <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-                <h3 className="font-display text-xl font-bold mb-2">No posts yet</h3>
-                <p className="text-muted-foreground">
+              <div className="block-card-static py-12 text-center">
+                <BookOpen className="mx-auto mb-4 h-12 w-12 text-ink/30" aria-hidden="true" />
+                <h3 className="mb-2 text-xl font-semibold text-ink">No posts yet</h3>
+                <p className="text-zinc-600">
                   We're working on bringing you great dental content. Check back soon!
                 </p>
               </div>
             )}
 
-            {posts && posts.length > 9 && (
-              <div className="text-center mt-8">
-                <Button variant="outline" size="lg" className="rounded-2xl font-bold">
-                  Load More Posts
-                </Button>
+            {filteredPosts.length > visible && (
+              <div className="mt-8 text-center">
+                <button type="button" className="btn-ghost" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+                  Load more articles
+                </button>
               </div>
             )}
+            </div>
           </div>
 
           {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Search CTA */}
-            <div className="card-modern p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
-                  <Search className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">Find a Dentist</h3>
-                  <p className="text-sm text-muted-foreground">In your city</p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
+          <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-[1.25rem] bg-tone-lemon p-6">
+              <Search className="h-6 w-6 text-ink" aria-hidden="true" />
+              <h2 className="mt-3 text-lg font-semibold text-ink">Find a dentist</h2>
+              <p className="mt-1 text-sm text-ink/80">
                 Compare {counts?.clinics ? `${counts.clinics.toLocaleString()} ` : ''}listed dental clinics and request an appointment.
               </p>
-              <Button asChild className="w-full rounded-xl font-bold">
-                <Link prefetch={false} href="/find-clinics/">
-                  Search Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+              <Link prefetch={false} href="/find-clinics/" className="btn-ink mt-4 w-full">
+                Search now <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
 
-            {/* Browse by State */}
-            <div className="card-modern p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <MapPin className="h-5 w-5 text-primary" />
-                <h3 className="font-bold">Find by Location</h3>
-              </div>
-              <div className="space-y-2">
+            <div className="block-card-static p-6">
+              <h2 className="flex items-center gap-2 font-semibold text-ink">
+                <MapPin className="h-4 w-4" aria-hidden="true" /> Find by location
+              </h2>
+              <ul className="mt-3 space-y-1">
                 {popularStates?.map((state) => (
-                  <Link
-                    key={state.slug}
-                    href={`/${state.slug}/`}
-                    className="flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-primary/10 transition-colors group"
-                  >
-                    <span className="font-medium group-hover:text-primary">{state.name}</span>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  </Link>
+                  <li key={state.slug}>
+                    <Link
+                      href={`/${state.slug}/`}
+                      className="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-medium text-ink hover:bg-paper"
+                    >
+                      {state.name}
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  </li>
                 ))}
-                <Link prefetch={false} href="/find-clinics/"
-                  className="flex items-center justify-center p-3 rounded-xl border border-dashed border-border hover:border-primary hover:text-primary transition-colors text-sm font-medium"
-                >
-                  View All Locations
-                </Link>
-              </div>
+              </ul>
+              <Link prefetch={false} href="/find-clinics/" className="btn-ghost mt-3 w-full">
+                View all locations
+              </Link>
             </div>
 
-            {/* Popular Services */}
-            <div className="card-modern p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Star className="h-5 w-5 text-gold" />
-                <h3 className="font-bold">Popular Services</h3>
+            {popularTreatments && popularTreatments.length > 0 && (
+              <div className="block-card-static p-6">
+                <h2 className="font-semibold text-ink">Popular treatments</h2>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {popularTreatments.map((treatment) => (
+                    <Link key={treatment.slug} href={`/services/${treatment.slug}/`} className="chip">
+                      {treatment.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {popularTreatments?.map((treatment) => (
-                  <Link
-                    key={treatment.slug}
-                    href={`/services/${treatment.slug}/`}
-                    className="px-3 py-1.5 text-sm rounded-full bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
-                  >
-                    {treatment.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            )}
 
-            {/* Newsletter CTA */}
-            <div className="card-modern p-6 bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
-              <h3 className="font-bold text-lg mb-2">Stay Updated</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="block-card-static p-6">
+              <h2 className="text-lg font-semibold text-ink">Stay updated</h2>
+              <p className="mt-1 text-sm text-zinc-600">
                 Get the latest dental health tips and news delivered to your inbox.
               </p>
-              <Button asChild variant="outline" className="w-full rounded-xl font-bold border-gold/30 hover:bg-gold/10">
-                <Link prefetch={false} href="/contact/">Subscribe</Link>
-              </Button>
+              <Link prefetch={false} href="/contact/" className="btn-ghost mt-4 w-full">Subscribe</Link>
             </div>
           </aside>
         </div>
-      </Section>
+      </section>
 
-      {/* CTA */}
-      <Section variant="primary" size="md">
-        <div className="text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Ready to Find Your Dentist?
-          </h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Browse listed dental clinics in Dubai by area, treatment and insurance.
-          </p>
-          <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-            <Link prefetch={false} href="/find-clinics/">
-              Find a Dentist
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
-        </div>
-      </Section>
+      <GuideCta
+        title="Find your dentist"
+        text="Browse listed dental clinics in Dubai by area, treatment and insurance."
+        href="/find-clinics/"
+        cta="Find a dentist"
+      />
     </PageLayout>
   );
 };

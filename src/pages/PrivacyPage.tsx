@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { Section } from "@/components/layout/Section";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
-import { Shield, ArrowRight, Lock, Eye, Database, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Lock, Eye, Database, Mail } from "lucide-react";
+import { LegalDocument } from "@/components/policy/PolicyPage";
 
 const PrivacyPage = () => {
   const { data: siteSettings } = useSiteSettings();
@@ -190,88 +188,16 @@ We are committed to resolving your concerns within 30 days of receipt, as requir
         data={{ type: 'organization' }}
       />
 
-      {/* Dark Hero Section */}
-      <section className="relative bg-dark-section text-dark-section-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(139,92,246,0.1),transparent_50%)]" />
-        <div className="absolute top-20 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-
-        <div className="container relative py-16 md:py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Lock className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">Your Privacy Matters</span>
-            </div>
-
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
-              Privacy{" "}
-              <span className="text-gradient">Policy</span>
-            </h1>
-
-            <p className="text-lg text-dark-section-foreground/70 max-w-xl mx-auto mb-8">
-              Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
-            </p>
-
-            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              {highlights.map((item, i) => (
-                <div key={i} className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                  <item.icon className="h-6 w-6 text-primary mx-auto mb-2" />
-                  <h3 className="font-bold text-sm">{item.title}</h3>
-                  <p className="text-xs text-dark-section-foreground/60">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Section size="lg">
-        <div className="max-w-4xl mx-auto">
-          <div className="card-modern p-8 md:p-12">
-            <div className="flex items-center gap-4 mb-8 pb-6 border-b">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-muted-foreground">
-                  <strong>Last Updated:</strong> January 2026
-                </p>
-                <p className="text-sm text-muted-foreground">Committed to protecting your privacy</p>
-              </div>
-            </div>
-
-            <p className="text-muted-foreground mb-8 leading-relaxed p-4 rounded-xl bg-muted/50">
-              AppointPanda ("we", "us", or "our") is committed to protecting your privacy in accordance with the UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (PDPL) and applicable regulations of Dubai Health Authority (DHA), Department of Health Abu Dhabi (DoH), and MOHAP. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services within the United Arab Emirates.
-            </p>
-
-            <div className="space-y-8">
-              {sections.map((section, i) => (
-                <div key={i} className="group">
-                  <h2 className="font-display text-xl font-bold mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm text-primary font-bold">
-                      {i + 1}
-                    </span>
-                    {section.title.replace(/^\d+\.\s*/, '')}
-                  </h2>
-                  <div className="text-muted-foreground leading-relaxed whitespace-pre-line pl-11">
-                    {section.content}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 pt-8 border-t text-center">
-              <p className="text-muted-foreground mb-4">Have questions about your privacy?</p>
-              <Button asChild variant="outline" className="rounded-2xl font-bold">
-                <Link href="/contact/">
-                  Contact Us
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Section>
+      <LegalDocument
+        kicker="Your privacy"
+        title="Privacy policy"
+        intro="Your privacy is important to us. This policy explains how we collect, use, and protect your personal information."
+        highlights={highlights}
+        preamble={`AppointPanda ("we", "us", or "our") is committed to protecting your privacy in accordance with the UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (PDPL) and applicable regulations of Dubai Health Authority (DHA), Department of Health Abu Dhabi (DoH), and MOHAP. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services within the United Arab Emirates.`}
+        sections={sections}
+        lastUpdated="January 2026"
+        contactPrompt="Have questions about your privacy?"
+      />
     </PageLayout>
   );
 };

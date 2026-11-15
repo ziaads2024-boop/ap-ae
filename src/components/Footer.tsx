@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { services, emirates, urls, LOCAL_GUIDE_SERVICES, serviceBySlug, isLiveEmirate } from '@/content';
-import { dubaiAreaBySlug } from '@/content/dubai';
+import {
+  navServices as services, navEmirates as emirates, navUrls as urls, NAV_LOCAL_GUIDE_SERVICES as LOCAL_GUIDE_SERVICES,
+  navServiceBySlug as serviceBySlug, isLiveEmirate, navAreaBySlug as dubaiAreaBySlug,
+} from '@/lib/navLinks';
 import { Logo } from '@/components/Navbar';
 
 const DUBAI_GUIDES = ['dental-implants', 'invisalign', 'veneers', 'teeth-whitening', 'emergency-dentist', 'pediatric-dentistry', 'braces', 'root-canal'];
@@ -34,7 +36,7 @@ export function Footer() {
             <div className="max-w-md">
               <Logo inverted />
               <p className="mt-4 text-sm leading-relaxed text-zinc-400">
-                Independent guides to dental treatment in the UAE, and a directory of licensed clinics across all seven emirates.
+                Independent guides to dental treatment in the UAE, and a directory of licensed dental clinics. Live in Dubai; other emirates coming soon.
                 Information on this site is general and does not replace advice from your dentist.
               </p>
             </div>
@@ -46,42 +48,42 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8 py-10 md:grid-cols-4">
             <div>
               <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Treatments</h2>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-1 text-sm">
                 {services.map((s) => (
-                  <li key={s.slug}><Link href={urls.service(s.slug)} className="hover:text-white">{s.name}</Link></li>
+                  <li key={s.slug}><Link href={urls.service(s.slug)} className="inline-block py-1 hover:text-white hover:underline">{s.name}</Link></li>
                 ))}
               </ul>
             </div>
             <div>
               <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Dentists in Dubai</h2>
-              <ul className="space-y-2 text-sm">
-                <li><Link href={urls.emirate('dubai')} className="hover:text-white">All of Dubai</Link></li>
+              <ul className="space-y-1 text-sm">
+                <li><Link href={urls.emirate('dubai')} className="inline-block py-1 hover:text-white hover:underline">All of Dubai</Link></li>
                 {FOOTER_AREAS.map((a) => {
                   const area = dubaiAreaBySlug(a);
-                  return area ? <li key={a}><Link href={urls.dubaiArea(a)} className="hover:text-white">{area.name}</Link></li> : null;
+                  return area ? <li key={a}><Link href={urls.dubaiArea(a)} className="inline-block py-1 hover:text-white hover:underline">{area.name}</Link></li> : null;
                 })}
               </ul>
-              <p className="mt-4 text-xs text-zinc-500">
+              <p className="mt-4 text-xs leading-relaxed text-zinc-400">
                 Coming soon:{' '}
                 {emirates.filter((e) => !isLiveEmirate(e.slug)).map((e, i) => (
-                  <span key={e.slug}>{i > 0 && ', '}<Link href={urls.emirate(e.slug)} className="hover:text-white">{e.name}</Link></span>
+                  <span key={e.slug}>{i > 0 && ', '}<Link href={urls.emirate(e.slug)} className="inline-block py-1 hover:text-white hover:underline">{e.name}</Link></span>
                 ))}
               </p>
             </div>
             <div>
               <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">Dubai treatment guides</h2>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-1 text-sm">
                 {DUBAI_GUIDES.filter((s) => LOCAL_GUIDE_SERVICES.includes(s)).map((s) => (
-                  <li key={s}><Link href={urls.serviceEmirate('dubai', s)} className="hover:text-white">{serviceBySlug(s)?.shortName} in Dubai</Link></li>
+                  <li key={s}><Link href={urls.serviceEmirate('dubai', s)} className="inline-block py-1 hover:text-white hover:underline">{serviceBySlug(s)?.shortName} in Dubai</Link></li>
                 ))}
-                <li><Link href={urls.dubaiReasons} className="hover:text-white">Find care by reason</Link></li>
+                <li><Link href={urls.dubaiReasons} className="inline-block py-1 hover:text-white hover:underline">Find care by reason</Link></li>
               </ul>
             </div>
             <div>
               <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-white">AppointPanda</h2>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-1 text-sm">
                 {COMPANY_LINKS.map((l) => (
-                  <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>
+                  <li key={l.href}><Link href={l.href} className="inline-block py-1 hover:text-white hover:underline">{l.label}</Link></li>
                 ))}
               </ul>
             </div>
@@ -95,7 +97,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-5 text-xs text-zinc-500 md:flex-row md:justify-between lg:px-14">
+        <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-5 text-xs text-zinc-400 md:flex-row md:justify-between lg:px-14">
           <p>© {new Date().getFullYear()} AppointPanda. All rights reserved.</p>
           <p>In a medical emergency in the UAE call 998 for an ambulance.</p>
         </div>

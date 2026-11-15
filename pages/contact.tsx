@@ -35,7 +35,7 @@ export default function ContactPage() {
     setState(error ? 'error' : 'sent');
   };
 
-  const field = 'h-11 w-full rounded-xl border border-black/10 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20';
+  const field = 'h-12 w-full rounded-xl border border-black/20 bg-white px-3 text-base md:text-sm focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink';
 
   return (
     <PageLayout>
@@ -84,28 +84,28 @@ export default function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <label className="block">
-                <span className="mb-1 block text-xs font-semibold text-zinc-600">Your name</span>
+                <span className="mb-1 block text-sm font-medium text-ink">Your name</span>
                 <input value={name} onChange={(e) => setName(e.target.value)} required minLength={2} autoComplete="name" className={field} />
               </label>
               <label className="block">
-                <span className="mb-1 block text-xs font-semibold text-zinc-600">Email</span>
+                <span className="mb-1 block text-sm font-medium text-ink">Email</span>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className={field} />
               </label>
               <label className="block">
-                <span className="mb-1 block text-xs font-semibold text-zinc-600">Topic</span>
+                <span className="mb-1 block text-sm font-medium text-ink">Topic</span>
                 <select value={topic} onChange={(e) => setTopic(e.target.value)} className={field}>
                   {TOPICS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </label>
               <label className="block">
-                <span className="mb-1 block text-xs font-semibold text-zinc-600">Message</span>
-                <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={5} required minLength={10} maxLength={3000} className="w-full rounded-xl border border-black/10 bg-white p-3 text-sm focus:outline-none focus:ring-2 focus:ring-ink/20" />
+                <span className="mb-1 block text-sm font-medium text-ink">Message</span>
+                <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={5} required minLength={10} maxLength={3000} className="w-full rounded-xl border border-black/20 bg-white p-3 text-base md:text-sm focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink" />
               </label>
-              <p className="text-xs text-zinc-500">Please do not include medical history. See our <Link href="/privacy/" className="underline">privacy policy</Link>.</p>
+              <p className="text-[13px] text-zinc-600">Please do not include medical history. See our <Link href="/privacy/" className="underline">privacy policy</Link>.</p>
               {state === 'error' && (
                 <p className="text-sm font-medium text-red-700" role="alert">We could not send your message. Please email {CONTACT_EMAIL} instead.</p>
               )}
-              <button type="submit" disabled={state === 'sending'} className="btn-ink w-full disabled:opacity-60">
+              <button type="submit" disabled={state === 'sending'} className="btn-ink w-full disabled:opacity-60" aria-busy={state === 'sending'}>
                 {state === 'sending' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Send message
               </button>
             </form>

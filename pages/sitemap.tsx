@@ -11,7 +11,7 @@ export default function SitemapPage() {
   return (
     <PageLayout>
       <Head>
-        <title>Sitemap — {SITE_NAME}.ae</title>
+        <title>{`Sitemap — ${SITE_NAME}.ae`}</title>
         <meta name="description" content={`Complete site map for ${SITE_NAME}.ae — find every page across our dental directory.`} />
         <link rel="canonical" href={`${BASE_URL}/sitemap/`} />
         <meta name="robots" content="index, follow" />
@@ -32,6 +32,8 @@ export default function SitemapPage() {
       <PageHero
         kicker="Site index"
         title="Sitemap"
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Sitemap' }]}
+        tone="sand"
       />
 
       <div className="max-w-5xl mx-auto px-5 py-12 lg:py-16">
@@ -47,7 +49,7 @@ export default function SitemapPage() {
                 { label: 'Insurance', href: '/insurance/' },
                 { label: 'Guides and articles', href: '/blog/' },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-zinc-600 hover:text-ink hover:underline">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="inline-block py-0.5 text-zinc-700 hover:text-ink hover:underline">{l.label}</Link></li>
               ))}
             </ul>
             <h2 className="mb-3 mt-8 text-sm font-semibold text-ink">AppointPanda</h2>
@@ -64,7 +66,7 @@ export default function SitemapPage() {
                 { label: 'Privacy', href: '/privacy/' },
                 { label: 'Terms', href: '/terms/' },
               ].map((l) => (
-                <li key={l.href}><Link href={l.href} className="text-zinc-600 hover:text-ink hover:underline">{l.label}</Link></li>
+                <li key={l.href}><Link href={l.href} className="inline-block py-0.5 text-zinc-700 hover:text-ink hover:underline">{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -73,7 +75,7 @@ export default function SitemapPage() {
             <h2 className="mb-3 text-sm font-semibold text-ink">Treatment guides</h2>
             <ul className="space-y-2 text-sm">
               {services.map((s) => (
-                <li key={s.slug}><Link href={urls.service(s.slug)} className="text-zinc-600 hover:text-ink hover:underline">{s.name}</Link></li>
+                <li key={s.slug}><Link href={urls.service(s.slug)} className="inline-block py-0.5 text-zinc-700 hover:text-ink hover:underline">{s.name}</Link></li>
               ))}
             </ul>
           </div>
@@ -83,10 +85,10 @@ export default function SitemapPage() {
             <ul className="space-y-4 text-sm">
               {emirates.map((e) => (
                 <li key={e.slug}>
-                  <Link href={urls.emirate(e.slug)} className="font-medium text-ink hover:underline">Dentists in {e.name}</Link>
+                  <Link href={urls.emirate(e.slug)} className="inline-block py-0.5 font-medium text-ink hover:underline">Dentists in {e.name}</Link>
                   <ul className="mt-1.5 space-y-1 pl-3">
                     {services.filter((s) => hasLocalGuide(s.slug, e.slug)).map((s) => (
-                      <li key={s.slug}><Link href={urls.serviceEmirate(e.slug, s.slug)} className="text-zinc-600 hover:text-ink hover:underline">{s.shortName} in {e.name}</Link></li>
+                      <li key={s.slug}><Link href={urls.serviceEmirate(e.slug, s.slug)} className="inline-block py-0.5 text-zinc-700 hover:text-ink hover:underline">{s.shortName} in {e.name}</Link></li>
                     ))}
                   </ul>
                 </li>

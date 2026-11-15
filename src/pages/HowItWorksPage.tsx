@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { Section } from "@/components/layout/Section";
-import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { PageHero } from "@/components/layout/PageHero";
+import { GuideCta } from "@/components/guide/GuideBlocks";
 import {
   Search,
   UserCheck,
@@ -15,7 +14,6 @@ import {
   TrendingUp,
   Shield,
   Phone,
-  Users
 } from "lucide-react";
 
 const HowItWorksPage = () => {
@@ -24,29 +22,25 @@ const HowItWorksPage = () => {
       step: 1,
       icon: Search,
       title: "Search",
-      description: "Choose an area and a reason for your visit or a treatment, then compare listed clinics nearby.",
-      color: "from-primary/20 to-teal/10"
+      description: "Choose an area and a reason for your visit or a treatment, then compare listed clinics nearby."
     },
     {
       step: 2,
       icon: UserCheck,
       title: "Compare",
-      description: "Open clinic and dentist profiles to see treatments, opening hours, insurance and Google ratings. Read the treatment guide to know what to ask.",
-      color: "from-purple/20 to-indigo-500/10"
+      description: "Open clinic and dentist profiles to see treatments, opening hours, insurance and Google ratings. Read the treatment guide to know what to ask."
     },
     {
       step: 3,
       icon: Calendar,
       title: "Book",
-      description: "Send a request with a preferred day and time of day. The clinic, or our team if the clinic is not on AppointPanda yet, calls you to agree a time.",
-      color: "from-gold/20 to-amber-500/10"
+      description: "Send a request with a preferred day and time of day. The clinic, or our team if the clinic is not on AppointPanda yet, calls you to agree a time."
     },
     {
       step: 4,
       icon: Star,
       title: "Give feedback",
-      description: "After your visit you can review the clinic on Google or send private feedback to the clinic. Both options are always open to you.",
-      color: "from-coral/20 to-pink/10"
+      description: "After your visit you can review the clinic on Google or send private feedback to the clinic. Both options are always open to you."
     },
   ];
 
@@ -79,7 +73,7 @@ const HowItWorksPage = () => {
 
   const patientBenefits = [
     "Clinic listings with Google ratings, shown as reported",
-    "Real patient reviews and ratings",
+    "Google ratings shown as reported, never edited",
     "Easy online appointment requests",
     "Compare clinics and prices",
     "Find specialists for any treatment",
@@ -105,148 +99,105 @@ const HowItWorksPage = () => {
       />
 
       <PageHero
-        badge="How It Works"
+        badge="How it works"
         title="Finding dental care made"
         highlight="simple"
         description="From search to booking, here's how AppointPanda helps you find the right dentist in just a few steps."
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "How it works" }]}
+        tone="sky"
       />
 
       {/* For Patients */}
-      <Section size="lg">
-        <div className="text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-            <Users className="h-4 w-4 text-primary" />
-            <span className="text-sm font-bold text-primary">For Patients</span>
-          </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">
-            Find Your Perfect <span className="text-primary">Dentist</span>
-          </h2>
-        </div>
+      <section className="mx-auto max-w-6xl px-5 py-12 lg:py-16">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-600">For patients</p>
+        <h2 className="heading-section mt-2">Find your dentist</h2>
 
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          {patientSteps.map((item, i) => (
-            <div key={i} className="relative">
-              <div className="card-modern p-6 text-center h-full card-hover">
-                <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-display font-bold text-xl mx-auto mb-4 shadow-glow">
-                  {item.step}
-                </div>
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto mb-4`}>
-                  <item.icon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="font-display text-lg font-bold mb-2">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+        <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {patientSteps.map((item) => (
+            <li key={item.step} className="block-card-static flex h-full flex-col p-6">
+              <div className="flex items-center gap-3">
+                <span className="grid size-9 place-items-center rounded-full bg-ink text-sm font-semibold text-white" aria-hidden="true">{item.step}</span>
+                <item.icon className="h-5 w-5 text-ink" aria-hidden="true" />
               </div>
-              {i < patientSteps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-border" />
-              )}
-            </div>
+              <h3 className="mt-4 text-lg font-semibold text-ink">
+                <span className="sr-only">Step {item.step}: </span>{item.title}
+              </h3>
+              <p className="mt-1 text-[15px] leading-relaxed text-zinc-700">{item.description}</p>
+            </li>
           ))}
-        </div>
+        </ol>
 
-        <div className="card-modern p-8 bg-gradient-to-br from-primary/5 via-transparent to-teal/5 border-primary/20">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="font-display text-2xl font-bold mb-4">Patient Benefits</h3>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {patientBenefits.map((benefit, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span className="font-medium">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="text-center md:text-right">
-              <Button asChild size="lg" className="rounded-2xl font-bold shadow-glow">
-                <Link href="/find-clinics/">
-                  Find a Dentist
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
+        <div className="mt-6 grid items-center gap-6 rounded-[1.25rem] bg-tone-sky p-6 md:grid-cols-[1fr_auto] md:p-8">
+          <div>
+            <h3 className="text-xl font-semibold text-ink">Patient benefits</h3>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {patientBenefits.map((benefit) => (
+                <li key={benefit} className="flex items-start gap-2 text-[15px] text-ink">
+                  <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
           </div>
+          <Link href="/find-clinics/" className="btn-ink">
+            Find a dentist <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
-      </Section>
+      </section>
 
       {/* For Dentists */}
-      <Section variant="dark" size="lg">
-        <div className="text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-            <Building2 className="h-4 w-4 text-primary" />
-            <span className="text-sm font-bold text-primary">For Dentists</span>
-          </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 text-dark-section-foreground">
-            Grow Your <span className="text-primary">Practice</span>
-          </h2>
-        </div>
+      <section className="px-3 lg:px-6">
+        <div className="mx-auto max-w-[1400px] rounded-[2rem] bg-ink px-6 py-12 text-white lg:px-14 lg:py-16">
+          <div className="mx-auto max-w-6xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-zinc-300">For dentists</p>
+            <h2 className="heading-section mt-2 !text-white">Grow your practice</h2>
 
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
-          {dentistSteps.map((item, i) => (
-            <div key={i} className="relative">
-              <div className="bg-card/10 backdrop-blur-sm border border-white/10 rounded-3xl p-6 text-center h-full hover:bg-card/20 transition-colors">
-                <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-display font-bold text-xl mx-auto mb-4 shadow-glow">
-                  {item.step}
-                </div>
-                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="font-display text-lg font-bold mb-2 text-white">{item.title}</h3>
-                <p className="text-sm text-white/70">{item.description}</p>
-              </div>
-              {i < dentistSteps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-white/20" />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="bg-card/10 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="font-display text-2xl font-bold mb-4 text-white">Dentist Benefits</h3>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {dentistBenefits.map((benefit, i) => (
-                  <div key={i} className="flex items-center gap-2 text-white/90">
-                    <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span className="font-medium">{benefit}</span>
+            <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {dentistSteps.map((item) => (
+                <li key={item.step} className="flex h-full flex-col rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 place-items-center rounded-full bg-tone-lemon text-sm font-semibold text-ink" aria-hidden="true">{item.step}</span>
+                    <item.icon className="h-5 w-5 text-white" aria-hidden="true" />
                   </div>
-                ))}
+                  <h3 className="mt-4 text-lg font-semibold text-white">
+                    <span className="sr-only">Step {item.step}: </span>{item.title}
+                  </h3>
+                  <p className="mt-1 text-[15px] leading-relaxed text-zinc-300">{item.description}</p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-6 grid items-center gap-6 rounded-[1.25rem] border border-white/10 p-6 md:grid-cols-[1fr_auto] md:p-8">
+              <div>
+                <h3 className="text-xl font-semibold text-white">Dentist benefits</h3>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {dentistBenefits.map((benefit) => (
+                    <li key={benefit} className="flex items-start gap-2 text-[15px] text-zinc-200">
+                      <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-tone-lime" aria-hidden="true" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="space-y-3 text-center md:text-right">
+                <Link href="/list-your-practice/" className="btn-ink !bg-white !text-ink hover:!bg-zinc-100">
+                  List your practice <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <p className="text-sm text-zinc-300">
+                  Already listed? <Link href="/claim-profile/" className="font-semibold text-white underline underline-offset-2">Claim your profile</Link>
+                </p>
               </div>
             </div>
-            <div className="text-center md:text-right space-y-3">
-              <Button asChild size="lg" className="rounded-2xl font-bold shadow-glow">
-                <Link href="/list-your-practice/">
-                  List Your Practice
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <p className="text-white/60 text-sm">
-                Already listed? <Link href="/claim-profile/" className="text-primary hover:underline">Claim your profile</Link>
-              </p>
-            </div>
           </div>
         </div>
-      </Section>
+      </section>
 
-      {/* CTA */}
-      <Section variant="primary" size="md">
-        <div className="text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Ready to get started?
-          </h2>
-          <p className="text-primary-foreground/80 mb-8 max-w-xl mx-auto">
-            Find a clinic near you, or list your practice for free.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg" variant="secondary" className="rounded-2xl font-bold">
-              <Link href="/find-clinics/">Find a Dentist</Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-2xl font-bold border-white/40 text-white bg-white/10 hover:bg-white/20">
-              <Link href="/list-your-practice/">List Your Practice</Link>
-            </Button>
-          </div>
-        </div>
-      </Section>
+      <GuideCta
+        title="Ready to get started?"
+        text="Find a clinic near you, or list your practice for free."
+        href="/find-clinics/"
+        cta="Find a dentist"
+      />
     </PageLayout>
   );
 };

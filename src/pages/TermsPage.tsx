@@ -1,11 +1,8 @@
-import Link from "next/link";
 import { PageLayout } from "@/components/layout/PageLayout";
-import { Section } from "@/components/layout/Section";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
-import { FileText, ArrowRight, Shield, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LegalDocument } from "@/components/policy/PolicyPage";
 
 const TermsPage = () => {
   const { data: siteSettings } = useSiteSettings();
@@ -142,7 +139,7 @@ Email: ${supportEmail}`
 
   const keyPoints = [
     "Free for patients to use",
-    "Verified dental professionals only",
+    "Clinic listings with their licensing regulator named",
     "Your data is protected",
     "Right to remove content"
   ];
@@ -156,83 +153,16 @@ Email: ${supportEmail}`
         keywords={['terms and conditions', 'service agreement', 'dental directory terms', 'AppointPanda terms']}
       />
 
-      {/* Dark Hero Section */}
-      <section className="relative bg-dark-section text-dark-section-foreground overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(139,92,246,0.1),transparent_50%)]" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-
-        <div className="container relative py-16 md:py-24">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <FileText className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">Legal</span>
-            </div>
-
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6">
-              Terms &{" "}
-              <span className="text-gradient">Conditions</span>
-            </h1>
-
-            <p className="text-lg text-dark-section-foreground/70 max-w-xl mx-auto mb-8">
-              Please read these terms carefully before using AppointPanda. By using our platform, you agree to these terms.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-3">
-              {keyPoints.map((point, i) => (
-                <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                  <CheckCircle className="h-4 w-4 text-primary" />
-                  <span className="text-sm">{point}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Section size="lg">
-        <div className="max-w-4xl mx-auto">
-          <div className="card-modern p-8 md:p-12">
-            <div className="flex items-center gap-4 mb-8 pb-6 border-b">
-              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Shield className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-muted-foreground">
-                  <strong>Last Updated:</strong> January 2026
-                </p>
-                <p className="text-sm text-muted-foreground">Effective immediately for all users</p>
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              {sections.map((section, i) => (
-                <div key={i} className="group">
-                  <h2 className="font-display text-xl font-bold mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm text-primary font-bold">
-                      {i + 1}
-                    </span>
-                    {section.title.replace(/^\d+\.\s*/, '')}
-                  </h2>
-                  <div className="text-muted-foreground leading-relaxed whitespace-pre-line pl-11">
-                    {section.content}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 pt-8 border-t text-center">
-              <p className="text-muted-foreground mb-4">Have questions about our terms?</p>
-              <Button asChild variant="outline" className="rounded-2xl font-bold">
-                <Link href="/contact/">
-                  Contact Us
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Section>
+      <LegalDocument
+        kicker="Legal"
+        title="Terms & conditions"
+        intro="Please read these terms carefully before using AppointPanda. By using our platform, you agree to these terms."
+        highlights={keyPoints.map((point) => ({ title: point }))}
+        sections={sections}
+        lastUpdated="January 2026"
+        lastUpdatedNote="Effective immediately for all users"
+        contactPrompt="Have questions about our terms?"
+      />
     </PageLayout>
   );
 };

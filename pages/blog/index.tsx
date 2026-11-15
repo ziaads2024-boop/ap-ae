@@ -39,13 +39,13 @@ export const getStaticProps: GetStaticProps<BlogIndexPageProps> = async () => {
   const [postsResult, featuredResult, statesResult, treatmentsResult] = await Promise.all([
     supabase
       .from('blog_posts')
-      .select('id, slug, title, excerpt, category, tags, author_name, featured_image_url, published_at, created_at')
+      .select('id, slug, title, excerpt, tags, author_name, featured_image_url, published_at, created_at, is_featured')
       .eq('status', 'published')
       .order('published_at', { ascending: false })
       .order('created_at', { ascending: false }),
     (supabase as any)
       .from('blog_posts')
-      .select('id, slug, title, excerpt, category, tags, author_name, featured_image_url, published_at, created_at')
+      .select('id, slug, title, excerpt, tags, author_name, featured_image_url, published_at, created_at, is_featured')
       .eq('status', 'published')
       .eq('is_featured', true)
       .order('published_at', { ascending: false })

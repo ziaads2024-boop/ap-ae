@@ -16,7 +16,7 @@ import {
   Phone,
   UserPlus,
   CheckCircle,
-  Sparkles,
+  LayoutGrid,
   Users,
   Globe,
   ArrowRight,
@@ -168,48 +168,49 @@ const SitemapPage = () => {
         description="Explore our comprehensive directory of dental services, locations, clinics, and resources across the UAE."
         breadcrumbs={breadcrumbs}
         size="sm"
+        tone="sand"
       />
 
       {/* Stats Bar */}
-      <section className="py-6 bg-primary/5 border-y">
+      <section className="px-5 py-6">
         <div className="container">
           <div className="flex flex-wrap justify-center gap-8 md:gap-16">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{states?.length || 0}</div>
-              <div className="text-sm text-muted-foreground font-medium">States</div>
+              <div className="text-3xl font-bold text-ink">{states?.length || 0}</div>
+              <div className="text-sm text-zinc-600 font-medium">States</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{citiesWithClinics || cities?.length || 0}</div>
-              <div className="text-sm text-muted-foreground font-medium">Cities</div>
+              <div className="text-3xl font-bold text-ink">{citiesWithClinics || cities?.length || 0}</div>
+              <div className="text-sm text-zinc-600 font-medium">Cities</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{treatments?.length || 0}</div>
-              <div className="text-sm text-muted-foreground font-medium">Services</div>
+              <div className="text-3xl font-bold text-ink">{treatments?.length || 0}</div>
+              <div className="text-sm text-zinc-600 font-medium">Services</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{totalClinics.toLocaleString()}</div>
-              <div className="text-sm text-muted-foreground font-medium">Clinics</div>
+              <div className="text-3xl font-bold text-ink">{totalClinics.toLocaleString()}</div>
+              <div className="text-sm text-zinc-600 font-medium">Clinics</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{totalPages.toLocaleString()}+</div>
-              <div className="text-sm text-muted-foreground font-medium">Total Pages</div>
+              <div className="text-3xl font-bold text-ink">{totalPages.toLocaleString()}+</div>
+              <div className="text-sm text-zinc-600 font-medium">Total Pages</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-background">
+      <section className="py-12">
         <div className="container">
           {/* XML Sitemap Notice */}
-          <div className="mb-12 p-6 rounded-3xl bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border border-primary/20">
+          <div className="mb-12 p-6 rounded-3xl bg-white border border-black/10">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
-                  <Globe className="h-6 w-6 text-primary" />
+                <div className="h-12 w-12 rounded-2xl bg-paper flex items-center justify-center">
+                  <Globe className="h-6 w-6 text-ink" />
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">XML Sitemap for Search Engines</h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-zinc-600 text-sm">
                     Submit to Google Search Console for better indexing
                   </p>
                 </div>
@@ -218,7 +219,7 @@ const SitemapPage = () => {
                 href="/sitemap.xml"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 transition-colors shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-ink text-white rounded-xl font-semibold hover:bg-[#2a2a2a] transition-colors shadow-lg"
               >
                 View sitemap.xml
                 <ArrowRight className="h-4 w-4" />
@@ -229,10 +230,10 @@ const SitemapPage = () => {
           {/* Main Pages & For Dentists Row */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {/* Main Pages */}
-            <div className="rounded-3xl bg-gradient-to-br from-background to-muted/30 border p-8">
+            <div className="rounded-3xl bg-white border p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Sparkles className="h-5 w-5 text-primary" />
+                <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                  <LayoutGrid className="h-5 w-5 text-ink" />
                 </div>
                 <h2 className="text-xl font-bold">Main Pages</h2>
               </div>
@@ -241,14 +242,14 @@ const SitemapPage = () => {
                   <Link
                     key={page.path}
                     href={page.path}
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 transition-colors group"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-paper transition-colors group"
                   >
-                    <page.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <page.icon className="h-5 w-5 text-zinc-600 group-hover:text-ink transition-colors" />
                     <div className="flex-1">
-                      <span className="font-medium group-hover:text-primary transition-colors">{page.name}</span>
-                      <span className="text-sm text-muted-foreground ml-2">— {page.description}</span>
+                      <span className="font-medium group-hover:text-ink transition-colors">{page.name}</span>
+                      <span className="text-sm text-zinc-600 ml-2">— {page.description}</span>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-ink transition-colors" />
                   </Link>
                 ))}
               </div>
@@ -257,10 +258,10 @@ const SitemapPage = () => {
             {/* For Dentists & Legal */}
             <div className="space-y-8">
               {/* For Dentists */}
-              <div className="rounded-3xl bg-gradient-to-br from-coral/5 to-coral/10 border border-coral/20 p-8">
+              <div className="rounded-3xl bg-white border border-black/10 p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-coral/20 flex items-center justify-center">
-                    <Building2 className="h-5 w-5 text-coral" />
+                  <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                    <Building2 className="h-5 w-5 text-ink" />
                   </div>
                   <h2 className="text-xl font-bold">For Dental Professionals</h2>
                 </div>
@@ -269,23 +270,23 @@ const SitemapPage = () => {
                     <Link
                       key={page.path}
                       href={page.path}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-coral/10 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-paper transition-colors group"
                     >
-                      <page.icon className="h-5 w-5 text-muted-foreground group-hover:text-coral transition-colors" />
+                      <page.icon className="h-5 w-5 text-zinc-600 group-hover:text-ink transition-colors" />
                       <div className="flex-1">
-                        <span className="font-medium group-hover:text-coral transition-colors">{page.name}</span>
-                        <span className="text-sm text-muted-foreground ml-2">— {page.description}</span>
+                        <span className="font-medium group-hover:text-ink transition-colors">{page.name}</span>
+                        <span className="text-sm text-zinc-600 ml-2">— {page.description}</span>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-coral transition-colors" />
+                      <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-ink transition-colors" />
                     </Link>
                   ))}
                 </div>
               </div>
 
               {/* Legal Pages */}
-              <div className="rounded-3xl bg-muted/30 border p-6">
+              <div className="rounded-3xl bg-paper border p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <FileCheck className="h-5 w-5 text-muted-foreground" />
+                  <FileCheck className="h-5 w-5 text-zinc-600" />
                   <h3 className="font-semibold">Legal</h3>
                 </div>
                 <div className="flex flex-wrap gap-4">
@@ -293,7 +294,7 @@ const SitemapPage = () => {
                     <Link
                       key={page.path}
                       href={page.path}
-                      className="text-muted-foreground hover:text-primary transition-colors"
+                      className="text-zinc-600 hover:text-ink transition-colors"
                     >
                       {page.name}
                     </Link>
@@ -306,8 +307,8 @@ const SitemapPage = () => {
           {/* Dental Services Section */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-gold/20 flex items-center justify-center">
-                <Stethoscope className="h-5 w-5 text-gold" />
+              <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                <Stethoscope className="h-5 w-5 text-ink" />
               </div>
               <h2 className="text-xl font-bold">Dental Services</h2>
               {treatments && <Badge variant="secondary" className="ml-2">{treatments.length} services</Badge>}
@@ -322,19 +323,19 @@ const SitemapPage = () => {
             ) : (
               <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <Link href="/services/"
-                  className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-gold/10 to-gold/5 border border-gold/20 hover:border-gold/40 transition-colors group"
+                  className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-black/10 hover:border-ink transition-colors group"
                 >
-                  <Star className="h-5 w-5 text-gold" />
-                  <span className="font-semibold text-gold">All Services</span>
-                  <ArrowRight className="h-4 w-4 text-gold ml-auto" />
+                  <Star className="h-5 w-5 text-ink" />
+                  <span className="font-semibold text-ink">All Services</span>
+                  <ArrowRight className="h-4 w-4 text-ink ml-auto" />
                 </Link>
                 {treatments?.map((treatment) => (
                   <Link
                     key={treatment.slug}
                     href={`/services/${treatment.slug}/`}
-                    className="flex items-center gap-3 p-4 rounded-2xl bg-muted/30 border hover:border-primary/40 hover:bg-primary/5 transition-colors group"
+                    className="flex items-center gap-3 p-4 rounded-2xl bg-paper border hover:border-ink hover:bg-paper transition-colors group"
                   >
-                    <span className="font-medium group-hover:text-primary transition-colors">{treatment.name}</span>
+                    <span className="font-medium group-hover:text-ink transition-colors">{treatment.name}</span>
                   </Link>
                 ))}
               </div>
@@ -344,8 +345,8 @@ const SitemapPage = () => {
           {/* Locations Section */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <MapPin className="h-5 w-5 text-primary" />
+              <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                <MapPin className="h-5 w-5 text-ink" />
               </div>
               <h2 className="text-xl font-bold">Locations</h2>
               {states && <Badge variant="secondary" className="ml-2">{states.length} States</Badge>}
@@ -363,32 +364,32 @@ const SitemapPage = () => {
                 {states?.map((state) => {
                   const stateCities = citiesByState[state.slug]?.cities || [];
                   return (
-                    <div key={state.slug} className="rounded-3xl bg-gradient-to-br from-background to-muted/30 border p-6 hover:shadow-lg transition-shadow">
+                    <div key={state.slug} className="rounded-3xl bg-white border p-6 hover:shadow-lg transition-shadow">
                       <Link
                         href={`/${state.slug}/`}
                         className="flex items-center gap-3 mb-4 group"
                       >
-                        <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                          <MapPin className="h-5 w-5 text-primary" />
+                        <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                          <MapPin className="h-5 w-5 text-ink" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-bold group-hover:text-primary transition-colors">{state.name}</h3>
-                          <p className="text-sm text-muted-foreground">{stateCities.length} cities</p>
+                          <h3 className="font-bold group-hover:text-ink transition-colors">{state.name}</h3>
+                          <p className="text-sm text-zinc-600">{stateCities.length} cities</p>
                         </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <ArrowRight className="h-4 w-4 text-zinc-600 group-hover:text-ink transition-colors" />
                       </Link>
                       <div className="flex flex-wrap gap-2">
                         {stateCities.slice(0, 8).map((city) => (
                           <Link
                             key={city.slug}
                             href={`/${state.slug}/${city.slug}/`}
-                            className="text-sm px-3 py-1 rounded-full bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
+                            className="text-sm px-3 py-1 rounded-full bg-paper hover:bg-zinc-100 hover:text-ink transition-colors"
                           >
                             {city.name}
                           </Link>
                         ))}
                         {stateCities.length > 8 && (
-                          <span className="text-sm px-3 py-1 text-muted-foreground">
+                          <span className="text-sm px-3 py-1 text-zinc-600">
                             +{stateCities.length - 8} more
                           </span>
                         )}
@@ -422,17 +423,17 @@ const SitemapPage = () => {
                   <Link
                     key={clinic.slug}
                     href={`/clinic/${clinic.slug}/`}
-                    className="flex flex-col p-4 rounded-2xl bg-muted/30 border hover:border-primary/40 hover:bg-primary/5 transition-colors group"
+                    className="flex flex-col p-4 rounded-2xl bg-paper border hover:border-ink hover:bg-paper transition-colors group"
                   >
-                    <span className="font-medium group-hover:text-primary transition-colors line-clamp-1">{clinic.name}</span>
+                    <span className="font-medium group-hover:text-ink transition-colors line-clamp-1">{clinic.name}</span>
                     {(clinic as any).city?.name && (
-                      <span className="text-sm text-muted-foreground">{(clinic as any).city.name}</span>
+                      <span className="text-sm text-zinc-600">{(clinic as any).city.name}</span>
                     )}
                   </Link>
                 ))}
                 {clinics && clinics.length > 20 && (
                   <Link href="/find-clinics/"
-                    className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors text-primary font-semibold"
+                    className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-paper border border-black/10 hover:bg-paper transition-colors text-ink font-semibold"
                   >
                     View All Clinics
                     <ArrowRight className="h-4 w-4" />
@@ -445,8 +446,8 @@ const SitemapPage = () => {
           {/* Dentists Section */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-coral/10 flex items-center justify-center">
-                <Users className="h-5 w-5 text-coral" />
+              <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                <Users className="h-5 w-5 text-ink" />
               </div>
               <h2 className="text-xl font-bold">Dental Professionals</h2>
               {dentists && <Badge variant="secondary" className="ml-2">{dentists.length}+ dentists</Badge>}
@@ -464,17 +465,17 @@ const SitemapPage = () => {
                   <Link
                     key={dentist.slug}
                     href={`/dentist/${dentist.slug}/`}
-                    className="flex flex-col p-4 rounded-2xl bg-muted/30 border hover:border-coral/40 hover:bg-coral/5 transition-colors group"
+                    className="flex flex-col p-4 rounded-2xl bg-paper border hover:border-ink hover:bg-paper transition-colors group"
                   >
-                    <span className="font-medium group-hover:text-coral transition-colors line-clamp-1">{dentist.name}</span>
+                    <span className="font-medium group-hover:text-ink transition-colors line-clamp-1">{dentist.name}</span>
                     {dentist.title && (
-                      <span className="text-sm text-muted-foreground">{dentist.title}</span>
+                      <span className="text-sm text-zinc-600">{dentist.title}</span>
                     )}
                   </Link>
                 ))}
                 {dentists && dentists.length > 16 && (
                   <Link href="/find-clinics/"
-                    className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-coral/10 border border-coral/20 hover:bg-coral/20 transition-colors text-coral font-semibold"
+                    className="flex items-center justify-center gap-2 p-4 rounded-2xl bg-paper border border-black/10 hover:bg-paper transition-colors text-ink font-semibold"
                   >
                     View All Dentists
                     <ArrowRight className="h-4 w-4" />
@@ -487,8 +488,8 @@ const SitemapPage = () => {
           {/* Blog Section */}
           <div className="mb-12">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <FileText className="h-5 w-5 text-primary" />
+              <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                <FileText className="h-5 w-5 text-ink" />
               </div>
               <h2 className="text-xl font-bold">Blog & Resources</h2>
               {blogPosts && <Badge variant="secondary" className="ml-2">{blogPosts.length} articles</Badge>}
@@ -503,36 +504,36 @@ const SitemapPage = () => {
             ) : blogPosts && blogPosts.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Link href="/blog/"
-                  className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-colors group"
+                  className="flex items-center gap-3 p-4 rounded-2xl bg-white border border-black/10 hover:border-ink transition-colors group"
                 >
-                  <BookOpen className="h-5 w-5 text-primary" />
-                  <span className="font-semibold text-primary">All Blog Posts</span>
-                  <ArrowRight className="h-4 w-4 text-primary ml-auto" />
+                  <BookOpen className="h-5 w-5 text-ink" />
+                  <span className="font-semibold text-ink">All Blog Posts</span>
+                  <ArrowRight className="h-4 w-4 text-ink ml-auto" />
                 </Link>
                 {blogPosts.map((post) => (
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}/`}
-                    className="flex items-center p-4 rounded-2xl bg-muted/30 border hover:border-primary/40 hover:bg-primary/5 transition-colors group"
+                    className="flex items-center p-4 rounded-2xl bg-paper border hover:border-ink hover:bg-paper transition-colors group"
                   >
-                    <span className="font-medium group-hover:text-primary transition-colors line-clamp-1">{post.title}</span>
+                    <span className="font-medium group-hover:text-ink transition-colors line-clamp-1">{post.title}</span>
                   </Link>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">No blog posts published yet.</p>
+              <p className="text-zinc-600">No blog posts published yet.</p>
             )}
           </div>
 
           {/* Service + Location Matrix */}
-          <div className="rounded-3xl bg-gradient-to-br from-primary/5 via-background to-accent/5 border p-8">
+          <div className="rounded-3xl bg-white border p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-primary" />
+              <div className="h-10 w-10 rounded-xl bg-paper flex items-center justify-center">
+                <LayoutGrid className="h-5 w-5 text-ink" />
               </div>
               <div>
                 <h2 className="text-xl font-bold">Service + Location Pages</h2>
-                <p className="text-sm text-muted-foreground">Dedicated pages for every service in every city</p>
+                <p className="text-sm text-zinc-600">Dedicated pages for every service in every city</p>
               </div>
             </div>
 
@@ -544,7 +545,7 @@ const SitemapPage = () => {
                     <Link
                       key={`${state.slug}-${city.slug}-${treatment.slug}`}
                       href={`/${state.slug}/${city.slug}/${treatment.slug}/`}
-                      className="text-sm px-4 py-2 rounded-full bg-muted hover:bg-primary/10 hover:text-primary transition-colors text-center"
+                      className="text-sm px-4 py-2 rounded-full bg-paper hover:bg-zinc-100 hover:text-ink transition-colors text-center"
                     >
                       {treatment.name} in {city.name}
                     </Link>
@@ -554,8 +555,8 @@ const SitemapPage = () => {
             </div>
 
             {treatments && cities && (
-              <p className="text-sm text-muted-foreground mt-6 text-center">
-                <span className="font-semibold text-primary">{treatments.length * (cities?.length || 0)}+</span> total service-location combinations available
+              <p className="text-sm text-zinc-600 mt-6 text-center">
+                <span className="font-semibold text-ink">{treatments.length * (cities?.length || 0)}+</span> total service-location combinations available
               </p>
             )}
           </div>
