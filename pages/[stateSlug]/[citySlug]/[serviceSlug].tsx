@@ -1,16 +1,27 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { DubaiAreaServiceGuide } from '@/components/guide/DubaiAreaServiceGuide';
 import { dubaiAreaBySlug } from '@/content/dubai';
-import { emirateBySlug, INDEX_COMING_SOON, isLiveEmirate, serviceBySlug, urls } from '@/content';
+import { emirateBySlug, guideSlugForDb, serviceBySlug, urls } from '@/content';
 import { canonicalTreatment, fetchAreaServiceData, type AreaServiceData } from '@/lib/dubaiData';
 import { normalizeStateSlug as normalizeDubaiState } from '@/lib/slug/normalizeStateSlug';
-import Head from 'next/head';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import ServiceLocationPageComponent from '@/pages/ServiceLocationPage';
 import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import { buildClinicLocationOrFilter } from '@/lib/location/buildClinicLocationFilter';
 
-const BASE_URL = 'https://www.appointpanda.ae';
+/**
+ * Database treatments without a guide that are close enough to one to send
+ * visitors there. Every other non-guide treatment goes to the area page.
+ */
+const NEAREST_GUIDE: Record<string, string> = {
+    'smile-makeover': 'hollywood-smile',
+    'cosmetic-dentistry': 'hollywood-smile',
+    'all-on-4-implants': 'dental-implants',
+    'bone-grafting': 'dental-implants',
+    'deep-cleaning': 'teeth-cleaning',
+    'dental-checkup': 'teeth-cleaning',
+    'gum-treatment': 'teeth-cleaning',
+};
 
 const ServiceLocationPageWithSEO = ({ stateSlug, citySlug, serviceSlug, stateData, cityData, treatmentData, seoData, faqs, seoH1, heroIntro, content, priceMin, priceMax, priceNote, quickAnswer, lastReviewedBy, expertCredential, medicalAccuracyVerified, processSteps, treatmentOptions, benefits, candidates, alternatives, relatedQuestions, processTimeMonths, processTimeNote, allSeoData, clinicProfilesProp, allEmirateCitiesProp }: {
     stateSlug: string;
@@ -43,37 +54,8 @@ const ServiceLocationPageWithSEO = ({ stateSlug, citySlug, serviceSlug, stateDat
     clinicProfilesProp?: any[];
     allEmirateCitiesProp?: any[];
 }) => {
-    const treatmentName = treatmentData?.name || serviceSlug;
-    const cityName = cityData?.name || citySlug;
-    const stateName = stateData?.name || stateSlug;
-    const fallbackTitle = `${treatmentName} in ${cityName} (2026) — Find Top-Rated Dentists Near You | AppointPanda`;
-    const fallbackDescription = `Need ${treatmentName.toLowerCase()} in ${cityName}? Compare 50+ verified specialists near you. Read patient reviews, check ratings (4.9+ stars), see transparent AED pricing. Book your appointment in minutes. All dentists are DHA/DOH-licensed. Free consultation available.`;
-
-    const metaTitle = seoData?.title || `${treatmentName} in ${cityData?.name || citySlug}`;
-    const metaDescription = seoData?.description || `Find the best ${treatmentName.toLowerCase()} specialists in ${cityData?.name || citySlug}.`;
-
     return (
         <>
-            <Head>
-                <title>{metaTitle}</title>
-                <meta name="description" content={metaDescription} />
-                <link rel="canonical" href={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-                <meta name="robots" content={!INDEX_COMING_SOON && !isLiveEmirate(stateSlug) ? 'noindex, follow' : 'index, follow'} />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-                <meta property="og:title" content={metaTitle} />
-                <meta property="og:description" content={metaDescription} />
-                <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
-                <meta property="og:site_name" content="AppointPanda" />
-                <meta property="og:locale" content="en_AE" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:url" content={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-                <meta name="twitter:title" content={metaTitle} />
-                <meta name="twitter:description" content={metaDescription} />
-                <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
-                <link rel="alternate" hrefLang="en-AE" href={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-                <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}${seoData?.canonical || `/${stateSlug}/${citySlug}/${serviceSlug}/`}`} />
-            </Head>
             <ServiceLocationPageComponent 
                 stateSlugProp={stateSlug}
                 citySlugProp={citySlug}
@@ -172,9 +154,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
             
             for (const treatment of treatments) {
                 // Only add path if this combination has at least one clinic
+                // Prerender Dubai area guides only: other combinations redirect or are noindex
                 const area = stateSlug === 'dubai' ? dubaiAreaBySlug(citySlug) : undefined;
-                const redirects = !!area && (area.slug !== citySlug || canonicalTreatment(treatment.slug) !== treatment.slug);
-                if (validCombos.has(`${cityId}-${treatment.id}`) && !redirects) {
+                const isGuide = !!area && area.slug === citySlug && canonicalTreatment(treatment.slug) === treatment.slug && !!serviceBySlug(treatment.slug);
+                if (validCombos.has(`${cityId}-${treatment.id}`) && isGuide) {
                     paths.push({
                         params: {
                             stateSlug,
@@ -209,6 +192,20 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
             }
             const areaServiceData = await fetchAreaServiceData(area.slug, service.slug);
             return { props: { dubaiAreaService: { area: area.slug, service: service.slug }, areaServiceData }, revalidate: 86400 };
+        }
+        if (area) {
+            // A Dubai area with a treatment that has no guide: never render the old
+            // template. Send it to the nearest guide, or to the area page.
+            const guide = NEAREST_GUIDE[serviceParam] || guideSlugForDb(serviceParam);
+            if (serviceBySlug(guide)) {
+                return { redirect: { destination: urls.dubaiAreaService(area.slug, guide), statusCode: 301 } };
+            }
+            const supabase = createServerSupabaseAdmin();
+            const { data: known } = supabase
+                ? await supabase.from('treatments').select('slug').eq('slug', serviceParam).maybeSingle()
+                : { data: null };
+            if (known) return { redirect: { destination: urls.dubaiArea(area.slug), statusCode: 301 } };
+            return { notFound: true, revalidate: 3600 };
         }
     }
     return legacyGetStaticProps(ctx);
@@ -290,12 +287,12 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
     ]);
 
     if (!stateData) {
-        return { notFound: true };
+        return { notFound: true, revalidate: 3600 };
     }
 
-    // Return 404 if city or treatment doesn't exist
-    if (!cityData || !treatmentData) {
-        return { notFound: true };
+    // Return 404 if city or treatment doesn't exist, or the city is in another emirate
+    if (!cityData || !treatmentData || cityData.state_id !== stateData.id) {
+        return { notFound: true, revalidate: 3600 };
     }
 
     // Pre-fetch clinic profiles for SSR. Keep these pages live even when
@@ -333,9 +330,10 @@ const legacyGetStaticProps: GetStaticProps = async (ctx) => {
     
     // Extract ALL SEO content fields for server-side rendering
     const seoDataFromDb = seoContent as any;
-    const metaTitle = seoDataFromDb?.meta_title || `${treatmentName} in ${cityName}, ${stateName} (2026) — Book Now | AppointPanda`;
-    const metaDescription = seoDataFromDb?.meta_description || `Get ${treatmentName.toLowerCase()} treatment in ${cityName}, ${stateName}. Compare top clinics, check AED prices, read verified reviews. Book your appointment today.`;
-    const seoH1 = seoDataFromDb?.h1 || seoDataFromDb?.title || `Best ${treatmentName} in ${cityName}`;
+    // Database SEO copy for these pages carried unverified claims, so titles are built here
+    const metaTitle = `${treatmentName} in ${cityName}, ${stateName}`;
+    const metaDescription = `Dental clinics listed in ${cityName}, ${stateName}, and what to ask about ${treatmentName.toLowerCase()} before you book.`;
+    const seoH1 = `${treatmentName} in ${cityName}`;
     const heroIntro = seoDataFromDb?.page_intro || null;
     const content = seoDataFromDb?.content || null;
     

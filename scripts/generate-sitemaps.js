@@ -4,7 +4,8 @@ const { loadEnvConfig } = require('@next/env');
 const { createClient } = require('@supabase/supabase-js');
 
 const BASE_URL = 'https://www.appointpanda.ae';
-const PUBLIC_DIR = path.join(process.cwd(), 'public');
+// SITEMAP_OUT_DIR lets you inspect the output without touching public/ (dry run).
+const PUBLIC_DIR = process.env.SITEMAP_OUT_DIR || path.join(process.cwd(), 'public');
 const SITEMAP_FILES = [
   'sitemap.xml',
   'sitemap-static.xml',
@@ -32,7 +33,11 @@ function imageEntry(img) {
   return { loc: `${BASE_URL}${img.src}`, title: img.caption };
 }
 
-function buildGuideUrls(content) {
+// `areaCounts` (dental clinics per Dubai area, from live data) leaves thin areas
+// out, matching their noindex tag. When it is null (no database) every area is listed.
+// Pages whose content is mostly live listings (emirate hubs, areas) carry no
+// lastmod: we cannot tell when their data last changed, and a fixed date would be false.
+function buildGuideUrls(content, areaCounts = null) {
   const lastmod = content.CONTENT_REVIEWED;
   const urls = [
     { loc: normalizeUrl(content.urls.services), lastmod, priority: 0.9, changefreq: 'monthly' },
@@ -43,7 +48,7 @@ function buildGuideUrls(content) {
     urls.push({ loc: normalizeUrl(content.urls.service(service.slug)), lastmod, priority: 0.9, changefreq: 'monthly', images: [imageEntry(imageForService(service.slug))] });
   }
   for (const emirate of content.emirates) {
-    urls.push({ loc: normalizeUrl(content.urls.emirate(emirate.slug)), lastmod, priority: 0.9, changefreq: 'monthly', images: [imageEntry(imageForEmirate(emirate.slug))] });
+    urls.push({ loc: normalizeUrl(content.urls.emirate(emirate.slug)), priority: 0.9, changefreq: 'monthly', images: [imageEntry(imageForEmirate(emirate.slug))] });
     for (const service of content.services) {
       if (content.hasLocalGuide(service.slug, emirate.slug)) {
         urls.push({
@@ -55,7 +60,8 @@ function buildGuideUrls(content) {
   }
   // Dubai area hubs and visit-reason pages
   for (const area of content.dubai.dubaiAreas) {
-    urls.push({ loc: normalizeUrl(content.urls.dubaiArea(area.slug)), lastmod, priority: 0.85, changefreq: 'weekly' });
+    if (areaCounts && (areaCounts[area.slug] || 0) < content.dubai.MIN_AREA_CLINICS_TO_INDEX) continue;
+    urls.push({ loc: normalizeUrl(content.urls.dubaiArea(area.slug)), priority: 0.85, changefreq: 'weekly' });
   }
   urls.push({ loc: normalizeUrl(content.urls.dubaiReasons), lastmod, priority: 0.7, changefreq: 'monthly' });
   for (const reason of content.dubai.visitReasons) {
@@ -190,9 +196,10 @@ ${urls.map((url) => `  <url>
 </urlset>`;
 }
 
-function generateSitemapIndexXml() {
+// Lists only the sub-sitemaps that contain URLs (`counts`: filename -> URL count).
+function generateSitemapIndexXml(counts = null) {
   const today = new Date().toISOString().split('T')[0];
-  const sitemapEntries = SITEMAP_FILES.filter((name) => name !== 'sitemap.xml');
+  const sitemapEntries = SITEMAP_FILES.filter((name) => name !== 'sitemap.xml' && (!counts || (counts[name] || 0) > 0));
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -279,7 +286,8 @@ async function buildCityUrls(supabase, content) {
 
   return cities
     .filter((city) => city.slug && stateSlugMap.get(city.state_id))
-    .filter((city) => !(stateSlugMap.get(city.state_id) === 'dubai' && content.dubai.dubaiAreas.some((a) => (a.aliases || []).includes(city.slug))))
+    // Dubai areas are guide pages: listed (or deliberately left out) in sitemap-guides.xml
+    .filter((city) => !(stateSlugMap.get(city.state_id) === 'dubai' && content.dubai.dubaiAreaBySlug(city.slug)))
     .filter((city) => !content.serviceBySlug(content.canonicalTreatment(city.slug)))
     .map((city) => ({
       loc: normalizeUrl(`/${stateSlugMap.get(city.state_id)}/${city.slug}`),
@@ -304,78 +312,99 @@ async function buildServiceUrls(supabase, content) {
     }));
 }
 
+// Live figures shared by several sitemaps, fetched once.
+let hoursPromise = null;
+const fetchHours = (supabase) => (hoursPromise ||= fetchAll(supabase, 'clinic_hours', 'clinic_id, is_closed, open_time'));
+const loadQuality = () => require('jiti')(__filename)(path.join(process.cwd(), 'src/lib/clinicQuality.ts'));
+
+// Dental clinics per Dubai area, with the same filter as src/lib/dubaiData.ts
+// (isDentalListing): not a pharmacy/lab/salon by name and not flagged
+// is_likely_dental = false.
+let dubaiAreaPromise = null;
+function fetchDubaiAreas(supabase, content) {
+  dubaiAreaPromise ||= (async () => {
+    const quality = loadQuality();
+    const [states, cities, clinics] = await Promise.all([
+      fetchAll(supabase, 'states', 'id, slug'),
+      fetchAll(supabase, 'cities', 'id, slug, state_id'),
+      fetchAll(supabase, 'clinics', 'id, name, slug, city_id, is_likely_dental', { is_active: true }),
+    ]);
+    const dubai = states.find((st) => st.slug === 'dubai');
+    const areaOfCity = new Map();
+    for (const c of cities) {
+      const area = dubai && c.state_id === dubai.id ? content.dubai.dubaiAreaBySlug(c.slug) : null;
+      if (area) areaOfCity.set(c.id, area.slug);
+    }
+    const counts = Object.fromEntries(content.dubai.dubaiAreas.map((a) => [a.slug, 0]));
+    const clinicArea = new Map();
+    for (const c of clinics) {
+      const area = areaOfCity.get(c.city_id);
+      if (!area || !c.slug || quality.isNonDental(c.name) || c.is_likely_dental === false) continue;
+      counts[area] += 1;
+      clinicArea.set(c.id, area);
+    }
+    return { counts, clinicArea };
+  })();
+  return dubaiAreaPromise;
+}
+
+// Area + treatment pages: the same rule as the page's robots tag
+// (isAreaServiceIndexable in src/content/dubai.ts, data from fetchAreaServiceData).
+// Only Dubai guide pages can be indexable; other combinations redirect or are noindex.
 async function buildServiceLocationUrls(supabase, content) {
-  const [states, cities, treatments, clinicCombinations] = await Promise.all([
-    fetchAll(supabase, 'states', 'id, slug', { is_active: true }),
-    fetchAll(supabase, 'cities', 'id, slug, state_id, updated_at', { is_active: true }),
-    fetchAll(supabase, 'treatments', 'id, slug, updated_at', { is_active: true }),
-    fetchAll(
-      supabase,
-      'clinic_treatments',
-      'clinic:clinics!inner(city_id), treatment_id',
-      { 'clinic.is_active': true }
-    ),
+  const [{ counts, clinicArea }, links, hours] = await Promise.all([
+    fetchDubaiAreas(supabase, content),
+    fetchAll(supabase, 'clinic_treatments', 'clinic_id, price_from, treatment:treatments(slug)'),
+    fetchHours(supabase),
   ]);
-
-  const stateSlugMap = new Map(states.map((state) => [state.id, state.slug]));
-  // Only list area + treatment pages with enough real clinics to be useful
-  // (pages below the threshold are noindexed; see src/lib/dubaiData.ts).
-  const MIN_CLINICS = 3;
-  const comboCounts = new Map();
-  for (const combo of clinicCombinations) {
-    if (combo.clinic?.city_id && combo.treatment_id) {
-      const key = `${combo.clinic.city_id}-${combo.treatment_id}`;
-      comboCounts.set(key, (comboCounts.get(key) || 0) + 1);
-    }
+  const withHours = new Set(hours.filter((h) => !h.is_closed && h.open_time).map((h) => h.clinic_id));
+  const combos = new Map();
+  for (const l of links) {
+    const area = clinicArea.get(l.clinic_id);
+    const guide = l.treatment?.slug && content.guideSlugForDb(l.treatment.slug);
+    if (!area || !guide || !content.serviceBySlug(guide)) continue;
+    const key = `${area}/${guide}`;
+    if (!combos.has(key)) combos.set(key, { area, guide, clinics: new Set(), priced: new Set() });
+    const combo = combos.get(key);
+    combo.clinics.add(l.clinic_id);
+    if (Number(l.price_from) > 0) combo.priced.add(l.clinic_id);
   }
-  const validCombos = new Set([...comboCounts].filter(([, n]) => n >= MIN_CLINICS).map(([key]) => key));
-  const aliasCities = new Set(content.dubai.dubaiAreas.flatMap((a) => a.aliases || []));
-  const aliasTreatments = { has: (slug) => content.isRenamedTreatment(slug) };
-
   const urls = [];
-  for (const city of cities) {
-    const stateSlug = stateSlugMap.get(city.state_id);
-    if (!city.slug || !stateSlug) {
-      continue;
-    }
-
-    if (stateSlug === 'dubai' && aliasCities.has(city.slug)) {
-      continue;
-    }
-    for (const treatment of treatments) {
-      if (!treatment.slug || !validCombos.has(`${city.id}-${treatment.id}`) || aliasTreatments.has(treatment.slug)) {
-        continue;
-      }
-
-      urls.push({
-        loc: normalizeUrl(`/${stateSlug}/${city.slug}/${treatment.slug}`),
-        lastmod: (city.updated_at || treatment.updated_at)?.split('T')[0],
-        priority: 0.7,
-        changefreq: 'weekly',
-      });
-    }
+  for (const { area, guide, clinics, priced } of combos.values()) {
+    if (content.dubai.dubaiAreaBySlug(area)?.mixedAssignments) continue;
+    const hoursListed = [...clinics].filter((id) => withHours.has(id)).length;
+    const uniqueBlocks = (priced.size >= 2 ? 1 : 0) + (hoursListed >= 3 ? 1 : 0);
+    if (!content.dubai.isAreaServiceIndexable({ areaClinics: counts[area] || 0, treatmentClinics: clinics.size, uniqueBlocks })) continue;
+    urls.push({ loc: normalizeUrl(content.urls.dubaiAreaService(area, guide)), priority: 0.7, changefreq: 'weekly' });
   }
-
   return urls;
 }
 
 // Same rule as the page's robots tag (clinicIndexable in src/lib/clinicQuality.ts):
 // only dental listings with a valid phone, opening hours and 5+ Google reviews
 // (or a claimed profile) are listed.
-async function buildProfileUrls(supabase) {
-  const quality = require('jiti')(__filename)(path.join(process.cwd(), 'src/lib/clinicQuality.ts'));
-  const [clinics, hours] = await Promise.all([
-    fetchAll(supabase, 'clinics', 'id, slug, name, phone, review_count, claim_status, updated_at', {
+// Clinics in emirates that are not live yet are noindex (ClinicProfile.tsx), so
+// only clinics whose city is in a live emirate are listed.
+async function buildProfileUrls(supabase, content) {
+  const quality = loadQuality();
+  const [clinics, hours, states, cities] = await Promise.all([
+    fetchAll(supabase, 'clinics', 'id, slug, name, phone, review_count, claim_status, updated_at, city_id', {
       is_active: true,
       is_duplicate: false,
     }),
-    fetchAll(supabase, 'clinic_hours', 'clinic_id, is_closed, open_time'),
+    fetchHours(supabase),
+    fetchAll(supabase, 'states', 'id, slug'),
+    fetchAll(supabase, 'cities', 'id, state_id'),
   ]);
   const withHours = new Set(hours.filter((h) => !h.is_closed && h.open_time).map((h) => h.clinic_id));
+  const stateSlug = new Map(states.map((st) => [st.id, st.slug]));
+  const emirateOfCity = new Map(cities.map((c) => [c.id, stateSlug.get(c.state_id)]));
+  const inLiveEmirate = (clinic) => content.INDEX_COMING_SOON || content.isLiveEmirate(emirateOfCity.get(clinic.city_id));
 
   return clinics
-    .filter((clinic) => clinic.slug && quality.clinicIndexable({
+    .filter((clinic) => clinic.slug && inLiveEmirate(clinic) && quality.clinicIndexable({
       name: clinic.name,
+      slug: clinic.slug,
       phone: clinic.phone,
       hasHours: withHours.has(clinic.id),
       reviewCount: clinic.review_count,
@@ -389,13 +418,15 @@ async function buildProfileUrls(supabase) {
     }));
 }
 
+// Posts listed in src/lib/retiredPosts.json 301 elsewhere (next.config.js).
 async function buildPostUrls(supabase) {
-  const posts = await fetchAll(supabase, 'blog_posts', 'slug, updated_at', { status: 'published' });
+  const retired = require(path.join(process.cwd(), 'src/lib/retiredPosts.json'));
+  const posts = await fetchAll(supabase, 'blog_posts', 'slug, updated_at, created_at', { status: 'published' });
   return posts
-    .filter((post) => post.slug)
+    .filter((post) => post.slug && !Object.prototype.hasOwnProperty.call(retired, post.slug))
     .map((post) => ({
       loc: normalizeUrl(`/blog/${post.slug}`),
-      lastmod: post.updated_at?.split('T')[0],
+      lastmod: (post.updated_at || post.created_at)?.split('T')[0],
       priority: 0.7,
       changefreq: 'monthly',
     }));
@@ -451,40 +482,44 @@ async function writeSitemap(filename, xml) {
   await fs.writeFile(path.join(PUBLIC_DIR, filename), `${xml}\n`, 'utf8');
 }
 
+async function writeAll(listsByFile) {
+  const counts = {};
+  const files = {};
+  for (const [filename, list] of Object.entries(listsByFile)) {
+    counts[filename] = list.length;
+    files[filename] = generateSitemapXml(list);
+  }
+  // Empty sub-sitemaps are still written (old references keep working) but left out of the index.
+  files['sitemap.xml'] = generateSitemapIndexXml(counts);
+  await Promise.all(Object.entries(files).map(([filename, xml]) => writeSitemap(filename, xml)));
+  return counts;
+}
+
 async function main() {
   const supabase = createSupabaseClient();
   const content = loadContent();
-  const guideUrls = buildGuideUrls(content);
-  const guideLocs = new Set(guideUrls.map((url) => url.loc));
-  const notAGuide = (url) => !guideLocs.has(url.loc);
   // Emirates that are not live yet are kept out of sitemaps (LIVE_EMIRATES).
   const live = (url) => content.INDEX_COMING_SOON || !content.isComingSoonPath(new URL(url.loc).pathname);
-  const sm = (list) => generateSitemapXml(list.filter(live));
   await fs.writeFile(path.join(PUBLIC_DIR, 'llms.txt'), buildLlmsTxt(content), 'utf8');
   await fs.writeFile(path.join(PUBLIC_DIR, 'llms-full.txt'), buildLlmsFullTxt(content), 'utf8');
 
   if (!supabase) {
-    const fallbackSitemaps = {
-      'sitemap.xml': generateSitemapIndexXml(),
-      'sitemap-static.xml': sm(buildStaticUrls()),
-      'sitemap-guides.xml': sm(guideUrls),
-      'sitemap-states.xml': sm([]),
-      'sitemap-cities.xml': sm([]),
-      'sitemap-services.xml': sm([]),
-      'sitemap-service-locations.xml': sm([]),
-      'sitemap-profiles.xml': sm([]),
-      'sitemap-posts.xml': sm([]),
-      'sitemap-insurance.xml': sm([]),
-    };
-
-    await Promise.all(
-      Object.entries(fallbackSitemaps).map(([filename, xml]) => writeSitemap(filename, xml))
-    );
-
+    await writeAll({
+      'sitemap-static.xml': buildStaticUrls().filter(live),
+      'sitemap-guides.xml': buildGuideUrls(content).filter(live),
+      'sitemap-states.xml': [],
+      'sitemap-cities.xml': [],
+      'sitemap-services.xml': [],
+      'sitemap-service-locations.xml': [],
+      'sitemap-profiles.xml': [],
+      'sitemap-posts.xml': [],
+      'sitemap-insurance.xml': [],
+    });
     console.warn('[generate-sitemaps] Supabase env is unavailable during build. Generated static-only sitemaps.');
     return;
   }
 
+  let areaCounts = null;
   let stateUrls = [];
   let cityUrls = [];
   let serviceUrls = [];
@@ -494,37 +529,43 @@ async function main() {
   let insuranceUrls = [];
 
   try {
-    [stateUrls, cityUrls, serviceUrls, serviceLocationUrls, profileUrls, postUrls, insuranceUrls] = await Promise.all([
+    let areas;
+    [areas, stateUrls, cityUrls, serviceUrls, serviceLocationUrls, profileUrls, postUrls, insuranceUrls] = await Promise.all([
+      fetchDubaiAreas(supabase, content),
       buildStateUrls(supabase),
       buildCityUrls(supabase, content),
       buildServiceUrls(supabase, content),
       buildServiceLocationUrls(supabase, content),
-      buildProfileUrls(supabase),
+      buildProfileUrls(supabase, content),
       buildPostUrls(supabase),
       buildInsuranceUrls(supabase),
     ]);
+    areaCounts = areas.counts;
   } catch (error) {
     console.warn('[generate-sitemaps] Dynamic sitemap generation failed, falling back to static-only output:', error);
   }
 
-  const sitemapXmlByFile = {
-    'sitemap.xml': generateSitemapIndexXml(),
-    'sitemap-static.xml': sm(buildStaticUrls()),
-    'sitemap-guides.xml': sm(guideUrls),
-    'sitemap-states.xml': sm(stateUrls.filter(notAGuide)),
-    'sitemap-cities.xml': sm(cityUrls.filter(notAGuide)),
-    'sitemap-services.xml': sm(serviceUrls.filter(notAGuide)),
-    'sitemap-service-locations.xml': sm(serviceLocationUrls),
-    'sitemap-profiles.xml': sm(profileUrls),
-    'sitemap-posts.xml': sm(postUrls),
-    'sitemap-insurance.xml': sm(insuranceUrls),
-  };
+  const guideUrls = buildGuideUrls(content, areaCounts);
+  const guideLocs = new Set(guideUrls.map((url) => url.loc));
+  const notAGuide = (url) => !guideLocs.has(url.loc);
+  if (areaCounts) {
+    const thin = content.dubai.dubaiAreas.filter((a) => (areaCounts[a.slug] || 0) < content.dubai.MIN_AREA_CLINICS_TO_INDEX);
+    console.log(`[generate-sitemaps] Dubai areas left out (fewer than ${content.dubai.MIN_AREA_CLINICS_TO_INDEX} dental clinics): ${thin.map((a) => `${a.slug} (${areaCounts[a.slug] || 0})`).join(', ') || 'none'}`);
+  }
 
-  await Promise.all(
-    Object.entries(sitemapXmlByFile).map(([filename, xml]) => writeSitemap(filename, xml))
-  );
+  const counts = await writeAll({
+    'sitemap-static.xml': buildStaticUrls().filter(live),
+    'sitemap-guides.xml': guideUrls.filter(live),
+    'sitemap-states.xml': stateUrls.filter(notAGuide).filter(live),
+    'sitemap-cities.xml': cityUrls.filter(notAGuide).filter(live),
+    'sitemap-services.xml': serviceUrls.filter(notAGuide).filter(live),
+    'sitemap-service-locations.xml': serviceLocationUrls.filter(live),
+    'sitemap-profiles.xml': profileUrls.filter(live),
+    'sitemap-posts.xml': postUrls.filter(live),
+    'sitemap-insurance.xml': insuranceUrls.filter(live),
+  });
 
-  console.log(`[generate-sitemaps] Generated ${Object.keys(sitemapXmlByFile).length} sitemap files.`);
+  console.log(`[generate-sitemaps] Generated sitemaps: ${Object.entries(counts).map(([f, n]) => `${f} ${n}`).join(', ')}.`);
 }
 
 main().catch((error) => {

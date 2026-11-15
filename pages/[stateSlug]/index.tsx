@@ -5,6 +5,7 @@ import { emirates, emirateBySlug } from '@/content';
 import { EmirateGuide, type CityLink } from '@/components/guide/EmirateGuide';
 import type { ClinicSummary } from '@/components/guide/GuideBlocks';
 import { fetchGuideClinics } from '@/lib/guideClinics';
+import { fetchDubaiAreaCounts } from '@/lib/dubaiData';
 
 // Emirate hub pages. Content is hand-written in src/content/emirates.ts and
 // renders without the database; clinic listings and area links are live extras.
@@ -13,11 +14,13 @@ interface Props {
   emirateSlug: string;
   clinics: ClinicSummary[];
   cities: CityLink[];
+  /** Dental clinics per Dubai area (Dubai hub only) */
+  areaCounts: Record<string, number> | null;
 }
 
-export default function EmiratePage({ emirateSlug, clinics, cities }: Props) {
+export default function EmiratePage({ emirateSlug, clinics, cities, areaCounts }: Props) {
   const emirate = emirateBySlug(emirateSlug)!;
-  return <EmirateGuide emirate={emirate} clinics={clinics} cities={cities} />;
+  return <EmirateGuide emirate={emirate} clinics={clinics} cities={cities} areaCounts={areaCounts || undefined} />;
 }
 
 export const getStaticPaths: GetStaticPaths = async () => ({
@@ -50,13 +53,14 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
     return { redirect: { destination: `/${emirateSlug}/`, permanent: true } };
   }
 
-  const [clinics, cities] = await Promise.all([
+  const [clinics, cities, areaCounts] = await Promise.all([
     fetchGuideClinics({ emirateSlug, limit: 10 }),
     fetchCities(emirateSlug),
+    emirateSlug === 'dubai' ? fetchDubaiAreaCounts() : Promise.resolve(null),
   ]);
 
   return {
-    props: { emirateSlug, clinics, cities },
+    props: { emirateSlug, clinics, cities, areaCounts },
     revalidate: 86400,
   };
 };

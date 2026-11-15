@@ -1,13 +1,15 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Head from 'next/head';
+import { SEOHead } from '@/components/seo/SEOHead';
 import { createServerSupabaseAdmin } from '@/lib/supabaseServer';
 import CityPageComponent from '@/pages/CityPage';
 import { normalizeStateSlug } from '@/lib/slug/normalizeStateSlug';
 import { buildClinicLocationOrFilter } from '@/lib/location/buildClinicLocationFilter';
 import { DubaiAreaGuide } from '@/components/guide/DubaiAreaGuide';
 import { dubaiAreas, dubaiAreaBySlug } from '@/content/dubai';
-import { canonicalTreatment, emirateBySlug, hasLocalGuide, serviceBySlug, urls } from '@/content';
+import { canonicalTreatment, emirateBySlug, hasLocalGuide, INDEX_COMING_SOON, isLiveEmirate, serviceBySlug, urls } from '@/content';
 import { fetchAreaData, type AreaData } from '@/lib/dubaiData';
+import { clip, fitTitle } from '@/lib/metaText';
 
 // Wrapper component to render SEO meta tags server-side with FAQ data for SSR
 const BASE_URL = 'https://www.appointpanda.ae';
@@ -32,12 +34,18 @@ const CityPageWithSEO = ({ citySlug, stateSlug, stateData, cityData, seoData, fa
     const cityName = cityData?.name || citySlug;
     const stateName = stateData?.name || stateSlug;
     const clinicCount = cityRatings?.clinicCount || 0;
-    const reviewCount = cityRatings?.totalReviews || 0;
-    const fallbackTitle = `Dentists in ${cityName}, ${stateName}: ${clinicCount ? `${clinicCount} ` : ''}Listed Clinics | AppointPanda`;
+    const fallbackTitle = `Dentists in ${cityName}, ${stateName}`;
     const fallbackDescription = `Dental clinics in ${cityName}, ${stateName}${clinicCount ? ` (${clinicCount} listed)` : ''}. Compare Google ratings, treatments and insurance, and contact a clinic.`;
 
     return (
         <>
+            {/* Rendered here so the head is in the server HTML; emirates that are not live are noindex */}
+            <SEOHead
+                title={seoData?.title || fallbackTitle}
+                description={seoData?.description || fallbackDescription}
+                canonical={seoData?.canonical || `/${stateSlug}/${citySlug}/`}
+                noindex={!INDEX_COMING_SOON && !isLiveEmirate(stateSlug)}
+            />
             <Head>
                 {/* ItemList — unique schema not duplicated in component */}
                 {cityRatings && cityRatings.clinicCount > 0 && (
@@ -46,7 +54,7 @@ const CityPageWithSEO = ({ citySlug, stateSlug, stateData, cityData, seoData, fa
                         dangerouslySetInnerHTML={{ __html: JSON.stringify({
                             "@context": "https://schema.org",
                             "@type": "ItemList",
-                            "name": `Best Dentists in ${cityData?.name || citySlug}, ${stateData?.name || stateSlug}`,
+                            "name": `Dental clinics in ${cityData?.name || citySlug}, ${stateData?.name || stateSlug}`,
                             "description": seoData.description || fallbackDescription,
                             "url": `${BASE_URL}${seoData.canonical}`,
                             "numberOfItems": cityRatings.clinicCount,
@@ -216,7 +224,7 @@ const [stateData, cityData, seoContent, pageContent, treatmentsData] = await Pro
 
     // Also check cityData - return 404 if state is missing (but allow inactive cities)
     if (!stateData) {
-        return { notFound: true };
+        return { notFound: true, revalidate: 3600 };
     }
     
     // If city not found with is_active=true, try without filter
@@ -230,6 +238,12 @@ const [stateData, cityData, seoContent, pageContent, treatmentsData] = await Pro
             .maybeSingle()
             .then(r => r.data);
         finalCityData = cityWithoutFilter;
+    }
+
+    // Unknown areas, or an area that belongs to another emirate, are a real 404
+    // (not a 200 "not found" page that gets cached and indexed).
+    if (!finalCityData || finalCityData.state_id !== stateData.id) {
+        return { notFound: true, revalidate: 3600 };
     }
 
     // Fetch aggregate rating data for this city
@@ -318,9 +332,9 @@ const [stateData, cityData, seoContent, pageContent, treatmentsData] = await Pro
     const stateName = stateData?.name || normalizedStateSlug;
     
     // Always generate meta - either from page_content, seo_pages, or auto-generated
-    const metaTitle = pageContent?.meta_title || seoContent?.meta_title || `Best Dentists in ${cityName}, ${stateName} (2026) — Book Now | AppointPanda`;
-    const metaDescription = pageContent?.meta_description || seoContent?.meta_description || `Find verified dental clinics in ${cityName}, ${stateName}. Compare ratings, prices, and book your appointment online.`;
-    const seoH1 = pageContent?.h1 || seoContent?.h1 || `Best Dentists in ${cityName}, ${stateName}`;
+    const metaTitle = fitTitle(`Dentists in ${cityName}, ${stateName}`, ': Listed Clinics', 50);
+    const metaDescription = clip(`Dental clinics listed in ${cityName}, ${stateName}${cityRatings.clinicCount ? ` (${cityRatings.clinicCount})` : ''}. See Google ratings and contact details, and check each clinic's licence before you book.`);
+    const seoH1 = `Dentists in ${cityName}, ${stateName}`;
 
     let ssrFaqs: { question: string; answer: string }[] = [];
     

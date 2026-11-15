@@ -18,7 +18,7 @@ export default function EmiratesIndex() {
   return (
     <PageLayout>
       <SEOHead
-        title="Dentists by Emirate: Licensing & Clinics Across the UAE"
+        title="Dentists by Emirate: UAE Licensing & Clinics"
         description="Find a dentist in any of the seven emirates. Who licenses clinics where, what insurance usually covers, and licensed dental clinics in Dubai, Abu Dhabi, Sharjah and the Northern Emirates."
         canonical={urls.emirates}
         ogImage={`${SITE_URL}${imageForEmirate('dubai').src}`}
@@ -39,8 +39,8 @@ export default function EmiratesIndex() {
       <GuideHero
         tone="sky"
         crumbs={crumbs}
-        label="All seven emirates"
-        title={<>Seven emirates,{' '}<br />three regulators</>}
+        label="Seven emirates, three regulators"
+        title={<>Dentists by{' '}<br />emirate</>}
         image={imageForEmirate('abu-dhabi')}
         badge={{ label: 'Regulators', value: 'DHA · DoH · MOHAP' }}
         answer="Dental clinics in Dubai are licensed by the Dubai Health Authority (or, in Dubai Healthcare City, its own authority), clinics in Abu Dhabi by the Department of Health - Abu Dhabi, and clinics in Sharjah and the Northern Emirates by the federal Ministry of Health and Prevention."

@@ -9,7 +9,6 @@ import dynamic from 'next/dynamic';
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { MarketplaceHero } from "@/components/marketplace/MarketplaceHero";
-import { generateCityQA } from "@/lib/ai-seo/generateQAContent";
 import { Section } from "@/components/layout/Section";
 import { SearchBox } from "@/components/SearchBox";
 import { BudgetFilterSidebar, useBudgetFilters } from "@/components/filters";
@@ -409,7 +408,8 @@ const CityPage = ({ citySlugProp, stateSlugProp, stateDataProp, cityDataProp, se
 
   const pageTitle = pageContentDataProp?.meta_title || seoContent?.meta_title || seoDataProp?.title || null;
   const pageDescription = pageContentDataProp?.meta_description || seoContent?.meta_description || seoDataProp?.description || null;
-  const pageH1 = pageContentDataProp?.h1 || seoContent?.h1 || seoH1Prop || null;
+  // Built in getStaticProps from the area name; older CMS headings used unverified "Best" claims
+  const pageH1 = seoH1Prop || pageContentDataProp?.h1 || seoContent?.h1 || null;
   const sanitizedHeroIntroHtml = sanitizeCmsHtml(pageContentDataProp?.hero_intro || '');
   const sanitizedBodyContentHtml = sanitizeCmsHtml(pageContentDataProp?.body_content ? pageContentDataProp.body_content.replace(/\n/g, '<br/>') : '');
   const sanitizedSection1Html = sanitizeCmsHtml(section1Content ? section1Content.replace(/\n/g, '<br/>') : '');
@@ -463,10 +463,8 @@ const shouldNoIndex = false;
           { href: `/${normalizedStateSlug}/`, label: `Browse ${stateName}`, variant: 'outline' },
         ]}
         stats={[
-          { label: 'Clinics discovered', value: `${profiles?.length || totalClinicCount || 0}+` },
-          { label: 'Specialists visible', value: `${(profiles?.length || 0) * 5 || 0}+` },
-          { label: 'Average rating signal', value: '4.8' },
-          { label: 'Location context', value: stateAbbr },
+          { label: 'Clinics listed', value: `${profiles?.length || totalClinicCount || 0}` },
+          { label: 'Emirate', value: stateAbbr },
         ]}
       >
         <div className="mx-auto max-w-4xl">
@@ -726,9 +724,14 @@ const shouldNoIndex = false;
             subtitle={`Common questions about finding a dentist in ${cityName}, ${stateAbbr}`}
             items={[
               ...faqs.map(f => ({ question: f.q || f.question, answer: f.a || f.answer })).filter(f => f.question && f.answer),
-              ...generateCityQA({ name: cityName, stateName, clinicCount: profiles?.length })
-                .filter(cq => !faqs.some(f => ((f.q || f.question) || '').toLowerCase().includes(cq.question.split(' ').slice(0, 4).join(' ').toLowerCase())))
-                .slice(0, 3),
+              {
+                question: `How many dental clinics are listed in ${cityName}?`,
+                answer: `${profiles?.length || 0} dental clinics in ${cityName} are listed on AppointPanda. Ratings shown are from Google.`,
+              },
+              {
+                question: `How do I check a dentist's licence in ${cityName}?`,
+                answer: `Dentists in the UAE are licensed by the Dubai Health Authority (DHA) in Dubai, the Department of Health in Abu Dhabi, and the Ministry of Health and Prevention (MOHAP) in Sharjah and the Northern Emirates. Check the dentist's licence with the regulator before you book.`,
+              },
             ]}
             contextLabel={`city-${citySlug}`}
             defaultOpen={true}
@@ -739,16 +742,15 @@ const shouldNoIndex = false;
       {/* AI Discovery Meta */}
       <AIDiscoveryMeta
         pageTitle={pageTitle}
-        aiSummary={`Find ${profiles?.length || 0}+ verified dental clinics in ${cityName}, ${stateName}, UAE. Compare ratings, read patient reviews, and book appointments online through AppointPanda.`}
+        aiSummary={`${profiles?.length || 0} dental clinics are listed in ${cityName}, ${stateName}, UAE on AppointPanda. Ratings shown are from Google.`}
         entityType="location"
         location={{ city: cityName, country: "UAE" }}
         url={`/${normalizedStateSlug}/${citySlug}/`}
         faqs={faqs.map(f => ({ question: f.q || f.question, answer: f.a || f.answer })).filter(f => f.question && f.answer)}
         keyFacts={[
-          `${profiles?.length || 0}+ dental clinics listed in ${cityName}`,
-          "All clinics verified with DHA/MOHAP licensing",
-          "Online booking with instant confirmation",
-          "Patient reviews and transparent AED pricing",
+          `${profiles?.length || 0} dental clinics listed in ${cityName}`,
+          "Check each dentist's licence with the emirate's health regulator before booking",
+          "Ratings shown are from Google",
         ]}
       />
     </PageLayout>

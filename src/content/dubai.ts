@@ -17,6 +17,12 @@ export interface DubaiArea {
   gettingThere: string;
   nearby: string[];
   tone: Tone;
+  /**
+   * The database currently files clinics from other parts of Dubai under this
+   * area, so live counts would misstate it. Pages hide area figures until the
+   * clinics are reassigned from their coordinates.
+   */
+  mixedAssignments?: boolean;
 }
 
 export const dubaiAreas: DubaiArea[] = [
@@ -340,7 +346,7 @@ export const dubaiAreas: DubaiArea[] = [
     nearby: ['mirdif', 'al-warqa', 'deira'],
   },
   {
-    slug: 'dubai-festival-city', name: 'Dubai Festival City', group: 'East & Deira', tone: 'lime',
+    slug: 'dubai-festival-city', name: 'Dubai Festival City', group: 'East & Deira', tone: 'lime', mixedAssignments: true,
     summary: 'A waterfront mixed-use district on the Creek, near Al Garhoud, with clinics around Festival City Mall.',
     notes: [
       'Festival City is close to Al Garhoud and the airport; mall-based clinics here usually open into the evening.',
@@ -352,6 +358,36 @@ export const dubaiAreas: DubaiArea[] = [
 
 export const dubaiAreaBySlug = (slug: string) =>
   dubaiAreas.find((a) => a.slug === slug || a.aliases?.includes(slug));
+
+/**
+ * Neighbouring areas in both directions: the areas this one lists plus the
+ * areas that list it, so every area receives links from its neighbours.
+ */
+export function neighboursOf(slug: string): DubaiArea[] {
+  const area = dubaiAreaBySlug(slug);
+  if (!area) return [];
+  const listed = area.nearby;
+  const reverse = dubaiAreas.filter((a) => a.slug !== area.slug && a.nearby.includes(area.slug)).map((a) => a.slug);
+  return Array.from(new Set([...listed, ...reverse])).map(dubaiAreaBySlug).filter(Boolean) as DubaiArea[];
+}
+
+/**
+ * Indexing rules shared by the pages and scripts/generate-sitemaps.js, so the
+ * robots tag and the sitemap always agree.
+ */
+/** Area pages with fewer dental clinics than this are noindex and left out of the sitemap. */
+export const MIN_AREA_CLINICS_TO_INDEX = 5;
+export const AREA_SERVICE_RULE = { minAreaClinics: 10, minTreatmentClinics: 3, minUniqueBlocks: 2 };
+/**
+ * Area + treatment pages are indexable only when the area has enough dental
+ * clinics, enough clinics have confirmed the treatment, and the page carries at
+ * least two blocks of local data a treatment guide cannot have.
+ */
+export function isAreaServiceIndexable(x: { areaClinics: number; treatmentClinics: number; uniqueBlocks: number }): boolean {
+  return x.areaClinics >= AREA_SERVICE_RULE.minAreaClinics
+    && x.treatmentClinics >= AREA_SERVICE_RULE.minTreatmentClinics
+    && x.uniqueBlocks >= AREA_SERVICE_RULE.minUniqueBlocks;
+}
 
 export const DUBAI_AREA_GROUPS = ['Marina & JBR', 'Downtown & central', 'Jumeirah coast', 'Old Dubai', 'Inland communities', 'East & Deira'] as const;
 

@@ -16,7 +16,14 @@ export interface CityLink {
   slug: string;
 }
 
-export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateContent; clinics: ClinicSummary[]; cities: CityLink[] }) {
+/** Keep the title within a search result once " | AppointPanda" is added. */
+function hubTitle(metaTitle: string): string {
+  if (metaTitle.length <= 50) return metaTitle;
+  const head = metaTitle.split(':')[0];
+  return `${head}: Compare Licensed Clinics`.length <= 50 ? `${head}: Compare Licensed Clinics` : head;
+}
+
+export function EmirateGuide({ emirate, clinics, cities, areaCounts }: { emirate: EmirateContent; clinics: ClinicSummary[]; cities: CityLink[]; areaCounts?: Record<string, number> }) {
   const path = urls.emirate(emirate.slug);
   const crumbs = [
     { name: 'Home', path: '/' },
@@ -30,7 +37,7 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
 
   return (
     <PageLayout>
-      <SEOHead title={emirate.metaTitle} description={emirate.metaDescription} canonical={path} ogImage={`${SITE_URL}${heroImage.src}`} />
+      <SEOHead title={hubTitle(emirate.metaTitle)} description={emirate.metaDescription} canonical={path} ogImage={`${SITE_URL}${heroImage.src}`} />
       <JsonLd
         data={[
           emiratePageSchema(emirate, heroImage),
@@ -63,6 +70,11 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
         {emirate.slug === 'dubai' && (
           <>
             <Section id="dubai-areas" eyebrow="Dubai areas" title="Find a dentist by area">
+              {areaCounts && Object.keys(areaCounts).length > 0 && (
+                <p className="mb-5 max-w-3xl text-[15px] leading-relaxed text-zinc-700">
+                  All {dubaiAreas.length} Dubai areas we cover, grouped by district. Figures are the dental clinics currently listed in each area.
+                </p>
+              )}
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {DUBAI_AREA_GROUPS.map((group) => (
                   <div key={group}>
@@ -71,7 +83,11 @@ export function EmirateGuide({ emirate, clinics, cities }: { emirate: EmirateCon
                       {dubaiAreas.filter((a) => a.group === group).map((a) => (
                         <li key={a.slug}>
                           <Link prefetch={false} href={urls.dubaiArea(a.slug)} className="group flex items-center justify-between rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-ink ring-1 ring-black/5 hover:ring-ink">
-                            {a.name} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                            <span>{a.name}</span>
+                            <span className="flex items-center gap-2 text-xs font-normal text-zinc-500">
+                              {areaCounts && !a.mixedAssignments && areaCounts[a.slug] !== undefined && `${areaCounts[a.slug]} clinic${areaCounts[a.slug] === 1 ? '' : 's'}`}
+                              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                            </span>
                           </Link>
                         </li>
                       ))}

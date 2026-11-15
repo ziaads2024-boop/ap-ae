@@ -4,35 +4,43 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { ClinicResults } from '@/components/search/ClinicResults';
 import { emirateBySlug, formatAed, hasLocalGuide, insuranceNote, services, SITE_URL, urls, type ServiceContent } from '@/content';
-import { dubaiAreaBySlug, reasonsForService, type DubaiArea } from '@/content/dubai';
+import { isAreaServiceIndexable, neighboursOf, reasonsForService, type DubaiArea } from '@/content/dubai';
 import { breadcrumbSchema, clinicListSchema, faqSchema } from '@/content/schema';
 import { imageForService } from '@/content/images';
-import { MIN_CLINICS_TO_INDEX, type AreaServiceData } from '@/lib/dubaiData';
+import type { AreaServiceData } from '@/lib/dubaiData';
+import { AreaFacts, LateWeekendList } from './DubaiAreaGuide';
 import { BulletList, FaqList, GuideCta, GuideHero, JsonLd, MedicalNote, PageImageCredits, Section } from './GuideBlocks';
 import { clip, fitTitle } from '@/lib/metaText';
 
 export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea; service: ServiceContent; data: AreaServiceData }) {
   const dubai = emirateBySlug('dubai')!;
   const path = urls.dubaiAreaService(area.slug, service.slug);
-  const indexable = data.clinicCount >= MIN_CLINICS_TO_INDEX;
-  const title = fitTitle(`${service.shortName} in ${area.name}, Dubai`, ': Clinics & Prices');
-  const description = clip(`${data.clinicCount ? `${data.clinicCount} listed clinics offer ${service.name.toLowerCase()} in ${area.name}. ` : ''}Compare clinic-listed prices, Google ratings and insurance, and request an appointment in ${area.name}, Dubai.`);
+  // Figures are hidden where the database mixes in clinics from elsewhere (see dubai.ts)
+  const areaStats = area.mixedAssignments ? null : data.areaStats;
+  const indexable = !area.mixedAssignments && isAreaServiceIndexable({
+    areaClinics: data.areaStats?.clinicCount || 0,
+    treatmentClinics: data.clinicCount,
+    uniqueBlocks: data.uniqueBlocks,
+  });
+  const placeName = /dubai/i.test(area.name) || `${service.name} in ${area.name}, Dubai`.length > 50 ? area.name : `${area.name}, Dubai`;
+  const title = fitTitle(`${service.name} in ${placeName}`, ': Clinics & Prices', 50);
+  const description = clip(`${data.clinicCount ? `${data.clinicCount} listed clinics offer ${service.name.toLowerCase()} in ${area.name}. ` : areaStats ? `${areaStats.clinicCount} dental clinics are listed in ${area.name}. ` : ''}Compare clinic-listed prices, Google ratings and insurance, and request an appointment in ${area.name}, Dubai.`);
   const crumbs = [
     { name: 'Home', path: '/' },
     { name: 'Dubai', path: urls.emirate('dubai') },
     { name: area.name, path: urls.dubaiArea(area.slug) },
-    { name: service.shortName, path },
+    { name: service.name, path },
   ];
   const image = imageForService(service.slug);
   const reasons = reasonsForService(service.slug);
-  const nearby = area.nearby.map(dubaiAreaBySlug).filter(Boolean) as DubaiArea[];
+  const nearby = neighboursOf(area.slug);
   const related = service.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServiceContent[];
 
   const answer = data.clinicCount
     ? `${data.clinicCount} clinic${data.clinicCount === 1 ? '' : 's'} listed on AppointPanda offer ${service.name.toLowerCase()} in ${area.name}${
         data.priceRange ? `, with clinic-listed prices starting from ${formatAed(data.priceRange.min)} to ${formatAed(data.priceRange.max)}` : ''
       }. ${service.summary}`
-    : `${service.summary} Use the search below to find clinics in and around ${area.name}.`;
+    : `${areaStats ? `${areaStats.clinicCount} dental clinic${areaStats.clinicCount === 1 ? ' is' : 's are'} listed in ${area.name}; none has yet confirmed ${service.name.toLowerCase()} on AppointPanda, so ask when you contact a clinic. ` : ''}${service.summary}`;
 
   const faqs = [
     {
@@ -56,25 +64,37 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
   return (
     <PageLayout>
       <SEOHead title={title} description={description} canonical={path} noindex={!indexable} ogImage={`${SITE_URL}${image.src}`} />
-      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(faqs), clinicListSchema(`${service.name} clinics in ${area.name}, Dubai`, data.clinics)]} />
+      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(faqs), clinicListSchema(`${service.name} clinics in ${placeName}`, data.clinics)]} />
 
       <GuideHero
         tone={service.tone}
         crumbs={crumbs}
         label={`${area.name} · Dubai`}
-        title={<>{service.shortName} in{' '}<br />{area.name}</>}
+        title={<>{service.name} in{' '}<br />{area.name}</>}
         answer={answer}
         image={image}
         badge={data.priceRange ? { label: `Clinic-listed prices in ${area.name}`, value: `${formatAed(data.priceRange.min)} – ${formatAed(data.priceRange.max)}` } : { label: 'Typical UAE range', value: `${formatAed(service.price.from)} – ${formatAed(service.price.to)}` }}
       >
-        <Link prefetch={false} href={`/find-clinics/?area=${area.slug}&specialty=${service.slug}`} className="btn-ink">Compare clinics <ArrowRight className="h-4 w-4" /></Link>
+        <a href="#clinics" className="btn-ink">See clinics <ArrowRight className="h-4 w-4" /></a>
+        <Link prefetch={false} href={urls.dubaiArea(area.slug)} className="btn-ghost">All dentists in {area.name}</Link>
       </GuideHero>
 
       <div className="mx-auto max-w-5xl px-5">
-        <Section id="clinics" eyebrow="Clinics" title={`${service.shortName} clinics in ${area.name}`}>
+        {data.treatmentStats && (
+          <Section id="treatment-hours" eyebrow="Opening hours" title={`${service.name} clinics in ${area.name}: hours`}>
+            <AreaFacts areaName={area.name} stats={data.treatmentStats} scope={`Clinics in ${area.name} that list ${service.name.toLowerCase()}`} />
+          </Section>
+        )}
+        {areaStats && (
+          <Section id="at-a-glance" eyebrow="At a glance" title={`Dental clinics in ${area.name}`}>
+            <AreaFacts areaName={area.name} stats={areaStats} />
+          </Section>
+        )}
+
+        <Section id="clinics" eyebrow="Clinics" title={`${service.name} clinics in ${area.name}`}>
           {data.clinics.length ? (
             <>
-              <ClinicResults clinics={data.clinics} priceLabel={`${service.shortName} from`} defaultReason={reasons[0]?.slug} />
+              <ClinicResults clinics={data.clinics} priceLabel={`${service.name} from`} defaultReason={reasons[0]?.slug} />
               <p className="mt-3 text-xs text-zinc-500">Sorted by number of Google reviews. Prices are those the clinic lists on AppointPanda and are a starting point, not a quote.</p>
             </>
           ) : data.areaClinics.length ? (
@@ -87,8 +107,8 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
             </>
           ) : (
             <p className="rounded-3xl border border-dashed border-black/20 bg-white p-6 text-sm text-zinc-600">
-              No clinics in {area.name} are listed yet.{' '}
-              <Link prefetch={false} href={`/find-clinics/?specialty=${service.slug}`} className="font-semibold underline">Search all of Dubai</Link>
+              No dental clinics in {area.name} are listed yet.{' '}
+              <Link prefetch={false} href={hasLocalGuide(service.slug, 'dubai') ? urls.serviceEmirate('dubai', service.slug) : urls.service(service.slug)} className="font-semibold underline">{service.name} in Dubai</Link>
             </p>
           )}
         </Section>
@@ -135,6 +155,15 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
           </div>
         </Section>
 
+        {areaStats && data.lateWeekend.length > 0 && (
+          <Section id="late-weekend" eyebrow="Evenings and weekends" title={`Late-night and weekend dentists in ${area.name}`}>
+            <p className="mb-4 max-w-3xl text-[15px] leading-relaxed text-zinc-700">
+              Dental clinics in {area.name} whose listed hours run past 9 pm and include Friday or Saturday. Based on listed hours; ask whether the clinic offers {service.name.toLowerCase()} when you call.
+            </p>
+            <LateWeekendList clinics={data.lateWeekend} />
+          </Section>
+        )}
+
         <Section id="faq" eyebrow="FAQ" title="Common questions">
           <FaqList faqs={faqs} />
         </Section>
@@ -143,16 +172,16 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
           <div className="flex flex-wrap gap-2">
             <Link prefetch={false} href={urls.service(service.slug)} className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white">Full {service.name.toLowerCase()} guide</Link>
             {hasLocalGuide(service.slug, 'dubai') && (
-              <Link prefetch={false} href={urls.serviceEmirate('dubai', service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in Dubai</Link>
+              <Link prefetch={false} href={urls.serviceEmirate('dubai', service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.name} in Dubai</Link>
             )}
             {reasons.map((r) => (
               <Link prefetch={false} key={r.slug} href={urls.dubaiReason(r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.label}</Link>
             ))}
             {nearby.map((n) => (
-              <Link prefetch={false} key={n.slug} href={urls.dubaiAreaService(n.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.shortName} in {n.name}</Link>
+              <Link prefetch={false} key={n.slug} href={urls.dubaiAreaService(n.slug, service.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{service.name} in {n.name}</Link>
             ))}
             {related.map((r) => (
-              <Link prefetch={false} key={r.slug} href={urls.dubaiAreaService(area.slug, r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.shortName} in {area.name}</Link>
+              <Link prefetch={false} key={r.slug} href={urls.dubaiAreaService(area.slug, r.slug)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-ink">{r.name} in {area.name}</Link>
             ))}
           </div>
         </Section>
@@ -164,10 +193,10 @@ export function DubaiAreaServiceGuide({ area, service, data }: { area: DubaiArea
       </div>
 
       <GuideCta
-        title={`Request ${service.shortName.toLowerCase()} in ${area.name}`}
+        title={`Request ${service.name.toLowerCase()} in ${area.name}`}
         text="Choose a clinic and a preferred day; the clinic calls you to confirm a time."
         href={`/find-clinics/?area=${area.slug}&specialty=${service.slug}`}
-        cta="Compare clinics"
+        cta="Search with filters"
       />
     </PageLayout>
   );
