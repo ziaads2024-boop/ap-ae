@@ -25,33 +25,51 @@ class MyDocument extends Document {
           <meta name="google-site-verification" content="rRYuAOlERaQwgPvDUKyirGO1QMVjD43uY-eXEPn--OM" />
 
           {/* Critical preconnects for LCP */}
-          <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
           <link rel="dns-prefetch" href="https://eneuthbghipsdvsqilmb.supabase.co" />
 
-          {/* Base Organization Schema */}
+          {/* Site-wide entities. Page schema refers to these by @id. */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({
                 "@context": "https://schema.org",
-                "@type": "Organization",
-                "name": "AppointPanda",
-                "url": "https://www.appointpanda.ae",
-                "logo": {
-                  "@type": "ImageObject",
-                  "url": "https://www.appointpanda.ae/logo.png",
-                  "width": 512,
-                  "height": 512,
-                },
-                "image": "https://www.appointpanda.ae/logo.png",
-                "description": "A directory of dental clinics in Dubai and the UAE, with treatment guides and appointment requests.",
-                "address": { "@type": "PostalAddress", "addressCountry": "AE" },
-                "sameAs": [
-                  "https://www.facebook.com/appointpanda/",
-                  "https://www.instagram.com/appointpanda/",
-                  "https://www.linkedin.com/company/appointpanda/",
-                  // Add Google Business Profile URL when claimed:
-                  // "https://maps.google.com/?cid=XXXXXXXXXXXXXXXXX",
+                "@graph": [
+                  {
+                    "@type": "Organization",
+                    "@id": "https://www.appointpanda.ae/#organization",
+                    "name": "AppointPanda",
+                    "url": "https://www.appointpanda.ae/",
+                    "logo": {
+                      "@type": "ImageObject",
+                      "url": "https://www.appointpanda.ae/logo.png",
+                      "width": 512,
+                      "height": 512,
+                    },
+                    "image": "https://www.appointpanda.ae/og-image.png",
+                    "description": "AppointPanda is a directory of dental clinics in Dubai, with treatment guides and costs in AED. Patients compare clinics and send appointment requests; it is not a clinic and does not provide treatment.",
+                    "areaServed": { "@type": "City", "name": "Dubai" },
+                    "address": { "@type": "PostalAddress", "addressLocality": "Dubai", "addressCountry": "AE" },
+                    "contactPoint": {
+                      "@type": "ContactPoint",
+                      "contactType": "customer support",
+                      "email": "hello@appointpanda.ae",
+                      "url": "https://www.appointpanda.ae/contact/",
+                      "availableLanguage": ["English"],
+                    },
+                  },
+                  {
+                    "@type": "WebSite",
+                    "@id": "https://www.appointpanda.ae/#website",
+                    "url": "https://www.appointpanda.ae/",
+                    "name": "AppointPanda",
+                    "inLanguage": "en-AE",
+                    "publisher": { "@id": "https://www.appointpanda.ae/#organization" },
+                    "potentialAction": {
+                      "@type": "SearchAction",
+                      "target": { "@type": "EntryPoint", "urlTemplate": "https://www.appointpanda.ae/find-clinics/?q={search_term_string}" },
+                      "query-input": "required name=search_term_string",
+                    },
+                  },
                 ],
               }),
             }}

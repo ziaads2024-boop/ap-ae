@@ -18,6 +18,8 @@ const arabicFont = Noto_Sans_Arabic({
   subsets: ['arabic'],
   variable: '--font-arabic',
   display: 'swap',
+  // Only a few emirate names use it; do not preload 160 KB on every page
+  preload: false,
   weight: ['400', '500', '600', '700'],
 });
 
